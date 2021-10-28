@@ -1,4 +1,4 @@
-import 'package:api_test/view/home.dart';
+import 'package:penny_pincher/view/home.dart';
 import 'package:flutter/material.dart';
 
 void main() {
