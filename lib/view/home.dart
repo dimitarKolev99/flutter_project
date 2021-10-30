@@ -25,13 +25,22 @@ class _HomePageState extends State<HomePage> {
 */
   @override
   void initState() {
-    super.initState();
-    _timer = new Timer.periodic(Duration(seconds: 3), (Timer timer) {
-      getProduct();
+    setState(() {
+      _isLoading = true;
     });
+    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
+      ProductApi().fetchProduct().then((product) {
+        setState(() {
+          _isLoading = false;
+        });
+        _product = product;
+        _products.insert(0, _product);
+      });
+    });
+    super.initState();
   }
 
-  Future<void> getProduct() async {
+  /*Future<void> getProduct() async {
     _product = await ProductApi().fetchProduct();
     _products.insert(0, _product);
     if (!_products.isEmpty) {
@@ -40,7 +49,7 @@ class _HomePageState extends State<HomePage> {
       });
     }
   }
-
+*/
   @override
   void dispose() {
     _timer!.cancel();
