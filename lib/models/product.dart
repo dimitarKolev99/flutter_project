@@ -34,9 +34,6 @@ import 'dart:convert';
 //
 //     final product = productFromJson(jsonString);
 
-
-String productToJson(Product data) => json.encode(data.toJson());
-
 class Product {
   Product({
     required this.id,
@@ -63,6 +60,15 @@ class Product {
     image: json["image"],
   );
 
+  // Map<String, dynamic> toJson() => {
+  //   "id": id,
+  //   "title": title,
+  //   "price": price,
+  //   "description": description,
+  //   "category": category,
+  //   "image": image,
+  // };
+
   Map<String, dynamic> toJson() => {
     "id": id,
     "title": title,
@@ -71,5 +77,10 @@ class Product {
     "category": category,
     "image": image,
   };
+
+   @override
+  String toString(){
+    return 'Product {title: $title, image: $image, price: $price, description: $description, category: $category}';
+  }
 }
 

@@ -11,9 +11,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late Product _product;
-  List<Product> _products = [];
+  //late Product _product;
+  late List<Product> _product;
+  late final List<Product> _products = [];
   bool _isLoading = true;
+  var count = 0;
   Timer? _timer;
 
   /* Stream<Product> getProducts = ( () async* {
@@ -23,22 +25,48 @@ class _HomePageState extends State<HomePage> {
     }
   })();
 */
+
   @override
   void initState() {
     setState(() {
       _isLoading = true;
     });
-    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
-      ProductApi().fetchProduct().then((product) {
-        setState(() {
-          _isLoading = false;
-        });
-        _product = product;
-        _products.insert(0, _product);
-      });
-    });
+    
     super.initState();
+    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
+      getProducts();
+      if(count>=_product.length - 1){
+       dispose();
+      }
+    });
   }
+
+  Future<void> getProducts() async {
+    _product = await ProductApi.fetchProduct();
+    setState(() {
+      _isLoading = false;
+    });
+    _products.insert(count, _product[count]);
+    count++;
+  }
+
+  // @override
+  // void initState() {
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
+  //   _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
+  //     ProductApi().fetchProduct().then((product) {
+  //       setState(() {
+  //         _isLoading = false;
+  //       });
+  //       _product = product;
+  //       _products.insert(0, _product);
+  //     });
+  //   });
+  //   super.initState();
+  // }
+  
 
   /*Future<void> getProduct() async {
     _product = await ProductApi().fetchProduct();
@@ -95,3 +123,4 @@ class _HomePageState extends State<HomePage> {
                 }));
   }
 }
+  

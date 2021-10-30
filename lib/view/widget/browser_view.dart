@@ -1,8 +1,9 @@
-import 'package:penny_pincher/models/recipe.api.dart';
-import 'package:penny_pincher/models/recipe.dart';
+import 'package:penny_pincher/models/product.api.dart';
+import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/widget/bottom_nav_bar.dart';
-import 'package:penny_pincher/view/widget/recipe_card.dart';
+import 'package:penny_pincher/view/widget/product_card.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 class BrowserView extends StatefulWidget {
   @override
@@ -11,22 +12,39 @@ class BrowserView extends StatefulWidget {
 
 class _BrowserViewState extends State<BrowserView> {
 
-  late List<Recipe> _recipes;
+  late List<Product> _product;
+  late final List<Product> _products = [];
   bool _isLoading = true;
+  var count = 0;
+  Timer? _timer;
 
-  @override
-  void initState(){
+@override
+  void initState() {
+    setState(() {
+      _isLoading = true;
+    });
+    
     super.initState();
-
-    getRecipes();
+    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
+      getProducts();
+      if(count>=_product.length - 1){
+       dispose();
+      }
+    });
   }
 
-  Future<void> getRecipes() async {
-    _recipes = await RecipeApi.getRecipes();
+  Future<void> getProducts() async {
+    _product = await ProductApi.fetchProduct();
     setState(() {
       _isLoading = false;
     });
-    print(_recipes);
+    _products.insert(count, _product[count]);
+    count++;
+  }
+    @override
+  void dispose() {
+    _timer!.cancel();
+    super.dispose();
   }
 
   @override
@@ -59,15 +77,13 @@ class _BrowserViewState extends State<BrowserView> {
         body: _isLoading
             ? Center(child:CircularProgressIndicator())
             : ListView.builder(
-            itemCount: _recipes.length,
-            itemBuilder: (context, index) {
-              return RecipeCard(
-                  title: _recipes[index].name,
-                  cookTime: _recipes[index].totalTime,
-                  rating: _recipes[index].rating.toString(),
-                  thumbnailUrl: _recipes[index].images);
-            }
-        )
-    );
+            itemCount: _products.length,
+                itemBuilder: (context, index) {
+                  return ProductCard(
+                      title: _products[index].title,
+                      category: _products[index].category,
+                      description: _products[index].description,
+                      thumbnailUrl: _products[index].image);
+                }));
   }
 }

@@ -36,22 +36,23 @@ class ProductApi{
     return Recipe.recipesFromSnapshot(_temp);
   }*/
 
-  Product productFromJson(String str) {
-    return Product.fromJson(json.decode(str));
-  }
+  // Product productFromJson(String str) {
+  //   return Product.fromJson(json.decode(str));
+  // }
 
-  Future<Product> fetchProduct() async {
-    final response = await http
-        .get(Uri.parse('https://fakestoreapi.com/products/1'));
+  static Future<List<Product>> fetchProduct() async {
+    final response = await http.get(Uri.parse("https://fakestoreapi.com/products"));
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
-      return productFromJson(response.body);
+      
+      List _data = json.decode(response.body);
+      return _data.map((data) =>Product.fromJson(data)).toList();
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception('Failed to load product');
+      throw NullThrownError();
     }
   }
 }

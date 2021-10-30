@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:penny_pincher/view/widget/BrowserView.dart';
+import 'package:penny_pincher/view/widget/browser_view.dart';
 
 import '../home.dart';
 
