@@ -10,7 +10,7 @@ class BottomNavBarGenerator extends StatefulWidget{
 
 
 class _BottomNavBarGeneratorState extends State<BottomNavBarGenerator>{
-  
+
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
