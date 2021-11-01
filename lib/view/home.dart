@@ -28,9 +28,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    setState(() {
-      _isLoading = true;
-    });
+    if(this.mounted) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
     
     super.initState();
     _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
@@ -43,12 +45,16 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> getProducts() async {
     _product = await ProductApi.fetchProduct();
-    setState(() {
-      _isLoading = false;
-    });
+    if(this.mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
     _products.insert(count, _product[count]);
     count++;
   }
+
+
 
   // @override
   // void initState() {
@@ -112,15 +118,21 @@ class _HomePageState extends State<HomePage> {
         bottomNavigationBar: BottomNavBarGenerator(),
         body: _isLoading
             ? Center(child: CircularProgressIndicator())
-            : ListView.builder(
-                itemCount: _products.length,
-                itemBuilder: (context, index) {
-                  return ProductCard(
-                      title: _products[index].title,
-                      category: _products[index].category,
-                      description: _products[index].description,
-                      thumbnailUrl: _products[index].image);
-                }));
+            : Align(
+              alignment: Alignment.topCenter,
+              child: ListView.builder(
+                  reverse: true,
+                  shrinkWrap: true,
+                  itemCount: _products.length,
+                  itemBuilder: (context, index) {
+                    return ProductCard(
+                        title: _products[index].title,
+                        category: _products[index].category,
+                        description: _products[index].description,
+                        thumbnailUrl: _products[index].image);
+                  }),
+            ),
+    );
   }
 }
   
