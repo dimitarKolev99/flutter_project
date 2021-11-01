@@ -1,6 +1,7 @@
 import 'package:penny_pincher/models/product.api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
+import 'package:penny_pincher/view/widget/article_search.dart';
 import 'package:penny_pincher/view/widget/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -77,7 +78,16 @@ class _HomePageState extends State<HomePage> {
               SizedBox(width: 10),
               Text('Penny Pincher')
             ],
-          )),
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                final results = showSearch(context: context, delegate: ArticleSearch());
+              },
+            )
+          ]
+      ),
       bottomNavigationBar: BottomNavBarGenerator(),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
