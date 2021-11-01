@@ -3,15 +3,18 @@ import 'package:flutter/material.dart';
 
 class ArticleCard extends StatelessWidget {
   final String title;
-  final String rating;
-  final String cookTime;
-  final String thumbnailUrl;
+  final String rating = "30";
+  final double price;
+  final String image;
+  final String description;
+  final String category;
 
   ArticleCard({
     required this.title,
-    required this.cookTime,
-    required this.rating,
-    required this.thumbnailUrl,
+    required this.price,
+    required this.image,
+    required this.description,
+    required this.category,
   });
   @override
   Widget build(BuildContext context) {
@@ -52,7 +55,7 @@ class ArticleCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                     child:
                     Image.network(
-                      thumbnailUrl,
+                      image,
                       width: displayWidth / 3 - 30,
                       height: displayWidth / 3 - 30,
                       fit: BoxFit.cover,
@@ -128,7 +131,7 @@ class ArticleCard extends StatelessWidget {
                                 .black),
                       ),
                       Text(
-                        cookTime,
+                        price.toString() + " €",
                         style: const TextStyle(
                           fontWeight: FontWeight
                               .bold,
