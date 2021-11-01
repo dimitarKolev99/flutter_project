@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:penny_pincher/models/product.api.dart';
 import 'package:penny_pincher/models/product.dart';
-import 'package:penny_pincher/view/widget/article_card.dart';
+import 'package:penny_pincher/view/widget/favorite_card.dart';
 import 'package:penny_pincher/view/widget/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
+
+
 
 class FavoritePage extends StatefulWidget {
   @override
@@ -12,10 +17,10 @@ class FavoritePage extends StatefulWidget {
 
 class _FavoritePageState extends State<FavoritePage> {
   //late Product _product;
+
   late List<Product> _product;
   late final List<Product> _products = [];
   bool _isLoading = true;
-  var count = 0;
   Timer? _timer;
 
   @override
@@ -27,11 +32,13 @@ class _FavoritePageState extends State<FavoritePage> {
     }
 
     super.initState();
-    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
-      getProducts();
-      if(count>=_product.length - 1){
-        dispose();
-      }
+    getProducts();
+  }
+
+  getData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      // displayName = prefs.getStringList('displayName');
     });
   }
 
@@ -42,14 +49,17 @@ class _FavoritePageState extends State<FavoritePage> {
         _isLoading = false;
       });
     }
-    _products.insert(count, _product[count]);
-    count++;
+    for (var i = 0; i < _product.length; i++) {
+      _products.insert(i, _product[i]);
+    }
   }
 
-  @override
-  void dispose() {
-    _timer!.cancel();
-    super.dispose();
+  void removeFavorite(int index) {
+    if(this.mounted) {
+      setState(() {
+        _products.removeAt(index);
+      });
+    }
   }
 
   @override
@@ -76,23 +86,33 @@ class _FavoritePageState extends State<FavoritePage> {
               SizedBox(width: 10),
               Text('Penny Pincher')
             ],
-          )),
+          ),
+          actions: [
+          IconButton(
+          icon: Icon(Icons.search),
+          onPressed: () {
+            removeFavorite(0);
+          },
+        )
+    ]),
       bottomNavigationBar: BottomNavBarGenerator(),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : Align(
         alignment: Alignment.topCenter,
         child: ListView.builder(
-            reverse: true,
             shrinkWrap: true,
             itemCount: _products.length,
             itemBuilder: (context, index) {
-              return  ArticleCard(
+              return FavoriteCard(
+                index: index,
                 title: _products[index].title,
                 category: _products[index].category,
                 description: _products[index].description,
                 image: _products[index].image,
-                price:  _products[index].price,);
+                price:  _products[index].price,
+              removeFunction: removeFavorite,);
+
             }),
       ),
     );
