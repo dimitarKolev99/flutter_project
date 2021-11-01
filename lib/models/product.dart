@@ -1,5 +1,4 @@
 import 'dart:convert';
-//     final product = productFromJson(jsonString);
 
 class Product {
   Product({

@@ -3,7 +3,6 @@ import 'package:penny_pincher/models/product.dart';
 import 'package:http/http.dart' as http;
 
 class ProductApi{
-  
   static Future<List<Product>> fetchProduct() async {
     final response = await http.get(Uri.parse("https://fakestoreapi.com/products"));
 

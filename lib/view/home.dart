@@ -17,19 +17,13 @@ class _HomePageState extends State<HomePage> {
   var count = 0;
   Timer? _timer;
 
-  /* Stream<Product> getProducts = ( () async* {
-    await Future<void>.delayed(Duration(seconds: 2));
-
-      yield ProductApi().fetchProduct();
-    }
-  })();
-*/
-
   @override
   void initState() {
-    setState(() {
-      _isLoading = true;
-    });
+    if(this.mounted) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
     
     super.initState();
     _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {      
@@ -43,29 +37,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> getProducts() async {
-    // _product = await ProductApi.fetchProduct();
-    // if(mounted){
-    //   super.setState(() {
-    //     _isLoading = false;
-    //   });
-    // }
-     ProductApi.fetchProduct().then((product){
-       if(mounted){
-        super.setState(() {
-          _isLoading = false;
-        });
-       }
-       _products.insert(count, product[count]);
-       count++;});   
+    _product = await ProductApi.fetchProduct();
+    if(this.mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+    _products.insert(count, _product[count]);
+    count++;
   }
 
-  //  Future<void> getProducts() async {
-  //   _products = await ProductApi.fetchProduct();
-  //   setState(() {
-  //     _isLoading = false;
-  //   });
-  // }
-  
   @override
   void dispose() {
     _timer!.cancel();
@@ -100,15 +81,21 @@ class _HomePageState extends State<HomePage> {
         bottomNavigationBar: BottomNavBarGenerator(),
         body: _isLoading
             ? Center(child: CircularProgressIndicator())
-            : ListView.builder(
-                itemCount: _products.length,
-                itemBuilder: (context, index) {
-                  return ProductCard(
-                      title: _products[index].title,
-                      category: _products[index].category,
-                      description: _products[index].description,
-                      thumbnailUrl: _products[index].image);
-                }));
+            : Align(
+              alignment: Alignment.topCenter,
+              child: ListView.builder(
+                  reverse: true,
+                  shrinkWrap: true,
+                  itemCount: _products.length,
+                  itemBuilder: (context, index) {
+                    return ProductCard(
+                        title: _products[index].title,
+                        category: _products[index].category,
+                        description: _products[index].description,
+                        thumbnailUrl: _products[index].image);
+                  }),
+            ),
+    );
   }
 }
   

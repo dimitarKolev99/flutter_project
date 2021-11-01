@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:penny_pincher/view/widget/browser_view.dart';
+import 'package:penny_pincher/view/browser_view.dart';
 
+import '../favorites.dart';
 import '../home.dart';
 
 class BottomNavBarGenerator extends StatefulWidget{
@@ -26,20 +27,23 @@ class _BottomNavBarGeneratorState extends State<BottomNavBarGenerator>{
       BottomNavigationBarItem(
         icon: IconButton(icon: Icon(Icons.update), onPressed: () {Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) =>  HomePage()),
         );},),
         label: 'LiveFeed',
         ),
       BottomNavigationBarItem(
             icon: IconButton(icon: Icon(Icons.filter_list_alt), onPressed: () {Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => BrowserView()),
+              MaterialPageRoute(builder: (context) => BrowserPage()),
             );},),
             label: 'Browser',
         ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.price_check),
-        label: "SuperDeals",
+        icon: IconButton(icon: Icon(Icons.price_check), onPressed: () {Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => FavoritePage()),
+        );},),
+        label: "Merkzettel",
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.account_circle_sharp),
