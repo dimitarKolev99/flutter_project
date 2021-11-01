@@ -18,14 +18,6 @@ class _HomePageState extends State<HomePage> {
   var count = 0;
   Timer? _timer;
 
-  /* Stream<Product> getProducts = ( () async* {
-    await Future<void>.delayed(Duration(seconds: 2));
-
-      yield ProductApi().fetchProduct();
-    }
-  })();
-*/
-
   @override
   void initState() {
     if(this.mounted) {
@@ -54,36 +46,6 @@ class _HomePageState extends State<HomePage> {
     count++;
   }
 
-
-
-  // @override
-  // void initState() {
-  //   setState(() {
-  //     _isLoading = true;
-  //   });
-  //   _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
-  //     ProductApi().fetchProduct().then((product) {
-  //       setState(() {
-  //         _isLoading = false;
-  //       });
-  //       _product = product;
-  //       _products.insert(0, _product);
-  //     });
-  //   });
-  //   super.initState();
-  // }
-  
-
-  /*Future<void> getProduct() async {
-    _product = await ProductApi().fetchProduct();
-    _products.insert(0, _product);
-    if (!_products.isEmpty) {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-*/
   @override
   void dispose() {
     _timer!.cancel();
