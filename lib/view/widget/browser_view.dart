@@ -27,7 +27,7 @@ class _BrowserViewState extends State<BrowserView> {
     super.initState();
     _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
       getProducts();
-      if(count>=_product.length - 1){
+      if(count> _product.length - 1){
        dispose();
       }
     });

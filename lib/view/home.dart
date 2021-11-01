@@ -11,9 +11,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  //late Product _product;
   late List<Product> _product;
-  late final List<Product> _products = [];
+  late List<Product> _products = [];
   bool _isLoading = true;
   var count = 0;
   Timer? _timer;
@@ -33,51 +32,40 @@ class _HomePageState extends State<HomePage> {
     });
     
     super.initState();
-    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
+    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {      
       getProducts();
-      if(count>=_product.length - 1){
-       dispose();
-      }
+      if(count >= _product.length - 1){
+        dispose();
+      } 
     });
+
+    getProducts();
   }
 
   Future<void> getProducts() async {
-    _product = await ProductApi.fetchProduct();
-    setState(() {
-      _isLoading = false;
-    });
-    _products.insert(count, _product[count]);
-    count++;
+    // _product = await ProductApi.fetchProduct();
+    // if(mounted){
+    //   super.setState(() {
+    //     _isLoading = false;
+    //   });
+    // }
+     ProductApi.fetchProduct().then((product){
+       if(mounted){
+        super.setState(() {
+          _isLoading = false;
+        });
+       }
+       _products.insert(count, product[count]);
+       count++;});   
   }
 
-  // @override
-  // void initState() {
+  //  Future<void> getProducts() async {
+  //   _products = await ProductApi.fetchProduct();
   //   setState(() {
-  //     _isLoading = true;
+  //     _isLoading = false;
   //   });
-  //   _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
-  //     ProductApi().fetchProduct().then((product) {
-  //       setState(() {
-  //         _isLoading = false;
-  //       });
-  //       _product = product;
-  //       _products.insert(0, _product);
-  //     });
-  //   });
-  //   super.initState();
   // }
   
-
-  /*Future<void> getProduct() async {
-    _product = await ProductApi().fetchProduct();
-    _products.insert(0, _product);
-    if (!_products.isEmpty) {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-*/
   @override
   void dispose() {
     _timer!.cancel();
