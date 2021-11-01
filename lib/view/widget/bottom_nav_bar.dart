@@ -34,7 +34,7 @@ class _BottomNavBarGeneratorState extends State<BottomNavBarGenerator>{
       BottomNavigationBarItem(
             icon: IconButton(icon: Icon(Icons.filter_list_alt), onPressed: () {Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => BrowserView()),
+              MaterialPageRoute(builder: (context) => BrowserPage()),
             );},),
             label: 'Browser',
         ),

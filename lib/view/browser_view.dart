@@ -5,12 +5,12 @@ import 'package:penny_pincher/view/widget/product_card.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-class HomePage extends StatefulWidget {
+class BrowserPage extends StatefulWidget {
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<BrowserPage> createState() => _BrowserPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _BrowserPageState extends State<BrowserPage> {
   //late Product _product;
   late List<Product> _product;
   late final List<Product> _products = [];
