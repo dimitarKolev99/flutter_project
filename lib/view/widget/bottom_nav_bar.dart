@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:penny_pincher/view/browser_view.dart';
+
+import '../favorites.dart';
+import '../home.dart';
 
 class BottomNavBarGenerator extends StatefulWidget{
 
@@ -11,7 +15,6 @@ class BottomNavBarGenerator extends StatefulWidget{
 
 class _BottomNavBarGeneratorState extends State<BottomNavBarGenerator>{
 
-
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
@@ -20,19 +23,27 @@ class _BottomNavBarGeneratorState extends State<BottomNavBarGenerator>{
       iconSize: 22,
       backgroundColor: const Color.fromRGBO(23, 41, 111, 1),
       type: BottomNavigationBarType.fixed,
-      items: const <BottomNavigationBarItem>[
+      items: <BottomNavigationBarItem>[
       BottomNavigationBarItem(
-        icon: Icon(Icons.update),
-        label: "LiveFeed",
-        //backgroundColor: Colors.black
-      ),
+        icon: IconButton(icon: Icon(Icons.update), onPressed: () {Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) =>  HomePage()),
+        );},),
+        label: 'LiveFeed',
+        ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.filter_list_alt),
-        label: "Browser",
-      ),
+            icon: IconButton(icon: Icon(Icons.filter_list_alt), onPressed: () {Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => BrowserPage()),
+            );},),
+            label: 'Browser',
+        ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.price_check),
-        label: "SuperDeals",
+        icon: IconButton(icon: Icon(Icons.price_check), onPressed: () {Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => FavoritePage()),
+        );},),
+        label: "Merkzettel",
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.account_circle_sharp),
