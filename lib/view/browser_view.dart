@@ -5,43 +5,48 @@ import 'package:penny_pincher/view/widget/product_card.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-class BrowserView extends StatefulWidget {
+class HomePage extends StatefulWidget {
   @override
-  State<BrowserView> createState() => _BrowserViewState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _BrowserViewState extends State<BrowserView> {
-
+class _HomePageState extends State<HomePage> {
+  //late Product _product;
   late List<Product> _product;
   late final List<Product> _products = [];
   bool _isLoading = true;
   var count = 0;
   Timer? _timer;
 
-@override
+  @override
   void initState() {
-    setState(() {
-      _isLoading = true;
-    });
-    
+    if(this.mounted) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
+
     super.initState();
     _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
       getProducts();
       if(count>=_product.length - 1){
-       dispose();
+        dispose();
       }
     });
   }
 
   Future<void> getProducts() async {
     _product = await ProductApi.fetchProduct();
-    setState(() {
-      _isLoading = false;
-    });
+    if(this.mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
     _products.insert(count, _product[count]);
     count++;
   }
-    @override
+
+  @override
   void dispose() {
     _timer!.cancel();
     super.dispose();
@@ -74,16 +79,18 @@ class _BrowserViewState extends State<BrowserView> {
             )
         ),
         bottomNavigationBar: BottomNavBarGenerator(),
-        body: _isLoading
-            ? Center(child:CircularProgressIndicator())
-            : ListView.builder(
-            itemCount: _products.length,
-                itemBuilder: (context, index) {
-                  return ProductCard(
-                      title: _products[index].title,
-                      category: _products[index].category,
-                      description: _products[index].description,
-                      thumbnailUrl: _products[index].image);
-                }));
+      body: GridView.count(
+        // Create a grid with 2 columns. If you change the scrollDirection to
+        // horizontal, this produces 2 rows.
+        crossAxisCount: 2,
+        children: List.generate(_products.length, (index) {
+          return ProductCard(
+              title: _products[index].title,
+              category: _products[index].category,
+              description: _products[index].description,
+              thumbnailUrl: _products[index].image);
+        }),
+      ),
+    );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:penny_pincher/view/home.dart';
 import 'package:flutter/material.dart';
-import 'package:penny_pincher/view/widget/first_route.dart';
+
 
 void main() {
   runApp(MyApp());
