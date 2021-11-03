@@ -5,6 +5,8 @@ import 'package:penny_pincher/view/widget/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:penny_pincher/view/widget/browser_article_card.dart';
+
 class BrowserPage extends StatefulWidget {
   @override
   State<BrowserPage> createState() => _BrowserPageState();
@@ -84,7 +86,7 @@ class _BrowserPageState extends State<BrowserPage> {
         // horizontal, this produces 2 rows.
         crossAxisCount: 2,
         children: List.generate(_products.length, (index) {
-          return  ArticleCard(
+          return  BrowserArticleCard(
             title: _products[index].title,
             category: _products[index].category,
             description: _products[index].description,
