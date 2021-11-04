@@ -17,6 +17,21 @@ class PreferencesArticles {
     await preferences.setString("favorites", jsonEncode(jsonData));
   }
 
+  Future deleteFavorite(int id) async {
+    final preferences = await SharedPreferences.getInstance();
+    final data = preferences.getString('favorites');
+    Map jsonData = jsonDecode(data.toString());
+    jsonData.remove(id.toString());
+    await preferences.setString("favorites", jsonEncode(jsonData));
+  }
+
+  Future<bool> getFavoriteById(int id) async {
+    final preferences = await SharedPreferences.getInstance();
+    final data = preferences.getString('favorites');
+    final jsonData = jsonDecode(data.toString());
+    return jsonData.containsKey(id.toString());
+  }
+
   Future getAllFavorites() async {
     final preferences = await SharedPreferences.getInstance();
     final data = preferences.getString('favorites');

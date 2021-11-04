@@ -57,11 +57,12 @@ class _FavoritePageState extends State<FavoritePage> {
     }
   }
 
-  void removeFavorite(context, int index) {
+  void removeFavorite(context, int index, int id) {
     Navigator.of(context).pop();
     if(this.mounted) {
       setState(() {
-        _products.removeAt(index);
+        _preferenceArticles.deleteFavorite(id);
+        //_products.removeAt(index);
       });
     }
   }
@@ -95,7 +96,7 @@ class _FavoritePageState extends State<FavoritePage> {
           IconButton(
           icon: Icon(Icons.search),
           onPressed: () {
-            removeFavorite(context, 0);
+            removeFavorite(context, 0, 0);
           },
         )
     ]),
@@ -123,7 +124,7 @@ class _FavoritePageState extends State<FavoritePage> {
     );
   }
 
-  showAlertDialog(BuildContext context, index) {
+  showAlertDialog(BuildContext context, index, int id) {
 
   // set up the buttons
   Widget cancelButton = TextButton(
@@ -134,7 +135,7 @@ class _FavoritePageState extends State<FavoritePage> {
         primary: Colors.red,
       ),
     child: const Text("Ja"),
-    onPressed:  () {removeFavorite(context, index);},
+    onPressed:  () {removeFavorite(context, index, id);},
   );
 
   // set up the AlertDialog
