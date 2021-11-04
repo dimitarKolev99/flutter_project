@@ -85,6 +85,7 @@ class _BrowserPageState extends State<BrowserPage> {
         crossAxisCount: 2,
         children: List.generate(_products.length, (index) {
           return  ArticleCard(
+            id: _products[index].id,
             title: _products[index].title,
             category: _products[index].category,
             description: _products[index].description,

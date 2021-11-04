@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class ArticleCard extends StatelessWidget {
+  final int id;
   final String title;
   final String rating = "30";
   final double price;
@@ -20,6 +21,7 @@ class ArticleCard extends StatelessWidget {
   //final int id;
 
   ArticleCard({
+    required this.id,
     required this.title,
     required this.price,
     required this.image,
@@ -29,6 +31,8 @@ class ArticleCard extends StatelessWidget {
   });
 
   final _preferenceArticles = PreferencesArticles();
+
+  
 
  // final List<PreferencesArticles> savedProducts;
 
@@ -206,6 +210,7 @@ class ArticleCard extends StatelessWidget {
   //creating an object of ArticleCard
   void _saveFav() {
     final markedFav = ArticleCard(
+        id: id,
         title: title,
         price: price,
         image: image,
@@ -214,18 +219,7 @@ class ArticleCard extends StatelessWidget {
 
     );
 
-
-    print(markedFav);
-    print("Title: " + title);
-    print("Price: " + price.toString());
-
     _preferenceArticles.saveData(markedFav);
-
-    //savedProducts.add(markedFav);
-    //savedProducts.add();
-
-    print("Print _preferenceArticles");
-    print(_preferenceArticles);
   }
 
 

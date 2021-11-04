@@ -1,3 +1,4 @@
+import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/models/product.api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
@@ -19,6 +20,8 @@ class _HomePageState extends State<HomePage> {
   var count = 0;
   Timer? _timer;
 
+  final _preferenceArticles = PreferencesArticles();
+
   @override
   void initState() {
     if(this.mounted) {
@@ -36,6 +39,8 @@ class _HomePageState extends State<HomePage> {
     });
 
     getProducts();
+
+    _preferenceArticles.getAllFavorites();
   }
 
   Future<void> getProducts() async {
@@ -100,6 +105,7 @@ class _HomePageState extends State<HomePage> {
             itemCount: _products.length,
             itemBuilder: (context, index) {
               return ArticleCard(
+                  id: _products[index].id,
                   title: _products[index].title,
                   category: _products[index].category,
                   description: _products[index].description,

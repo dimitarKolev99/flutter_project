@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../favorites.dart';
 
 class FavoriteCard extends StatelessWidget {
+  final int id;
   final int index;
   final String title;
   final String rating = "30";
@@ -14,6 +15,7 @@ class FavoriteCard extends StatelessWidget {
   var removeFunction;
 
   FavoriteCard({
+    required this.id,
     required this.index,
     required this.title,
     required this.price,
