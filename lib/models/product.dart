@@ -8,6 +8,7 @@ class Product {
     required this.productId,
     required this.title,
     required this.price,
+    required this.saving,
     required this.description,
     required this.image,
   });
@@ -17,6 +18,7 @@ class Product {
   String categoryName;
   int productId;
   String title;
+  int saving;
   double price;
   String description;
   String image;
@@ -28,6 +30,7 @@ class Product {
     productId: json["subCategories"][0]["productCategories"][0]["bargains"][0]["product_id"],
     title: json["subCategories"][0]["productCategories"][0]["bargains"][0]["product_title"],
     price: json["subCategories"][0]["productCategories"][0]["bargains"][0]["price"].toDouble(),
+    saving: json["subCategories"][0]["productCategories"][0]["bargains"][0]["saving"],
     description: json["subCategories"][0]["productCategories"][0]["bargains"][0]["description"],
     image: json["subCategories"][0]["productCategories"][0]["bargains"][0]["images"]["w120h100"][0],
   );

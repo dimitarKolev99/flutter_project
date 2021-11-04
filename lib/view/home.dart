@@ -1,4 +1,4 @@
-import 'package:penny_pincher/models/product.api.dart';
+import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
 import 'package:penny_pincher/view/widget/article_search.dart';
@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
           curve: Curves.easeOut,
           duration: const Duration(milliseconds: 300),
         );
-      if(count>=2){
+      if(count >= _product.length - 1){
         dispose();
       }
     });

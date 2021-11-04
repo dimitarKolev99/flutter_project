@@ -1,4 +1,4 @@
-import 'package:penny_pincher/models/product.api.dart';
+import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
 import 'package:penny_pincher/view/widget/bottom_nav_bar.dart';
