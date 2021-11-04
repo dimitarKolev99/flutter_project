@@ -1,5 +1,14 @@
+//import 'dart:html';
+
+import 'package:http/http.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:penny_pincher/models/preferences_articles.dart';
+import 'package:penny_pincher/models/product.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+
+
 
 class ArticleCard extends StatelessWidget {
   final String title;
@@ -8,6 +17,7 @@ class ArticleCard extends StatelessWidget {
   final String image;
   final String description;
   final String category;
+  //final int id;
 
   ArticleCard({
     required this.title,
@@ -15,11 +25,37 @@ class ArticleCard extends StatelessWidget {
     required this.image,
     required this.description,
     required this.category,
+    //required this.id,
   });
+
+  final _preferenceArticles = PreferencesArticles();
+
+ // final List<PreferencesArticles> savedProducts;
+
+
+
+  /*
+  @override
+  void _populateFileds() async {
+    final articleCard = await _preferenceArticles.getArticleCard();
+
+    setState(() {
+      title = articleCard.title;
+      price = articleCard.price;
+      image = articleCard.image;
+      description = articleCard.description;
+      category = articleCard.category;
+    });
+  }
+
+   */
+
+
   @override
   Widget build(BuildContext context) {
     final displayWidth =  MediaQuery.of(context).size.width;
     final displayHeight =  MediaQuery.of(context).size.height;
+
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 14, vertical: 5),
       width: displayWidth,
@@ -97,7 +133,11 @@ class ArticleCard extends StatelessWidget {
                   padding: EdgeInsets.only(right: 7),
                   child:
                   //TODO: adjust to clickable Icon
-                  Icon(Icons.favorite_border),
+                  IconButton(
+                  icon: Icon(Icons.favorite_border,
+                  color: Colors.red),
+                  onPressed: _saveFav,
+                  )
                 ),
               alignment: Alignment.centerRight,
               ),
@@ -159,4 +199,61 @@ class ArticleCard extends StatelessWidget {
       )
     );
   }
+
+
+
+
+  //creating an object of ArticleCard
+  void _saveFav() {
+    final markedFav = ArticleCard(
+        title: title,
+        price: price,
+        image: image,
+        description: description,
+        category: category,
+
+    );
+
+
+    print(markedFav);
+    print("Title: " + title);
+    print("Price: " + price.toString());
+
+    _preferenceArticles.saveData(markedFav);
+
+    //savedProducts.add(markedFav);
+    //savedProducts.add();
+
+    print("Print _preferenceArticles");
+    print(_preferenceArticles);
+  }
+
+
+  /*
+  Set<ArticleCard> _addArticleCard(ArticleCard card) {
+    _preferenceArticles.saveData(card);
+    final savedArticleCards = Set<ArticleCard>();
+    savedArticleCards.add(card);
+
+    return savedArticleCards;
+  }
+
+   */
+
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
