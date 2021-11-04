@@ -5,6 +5,8 @@ import 'package:penny_pincher/view/widget/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:penny_pincher/view/widget/extended_view.dart';
+
 class BrowserPage extends StatefulWidget {
   @override
   State<BrowserPage> createState() => _BrowserPageState();
@@ -86,12 +88,9 @@ class _BrowserPageState extends State<BrowserPage> {
         children: List.generate(_products.length, (index) {
           return InkWell(
             onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('Tap'),
-              ));
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ArticleCard(
+                MaterialPageRoute(builder: (context) => ExtendedView(
                   title: _products[index].title,
                   category: _products[index].category,
                   description: _products[index].description,
