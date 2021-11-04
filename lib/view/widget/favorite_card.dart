@@ -12,7 +12,7 @@ class FavoriteCard extends StatelessWidget {
   final String image;
   final String description;
   final String category;
-  var removeFunction;
+  dynamic callback;
 
   FavoriteCard({
     required this.id,
@@ -22,7 +22,7 @@ class FavoriteCard extends StatelessWidget {
     required this.image,
     required this.description,
     required this.category,
-    required this.removeFunction,
+    required this.callback,
   });
   @override
   Widget build(BuildContext context) {
@@ -107,7 +107,7 @@ class FavoriteCard extends StatelessWidget {
                   IconButton(
                     icon: Icon(Icons.favorite, color: Colors.red),
                     onPressed: () {
-                      removeFunction(context, index, index);
+                      callback.showAlertDialog(context, index, id);
                     },
                   ),
                 ),

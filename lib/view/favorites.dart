@@ -22,13 +22,12 @@ class _FavoritePageState extends State<FavoritePage> {
   late List<Product> _product;
   late final List<Product> _products = [];
   bool _isLoading = true;
-  Timer? _timer;
 
   final _preferenceArticles = PreferencesArticles();
 
   @override
   void initState() {
-    if(this.mounted) {
+    if(mounted) {
       setState(() {
         _isLoading = true;
       });
@@ -47,7 +46,7 @@ class _FavoritePageState extends State<FavoritePage> {
 
   Future<void> getProducts() async {
     _product = await _preferenceArticles.getAllFavorites();
-    if(this.mounted) {
+    if(mounted) {
       setState(() {
         _isLoading = false;
       });
@@ -57,12 +56,10 @@ class _FavoritePageState extends State<FavoritePage> {
     }
   }
 
-  void removeFavorite(context, int index, int id) {
-    Navigator.of(context).pop();
-    if(this.mounted) {
+  void removeFavorite(int index) {
+    if(mounted) {
       setState(() {
-        _preferenceArticles.deleteFavorite(id);
-        //_products.removeAt(index);
+        _products.removeAt(index);
       });
     }
   }
@@ -94,9 +91,9 @@ class _FavoritePageState extends State<FavoritePage> {
           ),
           actions: [
           IconButton(
-          icon: Icon(Icons.search),
+          icon: const Icon(Icons.search),
           onPressed: () {
-            removeFavorite(context, 0, 0);
+
           },
         )
     ]),
@@ -117,15 +114,13 @@ class _FavoritePageState extends State<FavoritePage> {
                 description: _products[index].description,
                 image: _products[index].image,
                 price:  _products[index].price,
-              removeFunction: showAlertDialog,);
-
+                callback: this,);
             }),
       ),
     );
   }
 
-  showAlertDialog(BuildContext context, index, int id) {
-
+  showAlertDialog(BuildContext context, int index, int id) {
   // set up the buttons
   Widget cancelButton = TextButton(
     child: const Text("Nein"),
@@ -133,9 +128,13 @@ class _FavoritePageState extends State<FavoritePage> {
   );
   Widget continueButton = TextButton(style: TextButton.styleFrom(
         primary: Colors.red,
-      ),
-    child: const Text("Ja"),
-    onPressed:  () {removeFavorite(context, index, id);},
+  ),
+  child: const Text("Ja"),
+    onPressed:  () {
+      Navigator.of(context).pop();
+      _preferenceArticles.removeFavorite(id);
+      removeFavorite(index);
+    },
   );
 
   // set up the AlertDialog

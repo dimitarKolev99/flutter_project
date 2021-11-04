@@ -18,7 +18,7 @@ class ArticleCard extends StatelessWidget {
   final String image;
   final String description;
   final String category;
-  //final int id;
+  dynamic callback;
 
   ArticleCard({
     required this.id,
@@ -27,12 +27,8 @@ class ArticleCard extends StatelessWidget {
     required this.image,
     required this.description,
     required this.category,
-    //required this.id,
+    required this.callback,
   });
-
-  final _preferenceArticles = PreferencesArticles();
-
-  
 
  // final List<PreferencesArticles> savedProducts;
 
@@ -136,11 +132,13 @@ class ArticleCard extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.only(right: 7),
                   child:
-                  //TODO: adjust to clickable Icon
                   IconButton(
-                  icon: Icon(Icons.favorite_border,
-                  color: Colors.red),
-                  onPressed: _saveFav,
+                  icon: (callback.isFavorite(id)
+                      ? const Icon(Icons.favorite,
+                      color: Colors.red)
+                      : const Icon(Icons.favorite_border,
+                      color: Colors.black)),
+                  onPressed: _changeFavorite,
                   )
                 ),
               alignment: Alignment.centerRight,
@@ -208,35 +206,9 @@ class ArticleCard extends StatelessWidget {
 
 
   //creating an object of ArticleCard
-  void _saveFav() {
-    final markedFav = ArticleCard(
-        id: id,
-        title: title,
-        price: price,
-        image: image,
-        description: description,
-        category: category,
-
-    );
-
-    _preferenceArticles.saveData(markedFav);
+  Future _changeFavorite() async {
+    await callback.changeFavoriteState(this);
   }
-
-
-  /*
-  Set<ArticleCard> _addArticleCard(ArticleCard card) {
-    _preferenceArticles.saveData(card);
-    final savedArticleCards = Set<ArticleCard>();
-    savedArticleCards.add(card);
-
-    return savedArticleCards;
-  }
-
-   */
-
-
-
-
 }
 
 
