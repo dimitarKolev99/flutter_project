@@ -65,17 +65,28 @@ class ExtendedView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SizedBox(height: 20),
+                                                                                // Picture, % Badge , Fav Icon
                       Stack(
                         children: [
+                          Center(
+                            child: Image.network(
+                              image,
+                              width: displayWidth * 0.6,
+                              height: displayWidth * 0.6,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
                           Align(
                             child: Padding(
                               padding: EdgeInsets.only(right: 7),
                               child:
                               //TODO: adjust to clickable Icon
-                              Icon(Icons.favorite_border),
+                              Icon(Icons.favorite_border,
+                              size: 33,),
                             ),
                             alignment: Alignment.centerRight,
                           ),
+                          SizedBox(height: 10),
 
                           Container(                                                      // % Badge
                             padding: EdgeInsets.only(top: 3, bottom: 3, left: 13, right: 10),
@@ -87,48 +98,77 @@ class ExtendedView extends StatelessWidget {
                               style: TextStyle(
                                 color: Color.fromRGBO(240, 240, 240, 1),
                                 fontWeight: FontWeight.bold,
-                                fontSize: 15,
+                                fontSize: 25,
+                                letterSpacing: 1.4,
                               ),
                             ),
                           ),
 
-                          Center(
-                            child: Image.network(
-                              image,
-                              width: displayWidth * 0.6,
-                              height: displayWidth * 0.6,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
+
                         ]
                       ),
+                      SizedBox(height: 5),
+                      Container(                                                                  // category
+                        margin:  EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(color: const Color.fromRGBO(23, 41, 111, 0.8),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        //width: displayWidth,
+                        //height: displayHeight / 4,
+                        child: Text(
+                          category,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: Color.fromRGBO(240, 240, 240, 1),
+                          ),
+                        ),
+                      ),
+                                                                                                  // title
+                      Container(
+                        margin:  EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        //width: displayWidth,
+                        //height: displayHeight / 4,
+                        child: Text(
+                          title,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
 
-                      SizedBox(height: 15),
+                      Container(                                                                  // description
+                        margin:  EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        //width: displayWidth,
+                        //height: displayHeight / 4,
+                        child: Text(
+                          description,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+
+
                       Row(
                         children: [
-                          Container(
-                            width: displayWidth / 2,
-                            height: displayHeight / 4,
-                            color: Colors.blue,
-                            child: Text(
-                              title,
-                              textAlign: TextAlign.left,
-                              style: TextStyle(),
-                            ),
-                          ),
+
                           Column(children: [
                             const Text(
                               "Current Price:",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 10,
+                                  fontSize: 20,
                                   color: Colors.black),
                             ),
                             Text(
                               price.toString() + " €",
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 20,
+                                fontSize: 30,
                                 color: Color.fromRGBO(220, 110, 30, 1),
                               ),
                             ),
@@ -136,7 +176,7 @@ class ExtendedView extends StatelessWidget {
                               //ToDO: add previous price
                               "Previously 9.99€",
                               style:
-                                  TextStyle(fontSize: 8, color: Colors.black),
+                                  TextStyle(fontSize: 15, color: Colors.black),
                             ),
                           ]),
                         ],
