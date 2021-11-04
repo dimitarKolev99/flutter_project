@@ -18,140 +18,116 @@ class BrowserArticleCard extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    final displayWidth =  MediaQuery.of(context).size.width;
-    final displayHeight =  MediaQuery.of(context).size.height;
+    final displayWidth = MediaQuery.of(context).size.width;
+    final displayHeight = MediaQuery.of(context).size.height;
     return Container(
-        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.6),
-              offset: Offset(
-                0.0,
-                10.0,
+      // card itself
+      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(2),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.6),
+            offset: Offset(
+              0.0,
+              10.0,
+            ),
+            blurRadius: 10.0,
+            spreadRadius: -6.0,
+          ),
+        ],
+      ),
+      child: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(children: [
+              //image + fav icon
+              Stack(
+                children: [
+                  //Image
+                  Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child: Image.network(
+                      image,
+                      width: displayWidth / 3,
+                      height: displayHeight / 6,
+                      fit: BoxFit.contain,
+                    ),
+                    alignment: Alignment.topCenter,
+                  ),
+                  // %Badge
+                  Container(
+                    margin: EdgeInsets.only(top: 5, left: 5),
+                    //padding: EdgeInsets.only(top: 3, bottom: 3, left: 10, right: 17),
+                    decoration: BoxDecoration(
+                      color: Color.fromRGBO(220, 110, 30, 1), // const Color.fromRGBO(23, 41, 111, 0.8),
+                      borderRadius: BorderRadius.circular(0),
+                    ),
+                    child: Text(
+                      " -" + rating + "% ",
+                      style: TextStyle(
+                        color: Color.fromRGBO(240, 240, 240, 1),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  //Favorite icon
+                  Container(
+                    margin: EdgeInsets.only(top: 5, right: 5),
+                    child: Align(
+                      child: Icon(
+                        Icons.favorite_border,
+                        size: 32.0,
+                      ),
+                      alignment: Alignment.topRight,
+                    ),
+                  ),
+                ],
               ),
-              blurRadius: 10.0,
-              spreadRadius: -6.0,
+              // title
+              Container(
+                margin: EdgeInsets.only(top: 5),
+                width: displayWidth / 2.5,
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                ),
+                alignment: Alignment.topCenter,
+              ),
+            ]),
+            //price
+            Container(
+              margin: EdgeInsets.only(bottom: 5),
+              child: Column(children: [
+                Text(
+                  //ToDO: add previous price
+                  "Previously  1" + price.toString() + "€",
+                  style: TextStyle(fontSize: 12, color: Colors.black),
+                ),
+                Text(
+                  price.toString() + "€",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30,
+                    color: Color.fromRGBO(220, 110, 30, 1),
+                  ),
+                ),
+              ]),
+              //alignment: Alignment.bottomCenter,
             ),
           ],
         ),
-        child:
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [ // Picture + Rating / Discount%
-            Align(
-              child: // Product Image
-              Container(
-                margin: EdgeInsets.only(top: 5),
-                child:
-                ClipRRect(
-                  child:
-                  Image.network(
-                    image,
-                    width: displayWidth/4,
-                    height: displayWidth/4,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              alignment: Alignment.topCenter,
-            ),
-            Container( // title
-              margin: EdgeInsets.only(bottom: 40),
-              width: displayWidth/3,
-              child: Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 15,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-                textAlign: TextAlign.center,
-              ),
-              alignment: Alignment.topCenter,
-            ),
-            Container(
-                //margin: EdgeInsets.only(bottom: 20),
-                //padding: EdgeInsets.only(bottom: 20),
-                width: displayWidth/2.5,
-                child:
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    // Favourite Icon
-                    Container(
-                      child:
-                      Padding(
-                        padding: EdgeInsets.only(right: 5),
-                        child:
-                        //TODO: adjust to clickable Icon
-                        Icon(Icons.favorite_border),
-                      ),
-                      alignment: Alignment.centerRight,
-                    ),
-                    // % Badge
-                    Container(
-                      //margin: EdgeInsets.only(bottom: 100),
-                      //padding: EdgeInsets.only(top: 3, bottom: 3, left: 10, right: 17),
-                      decoration: BoxDecoration(color: Color.fromRGBO(220, 110, 30, 1),  // const Color.fromRGBO(23, 41, 111, 0.8),
-                        borderRadius: BorderRadius.circular(0),
-                      ),
-                      child:
-                      Text("-" + rating+ "%",
-                        style: TextStyle(
-                          color: Color.fromRGBO(240, 240, 240, 1),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                    // current Price...
-                    Container(
-                      //margin: EdgeInsets.only(right: 10, bottom: 0),
-                      child:
-                      Column(
-                          children: [
-                            const Text(
-                              "Current Price:",
-                              style: TextStyle(
-                                  fontWeight: FontWeight
-                                      .bold,
-                                  fontSize: 10,
-                                  color: Colors
-                                      .black),
-                            ),
-                            Text(
-                              price.toString() + " €",
-                              style: const TextStyle(
-                                fontWeight: FontWeight
-                                    .bold,
-                                fontSize: 20,
-                                color: Color
-                                    .fromRGBO(
-                                    220, 110, 30,
-                                    1),),
-                            ),
-                            const Text(
-                              //ToDO: add previous price
-                              "Previously 9.99€",
-                              style: TextStyle(
-                                  fontSize: 8,
-                                  color: Colors
-                                      .black),
-                            ),
-                          ]
-                      ),
-                    ),
-                  ],
-                )
-            ),
-          ],
-        )
+      ),
     );
   }
 }

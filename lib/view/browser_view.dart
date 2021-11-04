@@ -85,6 +85,7 @@ class _BrowserPageState extends State<BrowserPage> {
         // Create a grid with 2 columns. If you change the scrollDirection to
         // horizontal, this produces 2 rows.
         crossAxisCount: 2,
+        childAspectRatio : 0.75,
         children: List.generate(_products.length, (index) {
           return  BrowserArticleCard(
             title: _products[index].title,
