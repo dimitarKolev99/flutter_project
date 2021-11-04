@@ -112,13 +112,13 @@ class BrowserArticleCard extends StatelessWidget {
                 Text(
                   //ToDO: add previous price
                   "Previously  1" + price.toString() + "€",
-                  style: TextStyle(fontSize: 12, color: Colors.black),
+                  style: TextStyle(fontSize: 11, color: Colors.black),
                 ),
                 Text(
                   price.toString() + "€",
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 30,
+                    fontSize: 28,
                     color: Color.fromRGBO(220, 110, 30, 1),
                   ),
                 ),
