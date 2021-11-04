@@ -6,6 +6,8 @@ import 'package:penny_pincher/view/widget/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:penny_pincher/view/widget/extended_view.dart';
+
 class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
@@ -98,12 +100,24 @@ class _HomePageState extends State<HomePage> {
             shrinkWrap: true,
             itemCount: _products.length,
             itemBuilder: (context, index) {
-              return ArticleCard(
-                  title: _products[index].title,
-                  category: _products[index].category,
-                  description: _products[index].description,
-                  image: _products[index].image,
-                  price:  _products[index].price,);
+              return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ExtendedView(
+                        title: _products[index].title,
+                        category: _products[index].category,
+                        description: _products[index].description,
+                        image: _products[index].image,
+                        price:  _products[index].price,)),
+                    );
+                  },
+                  child: ArticleCard(
+                    title: _products[index].title,
+                    category: _products[index].category,
+                    description: _products[index].description,
+                    image: _products[index].image,
+                    price:  _products[index].price,));
             }),
       ),
     );

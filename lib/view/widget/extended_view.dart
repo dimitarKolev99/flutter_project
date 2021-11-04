@@ -43,24 +43,66 @@ class ExtendedView extends StatelessWidget {
 
             child: Container(
                 alignment: Alignment.topLeft,
-                //margin: EdgeInsets.symmetric(vertical: 10),
+                margin:  EdgeInsets.symmetric(horizontal: 14, vertical: 5),
                 width: displayWidth,
-                height: displayHeight,
+                //height: displayHeight,
                 decoration: BoxDecoration(
                   color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.6),
+                      offset: Offset(
+                        0.0,
+                        10.0,
+                      ),
+                      blurRadius: 10.0,
+                      spreadRadius: -6.0,
+                    ),
+                  ]
                 ),
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SizedBox(height: 20),
-                      Center(
-                        child: Image.network(
-                          image,
-                          width: displayWidth * 0.6,
-                          //height: displayWidth / 3 - 30,
-                          fit: BoxFit.cover,
-                        ),
+                      Stack(
+                        children: [
+                          Align(
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 7),
+                              child:
+                              //TODO: adjust to clickable Icon
+                              Icon(Icons.favorite_border),
+                            ),
+                            alignment: Alignment.centerRight,
+                          ),
+
+                          Container(                                                      // % Badge
+                            padding: EdgeInsets.only(top: 3, bottom: 3, left: 13, right: 10),
+                            decoration: BoxDecoration(color: Color.fromRGBO(220, 110, 30, 1),  // const Color.fromRGBO(23, 41, 111, 0.8),
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                            child:
+                            Text("-" + rating+ "%",
+                              style: TextStyle(
+                                color: Color.fromRGBO(240, 240, 240, 1),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+
+                          Center(
+                            child: Image.network(
+                              image,
+                              width: displayWidth * 0.6,
+                              height: displayWidth * 0.6,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ]
                       ),
+
                       SizedBox(height: 15),
                       Row(
                         children: [
