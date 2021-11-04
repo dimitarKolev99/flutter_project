@@ -19,7 +19,7 @@ class _BottomNavBarGeneratorState extends State<BottomNavBarGenerator>{
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       selectedItemColor: const Color.fromRGBO(220, 110, 30, 1),
-      unselectedItemColor: const Color.fromRGBO(0, 0, 0, 1),
+      unselectedItemColor: const Color.fromRGBO(240, 240, 240, 1),
       iconSize: 22,
       backgroundColor: const Color.fromRGBO(23, 41, 111, 1),
       type: BottomNavigationBarType.fixed,

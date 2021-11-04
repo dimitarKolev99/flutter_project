@@ -5,7 +5,10 @@ import 'package:penny_pincher/view/widget/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
+
+import 'package:penny_pincher/view/widget/extended_view.dart';
 import 'package:penny_pincher/view/widget/browser_article_card.dart';
+
 
 class BrowserPage extends StatefulWidget {
   @override
@@ -87,12 +90,26 @@ class _BrowserPageState extends State<BrowserPage> {
         crossAxisCount: 2,
         childAspectRatio : 0.8,
         children: List.generate(_products.length, (index) {
-          return  BrowserArticleCard(
+
+          return InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ExtendedView(
+                  title: _products[index].title,
+                  category: _products[index].category,
+                  description: _products[index].description,
+                  image: _products[index].image,
+                  price:  _products[index].price,)),
+              );
+            },
+              child: BrowserArticleCard(
+
             title: _products[index].title,
             category: _products[index].category,
             description: _products[index].description,
             image: _products[index].image,
-            price:  _products[index].price,);
+            price:  _products[index].price,));
         }),
       ),
     );
