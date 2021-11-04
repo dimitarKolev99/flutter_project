@@ -3,8 +3,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 //this class will store all the informations
 class PreferencesArticles {
+
+
   Future saveData(ArticleCard articleCard) async {
     final preferences = await SharedPreferences.getInstance();
+
+    var test = toJson(articleCard);
+    print(test);
+    var test2 = fromJson(test);
+    print(test2.title);
+    
 
     await preferences.setDouble('price', articleCard.price);
     await preferences.setString('title', articleCard.title);
@@ -14,6 +22,23 @@ class PreferencesArticles {
 
     print('Saved Articel Card');
     print("------------------");
+  }
+
+  Map<String, dynamic> toJson(ArticleCard articleCard) => {
+        'title': articleCard.title,
+        'price': articleCard.price,
+        'image': articleCard.image,
+        'description': articleCard.description,
+        'category': articleCard.category,
+      };
+
+  ArticleCard fromJson(Map<String, dynamic> json) {
+    return ArticleCard(
+      title: json['title'],
+        price: json['price'],
+        image: json['image'],
+        description: json['description'],
+        category: json['category']);
   }
 
     Future<ArticleCard> getArticleCard() async {  //
