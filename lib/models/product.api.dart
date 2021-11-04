@@ -15,6 +15,7 @@ class ProductApi{
       List<dynamic> data = map["result"];
 
       //List _data = json.decode(response.body)
+      print(data[0]["subCategories"][0]["productCategories"][0]["bargains"][0]["images"]["w120h100"][0]);
       return data.map((data) => Product.fromJson(data)).toList();
     } else {
       // If the server did not return a 200 OK response,

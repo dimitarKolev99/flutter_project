@@ -108,11 +108,12 @@ class _HomePageState extends State<HomePage> {
             itemBuilder: (context, index) {
               return ArticleCard(
                   title: _products[index].title,
-                  category: _products[index].category,
+                  category: _products[index].categoryName,
                   description: _products[index].description,
                   image: _products[index].image,
-                  //price:  _products[index].price,);
-              );}),
+                  price:  _products[index].price,
+              );
+            }),
       ),
     );
   }

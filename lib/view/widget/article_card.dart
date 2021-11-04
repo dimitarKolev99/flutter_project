@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 class ArticleCard extends StatelessWidget {
   final String title;
   final String rating = "30";
-//  final double price;
+  final double price;
   final String image;
   final String description;
   final String category;
 
   ArticleCard({
     required this.title,
- //   required this.price,
+    required this.price,
     required this.image,
     required this.description,
     required this.category,
@@ -131,8 +131,7 @@ class ArticleCard extends StatelessWidget {
                                 .black),
                       ),
                       Text(
-                       // price.toString() + " €",
-                        "80",
+                        price.toString() + " €",
                         style: const TextStyle(
                           fontWeight: FontWeight
                               .bold,
