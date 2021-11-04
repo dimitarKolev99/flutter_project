@@ -17,9 +17,12 @@ class _HomePageState extends State<HomePage> {
   bool _isLoading = true;
   var count = 0;
   Timer? _timer;
+  bool _isScrolling = true;
+  ScrollController _scrollController = new ScrollController();
 
   @override
   void initState() {
+
     if(this.mounted) {
       setState(() {
         _isLoading = true;
@@ -27,13 +30,17 @@ class _HomePageState extends State<HomePage> {
     }
 
     super.initState();
-    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {      
+    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
       getProducts();
-      if(count>=_product.length - 1){
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          curve: Curves.easeOut,
+          duration: const Duration(milliseconds: 300),
+        );
+      if(count>=2){
         dispose();
       }
     });
-
     getProducts();
   }
 
@@ -96,6 +103,7 @@ class _HomePageState extends State<HomePage> {
         child: ListView.builder(
             reverse: true,
             shrinkWrap: true,
+            controller: _scrollController,
             itemCount: _products.length,
             itemBuilder: (context, index) {
               return ArticleCard(
@@ -103,8 +111,8 @@ class _HomePageState extends State<HomePage> {
                   category: _products[index].category,
                   description: _products[index].description,
                   image: _products[index].image,
-                  price:  _products[index].price,);
-            }),
+                  //price:  _products[index].price,);
+              );}),
       ),
     );
   }

@@ -2,42 +2,39 @@ import 'dart:convert';
 
 class Product {
   Product({
-    required this.id,
+    required this.subCategoryId,
+    required this.categoryId,
+    required this.productId,
     required this.title,
-    required this.price,
+    //required this.price,
     required this.description,
     required this.category,
     required this.image,
   });
 
-  int id;
+  int subCategoryId;
+  int categoryId;
+  int productId;
   String title;
-  double price;
+  //double price;
   String description;
   String category;
   String image;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
-    id: json["id"],
-    title: json["title"],
-    price: json["price"].toDouble(),
-    description: json["description"],
-    category: json["category"],
-    image: json["image"],
+    subCategoryId: json["id"],
+    categoryId: json["subCategories"][0]["productCategories"][0]["id"],
+    productId: json["subCategories"][0]["productCategories"][0]["bargains"][0]["product_id"],
+    title: json["subCategories"][0]["productCategories"][0]["bargains"][0]["product_title"],
+    //price: json["subCategories"][0]["productCategories"][0]["bargains"][0]["best_price_offer"]["price"],
+    description: json["subCategories"][0]["productCategories"][0]["bargains"][0]["description"],
+    category: json["subCategories"][0]["productCategories"][0]["bargains"][0]["category_name"],
+    image: json["subCategories"][0]["productCategories"][0]["bargains"][0]["images"]["w120h100"][0],
   );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "title": title,
-    "price": price,
-    "description": description,
-    "category": category,
-    "image": image,
-  };
 
    @override
   String toString(){
-    return 'Product {title: $title, image: $image, price: $price, description: $description, category: $category}';
+    return 'Product {title: $title, image: $image, description: $description, category: $category}';
   }
 }
 

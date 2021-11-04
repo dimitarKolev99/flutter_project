@@ -92,8 +92,8 @@ class _FavoritePageState extends State<FavoritePage> {
                 category: _products[index].category,
                 description: _products[index].description,
                 image: _products[index].image,
-                price:  _products[index].price,);
-            }),
+              //  price:  _products[index].price,);
+              );}),
       ),
     );
   }

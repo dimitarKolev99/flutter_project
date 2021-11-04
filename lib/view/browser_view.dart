@@ -89,8 +89,8 @@ class _BrowserPageState extends State<BrowserPage> {
             category: _products[index].category,
             description: _products[index].description,
             image: _products[index].image,
-            price:  _products[index].price,);
-        }),
+           // price:  _products[index].price,);
+          );}),
       ),
     );
   }
