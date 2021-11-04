@@ -3,19 +3,10 @@ import 'package:flutter/material.dart';
 
 class ArticleSearch extends SearchDelegate<String> {
 
-  final articles = [ //TODO: Just sample articles. Needs actual data
-    'iPhone',
-    'Jeans',
-    'macBook',
-    'bag',
-    'T-shirt',
-    'charger',
-  ];
-
   List<String> recentArticles = [];
 
   ArticleSearch () {
-    updateRecent();
+    updateRecent(); // reading out storage on opening searchBar
   }
 
   @override
@@ -72,7 +63,7 @@ class ArticleSearch extends SearchDelegate<String> {
     @override
     Widget buildSuggestions(BuildContext context) {
       updateRecent();
-      final suggestions = query.isEmpty ? recentArticles : articles.where((article) {
+      final suggestions = query.isEmpty ? recentArticles : recentArticles.where((article) {
         final articleLower = article.toLowerCase();
         final queryLower = query.toLowerCase();
 
@@ -82,7 +73,7 @@ class ArticleSearch extends SearchDelegate<String> {
       return buildSuggestionsSuccess(suggestions);
     }
 
-    Widget buildSuggestionsSuccess(List<dynamic> suggestions) => ListView.builder(
+    Widget buildSuggestionsSuccess(List<String> suggestions) => ListView.builder(
       itemCount: suggestions.length,
       itemBuilder: (context, index) {
         final suggestion = suggestions[index];
@@ -121,17 +112,18 @@ class ArticleSearch extends SearchDelegate<String> {
     );
 
     void storeToRecent(String s) async {
-      if(s == '' || s == ' ') return;
-      recentArticles.insert(0, s);
+      if(s == '' || s == ' ') return; // no need to store an empty query
+      if(recentArticles.contains(s)) recentArticles.remove(s); // avoiding duplications
+      recentArticles.insert(0, s); // storing in run-time variable
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setStringList('recentArticles', recentArticles);
+      prefs.setStringList('recentArticles', recentArticles); // storing permanently
 
     }
 
     void updateRecent() async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      recentArticles = prefs.getStringList('recentArticles') ?? [];
+      recentArticles = prefs.getStringList('recentArticles') ?? []; // reading out permanent storage
     }
 }
 
