@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/models/product.api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/widget/favorite_card.dart';
@@ -23,6 +24,8 @@ class _FavoritePageState extends State<FavoritePage> {
   bool _isLoading = true;
   Timer? _timer;
 
+  final _preferenceArticles = PreferencesArticles();
+
   @override
   void initState() {
     if(this.mounted) {
@@ -43,7 +46,7 @@ class _FavoritePageState extends State<FavoritePage> {
   }
 
   Future<void> getProducts() async {
-    _product = await ProductApi.fetchProduct();
+    _product = await _preferenceArticles.getAllFavorites();
     if(this.mounted) {
       setState(() {
         _isLoading = false;
