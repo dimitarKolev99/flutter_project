@@ -120,9 +120,9 @@ class ArticleSearch extends SearchDelegate<String> {
       },
     );
 
-    void storeToRecent(String query) async {
-      if(query == '' || query == ' ') return;
-      recentArticles.insert(0, query);
+    void storeToRecent(String s) async {
+      if(s == '' || s == ' ') return;
+      recentArticles.insert(0, s);
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setStringList('recentArticles', recentArticles);
