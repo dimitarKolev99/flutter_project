@@ -84,12 +84,27 @@ class _BrowserPageState extends State<BrowserPage> {
         // horizontal, this produces 2 rows.
         crossAxisCount: 2,
         children: List.generate(_products.length, (index) {
-          return  ArticleCard(
+          return InkWell(
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text('Tap'),
+              ));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ArticleCard(
+                  title: _products[index].title,
+                  category: _products[index].category,
+                  description: _products[index].description,
+                  image: _products[index].image,
+                  price:  _products[index].price,)),
+              );
+            },
+              child: ArticleCard(
             title: _products[index].title,
             category: _products[index].category,
             description: _products[index].description,
             image: _products[index].image,
-            price:  _products[index].price,);
+            price:  _products[index].price,));
         }),
       ),
     );
