@@ -137,6 +137,7 @@ class ExtendedView extends StatelessWidget {
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
+                            fontSize: 20,
                             color: Colors.black,
                           ),
                         ),
@@ -155,59 +156,77 @@ class ExtendedView extends StatelessWidget {
                         ),
                       ),
 
-
-
+                      SizedBox(height: 5),
+                                                                                    // Price Button - Row
                 Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                      color: Color.fromRGBO(23, 41, 111, 1),
+                    ),
+                  child:
+                  Container(
                   margin:  EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(children: [                                          // Price
-                        const Text(
+                    child:
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Price
+                              /*const Text(
                           "Current Price:",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                               color: Colors.black),
                         ),
-                        Text(
-                          price.toString() + " €",
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30,
-                            color: Color.fromRGBO(220, 110, 30, 1),
+
+                         */
+                              Text(
+                                price.toString() + " €",
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 35,
+                                  color: Color.fromRGBO(220, 110, 30, 1),
+                                ),
+                              ),
+                              const Text(
+                                //ToDO: add previous price
+                                "Previously 9.99€",
+                                style:
+                                TextStyle(fontSize: 15, color: Color.fromRGBO(240, 240, 240, 1)),
+                              ),
+                            ]),
+
+                        Container(                                                                  // Pay
+                          //margin:  EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+
+                          //width: displayWidth,
+                          //height: displayHeight / 4,
+                          child: TextButton(
+
+                            onPressed:() {},
+                            child: Text("To Offer", style: TextStyle(fontSize: 25, color: Color.fromRGBO(240, 240, 240, 1),),),
+
+                            //textAlign: TextAlign.left,
+                            style: TextButton.styleFrom(
+                              //fontWeight: FontWeight.bold,
+                                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                                backgroundColor: Color.fromRGBO(23, 41, 111, 0.5),
+                                shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                color: Color.fromRGBO(240, 240, 240, 1),
+                                width: 2,
+                                    style: BorderStyle.solid
+                                ), borderRadius: BorderRadius.circular(15)),
+                                )
+                            ),
                           ),
-                        ),
-                        const Text(
-                          //ToDO: add previous price
-                          "Previously 9.99€",
-                          style:
-                          TextStyle(fontSize: 15, color: Colors.black),
-                        ),
-                      ]),
-                      Container(                                                                  // Pay
-                        margin:  EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-
-                        //width: displayWidth,
-                        //height: displayHeight / 4,
-                        child: TextButton(
-
-                          onPressed:() {},
-                          child: Text("To Offer", style: TextStyle(fontSize: 25, color: Color.fromRGBO(240, 240, 240, 1),),),
-
-                          //textAlign: TextAlign.left,
-                          style: TextButton.styleFrom(
-                            //fontWeight: FontWeight.bold,
-                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                              backgroundColor: Color.fromRGBO(23, 41, 111, 1),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                              )
-                          ),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
+
                 ),
 
 
