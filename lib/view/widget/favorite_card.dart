@@ -105,7 +105,7 @@ class FavoriteCard extends StatelessWidget {
                   IconButton(
                     icon: Icon(Icons.favorite, color: Colors.red),
                     onPressed: () {
-                      removeFunction(index);
+                      removeFunction(context, index);
                     },
                   ),
                 ),

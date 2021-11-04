@@ -54,7 +54,8 @@ class _FavoritePageState extends State<FavoritePage> {
     }
   }
 
-  void removeFavorite(int index) {
+  void removeFavorite(context, int index) {
+    Navigator.of(context).pop();
     if(this.mounted) {
       setState(() {
         _products.removeAt(index);
@@ -91,7 +92,7 @@ class _FavoritePageState extends State<FavoritePage> {
           IconButton(
           icon: Icon(Icons.search),
           onPressed: () {
-            removeFavorite(0);
+            removeFavorite(context, 0);
           },
         )
     ]),
@@ -111,10 +112,45 @@ class _FavoritePageState extends State<FavoritePage> {
                 description: _products[index].description,
                 image: _products[index].image,
                 price:  _products[index].price,
-              removeFunction: removeFavorite,);
+              removeFunction: showAlertDialog,);
 
             }),
       ),
     );
   }
+
+  showAlertDialog(BuildContext context, index) {
+
+  // set up the buttons
+  Widget cancelButton = TextButton(
+    child: const Text("Nein"),
+    onPressed:  () {Navigator.of(context).pop();},
+  );
+  Widget continueButton = TextButton(style: TextButton.styleFrom(
+        primary: Colors.red,
+      ),
+    child: const Text("Ja"),
+    onPressed:  () {removeFavorite(context, index);},
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: const Text("Artikel entfernen?"),
+    content: const Text("Willst du diesen Artikel wirklich aus deinen Favorites entfernen?"),
+    shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0))),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
 }
