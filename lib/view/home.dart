@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late List<Product> _product;
+  late List<Product> _product; //TODO: LateInitializationError: Field '_product@18461920' has not been initialized. comes from here
   late List<Product> _products = [];
   bool _isLoading = true;
   var count = 0;
@@ -32,16 +32,18 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
       getProducts();
+      if(_scrollController.hasClients) {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
           curve: Curves.easeOut,
           duration: const Duration(milliseconds: 300),
         );
-      if(count >= _product.length - 1){
+      }
+      if(count >= _product.length - 1) {
         dispose();
       }
     });
-    getProducts();
+    //getProducts();
   }
 
   Future<void> getProducts() async {
@@ -55,11 +57,12 @@ class _HomePageState extends State<HomePage> {
     count++;
   }
 
-  @override
+ @override
   void dispose() {
     _timer!.cancel();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
