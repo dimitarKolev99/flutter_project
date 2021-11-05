@@ -78,20 +78,33 @@ class _BrowserPageState extends State<BrowserPage> {
               ],
             )
         ),
-        bottomNavigationBar: BottomNavBarGenerator(),
+      bottomNavigationBar: BottomNavBarGenerator(),
       body: GridView.count(
         // Create a grid with 2 columns. If you change the scrollDirection to
         // horizontal, this produces 2 rows.
         crossAxisCount: 2,
+        childAspectRatio : 0.8,
         children: List.generate(_products.length, (index) {
-          return  ArticleCard(
-            id: _products[index].id,
-            title: _products[index].title,
-            category: _products[index].category,
-            description: _products[index].description,
-            image: _products[index].image,
-            price:  _products[index].price,
-            callback: this);
+
+          return InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ExtendedView(
+                    title: _products[index].title,
+                    category: _products[index].category,
+                    description: _products[index].description,
+                    image: _products[index].image,
+                    price:  _products[index].price,)),
+                );
+              },
+              child: BrowserArticleCard(
+
+                title: _products[index].title,
+                category: _products[index].category,
+                description: _products[index].description,
+                image: _products[index].image,
+                price:  _products[index].price,));
         }),
       ),
     );

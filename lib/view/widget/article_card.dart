@@ -94,7 +94,7 @@ class ArticleCard extends StatelessWidget {
                       image,
                       width: displayWidth / 3 - 30,
                       height: displayWidth / 3 - 30,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.contain,
                       ),
                   ),
                   ),
