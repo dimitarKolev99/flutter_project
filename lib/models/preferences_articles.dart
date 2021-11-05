@@ -15,9 +15,9 @@ class PreferencesArticles {
       await _fetchData();
     }
 
-    final data = preferences.getString('favorites');
-    final jsonData = jsonDecode(data.toString());
-    jsonData[articleCard.id.toString()] = toJson(articleCard);
+    final rawData = preferences.getString('favorites');
+    final jsonData = jsonDecode(rawData.toString());
+    jsonData[articleCard.id.toString()] = fromCardToJson(articleCard);
     await preferences.setString("favorites", jsonEncode(jsonData));
   }
 
@@ -26,16 +26,16 @@ class PreferencesArticles {
       await _fetchData();
     }
 
-    final data = preferences.getString('favorites');
-    final jsonData = jsonDecode(data.toString());
+    final rawData = preferences.getString('favorites');
+    final jsonData = jsonDecode(rawData.toString());
     jsonData.remove(id.toString());
     await preferences.setString("favorites", jsonEncode(jsonData));
   }
 
   Future<bool> isFavorite(int id) async {
     final preferences = await SharedPreferences.getInstance();
-    final data = preferences.getString('favorites');
-    final jsonData = jsonDecode(data.toString());
+    final rawData = preferences.getString('favorites');
+    final jsonData = jsonDecode(rawData.toString());
     return jsonData.containsKey(id.toString());
   }
 
@@ -44,14 +44,14 @@ class PreferencesArticles {
       await _fetchData();
     }
 
-    var data = preferences.getString('favorites');
-    if (data == null) {
+    var rawData = preferences.getString('favorites');
+    if (rawData == null) {
       await preferences.setString("favorites", "{}");
-      data = preferences.getString('favorites');
+      rawData = preferences.getString('favorites');
     }
-    final jsonData = jsonDecode(data.toString());
+    final jsonData = jsonDecode(rawData.toString());
     List<Product> cards = [];
-    jsonData.forEach((id, value) => cards.add(fromJson(id, value))); 
+    jsonData.forEach((id, value) => cards.add(fromJsonToProduct(id, value)));
     return cards;
   }
 
@@ -59,7 +59,7 @@ class PreferencesArticles {
       preferences = await SharedPreferences.getInstance();
   }
 
-  Map<String, dynamic> toJson(ArticleCard articleCard) => {
+  Map<String, dynamic> fromCardToJson(ArticleCard articleCard) => {
         'title': articleCard.title,
         'price': articleCard.price,
         'image': articleCard.image,
@@ -67,7 +67,7 @@ class PreferencesArticles {
         'category': articleCard.category,
       };
 
-  Product fromJson(String id, Map<String, dynamic> json) {
+  Product fromJsonToProduct(String id, Map<String, dynamic> json) {
     return Product(
       id: int.parse(id),
       title: json['title'],

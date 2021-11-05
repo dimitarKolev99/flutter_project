@@ -100,7 +100,7 @@ class _FavoritePageState extends State<FavoritePage> {
       bottomNavigationBar: BottomNavBarGenerator(),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
-          : Align(
+          : _products.isNotEmpty ? Align(
         alignment: Alignment.topCenter,
         child: ListView.builder(
             shrinkWrap: true,
@@ -116,9 +116,36 @@ class _FavoritePageState extends State<FavoritePage> {
                 price:  _products[index].price,
                 callback: this,);
             }),
+      ) :
+      Center(child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+        children: [Icon(Icons.edit_outlined, color: Colors.grey, size: 80),
+          SizedBox(height: 30),
+          RichText(
+            textAlign: TextAlign.center,
+            text:
+            TextSpan(
+              children: [
+                TextSpan(
+                    text: "Du hast noch keine Favorites gespeichert.\n \nDu kannst Favorites hinzufügen, indem du auf das ", style: TextStyle(fontSize: 18, color: Colors.black)
+                ),
+                WidgetSpan(
+                  child: Icon(Icons.favorite, color: Colors.red, size: 20),
+                ),
+                TextSpan(
+                    text: " klickst.", style: TextStyle(fontSize: 18, color: Colors.black)
+                ),
+              ],
+            ),
+          )
+        ],
       ),
-    );
+      ),);
   }
+  // Text("Du hast noch keine Favoriten gespeichert.\n \nDu kannst Favoriten hinzufügen, indem du auf das ❤ klickst.",
+  // textAlign: TextAlign.center,
+  // style: TextStyle(fontSize: 18, color: Colors.black),
+  // )
 
   showAlertDialog(BuildContext context, int index, int id) {
   // set up the buttons
