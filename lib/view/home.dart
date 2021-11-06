@@ -1,3 +1,4 @@
+import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/models/product.api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
@@ -13,10 +14,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late List<Product> _product;
-  late List<Product> _products = [];
+  late final List _favoriteIds = [];
+  late final List<Product> _products = [];
   bool _isLoading = true;
   var count = 0;
   Timer? _timer;
+
+  final _preferenceArticles = PreferencesArticles();
 
   @override
   void initState() {
@@ -39,7 +43,14 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> getProducts() async {
     _product = await ProductApi.fetchProduct();
-    if(this.mounted) {
+    List<Product> favorites = await _preferenceArticles.getAllFavorites();
+    for (var i in favorites) {
+      if (!_favoriteIds.contains(i.id)) {
+        _favoriteIds.add(i.id);
+      }
+    }
+
+    if (this.mounted) {
       setState(() {
         _isLoading = false;
       });
@@ -99,13 +110,73 @@ class _HomePageState extends State<HomePage> {
             itemCount: _products.length,
             itemBuilder: (context, index) {
               return ArticleCard(
-                  title: _products[index].title,
-                  category: _products[index].category,
-                  description: _products[index].description,
-                  image: _products[index].image,
-                  price:  _products[index].price,);
+                id: _products[index].id,
+                title: _products[index].title,
+                category: _products[index].category,
+                description: _products[index].description,
+                image: _products[index].image,
+                price: _products[index].price,
+                callback: this,);
             }),
       ),
+    );
+  }
+
+  bool isFavorite(int id) {
+    return _favoriteIds.contains(id);
+  }
+
+  Future changeFavoriteState(ArticleCard card) async {
+    if (isFavorite(card.id)) {
+      showAlertDialog(context, card.id);
+    } else {
+      await _preferenceArticles.addFavorite(card);
+      if (mounted) {
+        setState(() {
+          _favoriteIds.add(card.id);});
+      }
+    }
+  }
+
+  showAlertDialog(BuildContext context, int id) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: const Text("Nein"),
+      onPressed:  () {Navigator.of(context).pop();},
+    );
+    Widget continueButton = TextButton(style: TextButton.styleFrom(
+      primary: Colors.red,
+    ),
+      child: const Text("Ja"),
+      onPressed:  () async {
+        Navigator.of(context).pop();
+        await _preferenceArticles.removeFavorite(id);
+        if (mounted) {
+          setState(() {
+            _favoriteIds.remove(id);
+          });
+        }
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: const Text("Artikel entfernen?"),
+      content: const Text("Willst du diesen Artikel wirklich aus deinen Favorites entfernen?"),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

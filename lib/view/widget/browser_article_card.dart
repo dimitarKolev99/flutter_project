@@ -1,20 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'article_card.dart';
+
 class BrowserArticleCard extends StatelessWidget {
+  final int id;
   final String title;
   final String rating = "40";
   final double price;
   final String image;
   final String description;
   final String category;
+  dynamic callback;
 
   BrowserArticleCard({
+    required this.id,
     required this.title,
     required this.price,
     required this.image,
     required this.description,
     required this.category,
+    required this.callback,
   });
   @override
   Widget build(BuildContext context) {
@@ -78,9 +84,13 @@ class BrowserArticleCard extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.only(top: 5, right: 5),
                     child: Align(
-                      child: Icon(
-                        Icons.favorite_border,
-                        size: 32.0,
+                      child: IconButton(
+                        icon: (callback.isFavorite(id)
+                            ? const Icon(Icons.favorite,
+                            color: Colors.red)
+                            : const Icon(Icons.favorite_border,
+                            color: Colors.black)),
+                        onPressed: _changeFavorite,
                       ),
                       alignment: Alignment.topRight,
                     ),
@@ -129,5 +139,17 @@ class BrowserArticleCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future _changeFavorite() async {
+    ArticleCard articleCard = ArticleCard(
+      id: id,
+      title: title,
+      category: category,
+      description: description,
+      image: image,
+      price:price,
+      callback: callback,);
+    await callback.changeFavoriteState(articleCard);
   }
 }

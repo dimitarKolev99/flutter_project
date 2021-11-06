@@ -138,7 +138,7 @@ class ArticleCard extends StatelessWidget {
                       color: Colors.red)
                       : const Icon(Icons.favorite_border,
                       color: Colors.black)),
-                  onPressed: _changeFavorite,
+                  onPressed: _changeFavoriteState,
                   )
                 ),
               alignment: Alignment.centerRight,
@@ -202,11 +202,7 @@ class ArticleCard extends StatelessWidget {
     );
   }
 
-
-
-
-  //creating an object of ArticleCard
-  Future _changeFavorite() async {
+  Future _changeFavoriteState() async {
     await callback.changeFavoriteState(this);
   }
 }

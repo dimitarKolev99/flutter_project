@@ -32,13 +32,6 @@ class PreferencesArticles {
     await preferences.setString("favorites", jsonEncode(jsonData));
   }
 
-  Future<bool> isFavorite(int id) async {
-    final preferences = await SharedPreferences.getInstance();
-    final rawData = preferences.getString('favorites');
-    final jsonData = jsonDecode(rawData.toString());
-    return jsonData.containsKey(id.toString());
-  }
-
   Future getAllFavorites() async {
     if (preferences == null) {
       await _fetchData();
