@@ -1,7 +1,6 @@
 import 'dart:convert';
-
 import 'package:penny_pincher/models/preferences_articles.dart';
-import 'package:penny_pincher/models/product.api.dart';
+import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/widget/favorite_card.dart';
 import 'package:penny_pincher/view/widget/bottom_nav_bar.dart';
@@ -107,10 +106,10 @@ class _FavoritePageState extends State<FavoritePage> {
             itemCount: _products.length,
             itemBuilder: (context, index) {
               return FavoriteCard(
-                id: _products[index].id,
+                id: _products[index].productId,
                 index: index,
                 title: _products[index].title,
-                category: _products[index].category,
+                category: _products[index].categoryName,
                 description: _products[index].description,
                 image: _products[index].image,
                 price:  _products[index].price,
