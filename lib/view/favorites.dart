@@ -1,9 +1,15 @@
+import 'dart:convert';
+
+import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/models/product.api.dart';
 import 'package:penny_pincher/models/product.dart';
-import 'package:penny_pincher/view/widget/article_card.dart';
+import 'package:penny_pincher/view/widget/favorite_card.dart';
 import 'package:penny_pincher/view/widget/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:shared_preferences/shared_preferences.dart';
+
+
 
 class FavoritePage extends StatefulWidget {
   @override
@@ -12,44 +18,50 @@ class FavoritePage extends StatefulWidget {
 
 class _FavoritePageState extends State<FavoritePage> {
   //late Product _product;
+
   late List<Product> _product;
   late final List<Product> _products = [];
   bool _isLoading = true;
-  var count = 0;
-  Timer? _timer;
+
+  final _preferenceArticles = PreferencesArticles();
 
   @override
   void initState() {
-    if(this.mounted) {
+    if(mounted) {
       setState(() {
         _isLoading = true;
       });
     }
 
     super.initState();
-    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
-      getProducts();
-      if(count>=_product.length - 1){
-        dispose();
-      }
+    getProducts();
+  }
+
+  getData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      // displayName = prefs.getStringList('displayName');
     });
   }
 
   Future<void> getProducts() async {
-    _product = await ProductApi.fetchProduct();
-    if(this.mounted) {
+    _product = await _preferenceArticles.getAllFavorites();
+    if(mounted) {
       setState(() {
         _isLoading = false;
       });
     }
-    _products.insert(count, _product[count]);
-    count++;
+    for (var i = 0; i < _product.length; i++) {
+      _products.insert(i, _product[i]);
+    }
   }
 
-  @override
-  void dispose() {
-    _timer!.cancel();
-    super.dispose();
+  void removeFavorite(int index) {
+    if(mounted) {
+      setState(() {
+        _products.removeAt(index);
+      });
+    }
   }
 
   @override
@@ -76,25 +88,100 @@ class _FavoritePageState extends State<FavoritePage> {
               SizedBox(width: 10),
               Text('Penny Pincher')
             ],
-          )),
+          ),
+          actions: [
+          IconButton(
+          icon: const Icon(Icons.search),
+          onPressed: () {
+
+          },
+        )
+    ]),
       bottomNavigationBar: BottomNavBarGenerator(),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
-          : Align(
+          : _products.isNotEmpty ? Align(
         alignment: Alignment.topCenter,
         child: ListView.builder(
-            reverse: true,
             shrinkWrap: true,
             itemCount: _products.length,
             itemBuilder: (context, index) {
-              return  ArticleCard(
+              return FavoriteCard(
+                id: _products[index].id,
+                index: index,
                 title: _products[index].title,
                 category: _products[index].category,
                 description: _products[index].description,
                 image: _products[index].image,
-                price:  _products[index].price,);
+                price:  _products[index].price,
+                callback: this,);
             }),
+      ) :
+      Center(child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+        children: [Icon(Icons.edit_outlined, color: Colors.grey, size: 80),
+          SizedBox(height: 30),
+          RichText(
+            textAlign: TextAlign.center,
+            text:
+            TextSpan(
+              children: [
+                TextSpan(
+                    text: "Du hast noch keine Favorites gespeichert.\n \nDu kannst Favorites hinzufügen, indem du auf das ", style: TextStyle(fontSize: 18, color: Colors.black)
+                ),
+                WidgetSpan(
+                  child: Icon(Icons.favorite, color: Colors.red, size: 20),
+                ),
+                TextSpan(
+                    text: " klickst.", style: TextStyle(fontSize: 18, color: Colors.black)
+                ),
+              ],
+            ),
+          )
+        ],
       ),
-    );
+      ),);
   }
+  // Text("Du hast noch keine Favoriten gespeichert.\n \nDu kannst Favoriten hinzufügen, indem du auf das ❤ klickst.",
+  // textAlign: TextAlign.center,
+  // style: TextStyle(fontSize: 18, color: Colors.black),
+  // )
+
+  showAlertDialog(BuildContext context, int index, int id) {
+  // set up the buttons
+  Widget cancelButton = TextButton(
+    child: const Text("Nein"),
+    onPressed:  () {Navigator.of(context).pop();},
+  );
+  Widget continueButton = TextButton(style: TextButton.styleFrom(
+        primary: Colors.red,
+  ),
+  child: const Text("Ja"),
+    onPressed:  () {
+      Navigator.of(context).pop();
+      _preferenceArticles.removeFavorite(id);
+      removeFavorite(index);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: const Text("Artikel entfernen?"),
+    content: const Text("Willst du diesen Artikel wirklich aus deinen Favorites entfernen?"),
+    shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0))),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
 }

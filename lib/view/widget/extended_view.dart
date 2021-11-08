@@ -1,23 +1,34 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class ExtendedView extends StatelessWidget {
+import 'article_card.dart';
+
+
+class ExtendedView extends StatefulWidget {
+  final int id;
   final String title;
   final String rating = "30";
   final double price;
   final String image;
   final String description;
   final String category;
-  //final String pay = "toOffer";
+  dynamic callback;
 
   ExtendedView({
+    required this.id,
     required this.title,
     required this.price,
     required this.image,
     required this.description,
     required this.category,
-    //required this.pay,
+    required this.callback,
   });
+
+  @override
+  State<ExtendedView> createState() => _ExtendedViewState();
+}
+
+class _ExtendedViewState extends State<ExtendedView> {
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +83,7 @@ class ExtendedView extends StatelessWidget {
                         children: [
                           Center(
                             child: Image.network(
-                              image,
+                              widget.image,
                               width: displayWidth * 0.6,
                               height: displayWidth * 0.6,
                               fit: BoxFit.contain,
@@ -82,9 +93,14 @@ class ExtendedView extends StatelessWidget {
                             child: Padding(
                               padding: EdgeInsets.only(right: 7),
                               child:
-                              //TODO: adjust to clickable Icon
-                              Icon(Icons.favorite_border,
-                              size: 33,),
+                              IconButton(
+                                icon: (widget.callback.isFavorite(widget.id)
+                                    ? const Icon(Icons.favorite,
+                                    color: Colors.red)
+                                    : const Icon(Icons.favorite_border,
+                                    color: Colors.black)),
+                                onPressed: _changeFavoriteState,
+                              ),
                             ),
                             alignment: Alignment.centerRight,
                           ),
@@ -96,7 +112,7 @@ class ExtendedView extends StatelessWidget {
                               borderRadius: BorderRadius.circular(0),
                             ),
                             child:
-                            Text("-" + rating+ "%",
+                            Text("-" + widget.rating+ "%",
                               style: TextStyle(
                                 color: Color.fromRGBO(240, 240, 240, 1),
                                 fontWeight: FontWeight.bold,
@@ -120,7 +136,7 @@ class ExtendedView extends StatelessWidget {
                         //width: displayWidth,
                         //height: displayHeight / 4,
                         child: Text(
-                          category,
+                          widget.category,
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             color: Color.fromRGBO(240, 240, 240, 1),
@@ -133,7 +149,7 @@ class ExtendedView extends StatelessWidget {
                         //width: displayWidth,
                         //height: displayHeight / 4,
                         child: Text(
-                          title,
+                          widget.title,
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -148,7 +164,7 @@ class ExtendedView extends StatelessWidget {
                         //width: displayWidth,
                         //height: displayHeight / 4,
                         child: Text(
-                          description,
+                          widget.description,
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             color: Colors.black,
@@ -184,7 +200,7 @@ class ExtendedView extends StatelessWidget {
 
                          */
                               Text(
-                                price.toString() + " €",
+                                widget.price.toString() + " €",
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 35,
@@ -231,5 +247,64 @@ class ExtendedView extends StatelessWidget {
 
 
                     ]))));
+  }
+
+  Future _changeFavoriteState() async {
+    ArticleCard articleCard = ArticleCard(
+      id: widget.id,
+      title: widget.title,
+      category: widget.category,
+      description: widget.description,
+      image: widget.image,
+      price: widget.price,
+      callback: widget.callback,);
+
+    if (widget.callback.isFavorite(widget.id)) {
+      showAlertDialog();
+    } else {
+      await widget.callback.addFavorite(articleCard);
+      if(mounted) {
+        setState(() {});
+      }
+    }
+  }
+
+  showAlertDialog() {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: const Text("Nein"),
+      onPressed:  () {Navigator.of(context).pop();},
+    );
+    Widget continueButton = TextButton(style: TextButton.styleFrom(
+      primary: Colors.red,
+    ),
+      child: const Text("Ja"),
+      onPressed:  () async {
+        await widget.callback.removeFavorite(widget.id);
+        if(mounted) {
+          setState(() {});
+        }
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: const Text("Artikel entfernen?"),
+      content: const Text("Willst du diesen Artikel wirklich aus deinen Favorites entfernen?"),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

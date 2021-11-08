@@ -1,17 +1,11 @@
-//import 'dart:html';
-
-import 'package:http/http.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:penny_pincher/models/preferences_articles.dart';
-import 'package:penny_pincher/models/product.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import '../favorites.dart';
 
-
-
-class ArticleCard extends StatelessWidget {
+class FavoriteCard extends StatelessWidget {
   final int id;
+  final int index;
   final String title;
   final String rating = "30";
   final double price;
@@ -20,8 +14,9 @@ class ArticleCard extends StatelessWidget {
   final String category;
   dynamic callback;
 
-  ArticleCard({
+  FavoriteCard({
     required this.id,
+    required this.index,
     required this.title,
     required this.price,
     required this.image,
@@ -29,33 +24,10 @@ class ArticleCard extends StatelessWidget {
     required this.category,
     required this.callback,
   });
-
- // final List<PreferencesArticles> savedProducts;
-
-
-
-  /*
-  @override
-  void _populateFileds() async {
-    final articleCard = await _preferenceArticles.getArticleCard();
-
-    setState(() {
-      title = articleCard.title;
-      price = articleCard.price;
-      image = articleCard.image;
-      description = articleCard.description;
-      category = articleCard.category;
-    });
-  }
-
-   */
-
-
   @override
   Widget build(BuildContext context) {
     final displayWidth =  MediaQuery.of(context).size.width;
     final displayHeight =  MediaQuery.of(context).size.height;
-
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 14, vertical: 5),
       width: displayWidth,
@@ -94,7 +66,7 @@ class ArticleCard extends StatelessWidget {
                       image,
                       width: displayWidth / 3 - 30,
                       height: displayWidth / 3 - 30,
-                      fit: BoxFit.contain,
+                      fit: BoxFit.cover,
                       ),
                   ),
                   ),
@@ -133,13 +105,11 @@ class ArticleCard extends StatelessWidget {
                   padding: EdgeInsets.only(right: 7),
                   child:
                   IconButton(
-                  icon: (callback.isFavorite(id)
-                      ? const Icon(Icons.favorite,
-                      color: Colors.red)
-                      : const Icon(Icons.favorite_border,
-                      color: Colors.black)),
-                  onPressed: _changeFavoriteState,
-                  )
+                    icon: Icon(Icons.favorite, color: Colors.red),
+                    onPressed: () {
+                      callback.showAlertDialog(context, index, id);
+                    },
+                  ),
                 ),
               alignment: Alignment.centerRight,
               ),
@@ -201,21 +171,4 @@ class ArticleCard extends StatelessWidget {
       )
     );
   }
-
-  Future _changeFavoriteState() async {
-    await callback.changeFavoriteState(this);
-  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
