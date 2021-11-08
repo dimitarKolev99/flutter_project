@@ -28,22 +28,20 @@ class _HomePageState extends State<HomePage> {
 
   final _preferenceArticles = PreferencesArticles();
 
-  final _preferenceArticles = PreferencesArticles();
+  // @override
+  // void initState() {
+  //   if(this.mounted) {
+  //     setState(() {
+  //       _isLoading = true;
+  //     });
+  //   }
 
-  @override
-  void initState() {
-    if(this.mounted) {
-      setState(() {
-        _isLoading = true;
-      });
-    }
-
-    super.initState();
-    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {      
-      getProducts();
-      if(count>=_product.length - 1){
-        dispose();
-      }
+  //   super.initState();
+  //   _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {      
+  //     getProducts();
+  //     if(count>=_product.length - 1){
+  //       dispose();
+  //     }
 
   _onUpdateScroll() {
     setState(() {
@@ -58,8 +56,8 @@ class _HomePageState extends State<HomePage> {
     _product = await ProductApi.fetchProduct();
     List<Product> favorites = await _preferenceArticles.getAllFavorites();
     for (var i in favorites) {
-      if (!_favoriteIds.contains(i.id)) {
-        _favoriteIds.add(i.id);
+      if (!_favoriteIds.contains(i.productId)) {
+        _favoriteIds.add(i.productId);
       }
     }
 
@@ -166,9 +164,9 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => ExtendedView(
-                      id: _products[index].id,
+                      id: _products[index].productId,
                       title: _products[index].title,
-                      category: _products[index].category,
+                      category: _products[index].categoryName,
                       description: _products[index].description,
                       image: _products[index].image,
                       price:  _products[index].price,
@@ -176,7 +174,7 @@ class _HomePageState extends State<HomePage> {
                 );
               },
                   child: ArticleCard(
-                id: _products[index].id,
+                id: _products[index].productId,
                 title: _products[index].title,
                 category: _products[index].categoryName,
                 description: _products[index].description,

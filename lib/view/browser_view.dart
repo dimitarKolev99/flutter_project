@@ -45,8 +45,8 @@ class _BrowserPageState extends State<BrowserPage> {
     _product = await ProductApi.fetchProduct();
     List<Product> favorites = await _preferenceArticles.getAllFavorites();
     for (var i in favorites) {
-      if (!_favoriteIds.contains(i.id)) {
-        _favoriteIds.add(i.id);
+      if (!_favoriteIds.contains(i.productId)) {
+        _favoriteIds.add(i.productId);
       }
     }
 

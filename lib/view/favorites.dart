@@ -106,7 +106,7 @@ class _FavoritePageState extends State<FavoritePage> {
             itemCount: _products.length,
             itemBuilder: (context, index) {
               return FavoriteCard(
-                id: _products[index].id,
+                id: _products[index].productId,
                 index: index,
                 title: _products[index].title,
                 category: _products[index].categoryName,
