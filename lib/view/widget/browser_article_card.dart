@@ -6,7 +6,7 @@ import 'article_card.dart';
 class BrowserArticleCard extends StatelessWidget {
   final int id;
   final String title;
-  final String rating = "40";
+  final int saving;
   final double price;
   final String image;
   final String description;
@@ -16,6 +16,7 @@ class BrowserArticleCard extends StatelessWidget {
   BrowserArticleCard({
     required this.id,
     required this.title,
+    required this.saving,
     required this.price,
     required this.image,
     required this.description,
@@ -24,6 +25,7 @@ class BrowserArticleCard extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
+    double newprice = price/100;
     final displayWidth = MediaQuery.of(context).size.width;
     final displayHeight = MediaQuery.of(context).size.height;
     return Container(
@@ -72,7 +74,7 @@ class BrowserArticleCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(0),
                     ),
                     child: Text(
-                      " -" + rating + "% ",
+                      " -" + saving.toString() + "% ",
                       style: TextStyle(
                         color: Color.fromRGBO(240, 240, 240, 1),
                         fontWeight: FontWeight.bold,
@@ -121,11 +123,11 @@ class BrowserArticleCard extends StatelessWidget {
               child: Column(children: [
                 Text(
                   //ToDO: add previous price
-                  "Previously  1" + price.toString() + "€",
+                  "Previously  " + price.toString() + "€",
                   style: TextStyle(fontSize: 11, color: Colors.black),
                 ),
                 Text(
-                  price.toString() + "€",
+                  newprice.toStringAsFixed(2) + "€",
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 28,
@@ -145,6 +147,7 @@ class BrowserArticleCard extends StatelessWidget {
     ArticleCard articleCard = ArticleCard(
       id: id,
       title: title,
+      saving: saving,
       category: category,
       description: description,
       image: image,

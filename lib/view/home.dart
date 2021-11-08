@@ -166,6 +166,7 @@ class _HomePageState extends State<HomePage> {
                   MaterialPageRoute(builder: (context) => ExtendedView(
                       id: _products[index].productId,
                       title: _products[index].title,
+                      saving: _products[index].saving,
                       category: _products[index].categoryName,
                       description: _products[index].description,
                       image: _products[index].image,
@@ -176,6 +177,7 @@ class _HomePageState extends State<HomePage> {
                   child: ArticleCard(
                 id: _products[index].productId,
                 title: _products[index].title,
+                    saving: _products[index].saving,
                 category: _products[index].categoryName,
                 description: _products[index].description,
                 image: _products[index].image,
