@@ -62,14 +62,12 @@ class PreferencesArticles {
 
   Product fromJsonToProduct(String id, Map<String, dynamic> json) {
     return Product(
-      categoryId: json["category_id"],
-      categoryName: json["category_name"],
-      productId: json["product_id"],
-      title: json["product_title"],
-      price: json["price"].toDouble(),
-      saving: json["saving"],
-      description:json["description"],
-      image: json["images"]["w120h100"][0],);
+      id: int.parse(id),
+      title: json['title'],
+      price: json['price'],
+      image: json['image'],
+      description: json['description'],
+      category: json['category'],);
   }
 
 }
