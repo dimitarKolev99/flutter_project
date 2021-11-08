@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:penny_pincher/view/widget/browser_article_card.dart';
+import 'package:penny_pincher/view/widget/extended_view.dart';
 
 class BrowserPage extends StatefulWidget {
   @override
@@ -14,12 +15,14 @@ class BrowserPage extends StatefulWidget {
 }
 
 class _BrowserPageState extends State<BrowserPage> {
-  //late Product _product;
   late List<Product> _product;
+  late final List _favoriteIds = [];
   late final List<Product> _products = [];
   bool _isLoading = true;
   var count = 0;
   Timer? _timer;
+
+  final _preferenceArticles = PreferencesArticles();
 
   @override
   void initState() {
@@ -40,7 +43,14 @@ class _BrowserPageState extends State<BrowserPage> {
 
   Future<void> getProducts() async {
     _product = await ProductApi.fetchProduct();
-    if(this.mounted) {
+    List<Product> favorites = await _preferenceArticles.getAllFavorites();
+    for (var i in favorites) {
+      if (!_favoriteIds.contains(i.id)) {
+        _favoriteIds.add(i.id);
+      }
+    }
+
+    if (this.mounted) {
       setState(() {
         _isLoading = false;
       });
@@ -81,7 +91,7 @@ class _BrowserPageState extends State<BrowserPage> {
               ],
             )
         ),
-        bottomNavigationBar: BottomNavBarGenerator(),
+      bottomNavigationBar: BottomNavBarGenerator(),
       body: GridView.count(
         // Create a grid with 2 columns. If you change the scrollDirection to
         // horizontal, this produces 2 rows.
@@ -110,7 +120,6 @@ class _BrowserPageState extends State<BrowserPage> {
                 image: _products[index].image,
                 price:  _products[index].price,
                 callback: this));
-          
         }),
       ),
     );

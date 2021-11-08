@@ -7,6 +7,8 @@ import 'package:penny_pincher/view/widget/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:penny_pincher/view/widget/extended_view.dart';
+
 class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
@@ -23,6 +25,8 @@ class _HomePageState extends State<HomePage> {
   ScrollController _scrollController = ScrollController();
   List<double> _offsetValues = [];
   var _countScrolls = 0;
+
+  final _preferenceArticles = PreferencesArticles();
 
   final _preferenceArticles = PreferencesArticles();
 
@@ -52,7 +56,14 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> getProducts() async {
     _product = await ProductApi.fetchProduct();
-    if(this.mounted) {
+    List<Product> favorites = await _preferenceArticles.getAllFavorites();
+    for (var i in favorites) {
+      if (!_favoriteIds.contains(i.id)) {
+        _favoriteIds.add(i.id);
+      }
+    }
+
+    if (this.mounted) {
       setState(() {
         _isLoading = false;
       });
@@ -175,6 +186,64 @@ class _HomePageState extends State<HomePage> {
             }),
         )
       ),
+    );
+  }
+
+  bool isFavorite(int id) {
+    return _favoriteIds.contains(id);
+  }
+
+  Future changeFavoriteState(ArticleCard card) async {
+    if (isFavorite(card.id)) {
+      showAlertDialog(context, card.id);
+    } else {
+      await _preferenceArticles.addFavorite(card);
+      if (mounted) {
+        setState(() {
+          _favoriteIds.add(card.id);});
+      }
+    }
+  }
+
+  showAlertDialog(BuildContext context, int id) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: const Text("Nein"),
+      onPressed:  () {Navigator.of(context).pop();},
+    );
+    Widget continueButton = TextButton(style: TextButton.styleFrom(
+      primary: Colors.red,
+    ),
+      child: const Text("Ja"),
+      onPressed:  () async {
+        Navigator.of(context).pop();
+        await _preferenceArticles.removeFavorite(id);
+        if (mounted) {
+          setState(() {
+            _favoriteIds.remove(id);
+          });
+        }
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: const Text("Artikel entfernen?"),
+      content: const Text("Willst du diesen Artikel wirklich aus deinen Favorites entfernen?"),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }
