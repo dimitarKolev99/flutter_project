@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
@@ -92,8 +94,32 @@ class _FavoritePageState extends State<FavoritePage> {
                 category: _products[index].categoryName,
                 description: _products[index].description,
                 image: _products[index].image,
-                price:  _products[index].price,);
-              }),
+                price:  _products[index].price,
+                callback: this,);
+            }),
+      ) :
+      Center(child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+        children: [Icon(Icons.edit_outlined, color: Colors.grey, size: 80),
+          SizedBox(height: 30),
+          RichText(
+            textAlign: TextAlign.center,
+            text:
+            TextSpan(
+              children: [
+                TextSpan(
+                    text: "Du hast noch keine Favorites gespeichert.\n \nDu kannst Favorites hinzufügen, indem du auf das ", style: TextStyle(fontSize: 18, color: Colors.black)
+                ),
+                WidgetSpan(
+                  child: Icon(Icons.favorite, color: Colors.red, size: 20),
+                ),
+                TextSpan(
+                    text: " klickst.", style: TextStyle(fontSize: 18, color: Colors.black)
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

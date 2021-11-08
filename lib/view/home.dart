@@ -1,3 +1,4 @@
+import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
@@ -12,8 +13,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late List<Product> _product; //TODO: LateInitializationError: Field '_product@18461920' has not been initialized. comes from here
-  late List<Product> _products = [];
+  late List<Product> _product;
+  late final List _favoriteIds = [];
+  late final List<Product> _products = [];
   bool _isLoading = true;
   var count = 0;
   Timer? _timer;
@@ -21,6 +23,23 @@ class _HomePageState extends State<HomePage> {
   ScrollController _scrollController = ScrollController();
   List<double> _offsetValues = [];
   var _countScrolls = 0;
+
+  final _preferenceArticles = PreferencesArticles();
+
+  @override
+  void initState() {
+    if(this.mounted) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
+
+    super.initState();
+    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {      
+      getProducts();
+      if(count>=_product.length - 1){
+        dispose();
+      }
 
   _onUpdateScroll() {
     setState(() {
@@ -131,13 +150,28 @@ class _HomePageState extends State<HomePage> {
             controller: _scrollController,
             itemCount: _products.length,
             itemBuilder: (context, index) {
-              return ArticleCard(
-                  title: _products[index].title,
-                  category: _products[index].categoryName,
-                  description: _products[index].description,
-                  image: _products[index].image,
-                  price:  _products[index].price,
-              );
+              return InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ExtendedView(
+                      id: _products[index].id,
+                      title: _products[index].title,
+                      category: _products[index].category,
+                      description: _products[index].description,
+                      image: _products[index].image,
+                      price:  _products[index].price,
+                      callback: this)),
+                );
+              },
+                  child: ArticleCard(
+                id: _products[index].id,
+                title: _products[index].title,
+                category: _products[index].categoryName,
+                description: _products[index].description,
+                image: _products[index].image,
+                price: _products[index].price,
+                callback: this,));
             }),
         )
       ),
