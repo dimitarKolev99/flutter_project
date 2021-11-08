@@ -1,5 +1,5 @@
 import 'package:penny_pincher/models/preferences_articles.dart';
-import 'package:penny_pincher/models/product.api.dart';
+import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
 import 'package:penny_pincher/view/widget/article_search.dart';
@@ -21,6 +21,12 @@ class _HomePageState extends State<HomePage> {
   bool _isLoading = true;
   var count = 0;
   Timer? _timer;
+  bool _isScrolling = false;
+  ScrollController _scrollController = ScrollController();
+  List<double> _offsetValues = [];
+  var _countScrolls = 0;
+
+  final _preferenceArticles = PreferencesArticles();
 
   final _preferenceArticles = PreferencesArticles();
 
@@ -38,9 +44,14 @@ class _HomePageState extends State<HomePage> {
       if(count>=_product.length - 1){
         dispose();
       }
-    });
 
-    getProducts();
+  _onUpdateScroll() {
+    setState(() {
+      if (_scrollController.offset < _offsetValues[_countScrolls-1]) //TODO: doesn't work properly
+        _isScrolling = true;
+      else
+        _isScrolling = false;
+    });
   }
 
   Future<void> getProducts() async {
@@ -62,6 +73,36 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void initState() {
+    if(this.mounted) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
+
+    super.initState();
+    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
+      getProducts();
+
+      if(_scrollController.hasClients && !_isScrolling) { //TODO: doesn't work properly
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          curve: Curves.easeOut,
+          duration: const Duration(milliseconds: 300),
+        );
+        _offsetValues.insert(_countScrolls, _scrollController.offset);
+        print(_offsetValues[_countScrolls]);
+        _countScrolls++;
+      }
+
+      if(count >= _product.length - 1) {
+        dispose();
+      }
+    });
+    //getProducts();
+  }
+
+ @override
   void dispose() {
     _timer!.cancel();
     super.dispose();
@@ -106,9 +147,18 @@ class _HomePageState extends State<HomePage> {
           ? Center(child: CircularProgressIndicator())
           : Align(
         alignment: Alignment.topCenter,
+        child: NotificationListener<ScrollNotification>(
+          onNotification: (scrollNotification) {
+            if (scrollNotification is ScrollUpdateNotification) {
+              _onUpdateScroll();
+            }
+            return true;
+          },
+
         child: ListView.builder(
             reverse: true,
             shrinkWrap: true,
+            controller: _scrollController,
             itemCount: _products.length,
             itemBuilder: (context, index) {
               return InkWell(
@@ -128,12 +178,13 @@ class _HomePageState extends State<HomePage> {
                   child: ArticleCard(
                 id: _products[index].id,
                 title: _products[index].title,
-                category: _products[index].category,
+                category: _products[index].categoryName,
                 description: _products[index].description,
                 image: _products[index].image,
                 price: _products[index].price,
                 callback: this,));
             }),
+        )
       ),
     );
   }

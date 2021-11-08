@@ -1,5 +1,5 @@
 import 'package:penny_pincher/models/preferences_articles.dart';
-import 'package:penny_pincher/models/product.api.dart';
+import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
 import 'package:penny_pincher/view/widget/bottom_nav_bar.dart';
@@ -98,15 +98,14 @@ class _BrowserPageState extends State<BrowserPage> {
         crossAxisCount: 2,
         childAspectRatio : 0.8,
         children: List.generate(_products.length, (index) {
-
-          return InkWell(
+           return InkWell(
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => ExtendedView(
-                    id: _products[index].id,
+                    id: _products[index].productId,
                     title: _products[index].title,
-                    category: _products[index].category,
+                    category: _products[index].categoryName,
                     description: _products[index].description,
                     image: _products[index].image,
                     price:  _products[index].price,
@@ -114,9 +113,9 @@ class _BrowserPageState extends State<BrowserPage> {
                 );
               },
               child: BrowserArticleCard(
-                id: _products[index].id,
+                id: _products[index].productId,
                 title: _products[index].title,
-                category: _products[index].category,
+                category: _products[index].categoryName,
                 description: _products[index].description,
                 image: _products[index].image,
                 price:  _products[index].price,
