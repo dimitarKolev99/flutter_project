@@ -1,43 +1,48 @@
 import 'dart:convert';
 
 class Product {
+  List<Map<String, dynamic>> bargains = [];
   Product({
-    required this.id,
+    //required this.subCategoryId,
+    required this.categoryId,
+    required this.categoryName,
+    required this.productId,
     required this.title,
     required this.price,
+    required this.saving,
     required this.description,
-    required this.category,
     required this.image,
   });
 
-  int id;
+  //int subCategoryId;
+  int categoryId;
+  String categoryName;
+  int productId;
   String title;
+  int saving;
   double price;
   String description;
-  String category;
   String image;
 
-  factory Product.fromJson(Map<String, dynamic> json) => Product(
-    id: json["id"],
-    title: json["title"],
-    price: json["price"].toDouble(),
-    description: json["description"],
-    category: json["category"],
-    image: json["image"],
-  );
+  factory Product.fromJson(Map<String, dynamic> json) {
 
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "title": title,
-    "price": price,
-    "description": description,
-    "category": category,
-    "image": image,
-  };
+    return Product(
+      //subCategoryId: json["id"],
+      categoryId: json["category_id"],
+      categoryName: json["category_name"],
+      productId: json["product_id"],
+      title: json["product_title"],
+      price: json["price"].toDouble(),
+      saving: json["saving"],
+      description:json["description"],
+      image: json["images"]["w120h100"][0],
+    );
+  }
 
    @override
   String toString(){
-    return 'Product {title: $title, image: $image, price: $price, description: $description, category: $category}';
+    return 'Product {title: $title, image: $image, description: $description}';
   }
 }
+
 
