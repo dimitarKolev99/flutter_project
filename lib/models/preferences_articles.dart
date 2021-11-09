@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 //this class will store all the informations
 class PreferencesArticles {
-
   dynamic preferences;
 
   Future addFavorite(ArticleCard articleCard) async {
@@ -49,6 +48,7 @@ class PreferencesArticles {
   }
 
   Future _fetchData() async {
+      SharedPreferences.setMockInitialValues({});
       preferences = await SharedPreferences.getInstance();
   }
 
