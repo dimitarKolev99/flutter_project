@@ -7,7 +7,7 @@ import 'article_card.dart';
 class ExtendedView extends StatefulWidget {
   final int id;
   final String title;
-  final String rating = "30";
+  final int saving;
   final double price;
   final String image;
   final String description;
@@ -17,6 +17,7 @@ class ExtendedView extends StatefulWidget {
   ExtendedView({
     required this.id,
     required this.title,
+    required this.saving,
     required this.price,
     required this.image,
     required this.description,
@@ -32,6 +33,7 @@ class _ExtendedViewState extends State<ExtendedView> {
 
   @override
   Widget build(BuildContext context) {
+    double newprice = widget.price/100;
     final displayWidth = MediaQuery.of(context).size.width;
     final displayHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -112,7 +114,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                               borderRadius: BorderRadius.circular(0),
                             ),
                             child:
-                            Text("-" + widget.rating+ "%",
+                            Text("-" + widget.saving.toString() + "%",
                               style: TextStyle(
                                 color: Color.fromRGBO(240, 240, 240, 1),
                                 fontWeight: FontWeight.bold,
@@ -200,7 +202,7 @@ class _ExtendedViewState extends State<ExtendedView> {
 
                          */
                               Text(
-                                widget.price.toString() + " €",
+                                newprice.toStringAsFixed(2) + " €",
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 35,
@@ -253,6 +255,7 @@ class _ExtendedViewState extends State<ExtendedView> {
     ArticleCard articleCard = ArticleCard(
       id: widget.id,
       title: widget.title,
+      saving: widget.saving,
       category: widget.category,
       description: widget.description,
       image: widget.image,

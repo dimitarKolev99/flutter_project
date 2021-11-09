@@ -11,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ArticleCard extends StatelessWidget {
   final int id;
   final String title;
-  final String rating = "30";
+  final int saving;
   final double price;
   final String image;
   final String description;
@@ -20,6 +20,7 @@ class ArticleCard extends StatelessWidget {
 
   ArticleCard({
     required this.title,
+    required this.saving,
     required this.price,
     required this.image,
     required this.description,
@@ -30,6 +31,8 @@ class ArticleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double newprice = price/100;
+
     MediaQueryData _mediaQueryData;
     double displayWidth;
     double displayHeight;
@@ -140,12 +143,12 @@ class ArticleCard extends StatelessWidget {
                       alignment: Alignment.centerRight,
                     ),
                     Container(                                                      // % Badge
-                      padding: EdgeInsets.only(top: blockSizeVertical * 1, bottom: blockSizeVertical * 1, left: blockSizeHorizontal * 5, right: blockSizeHorizontal * 4),//(top: 3, bottom: 3, left: 10, right: 17),
+                      padding: EdgeInsets.only(top: blockSizeVertical * 1, bottom: blockSizeVertical * 1, left: blockSizeHorizontal * 3, right: blockSizeHorizontal * 3),//(top: 3, bottom: 3, left: 10, right: 17),
                       decoration: BoxDecoration(color: Color.fromRGBO(220, 110, 30, 1),  // const Color.fromRGBO(23, 41, 111, 0.8),
                         borderRadius: BorderRadius.circular(0),
                       ),
                       child:
-                      Text("-" + rating+ "%",
+                      Text("-" + saving.toString() + "%",
                         style: TextStyle(
                           color: Color.fromRGBO(240, 240, 240, 1),
                           fontWeight: FontWeight.bold,
@@ -169,7 +172,7 @@ class ArticleCard extends StatelessWidget {
                                       .black),
                             ),
                             Text(
-                              price.toString() + " €",
+                              newprice.toStringAsFixed(2) + " €",
                               style: TextStyle(
                                 fontWeight: FontWeight
                                     .bold,

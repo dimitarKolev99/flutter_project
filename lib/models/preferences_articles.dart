@@ -55,6 +55,7 @@ class PreferencesArticles {
   Map<String, dynamic> fromCardToJson(ArticleCard articleCard) => {
         'title': articleCard.title,
         'price': articleCard.price,
+        'saving': articleCard.saving,
         'image': articleCard.image,
         'description': articleCard.description,
         'category': articleCard.category,
