@@ -7,7 +7,7 @@ class ProductApi{
   static Future<List<Product>> fetchProduct() async {
     final response = await http.get(
         Uri.parse(
-        "https://usjm35yny3.execute-api.eu-central-1.amazonaws.com/dev/pp-bargains?maxItems=20&minSaving=20&categoryIds=18817"
+        "https://usjm35yny3.execute-api.eu-central-1.amazonaws.com/dev/pp-bargains?maxItems=20&minSaving=20&categoryIds=19116 "
         )
     );
 

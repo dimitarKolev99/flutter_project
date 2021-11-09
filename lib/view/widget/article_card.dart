@@ -32,6 +32,8 @@ class ArticleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double newprice = price/100;
+    int x = 100 - saving;
+    double prevpreis = newprice/x * 100;
 
     MediaQueryData _mediaQueryData;
     double displayWidth;
@@ -184,7 +186,7 @@ class ArticleCard extends StatelessWidget {
                             ),
                             Text(
                               //ToDO: add previous price
-                              "Previously 9.99€",
+                              "Previously " + prevpreis.toStringAsFixed(2) + "€",
                               style: TextStyle(
                                   fontSize: safeBlockHorizontal * 2.0,
                                   color: Colors

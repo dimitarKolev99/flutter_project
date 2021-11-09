@@ -26,6 +26,9 @@ class BrowserArticleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double newprice = price/100;
+    int x = 100 - saving;
+    double prevpreis = newprice/x * 100;
+
     final displayWidth = MediaQuery.of(context).size.width;
     final displayHeight = MediaQuery.of(context).size.height;
     return Container(
@@ -123,7 +126,7 @@ class BrowserArticleCard extends StatelessWidget {
               child: Column(children: [
                 Text(
                   //ToDO: add previous price
-                  "Previously  " + price.toString() + "€",
+                  "Previously " + prevpreis.toStringAsFixed(2) + "€",
                   style: TextStyle(fontSize: 11, color: Colors.black),
                 ),
                 Text(
