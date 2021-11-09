@@ -143,7 +143,7 @@ class ArticleCard extends StatelessWidget {
                       alignment: Alignment.centerRight,
                     ),
                     Container(                                                      // % Badge
-                      padding: EdgeInsets.only(top: blockSizeVertical * 1, bottom: blockSizeVertical * 1, left: blockSizeHorizontal * 5, right: blockSizeHorizontal * 4),//(top: 3, bottom: 3, left: 10, right: 17),
+                      padding: EdgeInsets.only(top: blockSizeVertical * 1, bottom: blockSizeVertical * 1, left: blockSizeHorizontal * 3, right: blockSizeHorizontal * 3),//(top: 3, bottom: 3, left: 10, right: 17),
                       decoration: BoxDecoration(color: Color.fromRGBO(220, 110, 30, 1),  // const Color.fromRGBO(23, 41, 111, 0.8),
                         borderRadius: BorderRadius.circular(0),
                       ),
