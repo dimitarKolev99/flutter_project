@@ -67,6 +67,11 @@ class _BrowserPageState extends State<BrowserPage> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData _mediaQueryData = MediaQuery.of(context);;
+    double displayWidth = _mediaQueryData.size.width;
+    double displayHeight = _mediaQueryData.size.height;
+    double blockSizeHorizontal = displayWidth / 100; // bildschirmbreite in 1%
+    double blockSizeVertical = displayHeight / 100; // bildschirmhöhe in 1%
     return Scaffold(
         appBar: AppBar(
             backgroundColor: const Color.fromRGBO(23, 41, 111, 1),
