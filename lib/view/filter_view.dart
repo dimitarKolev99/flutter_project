@@ -46,7 +46,8 @@ class _FilterViewState extends State<FilterView> {
               ],
             )),
     body: Container(
-      height: blockSizeHorizontal * 30,
+      padding: EdgeInsets.only(left: blockSizeHorizontal * 5),
+      height: blockSizeVertical * 18,
       width: displayWidth,
       //color: Colors.red,
         child: Column(
@@ -55,6 +56,7 @@ class _FilterViewState extends State<FilterView> {
               SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
             children: [
               Text(
                 "Price",
