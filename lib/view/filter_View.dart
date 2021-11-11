@@ -10,11 +10,21 @@ class FilterView extends StatefulWidget{
 
 class _FilterViewState extends State<FilterView> {
 
-  var _currentSliderValue;
+  var _currentSliderValue = 0.0;
   @override
   Widget build(BuildContext context){
     return Container(
-      child: Slider(value: _currentSliderValue,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "Price",
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 30,
+            color: Color.fromRGBO(23, 41, 111, 1),
+          ),),
+        Slider(value: _currentSliderValue,
         min: 0,
         max: 100,
         divisions: 5,
@@ -24,8 +34,7 @@ class _FilterViewState extends State<FilterView> {
           _currentSliderValue = value;
         });
         },
-
-      )
-    );
+      )]
+    ));
   }
 }
