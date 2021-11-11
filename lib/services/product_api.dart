@@ -7,9 +7,10 @@ import 'package:http/http.dart' as http;
 class ProductApi{
   // IDEALO Colors
   static const Color darkBlue = Color.fromRGBO(10, 55, 97, 1);
+  static const Color lightBlue = Color.fromRGBO(55, 95, 134, 1);
   static const Color orange = Color.fromRGBO(255, 102, 0, 1);
   static const Color white = Color.fromRGBO(255, 255, 255, 1);
-  
+
   static Future<List<Product>> fetchProduct() async {
     final response = await http.get(
         Uri.parse(

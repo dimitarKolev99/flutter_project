@@ -110,8 +110,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                           padding: EdgeInsets.only(
                               top: 3, bottom: 3, left: 13, right: 10),
                           decoration: BoxDecoration(
-                            color: Color.fromRGBO(220, 110, 30,
-                                1), // const Color.fromRGBO(23, 41, 111, 0.8),
+                            color: ProductApi.orange, // const Color.fromRGBO(23, 41, 111, 0.8),
                             borderRadius: BorderRadius.circular(0),
                           ),
                           child: Text(
@@ -133,7 +132,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                         padding:
                             EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         decoration: BoxDecoration(
-                          color: const Color.fromRGBO(23, 41, 111, 0.8),
+                          color: ProductApi.lightBlue,
                           borderRadius: BorderRadius.circular(30),
                         ),
                         //width: displayWidth,
@@ -247,7 +246,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                                       padding: EdgeInsets.symmetric(
                                           horizontal: 25, vertical: 10),
                                       backgroundColor:
-                                          Color.fromRGBO(23, 41, 111, 0.5),
+                                          ProductApi.lightBlue,
                                       shape: RoundedRectangleBorder(
                                           side: BorderSide(
                                               color: ProductApi.white,
