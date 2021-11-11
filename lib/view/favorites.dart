@@ -10,6 +10,7 @@ import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FavoritePage extends StatefulWidget {
+  
   @override
   State<FavoritePage> createState() => _FavoritePageState();
 }
@@ -175,7 +176,7 @@ class _FavoritePageState extends State<FavoritePage> {
 
   Future removeFavorite(int id, bool close) async {
     final product = _favoriteIds.where((p) => p.productId == id).toList()[0];
-    Navigator.of(context).pop();
+    Navigator.of(context, rootNavigator: true).pop('dialog');
     await _preferenceArticles.removeFavorite(id);
     if (mounted) {
       setState(() {
@@ -192,7 +193,7 @@ class _FavoritePageState extends State<FavoritePage> {
     Widget cancelButton = TextButton(
       child: const Text("Nein"),
       onPressed: () {
-        Navigator.of(context).pop();
+        Navigator.of(context, rootNavigator: true).pop('dialog');
       },
     );
     Widget continueButton = TextButton(
