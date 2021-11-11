@@ -3,7 +3,6 @@ import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/widget/favorite_card.dart';
-import 'package:penny_pincher/view/widget/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -96,7 +95,6 @@ class _FavoritePageState extends State<FavoritePage> {
           },
         )
     ]),
-      bottomNavigationBar: BottomNavBarGenerator(),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : _products.isNotEmpty ? Align(
