@@ -139,8 +139,13 @@ class ArticleCard extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.only(right: blockSizeHorizontal * 2),
                         child:
-                        //TODO: adjust to clickable Icon
-                        Icon(Icons.favorite_border),
+                          IconButton(
+                          icon: (callback.isFavorite(id) ?
+                            const Icon(Icons.favorite,
+                            color: Colors.red) : const Icon(Icons.favorite_border,
+                            color: Colors.black)),
+                            onPressed: _changeFavoriteState,
+                            ),
                       ),
                       alignment: Alignment.centerRight,
                     ),
