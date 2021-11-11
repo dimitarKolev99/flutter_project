@@ -8,7 +8,15 @@ import 'dart:async';
 
 import 'package:penny_pincher/view/widget/extended_view.dart';
 
+StreamController<bool> streamController = StreamController<bool>.broadcast();
+
 class HomePage extends StatefulWidget {
+
+  late final Stream<bool> stream;
+  late final StreamController updateStream;
+
+  HomePage(this.stream, this.updateStream);
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -53,8 +61,10 @@ class _HomePageState extends State<HomePage> {
         _isLoading = false;
       });
     }
-    _products.insert(count, _product[count]);
-    count++;
+    if (count < _product.length) {
+      _products.insert(count, _product[count]);
+      count++;
+    }
   }
 
   @override
@@ -65,6 +75,9 @@ class _HomePageState extends State<HomePage> {
       });
     }
     super.initState();
+    widget.stream.listen((update) {
+      updateHome(update);
+    });
     _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
       getProducts();
 
@@ -78,9 +91,27 @@ class _HomePageState extends State<HomePage> {
 
       if(count >= _product.length - 1) {
 
-        dispose();
+        // dispose();
       }
     });
+  }
+
+  updateHome(bool update) {
+    if (this.mounted) {
+      updateFavorites();
+    }
+  }
+
+  Future<void> updateFavorites() async {
+    _favoriteIds.clear();
+    List<Product> favorites = await _preferenceArticles.getAllFavorites();
+    for (var i in favorites) {
+      if (!_favoriteIds.contains(i.productId)) {
+        _favoriteIds.add(i.productId);
+      }
+    }
+    setState(() {});
+    streamController.add(true);
   }
 
   @override
@@ -166,8 +197,7 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (context, index) {
                       return InkWell(
                           onTap: () {
-                            Navigator.push(
-                              context,
+                            Navigator.push(context,
                               MaterialPageRoute(
                                   builder: (context) => ExtendedView(
                                       id: _products[index].productId,
@@ -177,6 +207,7 @@ class _HomePageState extends State<HomePage> {
                                       description: _products[index].description,
                                       image: _products[index].image,
                                       price: _products[index].price,
+                                      stream: streamController.stream,
                                       callback: this)),
                             );
                           },
@@ -210,20 +241,22 @@ class _HomePageState extends State<HomePage> {
   Future addFavorite(ArticleCard card) async {
     final product = _products.where((p) => p.productId == card.id).toList()[0];
     await _preferenceArticles.addFavorite(product);
-    if (mounted) {
+    if (this.mounted) {
       setState(() {
         _favoriteIds.add(card.id);
       });
     }
+    widget.updateStream.add(true);
   }
 
   Future removeFavorite(int id, bool close) async {
     await _preferenceArticles.removeFavorite(id);
-    if (mounted) {
+    if (this.mounted) {
       setState(() {
         _favoriteIds.remove(id);
       });
     }
+    widget.updateStream.add(true);
   }
 
   showAlertDialog(BuildContext context, int id) {

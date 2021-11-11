@@ -9,7 +9,15 @@ import 'dart:async';
 import 'package:penny_pincher/view/widget/browser_article_card.dart';
 import 'package:penny_pincher/view/widget/extended_view.dart';
 
+StreamController<bool> streamController = StreamController<bool>.broadcast();
+
 class BrowserPage extends StatefulWidget {
+
+  late final Stream<bool> stream;
+  late final StreamController updateStream;
+
+  BrowserPage(this.stream, this.updateStream);
+
   @override
   State<BrowserPage> createState() => _BrowserPageState();
 }
@@ -32,6 +40,9 @@ class _BrowserPageState extends State<BrowserPage> {
       });
     }
     super.initState();
+    widget.stream.listen((update) {
+      updateBrowser(update);
+    });
     getProducts();
   }
 
@@ -51,6 +62,23 @@ class _BrowserPageState extends State<BrowserPage> {
     }
     _products.addAll(_product);
     //count++;
+  }
+
+  updateBrowser(bool update) {
+    if (this.mounted) {
+      updateFavorites();
+    }
+  }
+
+  Future<void> updateFavorites() async {
+    _favoriteIds.clear();
+    List<Product> favorites = await _preferenceArticles.getAllFavorites();
+    for (var i in favorites) {
+      if (!_favoriteIds.contains(i.productId)) {
+        _favoriteIds.add(i.productId);
+      }
+    }
+    setState(() {});
   }
 
   @override
@@ -142,8 +170,10 @@ class _BrowserPageState extends State<BrowserPage> {
                           description: _products[index].description,
                           image: _products[index].image,
                           price: _products[index].price,
+                          stream: streamController.stream,
                           callback: this)),
                 );
+                streamController.add(true);
               },
               child: BrowserArticleCard(
                   id: _products[index].productId,
@@ -179,6 +209,7 @@ class _BrowserPageState extends State<BrowserPage> {
         _favoriteIds.add(card.id);
       });
     }
+    widget.updateStream.add(true);
   }
 
   Future removeFavorite(int id, bool close) async {
@@ -188,6 +219,7 @@ class _BrowserPageState extends State<BrowserPage> {
         _favoriteIds.remove(id);
       });
     }
+    widget.updateStream.add(true);
   }
 
   showAlertDialog(BuildContext context, int id) {
