@@ -68,7 +68,7 @@ class _BrowserPageState extends State<BrowserPage> {
     double blockSizeVertical = displayHeight / 100; // bildschirmhöhe in 1%
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: const Color.fromRGBO(23, 41, 111, 1),
+          backgroundColor: ProductApi.darkBlue,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

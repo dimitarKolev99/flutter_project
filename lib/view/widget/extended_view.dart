@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:penny_pincher/services/product_api.dart';
 
 import 'article_card.dart';
 
@@ -38,7 +39,7 @@ class _ExtendedViewState extends State<ExtendedView> {
     final displayHeight = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
-            backgroundColor: const Color.fromRGBO(23, 41, 111, 1),
+            backgroundColor: ProductApi.darkBlue,
             title: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -109,14 +110,13 @@ class _ExtendedViewState extends State<ExtendedView> {
                           padding: EdgeInsets.only(
                               top: 3, bottom: 3, left: 13, right: 10),
                           decoration: BoxDecoration(
-                            color: Color.fromRGBO(220, 110, 30,
-                                1), // const Color.fromRGBO(23, 41, 111, 0.8),
+                            color: ProductApi.orange, // const Color.fromRGBO(23, 41, 111, 0.8),
                             borderRadius: BorderRadius.circular(0),
                           ),
                           child: Text(
                             "-" + widget.saving.toString() + "%",
                             style: TextStyle(
-                              color: Color.fromRGBO(240, 240, 240, 1),
+                              color: ProductApi.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 25,
                               letterSpacing: 1.4,
@@ -132,7 +132,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                         padding:
                             EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         decoration: BoxDecoration(
-                          color: const Color.fromRGBO(23, 41, 111, 0.8),
+                          color: ProductApi.lightBlue,
                           borderRadius: BorderRadius.circular(30),
                         ),
                         //width: displayWidth,
@@ -141,7 +141,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                           widget.category,
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                            color: Color.fromRGBO(240, 240, 240, 1),
+                            color: ProductApi.white,
                           ),
                         ),
                       ),
@@ -184,7 +184,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                           borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(15),
                               bottomRight: Radius.circular(15)),
-                          color: Color.fromRGBO(23, 41, 111, 1),
+                          color: ProductApi.darkBlue,
                         ),
                         child: Container(
                           margin: EdgeInsets.symmetric(
@@ -210,7 +210,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 35,
-                                        color: Color.fromRGBO(220, 110, 30, 1),
+                                        color: ProductApi.orange,
                                       ),
                                     ),
                                     Text(
@@ -221,7 +221,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                                       style: TextStyle(
                                           fontSize: 15,
                                           color:
-                                              Color.fromRGBO(240, 240, 240, 1)),
+                                              ProductApi.white),
                                     ),
                                   ]),
                               Container(
@@ -236,7 +236,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                                       "To Offer",
                                       style: TextStyle(
                                         fontSize: 25,
-                                        color: Color.fromRGBO(240, 240, 240, 1),
+                                        color: ProductApi.white,
                                       ),
                                     ),
 
@@ -246,11 +246,10 @@ class _ExtendedViewState extends State<ExtendedView> {
                                       padding: EdgeInsets.symmetric(
                                           horizontal: 25, vertical: 10),
                                       backgroundColor:
-                                          Color.fromRGBO(23, 41, 111, 0.5),
+                                          ProductApi.lightBlue,
                                       shape: RoundedRectangleBorder(
                                           side: BorderSide(
-                                              color: Color.fromRGBO(
-                                                  240, 240, 240, 1),
+                                              color: ProductApi.white,
                                               width: 2,
                                               style: BorderStyle.solid),
                                           borderRadius:

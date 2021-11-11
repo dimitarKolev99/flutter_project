@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/view/widget/tab_navigator.dart';
+
 
 class AppNavigator extends StatefulWidget {
   const AppNavigator({Key? key}) : super(key: key);
@@ -38,10 +40,11 @@ class AppState extends State<AppNavigator> {
       onWillPop: () async {
         final isFirstRouteInCurrentTab =
         !await _navigatorKeys[_currentPage]!.currentState!.maybePop();
+        //  check if we deeper in the stack of the current page
         if (isFirstRouteInCurrentTab) {
+          // check if we're not on first Page / LiveFeed -> If true return to Live Feed
           if (_currentPage != "Page1") {
-            _selectTab("Page1", 1);
-
+            _selectTab("Page1", 0);
             return false;
           }
         }
@@ -61,10 +64,10 @@ class AppState extends State<AppNavigator> {
             child:
             BottomNavigationBar(
 
-              selectedItemColor: const Color.fromRGBO(220, 110, 30, 1),
-              unselectedItemColor: const Color.fromRGBO(240, 240, 240, 1),
+              selectedItemColor: ProductApi.orange,
+              unselectedItemColor: ProductApi.white,
               iconSize: 22,
-              backgroundColor: const Color.fromRGBO(23, 41, 111, 1),
+              backgroundColor: ProductApi.darkBlue,
 
               onTap: (int index) {
                 _selectTab(pageKeys[index], index);
@@ -72,20 +75,31 @@ class AppState extends State<AppNavigator> {
               currentIndex: _selectedIndex,
               items: const [
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.update),
+                  icon:  Padding(
+                    padding: EdgeInsets.only(bottom: 5.0),
+                    child: Icon(Icons.update, size: 33),
+                    ),
                   label: 'LiveFeed',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.filter_list_alt),
+                  icon: Padding(
+                  padding: EdgeInsets.only(bottom: 5.0),
+                  child: Icon(Icons.filter_list_alt , size: 33),
+                  ),
                   label: 'Browser',
                 ),
                 // TODO: change heart Icon to bookmark_add_outlined ?
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.bookmarks_outlined),
+                  icon: Padding(
+                    padding: EdgeInsets.only(bottom: 5.0),
+                    child: Icon(Icons.bookmarks_outlined, size: 33),
+                    ),
                   label: 'Watchlist',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.account_circle),
+                  icon: Padding(
+                  padding: EdgeInsets.only(bottom: 5.0),
+                  child: Icon(Icons.account_circle, size: 33),),
                   label: 'Profile',
                 ),
               ],

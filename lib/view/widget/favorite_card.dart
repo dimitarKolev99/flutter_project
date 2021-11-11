@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
 
-import '../favorites.dart';
 
 class FavoriteCard extends StatelessWidget {
   final int id;
@@ -116,14 +116,13 @@ class FavoriteCard extends StatelessWidget {
                       padding: EdgeInsets.only(
                           top: 3, bottom: 3, left: 10, right: 17),
                       decoration: BoxDecoration(
-                        color: Color.fromRGBO(220, 110, 30,
-                            1), // const Color.fromRGBO(23, 41, 111, 0.8),
+                        color: ProductApi.orange, // const Color.fromRGBO(23, 41, 111, 0.8),
                         borderRadius: BorderRadius.circular(0),
                       ),
                       child: Text(
                         "-" + saving.toString() + "%",
                         style: TextStyle(
-                          color: Color.fromRGBO(240, 240, 240, 1),
+                          color: ProductApi.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
                         ),
@@ -145,7 +144,7 @@ class FavoriteCard extends StatelessWidget {
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
-                            color: Color.fromRGBO(220, 110, 30, 1),
+                            color: ProductApi.orange,
                           ),
                         ),
                         Text(
