@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/models/product.dart';
+import 'package:penny_pincher/services/product_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -151,13 +152,13 @@ class ArticleCard extends StatelessWidget {
                     ),
                     Container(                                                      // % Badge
                       padding: EdgeInsets.only(top: blockSizeVertical * 1, bottom: blockSizeVertical * 1, left: blockSizeHorizontal * 3, right: blockSizeHorizontal * 3),//(top: 3, bottom: 3, left: 10, right: 17),
-                      decoration: BoxDecoration(color: Color.fromRGBO(220, 110, 30, 1),  // const Color.fromRGBO(23, 41, 111, 0.8),
+                      decoration: BoxDecoration(color: ProductApi.orange,  // const Color.fromRGBO(23, 41, 111, 0.8),
                         borderRadius: BorderRadius.circular(0),
                       ),
                       child:
                       Text("-" + saving.toString() + "%",
                         style: TextStyle(
-                          color: Color.fromRGBO(240, 240, 240, 1),
+                          color: ProductApi.white,
                           fontWeight: FontWeight.bold,
                           fontSize: safeBlockHorizontal * 4,
                         ),
@@ -184,10 +185,7 @@ class ArticleCard extends StatelessWidget {
                                 fontWeight: FontWeight
                                     .bold,
                                 fontSize: safeBlockHorizontal * 5,
-                                color: Color
-                                    .fromRGBO(
-                                    220, 110, 30,
-                                    1),),
+                                color: ProductApi.orange),
                             ),
                             Text(
                               //ToDO: add previous price
