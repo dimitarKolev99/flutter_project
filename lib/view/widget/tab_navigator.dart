@@ -45,6 +45,8 @@ class _TabNavigatorState extends State<TabNavigator> {
       streamControllerFavorites.add(true);
       state = 2;
     }
+
+    print(state);
     // TODO: add Profile Page
 
     return Navigator(
