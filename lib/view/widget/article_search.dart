@@ -1,13 +1,21 @@
+import 'package:penny_pincher/models/product.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
+import '../browser_view.dart';
+import '../filter_View.dart';
+
 
 class ArticleSearch extends SearchDelegate<String> {
 
   List<String> recentArticles = [];
+  late final List<Product> _products = [];
 
   ArticleSearch () {
     updateRecent(); // reading out storage on opening searchBar
   }
+
+
+
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -26,14 +34,31 @@ class ArticleSearch extends SearchDelegate<String> {
     ];
   }
 
+
+
+
     @override
     Widget? buildLeading(BuildContext context) {
-      return IconButton(
+      return Container (
+        /*child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children:[
+          IconButton(
         icon: const Icon(Icons.arrow_back),
         onPressed: () =>
             close(context,
-                ''), // Not sure if empty string is okay here, but it works
-      );
+                ''),// Not sure if empty string is okay here, but it works
+          ),*/
+        child:
+            TextButton(
+            child:
+            const Text("Filtern"),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => FilterView()));
+            },
+          ));
     }
 
     @override
@@ -100,7 +125,7 @@ class ArticleSearch extends SearchDelegate<String> {
                 TextSpan(
                   text: remainingText,
                   style: const TextStyle(
-                    color: Colors.grey,
+                    color: Colors.black,
                     fontSize: 18,
                   ),
                 ),
