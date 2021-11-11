@@ -2,7 +2,6 @@ import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
-import 'package:penny_pincher/view/widget/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -96,7 +95,6 @@ class _BrowserPageState extends State<BrowserPage> {
               ],
             )
         ),
-      bottomNavigationBar: BottomNavBarGenerator(),
       body: GridView.count(
         // Create a grid with 2 columns. If you change the scrollDirection to
         // horizontal, this produces 2 rows.
