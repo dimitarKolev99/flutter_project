@@ -29,8 +29,17 @@ class BrowserArticleCard extends StatelessWidget {
     int x = 100 - saving;
     double prevpreis = newprice/x * 100;
 
-    final displayWidth = MediaQuery.of(context).size.width;
-    final displayHeight = MediaQuery.of(context).size.height;
+    MediaQueryData _mediaQueryData = MediaQuery.of(context);;
+    double displayWidth = _mediaQueryData.size.width;
+    double displayHeight = _mediaQueryData.size.height;
+    double blockSizeHorizontal = displayWidth / 100; // bildschirmbreite in 1%
+    double blockSizeVertical = displayHeight / 100; // bildschirmhöhe in 1%
+
+    double _safeAreaHorizontal = _mediaQueryData.padding.left + _mediaQueryData.padding.right; //abstand links rechts
+    double _safeAreaVertical = _mediaQueryData.padding.top + _mediaQueryData.padding.bottom; //abstand oben unten
+    double safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100; // umrechnung in pro
+    double safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
+
     return Container(
       // card itself
       margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
@@ -59,18 +68,18 @@ class BrowserArticleCard extends StatelessWidget {
                 children: [
                   //Image
                   Container(
-                    margin: EdgeInsets.only(top: 10),
+                    margin: EdgeInsets.only(top: blockSizeVertical*1),
                     child: Image.network(
                       image,
-                      width: displayWidth / 3,
-                      height: displayHeight / 6,
+                      width: blockSizeHorizontal * 33.33,
+                      height: blockSizeVertical * 16.67,
                       fit: BoxFit.contain,
                     ),
                     alignment: Alignment.topCenter,
                   ),
                   // %Badge
                   Container(
-                    margin: EdgeInsets.only(top: 5, left: 5),
+                    margin: EdgeInsets.only(top: blockSizeVertical*0.8, left: blockSizeHorizontal*1),
                     //padding: EdgeInsets.only(top: 3, bottom: 3, left: 10, right: 17),
                     decoration: BoxDecoration(
                       color: Color.fromRGBO(220, 110, 30, 1), // const Color.fromRGBO(23, 41, 111, 0.8),
@@ -81,13 +90,13 @@ class BrowserArticleCard extends StatelessWidget {
                       style: TextStyle(
                         color: Color.fromRGBO(240, 240, 240, 1),
                         fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                        fontSize: safeBlockHorizontal * 4.5,
                       ),
                     ),
                   ),
                   //Favorite icon
                   Container(
-                    margin: EdgeInsets.only(top: 5, right: 5),
+                    margin: EdgeInsets.only(top: blockSizeVertical*0.1, right: blockSizeHorizontal*0.1),
                     child: Align(
                       child: IconButton(
                         icon: (callback.isFavorite(id)
@@ -104,12 +113,12 @@ class BrowserArticleCard extends StatelessWidget {
               ),
               // title
               Container(
-                margin: EdgeInsets.only(top: 5),
-                width: displayWidth / 2.5,
+                margin: EdgeInsets.only(top: blockSizeVertical*0.1),
+                width: blockSizeVertical*20,
                 child: Text(
                   title,
-                  style: const TextStyle(
-                    fontSize: 15,
+                  style: TextStyle(
+                    fontSize: safeBlockHorizontal * 4,
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
@@ -122,18 +131,18 @@ class BrowserArticleCard extends StatelessWidget {
             ]),
             //price
             Container(
-              margin: EdgeInsets.only(bottom: 5),
+              margin: EdgeInsets.only(bottom: blockSizeVertical*0.2),
               child: Column(children: [
                 Text(
                   //ToDO: add previous price
                   "Previously " + prevpreis.toStringAsFixed(2) + "€",
-                  style: TextStyle(fontSize: 11, color: Colors.black),
+                  style: TextStyle(fontSize: safeBlockHorizontal * 3, color: Colors.black),
                 ),
                 Text(
                   newprice.toStringAsFixed(2) + "€",
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 28,
+                    fontSize: safeBlockHorizontal * 7,
                     color: Color.fromRGBO(220, 110, 30, 1),
                   ),
                 ),
