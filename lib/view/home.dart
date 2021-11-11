@@ -8,11 +8,14 @@ import 'dart:async';
 
 import 'package:penny_pincher/view/widget/extended_view.dart';
 
+StreamController<bool> streamController = StreamController<bool>.broadcast();
+
 class HomePage extends StatefulWidget {
 
   late final Stream<bool> stream;
+  late final StreamController updateStream;
 
-  HomePage(this.stream);
+  HomePage(this.stream, this.updateStream);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -58,8 +61,10 @@ class _HomePageState extends State<HomePage> {
         _isLoading = false;
       });
     }
-    _products.insert(count, _product[count]);
-    count++;
+    if (count < _product.length) {
+      _products.insert(count, _product[count]);
+      count++;
+    }
   }
 
   @override
@@ -86,16 +91,14 @@ class _HomePageState extends State<HomePage> {
 
       if(count >= _product.length - 1) {
 
-        dispose();
+        // dispose();
       }
     });
   }
 
   updateHome(bool update) {
     if (this.mounted) {
-      setState(() {
-        updateFavorites();
-      });
+      updateFavorites();
     }
   }
 
@@ -107,6 +110,8 @@ class _HomePageState extends State<HomePage> {
         _favoriteIds.add(i.productId);
       }
     }
+    setState(() {});
+    streamController.add(true);
   }
 
   @override
@@ -192,8 +197,7 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (context, index) {
                       return InkWell(
                           onTap: () {
-                            Navigator.push(
-                              context,
+                            Navigator.push(context,
                               MaterialPageRoute(
                                   builder: (context) => ExtendedView(
                                       id: _products[index].productId,
@@ -203,6 +207,7 @@ class _HomePageState extends State<HomePage> {
                                       description: _products[index].description,
                                       image: _products[index].image,
                                       price: _products[index].price,
+                                      stream: streamController.stream,
                                       callback: this)),
                             );
                           },
@@ -241,6 +246,7 @@ class _HomePageState extends State<HomePage> {
         _favoriteIds.add(card.id);
       });
     }
+    widget.updateStream.add(true);
   }
 
   Future removeFavorite(int id, bool close) async {
@@ -250,6 +256,7 @@ class _HomePageState extends State<HomePage> {
         _favoriteIds.remove(id);
       });
     }
+    widget.updateStream.add(true);
   }
 
   showAlertDialog(BuildContext context, int id) {

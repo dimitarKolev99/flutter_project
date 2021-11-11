@@ -6,9 +6,12 @@ import '../favorites.dart';
 import '../home.dart';
 import 'dart:async';
 
-StreamController<bool> streamControllerHome = StreamController<bool>.broadcast();
-StreamController<bool> streamControllerBrowser = StreamController<bool>.broadcast();
-StreamController<bool> streamControllerFavorites = StreamController<bool>.broadcast();
+int count = 0;
+
+StreamController<bool> streamControllerHome = StreamController<bool>.broadcast(sync: true);
+StreamController<bool> streamControllerBrowser = StreamController<bool>.broadcast(sync: true);
+StreamController<bool> streamControllerFavorites = StreamController<bool>.broadcast(sync: true);
+StreamController<bool> updateStream = StreamController<bool>.broadcast(sync: true);
 
 class TabNavigatorRoutes {
   static const String root = '/';
@@ -26,27 +29,34 @@ class TabNavigator extends StatefulWidget {
 
 class _TabNavigatorState extends State<TabNavigator> {
 
-  late int state = 0;
+  @override
+  void initState() {
+    super.initState();
+    if (!updateStream.hasListener) {
+      updateStream.stream.listen((update) {
+        updateStreams(update);
+      });
+    }
+  }
+
+  void updateStreams(bool update) {
+    streamControllerHome.add(true);
+    streamControllerBrowser.add(true);
+    streamControllerFavorites.add(true);
+  }
 
   @override
   Widget build(BuildContext context) {
 
-    Widget child = HomePage(streamControllerHome.stream);
+    Widget child = HomePage(streamControllerHome.stream, updateStream);
     if(widget.tabItem == "Page1") {
-      child = HomePage(streamControllerHome.stream);
-      streamControllerHome.add(true);
-      state = 0;
+      child = HomePage(streamControllerHome.stream, updateStream);
     } else if(widget.tabItem == "Page2") {
-      child = BrowserPage(streamControllerBrowser.stream);
-      streamControllerBrowser.add(true);
-      state = 1;
+      child = BrowserPage(streamControllerBrowser.stream, updateStream);
     } else if (widget.tabItem == "Page3") {
-      child = FavoritePage(streamControllerFavorites.stream);
-      streamControllerFavorites.add(true);
-      state = 2;
+      child = FavoritePage(streamControllerFavorites.stream, updateStream);
     }
 
-    print(state);
     // TODO: add Profile Page
 
     return Navigator(
