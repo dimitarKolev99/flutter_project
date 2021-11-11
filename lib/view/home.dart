@@ -111,7 +111,29 @@ class _HomePageState extends State<HomePage> {
             ),
             */
               SizedBox(width: 10),
-              Text('Penny Pincher')
+              Padding(
+               padding: EdgeInsets.only(top: 3),
+               child:
+              Text(
+                'Penny Pincher',
+                style: TextStyle(
+                  // Shaddow is used to get Distance to the underline -> TextColor itself is transparent
+                  shadows: [
+                    Shadow(
+                        color: Color.fromRGBO(240, 240, 240, 1),
+                        offset: Offset(0, -5))
+                  ],
+                  //fontFamily: '....',
+                  fontSize: 21,
+                  letterSpacing: 3,
+                  color: Colors.transparent,
+                  fontWeight: FontWeight.w900,
+                  decoration:
+                  TextDecoration.underline,
+                  decorationColor: Color.fromRGBO(220, 110, 30, 1),
+                  decorationThickness: 4,
+                ),
+              ), ),
             ],
           ),
           actions: [
