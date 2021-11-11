@@ -10,7 +10,7 @@ class TabNavigatorRoutes {
 }
 
 class TabNavigator extends StatelessWidget {
-  TabNavigator({required this.navigatorKey, required this.tabItem});
+  const TabNavigator({Key? key, required this.navigatorKey, required this.tabItem}) : super(key: key);
   final GlobalKey<NavigatorState> navigatorKey;
   final String tabItem;
 
@@ -18,12 +18,13 @@ class TabNavigator extends StatelessWidget {
   Widget build(BuildContext context) {
 
     Widget child = HomePage();
-    if(tabItem == "Page1")
+    if(tabItem == "Page1") {
       child = HomePage();
-    else if(tabItem == "Page2")
+    } else if(tabItem == "Page2") {
       child = BrowserPage();
-    else if(tabItem == "Page3")
+    } else if(tabItem == "Page3") {
       child = FavoritePage();
+    }
     // TODO: add Profile Page
 
     return Navigator(

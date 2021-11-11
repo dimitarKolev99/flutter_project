@@ -57,7 +57,7 @@ class AppState extends State<AppNavigator> {
             ]
         ),
         bottomNavigationBar: SizedBox(
-            height: 100,
+            height: 75,
             child:
             BottomNavigationBar(
 
@@ -73,20 +73,20 @@ class AppState extends State<AppNavigator> {
               items: const [
                 BottomNavigationBarItem(
                   icon: Icon(Icons.update),
-                  title: Text('LiveFeed'),
+                  label: 'LiveFeed',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.filter_list_alt),
-                  title: Text('Browser'),
+                  label: 'Browser',
                 ),
                 // TODO: change heart Icon to bookmark_add_outlined ?
                 BottomNavigationBarItem(
                   icon: Icon(Icons.bookmarks_outlined),
-                  title: Text('Watchlist'),
+                  label: 'Watchlist',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.account_circle),
-                  title: Text('Profile'),
+                  label: 'Profile',
                 ),
               ],
               type: BottomNavigationBarType.fixed,
