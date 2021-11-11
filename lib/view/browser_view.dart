@@ -3,6 +3,7 @@ import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
 import 'package:flutter/material.dart';
+import 'package:penny_pincher/view/widget/article_search.dart';
 import 'dart:async';
 
 import 'package:penny_pincher/view/widget/browser_article_card.dart';
@@ -87,7 +88,17 @@ class _BrowserPageState extends State<BrowserPage> {
               SizedBox(width: 10),
               Text('Penny Pincher')
             ],
-          )),
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                final results =
+                showSearch(context: context, delegate: ArticleSearch());
+              },
+            )
+          ]
+      ),
 
 
       body: GridView.count(
