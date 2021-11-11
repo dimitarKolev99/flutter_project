@@ -27,14 +27,17 @@ class _HomePageState extends State<HomePage> {
   final _preferenceArticles = PreferencesArticles();
 
   _onUpdateScroll() {
-    setState(() {
-      if (_scrollController.offset < _scrollController.position.maxScrollExtent) {
-        _isScrolling = true;
-      }
-      else {
-        _isScrolling = false;
-      }
-    });
+    if (this.mounted) {
+      setState(() {
+        if (_scrollController.offset <
+            _scrollController.position.maxScrollExtent) {
+          _isScrolling = true;
+        }
+        else {
+          _isScrolling = false;
+        }
+      });
+    }
   }
 
   Future<void> getProducts() async {
@@ -62,7 +65,6 @@ class _HomePageState extends State<HomePage> {
         _isLoading = true;
       });
     }
-
     super.initState();
     _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
       getProducts();
@@ -74,12 +76,10 @@ class _HomePageState extends State<HomePage> {
           duration: const Duration(milliseconds: 300),
         );
       }
-
       if(count >= _product.length - 1) {
         dispose();
       }
     });
-    //getProducts();
   }
 
  @override
