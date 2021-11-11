@@ -1,8 +1,17 @@
+
 import 'package:flutter/material.dart';
 
 import '../browser_view.dart';
 import '../favorites.dart';
 import '../home.dart';
+import 'dart:async';
+
+int count = 0;
+
+StreamController<bool> streamControllerHome = StreamController<bool>.broadcast(sync: true);
+StreamController<bool> streamControllerBrowser = StreamController<bool>.broadcast(sync: true);
+StreamController<bool> streamControllerFavorites = StreamController<bool>.broadcast(sync: true);
+StreamController<bool> updateStream = StreamController<bool>.broadcast(sync: true);
 
 class TabNavigatorRoutes {
   static const String root = '/';
@@ -19,16 +28,33 @@ class TabNavigator extends StatefulWidget {
 }
 
 class _TabNavigatorState extends State<TabNavigator> {
+
+  @override
+  void initState() {
+    super.initState();
+    if (!updateStream.hasListener) {
+      updateStream.stream.listen((update) {
+        updateStreams(update);
+      });
+    }
+  }
+
+  void updateStreams(bool update) {
+    streamControllerHome.add(true);
+    streamControllerBrowser.add(true);
+    streamControllerFavorites.add(true);
+  }
+
   @override
   Widget build(BuildContext context) {
 
-    Widget child = HomePage();
+    Widget child = HomePage(streamControllerHome.stream, updateStream);
     if(widget.tabItem == "Page1") {
-      child = HomePage();
+      child = HomePage(streamControllerHome.stream, updateStream);
     } else if(widget.tabItem == "Page2") {
-      child = BrowserPage();
-    } else if(widget.tabItem == "Page3") {
-      child = FavoritePage();
+      child = BrowserPage(streamControllerBrowser.stream, updateStream);
+    } else if (widget.tabItem == "Page3") {
+      child = FavoritePage(streamControllerFavorites.stream, updateStream);
     }
 
     // TODO: add Profile Page

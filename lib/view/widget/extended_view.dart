@@ -12,6 +12,7 @@ class ExtendedView extends StatefulWidget {
   final String image;
   final String description;
   final String category;
+  final Stream<bool> stream;
   dynamic callback;
 
   ExtendedView({
@@ -22,6 +23,7 @@ class ExtendedView extends StatefulWidget {
     required this.image,
     required this.description,
     required this.category,
+    required this.stream,
     required this.callback,
   });
 
@@ -30,6 +32,21 @@ class ExtendedView extends StatefulWidget {
 }
 
 class _ExtendedViewState extends State<ExtendedView> {
+
+  @override
+  void initState() {
+    super.initState();
+    widget.stream.listen((update) {
+      updateExtendedView(update);
+    });
+  }
+
+  updateExtendedView(bool update) {
+    if (this.mounted) {
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double newprice = widget.price / 100;
@@ -298,7 +315,7 @@ class _ExtendedViewState extends State<ExtendedView> {
       showAlertDialog();
     } else {
       await widget.callback.addFavorite(articleCard);
-      if (mounted) {
+      if (this.mounted) {
         setState(() {});
       }
     }
@@ -320,7 +337,7 @@ class _ExtendedViewState extends State<ExtendedView> {
       onPressed: () async {
         Navigator.of(context, rootNavigator: true).pop('dialog');
         await widget.callback.removeFavorite(widget.id, true);
-        if (mounted) {
+        if (this.mounted) {
           setState(() {});
         }
       },

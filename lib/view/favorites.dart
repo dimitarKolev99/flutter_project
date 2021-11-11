@@ -9,8 +9,15 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
+StreamController<bool> streamController = StreamController<bool>.broadcast();
+
 class FavoritePage extends StatefulWidget {
-  
+
+  late final Stream<bool> stream;
+  late final StreamController updateStream;
+
+  FavoritePage(this.stream, this.updateStream);
+
   @override
   State<FavoritePage> createState() => _FavoritePageState();
 }
@@ -21,6 +28,7 @@ class _FavoritePageState extends State<FavoritePage> {
   late List<Product> _product;
   late final List<Product> _favoriteIds = [];
   bool _isLoading = true;
+  bool _isClosed = false;
 
   final _preferenceArticles = PreferencesArticles();
 
@@ -33,6 +41,9 @@ class _FavoritePageState extends State<FavoritePage> {
     }
 
     super.initState();
+    widget.stream.listen((update) {
+      updateFavorites(update);
+    });
     getProducts();
   }
 
@@ -43,7 +54,8 @@ class _FavoritePageState extends State<FavoritePage> {
     });
   }
 
-  Future<void> getProducts() async {
+  Future <void> getProducts() async {
+    _favoriteIds.clear();
     _product = await _preferenceArticles.getAllFavorites();
     if (mounted) {
       setState(() {
@@ -52,6 +64,18 @@ class _FavoritePageState extends State<FavoritePage> {
     }
     for (var i = 0; i < _product.length; i++) {
       _favoriteIds.insert(i, _product[i]);
+    }
+  }
+
+  updateFavorites(bool update) {
+    if (this.mounted) {
+      setState(() {
+        getProducts();
+      });
+    }
+    if (_isClosed) {
+      _isClosed = false;
+      Navigator.maybePop(context);
     }
   }
 
@@ -134,8 +158,11 @@ class _FavoritePageState extends State<FavoritePage> {
                                             _favoriteIds[index].description,
                                         image: _favoriteIds[index].image,
                                         price: _favoriteIds[index].price,
+                                        stream: streamController.stream,
                                         callback: this)),
                               );
+                              streamController.add(true);
+                              _isClosed = true;
                             },
                             child: FavoriteCard(
                               id: _favoriteIds[index].productId,
@@ -198,7 +225,6 @@ class _FavoritePageState extends State<FavoritePage> {
 
   Future removeFavorite(int id, bool close) async {
     final product = _favoriteIds.where((p) => p.productId == id).toList()[0];
-    Navigator.of(context, rootNavigator: true).pop('dialog');
     await _preferenceArticles.removeFavorite(id);
     if (mounted) {
       setState(() {
@@ -208,6 +234,7 @@ class _FavoritePageState extends State<FavoritePage> {
     if (close) {
       Navigator.pop(context);
     }
+    widget.updateStream.add(true);
   }
 
   showAlertDialog(BuildContext context, int id) {
@@ -224,6 +251,7 @@ class _FavoritePageState extends State<FavoritePage> {
       ),
       child: const Text("Ja"),
       onPressed: () async {
+        Navigator.of(context, rootNavigator: true).pop('dialog');
         await removeFavorite(id, false);
       },
     );
