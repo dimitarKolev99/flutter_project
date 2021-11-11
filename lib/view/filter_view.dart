@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:penny_pincher/models/product.dart';
+import 'package:penny_pincher/services/product_api.dart';
 
 class FilterView extends StatefulWidget {
   @override
@@ -30,7 +31,7 @@ class _FilterViewState extends State<FilterView> {
 
     return Scaffold(
         appBar: AppBar(
-            backgroundColor: const Color.fromRGBO(23, 41, 111, 1),
+            backgroundColor: ProductApi.darkBlue,
             title: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -63,13 +64,15 @@ class _FilterViewState extends State<FilterView> {
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
-                  color: Color.fromRGBO(23, 41, 111, 1),
+                  color: ProductApi.darkBlue,
                 ),
               ),
               Container(
                 //color: Colors.green,
                 width: blockSizeHorizontal * 80,
                 child: Slider(
+                  activeColor: ProductApi.darkBlue,
+                  //inactiveColor: ProductApi.lightBlue,
                   value: _currentSliderValuePrice,
                   min: 0,
                   max: 100,
@@ -92,7 +95,7 @@ class _FilterViewState extends State<FilterView> {
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
-                  color: Color.fromRGBO(23, 41, 111, 1),
+                  color: ProductApi.darkBlue,
                 ),
               ),
               Container(
