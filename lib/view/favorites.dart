@@ -5,7 +5,6 @@ import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
 import 'package:penny_pincher/view/widget/extended_view.dart';
 import 'package:penny_pincher/view/widget/favorite_card.dart';
-import 'package:penny_pincher/view/widget/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -81,12 +80,13 @@ class _FavoritePageState extends State<FavoritePage> {
             ],
           ),
           actions: [
-            IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () {},
-            )
-          ]),
-      bottomNavigationBar: BottomNavBarGenerator(),
+          IconButton(
+          icon: const Icon(Icons.search),
+          onPressed: () {
+
+          },
+        )
+    ]),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : _favoriteIds.isNotEmpty

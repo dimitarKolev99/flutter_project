@@ -2,7 +2,6 @@ import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
-import 'package:penny_pincher/view/widget/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -31,14 +30,8 @@ class _BrowserPageState extends State<BrowserPage> {
         _isLoading = true;
       });
     }
-
     super.initState();
-    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
-      getProducts();
-      if (count >= _product.length - 1) {
-        dispose();
-      }
-    });
+    getProducts();
   }
 
   Future<void> getProducts() async {
@@ -55,8 +48,8 @@ class _BrowserPageState extends State<BrowserPage> {
         _isLoading = false;
       });
     }
-    _products.insert(count, _product[count]);
-    count++;
+    _products.addAll(_product);
+    //count++;
   }
 
   @override
@@ -67,6 +60,11 @@ class _BrowserPageState extends State<BrowserPage> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData _mediaQueryData = MediaQuery.of(context);;
+    double displayWidth = _mediaQueryData.size.width;
+    double displayHeight = _mediaQueryData.size.height;
+    double blockSizeHorizontal = displayWidth / 100; // bildschirmbreite in 1%
+    double blockSizeVertical = displayHeight / 100; // bildschirmhöhe in 1%
     return Scaffold(
       appBar: AppBar(
           backgroundColor: const Color.fromRGBO(23, 41, 111, 1),
@@ -91,6 +89,7 @@ class _BrowserPageState extends State<BrowserPage> {
             ],
           )),
       bottomNavigationBar: BottomNavBarGenerator(),
+
       body: GridView.count(
         // Create a grid with 2 columns. If you change the scrollDirection to
         // horizontal, this produces 2 rows.
