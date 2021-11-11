@@ -195,8 +195,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future removeFavorite(int id, {bool close = false}) async {
-    Navigator.of(context).pop();
+  Future removeFavorite(int id, bool close) async {
     await _preferenceArticles.removeFavorite(id);
     if (mounted) {
       setState(() {
@@ -219,7 +218,8 @@ class _HomePageState extends State<HomePage> {
       ),
       child: const Text("Ja"),
       onPressed: () async {
-        await removeFavorite(id);
+        Navigator.of(context, rootNavigator: true).pop('dialog');
+        await removeFavorite(id, false);
       },
     );
 

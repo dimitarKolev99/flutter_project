@@ -147,8 +147,7 @@ class _BrowserPageState extends State<BrowserPage> {
     }
   }
 
-  Future removeFavorite(int id, {bool close = false}) async {
-    Navigator.of(context).pop();
+  Future removeFavorite(int id, bool close) async {
     await _preferenceArticles.removeFavorite(id);
     if (mounted) {
       setState(() {
@@ -162,7 +161,7 @@ class _BrowserPageState extends State<BrowserPage> {
     Widget cancelButton = TextButton(
       child: const Text("Nein"),
       onPressed: () {
-        Navigator.of(context).pop();
+        Navigator.of(context, rootNavigator: true).pop('dialog');
       },
     );
     Widget continueButton = TextButton(
@@ -171,7 +170,8 @@ class _BrowserPageState extends State<BrowserPage> {
       ),
       child: const Text("Ja"),
       onPressed: () async {
-        await removeFavorite(id);
+        Navigator.of(context, rootNavigator: true).pop('dialog');
+        await removeFavorite(id, false);
       },
     );
 

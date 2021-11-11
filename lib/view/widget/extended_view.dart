@@ -291,7 +291,7 @@ class _ExtendedViewState extends State<ExtendedView> {
     Widget cancelButton = TextButton(
       child: const Text("Nein"),
       onPressed: () {
-        Navigator.of(context).pop();
+        Navigator.of(context, rootNavigator: true).pop('dialog');
       },
     );
     Widget continueButton = TextButton(
@@ -300,6 +300,7 @@ class _ExtendedViewState extends State<ExtendedView> {
       ),
       child: const Text("Ja"),
       onPressed: () async {
+        Navigator.of(context, rootNavigator: true).pop('dialog');
         await widget.callback.removeFavorite(widget.id, true);
         if (mounted) {
           setState(() {});

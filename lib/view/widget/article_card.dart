@@ -179,7 +179,7 @@ class ArticleCard extends StatelessWidget {
                                       .black),
                             ),
                             Text(
-                              newprice.toStringAsFixed(2) + " €",
+                              newprice.toStringAsFixed(2) + "€",
                               style: TextStyle(
                                 fontWeight: FontWeight
                                     .bold,

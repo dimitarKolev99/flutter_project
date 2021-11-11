@@ -9,7 +9,6 @@ class FavoriteCard extends StatelessWidget {
   final int index;
   final String title;
   final int saving;
-  final String rating = "30";
   final double price;
   final String image;
   final String description;
@@ -17,6 +16,7 @@ class FavoriteCard extends StatelessWidget {
   dynamic callback;
 
   FavoriteCard({
+
     required this.id,
     required this.index,
     required this.saving,
@@ -29,6 +29,9 @@ class FavoriteCard extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
+    double newprice = price/100;
+    int x = 100 - saving;
+    double prevpreis = newprice/x * 100;
     final displayWidth = MediaQuery.of(context).size.width;
     final displayHeight = MediaQuery.of(context).size.height;
     return Container(
@@ -118,7 +121,7 @@ class FavoriteCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(0),
                       ),
                       child: Text(
-                        "-" + rating + "%",
+                        "-" + saving.toString() + "%",
                         style: TextStyle(
                           color: Color.fromRGBO(240, 240, 240, 1),
                           fontWeight: FontWeight.bold,
@@ -138,16 +141,16 @@ class FavoriteCard extends StatelessWidget {
                               color: Colors.black),
                         ),
                         Text(
-                          price.toString() + " €",
+                          newprice.toStringAsFixed(2) + "€",
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
                             color: Color.fromRGBO(220, 110, 30, 1),
                           ),
                         ),
-                        const Text(
+                        Text(
                           //ToDO: add previous price
-                          "Previously 9.99€",
+                          "Previously " + prevpreis.toStringAsFixed(2) + "€",
                           style: TextStyle(fontSize: 8, color: Colors.black),
                         ),
                       ]),
