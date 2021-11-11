@@ -2,7 +2,7 @@ import 'package:penny_pincher/models/product.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import '../browser_view.dart';
-import '../filter_View.dart';
+import '../filter_view.dart';
 
 
 class ArticleSearch extends SearchDelegate<String> {
