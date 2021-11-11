@@ -197,11 +197,26 @@ class _HomePageState extends State<HomePage> {
     if (isFavorite(card.id)) {
       showAlertDialog(context, card.id);
     } else {
-      await _preferenceArticles.addFavorite(card);
-      if (mounted) {
-        setState(() {
-          _favoriteIds.add(card.id);});
-      }
+      await addFavorite(card);
+    }
+  }
+
+  Future addFavorite(ArticleCard card) async {
+    final product = _products.where((p) => p.productId == card.id).toList()[0];
+    await _preferenceArticles.addFavorite(product);
+    if (mounted) {
+      setState(() {
+        _favoriteIds.add(card.id);});
+    }
+  }
+
+  Future removeFavorite(int id) async {
+    Navigator.of(context).pop();
+    await _preferenceArticles.removeFavorite(id);
+    if (mounted) {
+      setState(() {
+        _favoriteIds.remove(id);
+      });
     }
   }
 
@@ -216,13 +231,7 @@ class _HomePageState extends State<HomePage> {
     ),
       child: const Text("Ja"),
       onPressed:  () async {
-        Navigator.of(context).pop();
-        await _preferenceArticles.removeFavorite(id);
-        if (mounted) {
-          setState(() {
-            _favoriteIds.remove(id);
-          });
-        }
+        await removeFavorite(id);
       },
     );
 

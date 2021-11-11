@@ -140,7 +140,8 @@ class _BrowserPageState extends State<BrowserPage> {
   }
 
   Future addFavorite(ArticleCard card) async {
-    await _preferenceArticles.addFavorite(card);
+    final product = _products.where((p) => p.productId == card.id).toList()[0];
+    await _preferenceArticles.addFavorite(product);
     if (mounted) {
       setState(() {
         _favoriteIds.add(card.id);});
