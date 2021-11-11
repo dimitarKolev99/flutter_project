@@ -30,6 +30,7 @@ class _TabNavigatorState extends State<TabNavigator> {
     } else if(widget.tabItem == "Page3") {
       child = FavoritePage();
     }
+
     // TODO: add Profile Page
 
     return Navigator(
