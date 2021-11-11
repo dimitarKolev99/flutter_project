@@ -9,6 +9,11 @@ import 'dart:async';
 import 'package:penny_pincher/view/widget/extended_view.dart';
 
 class HomePage extends StatefulWidget {
+
+  late final Stream<bool> stream;
+
+  HomePage(this.stream);
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -65,6 +70,9 @@ class _HomePageState extends State<HomePage> {
       });
     }
     super.initState();
+    widget.stream.listen((update) {
+      updateHome(update);
+    });
     _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
       getProducts();
 
@@ -81,6 +89,24 @@ class _HomePageState extends State<HomePage> {
         dispose();
       }
     });
+  }
+
+  updateHome(bool update) {
+    if (this.mounted) {
+      setState(() {
+        updateFavorites();
+      });
+    }
+  }
+
+  Future<void> updateFavorites() async {
+    _favoriteIds.clear();
+    List<Product> favorites = await _preferenceArticles.getAllFavorites();
+    for (var i in favorites) {
+      if (!_favoriteIds.contains(i.productId)) {
+        _favoriteIds.add(i.productId);
+      }
+    }
   }
 
   @override
@@ -188,7 +214,7 @@ class _HomePageState extends State<HomePage> {
   Future addFavorite(ArticleCard card) async {
     final product = _products.where((p) => p.productId == card.id).toList()[0];
     await _preferenceArticles.addFavorite(product);
-    if (mounted) {
+    if (this.mounted) {
       setState(() {
         _favoriteIds.add(card.id);
       });
@@ -197,7 +223,7 @@ class _HomePageState extends State<HomePage> {
 
   Future removeFavorite(int id, bool close) async {
     await _preferenceArticles.removeFavorite(id);
-    if (mounted) {
+    if (this.mounted) {
       setState(() {
         _favoriteIds.remove(id);
       });

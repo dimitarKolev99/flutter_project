@@ -10,7 +10,11 @@ import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FavoritePage extends StatefulWidget {
-  
+
+  late final Stream<bool> stream;
+
+  FavoritePage(this.stream);
+
   @override
   State<FavoritePage> createState() => _FavoritePageState();
 }
@@ -33,6 +37,9 @@ class _FavoritePageState extends State<FavoritePage> {
     }
 
     super.initState();
+    widget.stream.listen((update) {
+      updateFavorites(update);
+    });
     getProducts();
   }
 
@@ -43,7 +50,9 @@ class _FavoritePageState extends State<FavoritePage> {
     });
   }
 
-  Future<void> getProducts() async {
+  Future <void> getProducts() async {
+    print("2");
+    _favoriteIds.clear();
     _product = await _preferenceArticles.getAllFavorites();
     if (mounted) {
       setState(() {
@@ -52,6 +61,14 @@ class _FavoritePageState extends State<FavoritePage> {
     }
     for (var i = 0; i < _product.length; i++) {
       _favoriteIds.insert(i, _product[i]);
+    }
+  }
+
+  updateFavorites(bool update) {
+    if (this.mounted) {
+      setState(() {
+        getProducts();
+      });
     }
   }
 

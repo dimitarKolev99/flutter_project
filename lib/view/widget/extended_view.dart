@@ -280,7 +280,7 @@ class _ExtendedViewState extends State<ExtendedView> {
       showAlertDialog();
     } else {
       await widget.callback.addFavorite(articleCard);
-      if (mounted) {
+      if (this.mounted) {
         setState(() {});
       }
     }
@@ -302,7 +302,7 @@ class _ExtendedViewState extends State<ExtendedView> {
       onPressed: () async {
         Navigator.of(context, rootNavigator: true).pop('dialog');
         await widget.callback.removeFavorite(widget.id, true);
-        if (mounted) {
+        if (this.mounted) {
           setState(() {});
         }
       },

@@ -10,6 +10,11 @@ import 'package:penny_pincher/view/widget/browser_article_card.dart';
 import 'package:penny_pincher/view/widget/extended_view.dart';
 
 class BrowserPage extends StatefulWidget {
+
+  late final Stream<bool> stream;
+
+  BrowserPage(this.stream);
+
   @override
   State<BrowserPage> createState() => _BrowserPageState();
 }
@@ -32,6 +37,9 @@ class _BrowserPageState extends State<BrowserPage> {
       });
     }
     super.initState();
+    widget.stream.listen((update) {
+      updateBrowser(update);
+    });
     getProducts();
   }
 
@@ -51,6 +59,24 @@ class _BrowserPageState extends State<BrowserPage> {
     }
     _products.addAll(_product);
     //count++;
+  }
+
+  updateBrowser(bool update) {
+    if (this.mounted) {
+      setState(() {
+        updateFavorites();
+      });
+    }
+  }
+
+  Future<void> updateFavorites() async {
+    _favoriteIds.clear();
+    List<Product> favorites = await _preferenceArticles.getAllFavorites();
+    for (var i in favorites) {
+      if (!_favoriteIds.contains(i.productId)) {
+        _favoriteIds.add(i.productId);
+      }
+    }
   }
 
   @override
