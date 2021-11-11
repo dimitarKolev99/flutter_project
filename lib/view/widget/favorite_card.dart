@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
 
-import '../favorites.dart';
 
 class FavoriteCard extends StatelessWidget {
   final int id;
