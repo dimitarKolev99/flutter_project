@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   //   }
 
   //   super.initState();
-  //   _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {      
+  //   _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
   //     getProducts();
   //     if(count>=_product.length - 1){
   //       dispose();
@@ -45,7 +45,8 @@ class _HomePageState extends State<HomePage> {
 
   _onUpdateScroll() {
     setState(() {
-      if (_scrollController.offset < _offsetValues[_countScrolls-1]) //TODO: doesn't work properly
+      if (_scrollController.offset <
+          _offsetValues[_countScrolls - 1]) //TODO: doesn't work properly
         _isScrolling = true;
       else
         _isScrolling = false;
@@ -72,7 +73,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    if(this.mounted) {
+    if (this.mounted) {
       setState(() {
         _isLoading = true;
       });
@@ -82,7 +83,8 @@ class _HomePageState extends State<HomePage> {
     _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
       getProducts();
 
-      if(_scrollController.hasClients && !_isScrolling) { //TODO: doesn't work properly
+      if (_scrollController.hasClients && !_isScrolling) {
+        //TODO: doesn't work properly
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
           curve: Curves.easeOut,
@@ -93,14 +95,14 @@ class _HomePageState extends State<HomePage> {
         _countScrolls++;
       }
 
-      if(count >= _product.length - 1) {
+      if (count >= _product.length - 1) {
         dispose();
       }
     });
     //getProducts();
   }
 
- @override
+  @override
   void dispose() {
     _timer!.cancel();
     super.dispose();
@@ -135,57 +137,57 @@ class _HomePageState extends State<HomePage> {
             IconButton(
               icon: Icon(Icons.search),
               onPressed: () {
-                final results = showSearch(context: context, delegate: ArticleSearch());
+                final results =
+                    showSearch(context: context, delegate: ArticleSearch());
               },
             )
-          ]
-      ),
+          ]),
       bottomNavigationBar: BottomNavBarGenerator(),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : Align(
-        alignment: Alignment.topCenter,
-        child: NotificationListener<ScrollNotification>(
-          onNotification: (scrollNotification) {
-            if (scrollNotification is ScrollUpdateNotification) {
-              _onUpdateScroll();
-            }
-            return true;
-          },
-
-        child: ListView.builder(
-            reverse: true,
-            shrinkWrap: true,
-            controller: _scrollController,
-            itemCount: _products.length,
-            itemBuilder: (context, index) {
-              return InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ExtendedView(
-                      id: _products[index].productId,
-                      title: _products[index].title,
-                      saving: _products[index].saving,
-                      category: _products[index].categoryName,
-                      description: _products[index].description,
-                      image: _products[index].image,
-                      price:  _products[index].price,
-                      callback: this)),
-                );
-              },
-                  child: ArticleCard(
-                id: _products[index].productId,
-                title: _products[index].title,
-                    saving: _products[index].saving,
-                category: _products[index].categoryName,
-                description: _products[index].description,
-                image: _products[index].image,
-                price: _products[index].price,
-                callback: this,));
-            }),
-        )
-      ),
+              alignment: Alignment.topCenter,
+              child: NotificationListener<ScrollNotification>(
+                onNotification: (scrollNotification) {
+                  if (scrollNotification is ScrollUpdateNotification) {
+                    _onUpdateScroll();
+                  }
+                  return true;
+                },
+                child: ListView.builder(
+                    reverse: true,
+                    shrinkWrap: true,
+                    controller: _scrollController,
+                    itemCount: _products.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ExtendedView(
+                                      id: _products[index].productId,
+                                      title: _products[index].title,
+                                      saving: _products[index].saving,
+                                      category: _products[index].categoryName,
+                                      description: _products[index].description,
+                                      image: _products[index].image,
+                                      price: _products[index].price,
+                                      callback: this)),
+                            );
+                          },
+                          child: ArticleCard(
+                            id: _products[index].productId,
+                            title: _products[index].title,
+                            saving: _products[index].saving,
+                            category: _products[index].categoryName,
+                            description: _products[index].description,
+                            image: _products[index].image,
+                            price: _products[index].price,
+                            callback: this,
+                          ));
+                    }),
+              )),
     );
   }
 
@@ -206,11 +208,12 @@ class _HomePageState extends State<HomePage> {
     await _preferenceArticles.addFavorite(product);
     if (mounted) {
       setState(() {
-        _favoriteIds.add(card.id);});
+        _favoriteIds.add(card.id);
+      });
     }
   }
 
-  Future removeFavorite(int id) async {
+  Future removeFavorite(int id, {bool close = false}) async {
     Navigator.of(context).pop();
     await _preferenceArticles.removeFavorite(id);
     if (mounted) {
@@ -224,13 +227,16 @@ class _HomePageState extends State<HomePage> {
     // set up the buttons
     Widget cancelButton = TextButton(
       child: const Text("Nein"),
-      onPressed:  () {Navigator.of(context).pop();},
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
     );
-    Widget continueButton = TextButton(style: TextButton.styleFrom(
-      primary: Colors.red,
-    ),
+    Widget continueButton = TextButton(
+      style: TextButton.styleFrom(
+        primary: Colors.red,
+      ),
       child: const Text("Ja"),
-      onPressed:  () async {
+      onPressed: () async {
         await removeFavorite(id);
       },
     );
@@ -238,7 +244,8 @@ class _HomePageState extends State<HomePage> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: const Text("Artikel entfernen?"),
-      content: const Text("Willst du diesen Artikel wirklich aus deinen Favorites entfernen?"),
+      content: const Text(
+          "Willst du diesen Artikel wirklich aus deinen Favorites entfernen?"),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0))),
       actions: [

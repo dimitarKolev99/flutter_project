@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'article_card.dart';
 
-
 class ExtendedView extends StatefulWidget {
   final int id;
   final String title;
@@ -30,12 +29,11 @@ class ExtendedView extends StatefulWidget {
 }
 
 class _ExtendedViewState extends State<ExtendedView> {
-
   @override
   Widget build(BuildContext context) {
-    double newprice = widget.price/100;
+    double newprice = widget.price / 100;
     int x = 100 - widget.saving;
-    double prevpreis = newprice/x * 100;
+    double prevpreis = newprice / x * 100;
     final displayWidth = MediaQuery.of(context).size.width;
     final displayHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -60,81 +58,81 @@ class _ExtendedViewState extends State<ExtendedView> {
 
             child: Container(
                 alignment: Alignment.topLeft,
-                margin:  EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+                margin: EdgeInsets.symmetric(horizontal: 14, vertical: 5),
                 width: displayWidth,
                 //height: displayHeight,
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.6),
-                      offset: Offset(
-                        0.0,
-                        10.0,
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.6),
+                        offset: Offset(
+                          0.0,
+                          10.0,
+                        ),
+                        blurRadius: 10.0,
+                        spreadRadius: -6.0,
                       ),
-                      blurRadius: 10.0,
-                      spreadRadius: -6.0,
-                    ),
-                  ]
-                ),
+                    ]),
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       SizedBox(height: 20),
-                                                                                // Picture, % Badge , Fav Icon
-                      Stack(
-                        children: [
-                          Center(
-                            child: Image.network(
-                              widget.image,
-                              width: displayWidth * 0.6,
-                              height: displayWidth * 0.6,
-                              fit: BoxFit.contain,
+                      // Picture, % Badge , Fav Icon
+                      Stack(children: [
+                        Center(
+                          child: Image.network(
+                            widget.image,
+                            width: displayWidth * 0.6,
+                            height: displayWidth * 0.6,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        Align(
+                          child: Padding(
+                            padding: EdgeInsets.only(right: 7),
+                            child: IconButton(
+                              icon: (widget.callback.isFavorite(widget.id)
+                                  ? const Icon(Icons.favorite,
+                                      color: Colors.red)
+                                  : const Icon(Icons.favorite_border,
+                                      color: Colors.black)),
+                              onPressed: _changeFavoriteState,
                             ),
                           ),
-                          Align(
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 7),
-                              child:
-                              IconButton(
-                                icon: (widget.callback.isFavorite(widget.id)
-                                    ? const Icon(Icons.favorite,
-                                    color: Colors.red)
-                                    : const Icon(Icons.favorite_border,
-                                    color: Colors.black)),
-                                onPressed: _changeFavoriteState,
-                              ),
-                            ),
-                            alignment: Alignment.centerRight,
+                          alignment: Alignment.centerRight,
+                        ),
+                        SizedBox(height: 10),
+                        Container(
+                          // % Badge
+                          padding: EdgeInsets.only(
+                              top: 3, bottom: 3, left: 13, right: 10),
+                          decoration: BoxDecoration(
+                            color: Color.fromRGBO(220, 110, 30,
+                                1), // const Color.fromRGBO(23, 41, 111, 0.8),
+                            borderRadius: BorderRadius.circular(0),
                           ),
-                          SizedBox(height: 10),
-
-                          Container(                                                      // % Badge
-                            padding: EdgeInsets.only(top: 3, bottom: 3, left: 13, right: 10),
-                            decoration: BoxDecoration(color: Color.fromRGBO(220, 110, 30, 1),  // const Color.fromRGBO(23, 41, 111, 0.8),
-                              borderRadius: BorderRadius.circular(0),
-                            ),
-                            child:
-                            Text("-" + widget.saving.toString() + "%",
-                              style: TextStyle(
-                                color: Color.fromRGBO(240, 240, 240, 1),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 25,
-                                letterSpacing: 1.4,
-                              ),
+                          child: Text(
+                            "-" + widget.saving.toString() + "%",
+                            style: TextStyle(
+                              color: Color.fromRGBO(240, 240, 240, 1),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25,
+                              letterSpacing: 1.4,
                             ),
                           ),
-
-
-                        ]
-                      ),
+                        ),
+                      ]),
                       SizedBox(height: 5),
                       Container(
                         //alignment: Alignment.topLeft,// category
-                        margin:  EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        decoration: BoxDecoration(color: const Color.fromRGBO(23, 41, 111, 0.8),
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: const Color.fromRGBO(23, 41, 111, 0.8),
                           borderRadius: BorderRadius.circular(30),
                         ),
                         //width: displayWidth,
@@ -147,9 +145,10 @@ class _ExtendedViewState extends State<ExtendedView> {
                           ),
                         ),
                       ),
-                                                                                                  // title
+                      // title
                       Container(
-                        margin:  EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         //width: displayWidth,
                         //height: displayHeight / 4,
                         child: Text(
@@ -163,8 +162,10 @@ class _ExtendedViewState extends State<ExtendedView> {
                         ),
                       ),
 
-                      Container(                                                                  // description
-                        margin:  EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      Container(
+                        // description
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         //width: displayWidth,
                         //height: displayHeight / 4,
                         child: Text(
@@ -177,24 +178,25 @@ class _ExtendedViewState extends State<ExtendedView> {
                       ),
 
                       SizedBox(height: 5),
-                                                                                    // Price Button - Row
-                Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
-                      color: Color.fromRGBO(23, 41, 111, 1),
-                    ),
-                  child:
-                  Container(
-                  margin:  EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    child:
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                      // Price Button - Row
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(15),
+                              bottomRight: Radius.circular(15)),
+                          color: Color.fromRGBO(23, 41, 111, 1),
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              // Price
-                              /*const Text(
+                              Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Price
+                                    /*const Text(
                           "Current Price:",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -203,53 +205,62 @@ class _ExtendedViewState extends State<ExtendedView> {
                         ),
 
                          */
-                              Text(
-                                newprice.toStringAsFixed(2) + " €",
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 35,
-                                  color: Color.fromRGBO(220, 110, 30, 1),
-                                ),
+                                    Text(
+                                      newprice.toStringAsFixed(2) + " €",
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 35,
+                                        color: Color.fromRGBO(220, 110, 30, 1),
+                                      ),
+                                    ),
+                                    Text(
+                                      //ToDO: add previous price
+                                      "Previously " +
+                                          prevpreis.toStringAsFixed(2) +
+                                          "€",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color:
+                                              Color.fromRGBO(240, 240, 240, 1)),
+                                    ),
+                                  ]),
+                              Container(
+                                // Pay
+                                //margin:  EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+
+                                //width: displayWidth,
+                                //height: displayHeight / 4,
+                                child: TextButton(
+                                    onPressed: () {},
+                                    child: Text(
+                                      "To Offer",
+                                      style: TextStyle(
+                                        fontSize: 25,
+                                        color: Color.fromRGBO(240, 240, 240, 1),
+                                      ),
+                                    ),
+
+                                    //textAlign: TextAlign.left,
+                                    style: TextButton.styleFrom(
+                                      //fontWeight: FontWeight.bold,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 25, vertical: 10),
+                                      backgroundColor:
+                                          Color.fromRGBO(23, 41, 111, 0.5),
+                                      shape: RoundedRectangleBorder(
+                                          side: BorderSide(
+                                              color: Color.fromRGBO(
+                                                  240, 240, 240, 1),
+                                              width: 2,
+                                              style: BorderStyle.solid),
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                    )),
                               ),
-                              Text(
-                                //ToDO: add previous price
-                                "Previously " + prevpreis.toStringAsFixed(2) + "€",
-                                style:
-                                TextStyle(fontSize: 15, color: Color.fromRGBO(240, 240, 240, 1)),
-                              ),
-                            ]),
-
-                        Container(                                                                  // Pay
-                          //margin:  EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-
-                          //width: displayWidth,
-                          //height: displayHeight / 4,
-                          child: TextButton(
-
-                            onPressed:() {},
-                            child: Text("To Offer", style: TextStyle(fontSize: 25, color: Color.fromRGBO(240, 240, 240, 1),),),
-
-                            //textAlign: TextAlign.left,
-                            style: TextButton.styleFrom(
-                              //fontWeight: FontWeight.bold,
-                                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                                backgroundColor: Color.fromRGBO(23, 41, 111, 0.5),
-                                shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                color: Color.fromRGBO(240, 240, 240, 1),
-                                width: 2,
-                                    style: BorderStyle.solid
-                                ), borderRadius: BorderRadius.circular(15)),
-                                )
-                            ),
+                            ],
                           ),
-                      ],
-                    ),
-                  ),
-
-                ),
-
-
+                        ),
+                      ),
                     ]))));
   }
 
@@ -262,13 +273,14 @@ class _ExtendedViewState extends State<ExtendedView> {
       description: widget.description,
       image: widget.image,
       price: widget.price,
-      callback: widget.callback,);
+      callback: widget.callback,
+    );
 
     if (widget.callback.isFavorite(widget.id)) {
       showAlertDialog();
     } else {
       await widget.callback.addFavorite(articleCard);
-      if(mounted) {
+      if (mounted) {
         setState(() {});
       }
     }
@@ -278,15 +290,18 @@ class _ExtendedViewState extends State<ExtendedView> {
     // set up the buttons
     Widget cancelButton = TextButton(
       child: const Text("Nein"),
-      onPressed:  () {Navigator.of(context).pop();},
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
     );
-    Widget continueButton = TextButton(style: TextButton.styleFrom(
-      primary: Colors.red,
-    ),
+    Widget continueButton = TextButton(
+      style: TextButton.styleFrom(
+        primary: Colors.red,
+      ),
       child: const Text("Ja"),
-      onPressed:  () async {
-        await widget.callback.removeFavorite(widget.id);
-        if(mounted) {
+      onPressed: () async {
+        await widget.callback.removeFavorite(widget.id, true);
+        if (mounted) {
           setState(() {});
         }
       },
@@ -295,7 +310,8 @@ class _ExtendedViewState extends State<ExtendedView> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: const Text("Artikel entfernen?"),
-      content: const Text("Willst du diesen Artikel wirklich aus deinen Favorites entfernen?"),
+      content: const Text(
+          "Willst du diesen Artikel wirklich aus deinen Favorites entfernen?"),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0))),
       actions: [

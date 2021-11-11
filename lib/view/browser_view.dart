@@ -26,7 +26,7 @@ class _BrowserPageState extends State<BrowserPage> {
 
   @override
   void initState() {
-    if(this.mounted) {
+    if (this.mounted) {
       setState(() {
         _isLoading = true;
       });
@@ -35,7 +35,7 @@ class _BrowserPageState extends State<BrowserPage> {
     super.initState();
     _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
       getProducts();
-      if(count>=_product.length - 1){
+      if (count >= _product.length - 1) {
         dispose();
       }
     });
@@ -68,60 +68,60 @@ class _BrowserPageState extends State<BrowserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            backgroundColor: const Color.fromRGBO(23, 41, 111, 1),
-            title: Row(
-              mainAxisAlignment:  MainAxisAlignment.center,
-              children: [
-                //Icon(Icons.restaurant_menu),
-                Image.network(
-                  "https://cdn.discordapp.com/attachments/899305939109302285/903270501781221426/photopenny.png",
-                  width: 40,
-                  height: 40,
-                ),
-                /*
+      appBar: AppBar(
+          backgroundColor: const Color.fromRGBO(23, 41, 111, 1),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              //Icon(Icons.restaurant_menu),
+              Image.network(
+                "https://cdn.discordapp.com/attachments/899305939109302285/903270501781221426/photopenny.png",
+                width: 40,
+                height: 40,
+              ),
+              /*
             // Doesnt work yet
             Image.asset("pictures/logopenny.png"
             , width: 40,
               height: 40,
             ),
             */
-                SizedBox(width: 10),
-                Text('Penny Pincher')
-              ],
-            )
-        ),
+              SizedBox(width: 10),
+              Text('Penny Pincher')
+            ],
+          )),
       bottomNavigationBar: BottomNavBarGenerator(),
       body: GridView.count(
         // Create a grid with 2 columns. If you change the scrollDirection to
         // horizontal, this produces 2 rows.
         crossAxisCount: 2,
-        childAspectRatio : 0.8,
+        childAspectRatio: 0.8,
         children: List.generate(_products.length, (index) {
-           return InkWell(
+          return InkWell(
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ExtendedView(
-                    id: _products[index].productId,
-                    title: _products[index].title,
-                    saving: _products[index].saving,
-                    category: _products[index].categoryName,
-                    description: _products[index].description,
-                    image: _products[index].image,
-                    price:  _products[index].price,
-                    callback: this)),
+                  MaterialPageRoute(
+                      builder: (context) => ExtendedView(
+                          id: _products[index].productId,
+                          title: _products[index].title,
+                          saving: _products[index].saving,
+                          category: _products[index].categoryName,
+                          description: _products[index].description,
+                          image: _products[index].image,
+                          price: _products[index].price,
+                          callback: this)),
                 );
               },
               child: BrowserArticleCard(
-                id: _products[index].productId,
-                title: _products[index].title,
+                  id: _products[index].productId,
+                  title: _products[index].title,
                   saving: _products[index].saving,
-                category: _products[index].categoryName,
-                description: _products[index].description,
-                image: _products[index].image,
-                price:  _products[index].price,
-                callback: this));
+                  category: _products[index].categoryName,
+                  description: _products[index].description,
+                  image: _products[index].image,
+                  price: _products[index].price,
+                  callback: this));
         }),
       ),
     );
@@ -144,11 +144,12 @@ class _BrowserPageState extends State<BrowserPage> {
     await _preferenceArticles.addFavorite(product);
     if (mounted) {
       setState(() {
-        _favoriteIds.add(card.id);});
+        _favoriteIds.add(card.id);
+      });
     }
   }
 
-  Future removeFavorite(int id) async {
+  Future removeFavorite(int id, {bool close = false}) async {
     Navigator.of(context).pop();
     await _preferenceArticles.removeFavorite(id);
     if (mounted) {
@@ -162,13 +163,16 @@ class _BrowserPageState extends State<BrowserPage> {
     // set up the buttons
     Widget cancelButton = TextButton(
       child: const Text("Nein"),
-      onPressed:  () {Navigator.of(context).pop();},
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
     );
-    Widget continueButton = TextButton(style: TextButton.styleFrom(
-      primary: Colors.red,
-    ),
+    Widget continueButton = TextButton(
+      style: TextButton.styleFrom(
+        primary: Colors.red,
+      ),
       child: const Text("Ja"),
-      onPressed:  () async {
+      onPressed: () async {
         await removeFavorite(id);
       },
     );
@@ -176,7 +180,8 @@ class _BrowserPageState extends State<BrowserPage> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: const Text("Artikel entfernen?"),
-      content: const Text("Willst du diesen Artikel wirklich aus deinen Favorites entfernen?"),
+      content: const Text(
+          "Willst du diesen Artikel wirklich aus deinen Favorites entfernen?"),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0))),
       actions: [
