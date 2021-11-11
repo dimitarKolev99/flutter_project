@@ -22,33 +22,21 @@ class _HomePageState extends State<HomePage> {
   Timer? _timer;
   bool _isScrolling = false;
   ScrollController _scrollController = ScrollController();
-  List<double> _offsetValues = [];
-  var _countScrolls = 0;
 
   final _preferenceArticles = PreferencesArticles();
 
-  // @override
-  // void initState() {
-  //   if(this.mounted) {
-  //     setState(() {
-  //       _isLoading = true;
-  //     });
-  //   }
-
-  //   super.initState();
-  //   _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {      
-  //     getProducts();
-  //     if(count>=_product.length - 1){
-  //       dispose();
-  //     }
-
   _onUpdateScroll() {
-    setState(() {
-      if (_scrollController.offset < _offsetValues[_countScrolls-1]) //TODO: doesn't work properly
-        _isScrolling = true;
-      else
-        _isScrolling = false;
-    });
+    if (this.mounted) {
+      setState(() {
+        if (_scrollController.offset <
+            _scrollController.position.maxScrollExtent) {
+          _isScrolling = true;
+        }
+        else {
+          _isScrolling = false;
+        }
+      });
+    }
   }
 
   Future<void> getProducts() async {
@@ -76,27 +64,21 @@ class _HomePageState extends State<HomePage> {
         _isLoading = true;
       });
     }
-
     super.initState();
     _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
       getProducts();
 
-      if(_scrollController.hasClients && !_isScrolling) { //TODO: doesn't work properly
+      if(_scrollController.hasClients && !_isScrolling) {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
           curve: Curves.easeOut,
           duration: const Duration(milliseconds: 300),
         );
-        _offsetValues.insert(_countScrolls, _scrollController.offset);
-        print(_offsetValues[_countScrolls]);
-        _countScrolls++;
       }
-
       if(count >= _product.length - 1) {
         dispose();
       }
     });
-    //getProducts();
   }
 
  @override

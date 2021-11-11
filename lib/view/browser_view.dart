@@ -30,14 +30,8 @@ class _BrowserPageState extends State<BrowserPage> {
         _isLoading = true;
       });
     }
-
     super.initState();
-    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
-      getProducts();
-      if(count>=_product.length - 1){
-        dispose();
-      }
-    });
+    getProducts();
   }
 
   Future<void> getProducts() async {
@@ -54,8 +48,8 @@ class _BrowserPageState extends State<BrowserPage> {
         _isLoading = false;
       });
     }
-    _products.insert(count, _product[count]);
-    count++;
+    _products.addAll(_product);
+    //count++;
   }
 
   @override
