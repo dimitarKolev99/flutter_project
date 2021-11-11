@@ -264,7 +264,7 @@ class _HomePageState extends State<HomePage> {
     Widget cancelButton = TextButton(
       child: const Text("Nein"),
       onPressed: () {
-        Navigator.of(context).pop();
+        Navigator.of(context, rootNavigator: true).pop('dialog');
       },
     );
     Widget continueButton = TextButton(
