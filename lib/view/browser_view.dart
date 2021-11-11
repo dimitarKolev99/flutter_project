@@ -88,7 +88,7 @@ class _BrowserPageState extends State<BrowserPage> {
               Text('Penny Pincher')
             ],
           )),
-      bottomNavigationBar: BottomNavBarGenerator(),
+
 
       body: GridView.count(
         // Create a grid with 2 columns. If you change the scrollDirection to
