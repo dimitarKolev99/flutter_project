@@ -1,5 +1,5 @@
-import 'package:penny_pincher/view/home.dart';
 import 'package:flutter/material.dart';
+import 'package:penny_pincher/view/AppNavigator.dart';
 
 
 void main() {
@@ -14,13 +14,16 @@ class MyApp extends StatelessWidget {
       title: 'Food recipe',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        primaryColor: Colors.white,
-        textTheme: TextTheme(
+          primarySwatch: Colors.blue,
+          primaryColor: Colors.white,
+          textTheme: TextTheme(
             bodyText2: TextStyle(color: Colors.white),
           )
       ),
-      home: HomePage(),
+      home: AppNavigator(),
     );
   }
 }
+
+
+
