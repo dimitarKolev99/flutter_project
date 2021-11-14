@@ -6,22 +6,6 @@ import 'package:penny_pincher/services/product_api.dart';
 
 class FilterView extends StatefulWidget {
 
-  var categoryName;
-
-  FilterView({
-    this.categoryName,
-  });
-
-  factory FilterView.fromJson(Map<String, dynamic> json){
-
-    return FilterView(
-      categoryName: json["category_name"],
-    );
-  }
-
-
-
-
 
   @override
   State<FilterView> createState() => _FilterViewState();
@@ -30,6 +14,7 @@ class FilterView extends StatefulWidget {
 class _FilterViewState extends State<FilterView> {
   var _currentSliderValuePrice = 0.0;
   var _currentSliderValueDiscount = 0.0;
+  late final List<String> _categories = ["Books", "Phones", "Computers", "Clothes", "Shoes"];
 
 
 
@@ -66,7 +51,7 @@ class _FilterViewState extends State<FilterView> {
                 Text('Penny Pincher')
               ],
             )),
-    body: Row(
+    body: Column(
         children: [
           Container(
               padding: EdgeInsets.only(left: blockSizeHorizontal * 5),
@@ -145,6 +130,30 @@ class _FilterViewState extends State<FilterView> {
                         ])
                   ])
           ),
+          //SizedBox(height: 7),
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: _categories.length,
+            itemBuilder: (context, index){
+              return Container(
+                //alignment: Alignment.topLeft,
+                padding: EdgeInsets.symmetric(horizontal: 21, vertical: 5),
+                decoration: BoxDecoration(
+                  //color: ProductApi.lightBlue,
+                  //borderRadius: BorderRadius.circular(30),
+                ),
+                width: displayWidth,
+                //height: displayHeight / 4,
+
+                child: Text(
+                  _categories[index],
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    //backgroundColor: ProductApi.darkBlue,
+                    color: ProductApi.darkBlue,
+              ),
+            ),
+          );},),
         ])
     );
   }
