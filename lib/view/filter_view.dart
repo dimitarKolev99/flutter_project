@@ -1,9 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/services/product_api.dart';
 
 class FilterView extends StatefulWidget {
+
+  var categoryName;
+
+  FilterView({
+    this.categoryName,
+  });
+
+  factory FilterView.fromJson(Map<String, dynamic> json){
+
+    return FilterView(
+      categoryName: json["category_name"],
+    );
+  }
+
+
 
 
 
@@ -14,6 +30,7 @@ class FilterView extends StatefulWidget {
 class _FilterViewState extends State<FilterView> {
   var _currentSliderValuePrice = 0.0;
   var _currentSliderValueDiscount = 0.0;
+
 
 
 
@@ -49,79 +66,87 @@ class _FilterViewState extends State<FilterView> {
                 Text('Penny Pincher')
               ],
             )),
-    body: Container(
-      padding: EdgeInsets.only(left: blockSizeHorizontal * 5),
-      height: blockSizeVertical * 18,
-      width: displayWidth,
-      //color: Colors.red,
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Text(
-                "Price",
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: ProductApi.darkBlue,
-                ),
-              ),
-              Container(
-                //color: Colors.green,
-                width: blockSizeHorizontal * 70,
-                child: Slider(
-                  activeColor: ProductApi.darkBlue,
-                  //inactiveColor: ProductApi.orange,
-                  value: _currentSliderValuePrice,
-                  min: 0,
-                  max: 100,
-                  divisions: 5,
-                  label: _currentSliderValuePrice.round().toString(),
-                  onChanged: (double value) {
-                    setState(() {
-                      _currentSliderValuePrice = value;
-                    });
-                  },
-                ),
-              )
-            ],
-          ),
-          Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Discount",
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: ProductApi.darkBlue,
-                ),
-              ),
-              Container(
-               // color: Colors.green,
-                width: blockSizeHorizontal * 70,
-                child: Slider(
-                  activeColor: ProductApi.darkBlue,
-                  value: _currentSliderValueDiscount,
-                  min: 0,
-                  max: 100,
-                  divisions: 5,
-                  label: _currentSliderValueDiscount.round().toString(),
-                  onChanged: (double value) {
-                    setState(() {
-                      _currentSliderValueDiscount = value;
-                    });
-                  },
-                ),
-              )
-            ]
-          )
+    body: Row(
+        children: [
+          Container(
+              padding: EdgeInsets.only(left: blockSizeHorizontal * 5),
+              height: blockSizeVertical * 18,
+              width: displayWidth,
+              //color: ProductApi.lightBlue,
 
-        ])));
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+
+                        Text(
+                          "Price",
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: ProductApi.darkBlue,
+                            //backgroundColor: ProductApi.orange,
+                          ),
+                        ),
+
+                        Container(
+                          //color: Colors.green,
+                          width: blockSizeHorizontal * 70,
+
+                          child: Slider(
+                            activeColor: ProductApi.darkBlue,
+                            //inactiveColor: ProductApi.orange,
+                            value: _currentSliderValuePrice,
+                            min: 0,
+                            max: 100,
+                            divisions: 5,
+                            label: _currentSliderValuePrice.round().toString(),
+                            onChanged: (double value) {
+                              setState(() {
+                                _currentSliderValuePrice = value;
+                              });},
+                          ),
+                        )],
+                    ),
+
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Discount",
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: ProductApi.darkBlue,
+                            ),
+                          ),
+                          Container(
+                            //color: Colors.green,
+                            width: blockSizeHorizontal * 70,
+                            child: Slider(
+                              activeColor: ProductApi.darkBlue,
+                              value: _currentSliderValueDiscount,
+                              min: 0,
+                              max: 100,
+                              divisions: 5,
+                              label: _currentSliderValueDiscount.round().toString(),
+                              onChanged: (double value) {
+                                setState(() {
+                                  _currentSliderValueDiscount = value;
+                                });
+                                },
+                            ),
+                          )
+                        ])
+                  ])
+          ),
+        ])
+    );
   }
 }
 
