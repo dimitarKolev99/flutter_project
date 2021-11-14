@@ -40,25 +40,13 @@ class ArticleSearch extends SearchDelegate<String> {
     @override
     Widget? buildLeading(BuildContext context) {
       return Container (
-        /*child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children:[
-          IconButton(
+        child: IconButton(
         icon: const Icon(Icons.arrow_back),
         onPressed: () =>
             close(context,
                 ''),// Not sure if empty string is okay here, but it works
-          ),*/
-        child:
-            TextButton(
-            child:
-            const Text("Filtern"),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => FilterView()));
-            },
-          ));
+          ),
+        );
     }
 
     @override

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
@@ -7,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:penny_pincher/view/widget/extended_view.dart';
+
+import 'filter_view.dart';
 
 StreamController<bool> streamController = StreamController<bool>.broadcast();
 
@@ -126,8 +129,28 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
           backgroundColor: ProductApi.darkBlue,
           title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              TextButton(
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                  //backgroundColor: Colors.white,
+                ),
+                child:
+                const Text("Filters",
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: ProductApi.white,
+                  //backgroundColor: Color.fromRGBO(255, 255, 255, 1)
+                )),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => FilterView()));
+                },
+              ),
+
               //Icon(Icons.restaurant_menu),
               Image.network(
                 "https://cdn.discordapp.com/attachments/899305939109302285/903270501781221426/photopenny.png",

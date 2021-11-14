@@ -4,13 +4,16 @@ import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/services/product_api.dart';
 
 class FilterView extends StatefulWidget {
+
+
+
   @override
   State<FilterView> createState() => _FilterViewState();
 }
 
 class _FilterViewState extends State<FilterView> {
   var _currentSliderValuePrice = 0.0;
-  var _currentSliderValueRabatt = 0.0;
+  var _currentSliderValueDiscount = 0.0;
 
 
 
@@ -69,10 +72,10 @@ class _FilterViewState extends State<FilterView> {
               ),
               Container(
                 //color: Colors.green,
-                width: blockSizeHorizontal * 80,
+                width: blockSizeHorizontal * 70,
                 child: Slider(
                   activeColor: ProductApi.darkBlue,
-                  //inactiveColor: ProductApi.lightBlue,
+                  //inactiveColor: ProductApi.orange,
                   value: _currentSliderValuePrice,
                   min: 0,
                   max: 100,
@@ -91,7 +94,7 @@ class _FilterViewState extends State<FilterView> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Rabatt",
+                "Discount",
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
@@ -100,16 +103,17 @@ class _FilterViewState extends State<FilterView> {
               ),
               Container(
                // color: Colors.green,
-                width: blockSizeHorizontal * 80,
+                width: blockSizeHorizontal * 70,
                 child: Slider(
-                  value: _currentSliderValueRabatt,
+                  activeColor: ProductApi.darkBlue,
+                  value: _currentSliderValueDiscount,
                   min: 0,
                   max: 100,
                   divisions: 5,
-                  label: _currentSliderValueRabatt.round().toString(),
+                  label: _currentSliderValueDiscount.round().toString(),
                   onChanged: (double value) {
                     setState(() {
-                      _currentSliderValueRabatt = value;
+                      _currentSliderValueDiscount = value;
                     });
                   },
                 ),
