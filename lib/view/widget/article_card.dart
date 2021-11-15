@@ -109,7 +109,7 @@ class ArticleCard extends StatelessWidget {
             Container(
               // title
               //color: Colors.blue,
-              margin: EdgeInsets.only(left: blockSizeHorizontal * 2, right: blockSizeHorizontal * 2, top: blockSizeVertical * 4),//(left: 4, right: 4, top: 20),
+              margin: EdgeInsets.only(left: blockSizeHorizontal * 2, right: blockSizeHorizontal * 2, top: blockSizeVertical * 7),//(left: 4, right: 4, top: 20),
               width: blockSizeHorizontal * 30,//displayWidth/3 ,
               height: blockSizeVertical * 20,
               child: Text(
@@ -129,7 +129,7 @@ class ArticleCard extends StatelessWidget {
             Container(
               //color: Colors.red,
                 width: blockSizeHorizontal * 25,//displayWidth / 3 -35,
-                height: blockSizeVertical * 20,
+                height: blockSizeVertical * 25,
                 child:
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
