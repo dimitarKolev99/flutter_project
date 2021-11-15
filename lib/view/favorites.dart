@@ -6,6 +6,7 @@ import 'package:penny_pincher/view/widget/article_card.dart';
 import 'package:penny_pincher/view/widget/extended_view.dart';
 import 'package:penny_pincher/view/widget/favorite_card.dart';
 import 'package:flutter/material.dart';
+import 'package:penny_pincher/view/widget/favorite_search.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -127,13 +128,14 @@ class _FavoritePageState extends State<FavoritePage> {
             ],
           ),
           actions: [
-          IconButton(
-          icon: const Icon(Icons.search),
-          onPressed: () {
-
-          },
-        )
-    ]),
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                final results =
+                showSearch(context: context, delegate: FavoriteSearch());
+              },
+            )
+          ]),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : _favoriteIds.isNotEmpty
