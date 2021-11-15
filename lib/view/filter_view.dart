@@ -14,8 +14,9 @@ class FilterView extends StatefulWidget {
 class _FilterViewState extends State<FilterView> {
   var _currentSliderValuePrice = 0.0;
   var _currentSliderValueDiscount = 0.0;
-  late final List<String> _categories = ["Books", "Phones", "Computers", "Clothes", "Shoes"];
-
+  late final List<String> _categories = ["Books", "Phones", "Computers", "Clothes", "Shoes", "Sweets", "School supplies"];
+//"Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category",
+//     "Category", "Category", "Category", "Category", "Category", "Category"
 
 
 
@@ -53,6 +54,7 @@ class _FilterViewState extends State<FilterView> {
             )),
     body: Column(
         children: [
+          // Sliders
           Container(
               padding: EdgeInsets.only(left: blockSizeHorizontal * 5),
               height: blockSizeVertical * 18,
@@ -73,7 +75,7 @@ class _FilterViewState extends State<FilterView> {
                           "Price",
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                            fontSize: 25,
                             color: ProductApi.darkBlue,
                             //backgroundColor: ProductApi.orange,
                           ),
@@ -82,15 +84,14 @@ class _FilterViewState extends State<FilterView> {
                         Container(
                           //color: Colors.green,
                           width: blockSizeHorizontal * 70,
-
                           child: Slider(
                             activeColor: ProductApi.darkBlue,
                             //inactiveColor: ProductApi.orange,
                             value: _currentSliderValuePrice,
                             min: 0,
                             max: 100,
-                            divisions: 5,
-                            label: _currentSliderValuePrice.round().toString(),
+                            divisions: 20,
+                            label: _currentSliderValuePrice.round().toString() + "€",
                             onChanged: (double value) {
                               setState(() {
                                 _currentSliderValuePrice = value;
@@ -106,7 +107,7 @@ class _FilterViewState extends State<FilterView> {
                             "Discount",
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 20,
+                              fontSize: 25,
                               color: ProductApi.darkBlue,
                             ),
                           ),
@@ -118,8 +119,8 @@ class _FilterViewState extends State<FilterView> {
                               value: _currentSliderValueDiscount,
                               min: 0,
                               max: 100,
-                              divisions: 5,
-                              label: _currentSliderValueDiscount.round().toString(),
+                              divisions: 20,
+                              label: _currentSliderValueDiscount.round().toString() + "€",
                               onChanged: (double value) {
                                 setState(() {
                                   _currentSliderValueDiscount = value;
@@ -131,29 +132,70 @@ class _FilterViewState extends State<FilterView> {
                   ])
           ),
           //SizedBox(height: 7),
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: _categories.length,
-            itemBuilder: (context, index){
-              return Container(
-                //alignment: Alignment.topLeft,
-                padding: EdgeInsets.symmetric(horizontal: 21, vertical: 5),
-                decoration: BoxDecoration(
-                  //color: ProductApi.lightBlue,
-                  //borderRadius: BorderRadius.circular(30),
-                ),
-                width: displayWidth,
-                //height: displayHeight / 4,
 
-                child: Text(
-                  _categories[index],
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    //backgroundColor: ProductApi.darkBlue,
-                    color: ProductApi.darkBlue,
+          Container(
+            alignment: Alignment.centerLeft,
+              margin: EdgeInsets.only(left: 21),
+              child:
+              Text(
+                "Categories",
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25,
+                  color: ProductApi.darkBlue,
+                ),
+              ),
+          ),
+
+          GridView.count(
+            shrinkWrap: true,
+            crossAxisCount: 3,
+              childAspectRatio: 3.5,
+              children: List.generate(_categories.length, (index) {
+                return Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                  margin: EdgeInsets.symmetric(horizontal: blockSizeHorizontal * 2, vertical: blockSizeVertical * 0.8),
+                  decoration: BoxDecoration(
+                    color: ProductApi.lightBlue,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  //width: displayWidth / 1.5,
+                  //height: displayHeight / 8,
+                  child: Text(
+                    _categories[index],
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                    //backgroundColor: ProductApi.orange,
+                    color: ProductApi.white,
               ),
             ),
-          );},),
+          );}),
+          ),
+
+          //Save Button
+          Container(
+            //color: ProductApi.orange,
+            height: blockSizeVertical * 37,
+            alignment: Alignment.bottomRight,
+            margin: EdgeInsets.only(right: 21),
+            child:
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: ProductApi.darkBlue,
+              ),
+              child:
+              const Text("Save",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: ProductApi.white,
+                    //backgroundColor: ProductApi.darkBlue,
+                  )),
+              onPressed: () {},
+            )
+          ),
+
         ])
     );
   }
