@@ -47,7 +47,7 @@ class _BrowserPageState extends State<BrowserPage> {
   }
 
   Future<void> getProducts() async {
-    _product = await ProductApi.fetchProduct();
+    _product = await ProductApi().fetchProduct();
     List<Product> favorites = await _preferenceArticles.getAllFavorites();
     for (var i in favorites) {
       if (!_favoriteIds.contains(i.productId)) {

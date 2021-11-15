@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:ui';
@@ -13,14 +14,102 @@ class ProductApi {
   static const Color orange = Color.fromRGBO(255, 102, 0, 1);
   static const Color white = Color.fromRGBO(255, 255, 255, 1);
 
+  // Map<ProduktkategorieName, ProduktID>
+  // Blätter -> aus dieser Id können wir Artikel Returnen, BlattID -> in URL
+  Map<String, int> produktKategorie = new Map<String, int>();
+  // Map<SubkategorieName, ProduktID>
+  // Äste
+  Map<String, int> subKategorie = new Map<String, int>();
 
-  static Future<List<Product>> fetchProduct() async {
+
+
+  int count = 0;
+  String name = "";
+  int id = 0;
+  int translateTree (String category, List<dynamic> resultList){
+
+    if(category == name ) return id;
+
+    resultList.forEach((element) {
+    //print(element);
+    if(element.toString().substring(1,14) == "subCategories") {
+      print("subCategorie");
+      List<dynamic> resultList2 = element["subCategories"];
+      name = element["subCategories"][0]["name"];
+      id = element["subCategories"][0]["id"];
+      print("subCat + $name");
+      print("subCat + $id");
+      count++;
+      print(count);
+      translateTree(category, resultList2);
+    }
+    else if(element.toString().substring(1,18) == "productCategories"){
+      List<dynamic> resultList2 = element["productCategories"];
+      print("productCategorie");
+      resultList2.forEach((element) {
+        name = element["name"];
+        id = element["id"];
+        print("count =  $count");
+        print("Prod + $name");
+        print("Prod + $id");
+
+        //categories.putIfAbsent(name, () => id);
+      });
+
+      count = 0;
+      translateTree(category, resultList2);
+
+    }
+
+    });
+
+      return  0;
+    }
+
+
+
+    List<dynamic> findBargains(List<dynamic> fromUri ){
+      String name = "";
+      int id = 0;
+
+      fromUri.forEach((element) {
+        //print(element);
+        if(element.toString().substring(1,14) == "subCategories") {
+          print("subCategorie");
+          List<dynamic> resultList2 = element["subCategories"];
+          name = element["subCategories"][0]["name"];
+          id = element["subCategories"][0]["id"];
+
+        }
+        else if(element.toString().substring(1,18) == "productCategories"){
+          List<dynamic> resultList2 = element["productCategories"];
+          print("productCategorie");
+
+          resultList2.forEach((element) {
+            name = element["name"];
+            id = element["id"];
+            return element["bargains"];
+            //categories.putIfAbsent(name, () => id);
+          });
+
+
+          findBargains(fromUri);
+
+        }
+      });
+    List<dynamic> empty = List.empty();
+    return empty;
+  }
+
+
+  Future<List<Product>> fetchProduct() async {
     List<dynamic> list = <String>[];
     print("call APi");
 
+
+
     final response = await rootBundle.loadString(
         'lib/resources/cat_tree1.json');
-    print("resonse exists");
     //print(response);
     Map<String, dynamic> myMap = new Map<String, dynamic>.from(
         json.decode(response));
@@ -31,93 +120,30 @@ class ProductApi {
 
 
     List<dynamic> elementsOfCategories = myMap["result"][0]["subCategories"][0]["subCategories"][0]["subCategories"][0]["productCategories"];
+    //print(myMap["result"][0]);
+    List<dynamic> resultList = myMap["result"];
 
-    elementsOfCategories.forEach((element) {
-      String name = element["name"];
-      int id = element["id"];
-      print(name);
-      print(id);
+    //print("xsxx = ${myMap["result"][0]["subCategories"][0].toString().substring(1,14) == "subCategories"}");
+    int i = 0;
 
-      categories.putIfAbsent(name, () => id);
-    });
-    //String name = myMap["result"][0]["subCategories"][0]["subCategories"][0]["subCategories"][0]["productCategories"][pos]["name"];
-    //int id = myMap["result"][0]["subCategories"][0]["subCategories"][0]["subCategories"][0]["productCategories"][pos]["id"];
-    //categories.putIfAbsent(name, () => id);
+    int categoryID = translateTree("Digitalpianos" , resultList);
 
+    final response2 = await http.get(
+        Uri.parse(
+            "https://usjm35yny3.execute-api.eu-central-1.amazonaws.com/dev/pp-bargains?maxItems=20&minSaving=20&categoryIds=$categoryID"
+        ));
 
-    print(categories);
-
-
-/*
-    print(myMap["result"][0]["subCategories"][0]["subCategories"][0]["subCategories"][0]["productCategories"][0]["name"]);
-    List<Map> nameData = myMap["result"][0]["subCategories"][0]["subCategories"][0]["subCategories"][0]["productCategories"][0]["name"];
-    List<String> idData = myMap["result"][0]["subCategories"][0]["subCategories"][0]["subCategories"][0]["productCategories"][0]["id"];
-    //print(myMap);
-    print('$nameData');
-    print('$idData');
+    Map<String, dynamic> map = new Map<String, dynamic>.from(json.decode(response2.body));
+    List<dynamic> fromUri = map["result"];
+    List<dynamic> bargains = findBargains(fromUri);
 
 
-
-    for (int i = 0; i < (myMap["result"].length); i++) {
-      print(" i = $i");
-      var currObj = myMap["result"][i];
-
-      while (currObj.containsKey('subCategories')) {
-        // move to last subCategory
-      }
-      if (currObj.containsKey('subCategories').containsKey(
-          'productCategories')) {
-        var currObjSubCategoryList =
-        currObj['subCategories'] as List<Map<String, Object>>;
-        for (int j = 0; j < currObjSubCategoryList.length; j++) {
-          var listItem = currObjSubCategoryList[j];
-          var typeList = listItem['name']! as List<Map<String, Object>>;
-          for (int k = 0; k < typeList.length; k++) {
-            var temp = typeList[k];
-            var currDishName = temp['name'];
-            var currDishPrice = temp['id'];
-            print("Name: " +
-                currDishName.toString() +
-                "\n" +
-                " id :" +
-                currDishPrice.toString());
-          }
-        }
-      }
-    }
-  }
-
-*/
-
-
-/*
-    Map<String, dynamic> myMap = json.decode(response);
-    print("Map:  ${myMap.toString()}");
-    List<dynamic> list = myMap["result" ][0]["name"];
-    list.forEach((entitlement) {
-
-      (entitlement as Map<String, dynamic>).forEach((key, value) {
-        print(key);
-
-        (value as Map<String, dynamic>).forEach((key2, value2) {
-          print(key2);
-          print(value2);
-        });
-      });
-    });
-*/
-
-      //Map<String, dynamic> map = new Map<String, dynamic>.from(json.decode(response.body));
-      //List<dynamic> data = map["result"][0]["subCategories"][0]["productCategories"][0]["bargains"];
-
-      // Array mit
       final products = <Product>[];
 
-      for(var bargain in list) {
+      for(var bargain in bargains) {
         products.add(Product.fromJson(bargain));
       }
-      //List _data = json.decode(response.body)
-      //return data.map((data) => Product.fromJson(data)).toList();
+
       return products;
     } /* else {
       // If the server did not return a 200 OK response,
