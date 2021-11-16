@@ -1,8 +1,10 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/services/product_api.dart';
+
 
 class FilterView extends StatefulWidget {
   @override
@@ -12,6 +14,7 @@ class FilterView extends StatefulWidget {
 class _FilterViewState extends State<FilterView> {
   var _currentSliderValuePrice = 0.0;
   var _currentSliderValueDiscount = 0.0;
+
   late final List<String> _categories = [
     "Books",
     "Phones",
@@ -19,11 +22,20 @@ class _FilterViewState extends State<FilterView> {
     "Clothes",
     "Shoes",
     "Sweets",
-    "School supplies"
+    "School supplies",
+    "Instruments",
+    "Cars",
+    "Airplanes",
   ];
+
+  double _minValue = 0;
+  double _maxValue = 100;
+
+
 
 //"Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category",
 //     "Category", "Category", "Category", "Category", "Category", "Category"
+
 
   @override
   Widget build(BuildContext context) {
@@ -57,16 +69,6 @@ class _FilterViewState extends State<FilterView> {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                /*
-                //Icon(Icons.restaurant_menu),
-                Image.network(
-                  "https://cdn.discordapp.com/attachments/899305939109302285/903270501781221426/photopenny.png",
-                  width: 40,
-                  height: 40,
-                ),
-
-                 */
-
                 const Text(
                   'Categories',
                   style: TextStyle(
@@ -89,7 +91,9 @@ class _FilterViewState extends State<FilterView> {
                 SizedBox(width: blockSizeHorizontal * 10),
               ],
             )),
-        body: Column(children: [
+        body: Column(
+            children: [
+
           // Sliders
           Container(
               padding: EdgeInsets.only(left: blockSizeHorizontal * 0.5),
@@ -103,6 +107,8 @@ class _FilterViewState extends State<FilterView> {
                 Container(
                   alignment: Alignment.centerLeft,
                   margin: EdgeInsets.only(left: blockSizeHorizontal * 6),
+
+                  //Headline: Price
                   child: Text("Price: ",
                       style: TextStyle(
                         color: Colors.black,
@@ -114,6 +120,8 @@ class _FilterViewState extends State<FilterView> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
                   children: [
+
+                    //Slider for the Price Range
                     Container(
                       //color: Colors.green,
                       width: blockSizeHorizontal * 80,
@@ -121,17 +129,20 @@ class _FilterViewState extends State<FilterView> {
                         activeColor: ProductApi.darkBlue,
                         //inactiveColor: ProductApi.orange,
                         value: _currentSliderValuePrice,
-                        min: 0,
-                        max: 100,
+                        min: _minValue,
+                        max: _maxValue,
                         divisions: 100,
                         //label: _currentSliderValuePrice.round().toString() + "€",
                         onChanged: (double value) {
                           setState(() {
                             _currentSliderValuePrice = value;
-                          });
+                          }
+                          );
                         },
                       ),
                     ),
+
+                    //Output of slider
                     Container(
                       padding: EdgeInsets.only(
                           top: blockSizeVertical * 1,
@@ -155,6 +166,8 @@ class _FilterViewState extends State<FilterView> {
                     )
                   ],
                 ),
+
+                //Headline: Discount
                 Container(
                   alignment: Alignment.centerLeft,
                   margin: EdgeInsets.only(left: blockSizeHorizontal * 6),
@@ -165,6 +178,8 @@ class _FilterViewState extends State<FilterView> {
                         fontSize: safeBlockHorizontal * 5,
                       )),
                 ),
+
+                    //Slider for Discount
                 Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                   Container(
                     //color: Colors.green,
@@ -183,6 +198,8 @@ class _FilterViewState extends State<FilterView> {
                       },
                     ),
                   ),
+
+                  //Output for Discount
                   Container(
                     padding: EdgeInsets.only(
                         top: blockSizeVertical * 1,
@@ -207,6 +224,7 @@ class _FilterViewState extends State<FilterView> {
               ])),
           //SizedBox(height: 7),
 
+          // Headline: Categories
           Container(
             alignment: Alignment.centerLeft,
             margin: EdgeInsets.only(left: 21),
@@ -215,10 +233,38 @@ class _FilterViewState extends State<FilterView> {
                   color: Colors.black,
                   //fontWeight: FontWeight.bold,
                   fontSize: safeBlockHorizontal * 5,
-                )
+                )),
+          ),
+          SizedBox(height: blockSizeVertical * 3),
+          Expanded(
+            child: ListView.builder(
+              addAutomaticKeepAlives: false,
+                itemCount: _categories.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    child: ListTile(
+                      onTap: () {},
+                      title: Text(
+                          _categories[index],
+                        style: TextStyle(
+                          fontSize: safeBlockHorizontal * 4.2,
+                        ),
+                      ),
+                      leading: CircleAvatar(
+                        backgroundColor: ProductApi.darkBlue,
+                        child: IconButton(
+                          icon: Icon(Icons.arrow_drop_down_circle_outlined),
+                          onPressed: () {  },
+                        ),
+                      ),
+                    ),
+                  );
+                }
+
             ),
           ),
 
+          /*
           GridView.count(
             shrinkWrap: true,
             crossAxisCount: 3,
@@ -248,9 +294,11 @@ class _FilterViewState extends State<FilterView> {
             }),
           ),
 
+
+
           //Save Button
           Container(
-              //color: ProductApi.orange,
+              color: ProductApi.orange,
               height: blockSizeVertical * 30,
               alignment: Alignment.bottomRight,
               margin: EdgeInsets.only(right: 21),
@@ -266,9 +314,17 @@ class _FilterViewState extends State<FilterView> {
                       //backgroundColor: ProductApi.darkBlue,
                     )),
                 onPressed: () {},
-              )),
-        ]));
+              )
+          ),
+
+           */
+        ]
+        ),
+    );
   }
+
+
+
 }
 
 /*
