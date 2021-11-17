@@ -91,7 +91,7 @@ class ProductApi {
      }
     }
 
-     findBargains(List<dynamic> fromUri ){
+     findBargains(List<dynamic> fromUri){
       String name = "";
       int id = 0;
 
@@ -111,8 +111,8 @@ class ProductApi {
           resultList2.forEach((element) {
             name = element["name"];
             id = element["id"];
-            element["bargains"] = bargains;
-            print(element);
+            bargains = element["bargains"];
+            print(element["bargains"]);
             //categories.putIfAbsent(name, () => id);
           });
           //findBargains(fromUri);
