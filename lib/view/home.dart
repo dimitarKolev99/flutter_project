@@ -5,7 +5,6 @@ import 'package:penny_pincher/view/widget/article_card.dart';
 import 'package:penny_pincher/view/widget/article_search.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-
 import 'package:penny_pincher/view/widget/extended_view.dart';
 
 StreamController<bool> streamController = StreamController<bool>.broadcast();
@@ -28,7 +27,7 @@ class _HomePageState extends State<HomePage> {
   bool _isLoading = true;
   var count = 0;
   Timer? _timer;
-  bool _isScrolling = false;
+  bool isScrolling = false;
   ScrollController _scrollController = ScrollController();
 
   final _preferenceArticles = PreferencesArticles();
@@ -38,10 +37,10 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         if (_scrollController.offset <
             _scrollController.position.maxScrollExtent) {
-          _isScrolling = true;
+          isScrolling = true;
         }
         else {
-          _isScrolling = false;
+          isScrolling = false;
         }
       });
     }
@@ -78,8 +77,11 @@ class _HomePageState extends State<HomePage> {
     widget.stream.listen((update) {
       updateHome(update);
     });
+
     getProducts();
-    /*_timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
+
+    /*
+    _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
       getProducts();
 
       if(_scrollController.hasClients && !_isScrolling) {
@@ -94,7 +96,9 @@ class _HomePageState extends State<HomePage> {
 
         // dispose();
       }
-    });*/
+    });
+
+     */
   }
 
   updateHome(bool update) {
