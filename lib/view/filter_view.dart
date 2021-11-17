@@ -1,10 +1,9 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/services/product_api.dart';
-
+import 'package:penny_pincher/view/widget/browser_article_card.dart';
 
 class FilterView extends StatefulWidget {
   @override
@@ -31,11 +30,10 @@ class _FilterViewState extends State<FilterView> {
   double _minValue = 0;
   double _maxValue = 100;
 
-
+  late final List<Product> _products = [];
 
 //"Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category",
 //     "Category", "Category", "Category", "Category", "Category", "Category"
-
 
   @override
   Widget build(BuildContext context) {
@@ -64,142 +62,81 @@ class _FilterViewState extends State<FilterView> {
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
 
     return Scaffold(
-        appBar: AppBar(
-            backgroundColor: ProductApi.darkBlue,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'Categories',
-                  style: TextStyle(
-                    // Shaddow is used to get Distance to the underline -> TextColor itself is transparent
-                    shadows: [
-                      Shadow(
-                          color: Color.fromRGBO(240, 240, 240, 1),
-                          offset: Offset(0, -5))
-                    ],
-                    //fontFamily: '....',
-                    fontSize: 21,
-                    letterSpacing: 3,
-                    color: Colors.transparent,
-                    fontWeight: FontWeight.w900,
-                    decoration: TextDecoration.underline,
-                    decorationColor: ProductApi.white,
-                    decorationThickness: 4,
-                  ),
-                ),
-                SizedBox(width: blockSizeHorizontal * 10),
-              ],
-            )),
-        body: Column(
+      appBar: AppBar(
+          backgroundColor: ProductApi.darkBlue,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-
-          // Sliders
-          Container(
-              padding: EdgeInsets.only(left: blockSizeHorizontal * 0.5),
-              height: blockSizeVertical * 23.5,
-              width: displayWidth,
-              //color: ProductApi.lightBlue,
-
-              child:
-                  Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                SizedBox(height: blockSizeVertical * 1.5),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.only(left: blockSizeHorizontal * 6),
-
-                  //Headline: Price
-                  child: Text("Price: ",
-                      style: TextStyle(
-                        color: Colors.black,
-                        //fontWeight: FontWeight.bold,
-                        fontSize: safeBlockHorizontal * 5,
-                      )),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-
-                    //Slider for the Price Range
-                    Container(
-                      //color: Colors.green,
-                      width: blockSizeHorizontal * 80,
-                      child: Slider(
-                        activeColor: ProductApi.darkBlue,
-                        //inactiveColor: ProductApi.orange,
-                        value: _currentSliderValuePrice,
-                        min: _minValue,
-                        max: _maxValue,
-                        divisions: 100,
-                        //label: _currentSliderValuePrice.round().toString() + "€",
-                        onChanged: (double value) {
-                          setState(() {
-                            _currentSliderValuePrice = value;
-                          }
-                          );
-                        },
-                      ),
-                    ),
-
-                    //Output of slider
-                    Container(
-                      padding: EdgeInsets.only(
-                          top: blockSizeVertical * 1,
-                          bottom: blockSizeVertical * 1,
-                          left: blockSizeHorizontal * 3,
-                          right: blockSizeHorizontal * 3),
-                      decoration: BoxDecoration(
-                        color: ProductApi.lightBlue,
-                        borderRadius:
-                            BorderRadius.circular(blockSizeHorizontal * 3),
-                      ),
-                      child: Text(
-                        _currentSliderValuePrice.round().toString() + " €",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: safeBlockHorizontal * 4.8,
-                          color: ProductApi.white,
-                          //backgroundColor: ProductApi.lightBlue,
-                        ),
-                      ),
-                    )
+              const Text(
+                'Categories',
+                style: TextStyle(
+                  // Shaddow is used to get Distance to the underline -> TextColor itself is transparent
+                  shadows: [
+                    Shadow(
+                        color: Color.fromRGBO(240, 240, 240, 1),
+                        offset: Offset(0, -5))
                   ],
+                  //fontFamily: '....',
+                  fontSize: 21,
+                  letterSpacing: 3,
+                  color: Colors.transparent,
+                  fontWeight: FontWeight.w900,
+                  decoration: TextDecoration.underline,
+                  decorationColor: ProductApi.white,
+                  decorationThickness: 4,
                 ),
+              ),
+              SizedBox(width: blockSizeHorizontal * 10),
+            ],
+          )),
+      body: Column(children: [
+        // Sliders
+        Container(
+            padding: EdgeInsets.only(left: blockSizeHorizontal * 0.5),
+            height: blockSizeVertical * 23.5,
+            width: displayWidth,
+            //color: ProductApi.lightBlue,
 
-                //Headline: Discount
-                Container(
-                  alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.only(left: blockSizeHorizontal * 6),
-                  child: Text("Discount: ",
-                      style: TextStyle(
-                        color: Colors.black,
-                        //fontWeight: FontWeight.bold,
-                        fontSize: safeBlockHorizontal * 5,
-                      )),
-                ),
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+              SizedBox(height: blockSizeVertical * 1.5),
+              Container(
+                alignment: Alignment.centerLeft,
+                margin: EdgeInsets.only(left: blockSizeHorizontal * 6),
 
-                    //Slider for Discount
-                Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                //Headline: Price
+                child: Text("Price: ",
+                    style: TextStyle(
+                      color: Colors.black,
+                      //fontWeight: FontWeight.bold,
+                      fontSize: safeBlockHorizontal * 5,
+                    )),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  //Slider for the Price Range
                   Container(
                     //color: Colors.green,
                     width: blockSizeHorizontal * 80,
                     child: Slider(
                       activeColor: ProductApi.darkBlue,
-                      value: _currentSliderValueDiscount,
-                      min: 0,
-                      max: 100,
+                      //inactiveColor: ProductApi.orange,
+                      value: _currentSliderValuePrice,
+                      min: _minValue,
+                      max: _maxValue,
                       divisions: 100,
-                      // label: _currentSliderValueDiscount.round().toString() + "€",
+                      //label: _currentSliderValuePrice.round().toString() + "€",
                       onChanged: (double value) {
                         setState(() {
-                          _currentSliderValueDiscount = value;
+                          _currentSliderValuePrice = value;
                         });
                       },
                     ),
                   ),
 
-                  //Output for Discount
+                  //Output of slider
                   Container(
                     padding: EdgeInsets.only(
                         top: blockSizeVertical * 1,
@@ -212,59 +149,164 @@ class _FilterViewState extends State<FilterView> {
                           BorderRadius.circular(blockSizeHorizontal * 3),
                     ),
                     child: Text(
-                      _currentSliderValueDiscount.round().toString() + " %",
+                      _currentSliderValuePrice.round().toString() + " €",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: safeBlockHorizontal * 4.8,
                         color: ProductApi.white,
+                        //backgroundColor: ProductApi.lightBlue,
                       ),
                     ),
                   )
-                ])
-              ])),
-          //SizedBox(height: 7),
+                ],
+              ),
 
-          // Headline: Categories
-          Container(
-            alignment: Alignment.centerLeft,
-            margin: EdgeInsets.only(left: 21),
-            child: Text("Categories",
-                style: TextStyle(
-                  color: Colors.black,
-                  //fontWeight: FontWeight.bold,
-                  fontSize: safeBlockHorizontal * 5,
-                )),
-          ),
-          SizedBox(height: blockSizeVertical * 3),
-          Expanded(
-            child: ListView.builder(
+              //Headline: Discount
+              Container(
+                alignment: Alignment.centerLeft,
+                margin: EdgeInsets.only(left: blockSizeHorizontal * 6),
+                child: Text("Discount: ",
+                    style: TextStyle(
+                      color: Colors.black,
+                      //fontWeight: FontWeight.bold,
+                      fontSize: safeBlockHorizontal * 5,
+                    )),
+              ),
+
+              //Slider for Discount
+              Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                Container(
+                  //color: Colors.green,
+                  width: blockSizeHorizontal * 80,
+                  child: Slider(
+                    activeColor: ProductApi.darkBlue,
+                    value: _currentSliderValueDiscount,
+                    min: 0,
+                    max: 100,
+                    divisions: 100,
+                    // label: _currentSliderValueDiscount.round().toString() + "€",
+                    onChanged: (double value) {
+                      setState(() {
+                        _currentSliderValueDiscount = value;
+                      });
+                    },
+                  ),
+                ),
+
+                //Output for Discount
+                Container(
+                  padding: EdgeInsets.only(
+                      top: blockSizeVertical * 1,
+                      bottom: blockSizeVertical * 1,
+                      left: blockSizeHorizontal * 3,
+                      right: blockSizeHorizontal * 3),
+                  decoration: BoxDecoration(
+                    color: ProductApi.lightBlue,
+                    borderRadius:
+                        BorderRadius.circular(blockSizeHorizontal * 3),
+                  ),
+                  child: Text(
+                    _currentSliderValueDiscount.round().toString() + " %",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: safeBlockHorizontal * 4.8,
+                      color: ProductApi.white,
+                    ),
+                  ),
+                )
+              ])
+            ])),
+        //SizedBox(height: 7),
+
+        // Headline: Categories
+        Container(
+          alignment: Alignment.centerLeft,
+          margin: EdgeInsets.only(left: 21),
+          child: Text("Categories",
+              style: TextStyle(
+                color: Colors.black,
+                //fontWeight: FontWeight.bold,
+                fontSize: safeBlockHorizontal * 5,
+              )),
+        ),
+        SizedBox(height: blockSizeVertical * 3),
+        Expanded(
+          child: ListView.builder(
+              physics: ScrollPhysics(),
               addAutomaticKeepAlives: false,
-                itemCount: _categories.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    child: ListTile(
-                      onTap: () {},
-                      title: Text(
-                          _categories[index],
-                        style: TextStyle(
-                          fontSize: safeBlockHorizontal * 4.2,
-                        ),
-                      ),
-                      leading: CircleAvatar(
-                        backgroundColor: ProductApi.darkBlue,
-                        child: IconButton(
-                          icon: Icon(Icons.arrow_drop_down_circle_outlined),
-                          onPressed: () {  },
-                        ),
+              itemCount: _categories.length,
+              itemBuilder: (context, index) {
+                return Column(children: [
+                  ListTile(
+                    onTap: () {},
+                    title: Text(
+                      _categories[index],
+                      style: TextStyle(
+                        fontSize: safeBlockHorizontal * 4.2,
                       ),
                     ),
-                  );
-                }
+                    leading: CircleAvatar(
+                      backgroundColor: ProductApi.darkBlue,
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_drop_down_circle_outlined),
+                        onPressed: () {},
+                      ),
+                    ),
+                  ),
+                  Container(
+                    //color: Colors.red,
+                    height: blockSizeVertical * 35,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Colors.grey,
+                          width: 0.5,),
+                        top: BorderSide(
+                          color: Colors.grey,
+                          width: 0.5,
+                        )
+                        ),
+                    ),
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 30,
+                        itemBuilder: (context, index) {
+                          return Column(children: [
+                            Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: Container(
+                                //color: Colors.green,
+                                height: blockSizeVertical * 31.0,
+                                width: blockSizeHorizontal * 50,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(2),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.6),
+                                      offset: Offset(
+                                        0.0,
+                                        10.0,
+                                      ),
+                                      blurRadius: 10.0,
+                                      spreadRadius: -6.0,
+                                    ),
+                                  ],
+                                ),
+                                child: Text("Test"),
+                              ),
+                            )
+                          ]);
+                        }),
+                  )
+                ]);
+              }),
+        ),
 
-            ),
-          ),
-
-          /*
+        /*
           GridView.count(
             shrinkWrap: true,
             crossAxisCount: 3,
@@ -318,13 +360,9 @@ class _FilterViewState extends State<FilterView> {
           ),
 
            */
-        ]
-        ),
+      ]),
     );
   }
-
-
-
 }
 
 /*
