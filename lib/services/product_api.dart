@@ -21,54 +21,77 @@ class ProductApi {
   // Äste
   Map<String, int> subKategorie = new Map<String, int>();
 
-
+  List<dynamic> bargains = [];
 
   int count = 0;
   String name = "";
   int id = 0;
-  int translateTree (String category, List<dynamic> resultList){
+  int resultID = 0;
+  bool stop = false;
 
-    if(category == name ) return id;
+  int translateTree(String category, List<dynamic> resultList){
+      resultList.forEach((element) {
 
-    resultList.forEach((element) {
-    //print(element);
-    if(element.toString().substring(1,14) == "subCategories") {
-      print("subCategorie");
-      List<dynamic> resultList2 = element["subCategories"];
-      name = element["subCategories"][0]["name"];
-      id = element["subCategories"][0]["id"];
-      print("subCat + $name");
-      print("subCat + $id");
-      count++;
-      print(count);
-      translateTree(category, resultList2);
-    }
-    else if(element.toString().substring(1,18) == "productCategories"){
-      List<dynamic> resultList2 = element["productCategories"];
-      print("productCategorie");
-      resultList2.forEach((element) {
-        name = element["name"];
-        id = element["id"];
-        print("count =  $count");
-        print("Prod + $name");
-        print("Prod + $id");
+         if (element.toString().substring(1, 14) == "subCategories") {
+          print("subCategorie");
+          List<dynamic> resultList2 = element["subCategories"];
 
-        //categories.putIfAbsent(name, () => id);
+          if(element["subCategories"] != null && element["productCategories"] != null) {
+            List<dynamic> productList = element["productCategories"];
+            productList.forEach((element) {
+
+              name = element["name"];
+              id = element["id"];
+              //print("count =  $count");
+              print("Prod + $name");
+              print("Prod + $id");
+              if (category == name) resultID = id;
+              print("result: $resultID");
+            });
+
+          }
+
+          resultList2.forEach((element) {
+            if(element["name"] != null) {
+              name = element["name"];
+            }
+            id = element["id"];
+            //print("count =  $count");
+            print("subCat + $name");
+            print("subCat + $id");
+          });
+
+          //count++;
+          //print(count);
+          translateTree(category, resultList2);
+        }
+        else if (element.toString().substring(1, 18) == "productCategories") {
+          List<dynamic> resultList2 = element["productCategories"];
+          print("productCategorie");
+          resultList2.forEach((element) {
+            name = element["name"];
+            id = element["id"];
+            //print("count =  $count");
+            print("Prod + $name");
+            print("Prod + $id");
+            if (category == name) resultID = id;
+            print("result: $resultID");
+          });
+
+          //count = 0;
+          translateTree(category, resultList2);
+        }
       });
 
-      count = 0;
-      translateTree(category, resultList2);
-
+     if (resultID != 0) {
+       return resultID;
+     }
+     else {
+       return 0;
+     }
     }
 
-    });
-
-      return  0;
-    }
-
-
-
-    List<dynamic> findBargains(List<dynamic> fromUri ){
+     findBargains(List<dynamic> fromUri ){
       String name = "";
       int id = 0;
 
@@ -77,9 +100,9 @@ class ProductApi {
         if(element.toString().substring(1,14) == "subCategories") {
           print("subCategorie");
           List<dynamic> resultList2 = element["subCategories"];
-          name = element["subCategories"][0]["name"];
+          //name = element["subCategories"][0]["name"];
           id = element["subCategories"][0]["id"];
-
+          findBargains(resultList2);
         }
         else if(element.toString().substring(1,18) == "productCategories"){
           List<dynamic> resultList2 = element["productCategories"];
@@ -88,54 +111,47 @@ class ProductApi {
           resultList2.forEach((element) {
             name = element["name"];
             id = element["id"];
-            return element["bargains"];
+            element["bargains"] = bargains;
+            print(element);
             //categories.putIfAbsent(name, () => id);
           });
-
-
-          findBargains(fromUri);
-
+          //findBargains(fromUri);
         }
       });
-    List<dynamic> empty = List.empty();
-    return empty;
   }
 
 
   Future<List<Product>> fetchProduct() async {
-    List<dynamic> list = <String>[];
+    //List<dynamic> list = <String>[];
     print("call APi");
 
+    final response = await rootBundle.loadString('lib/resources/cat_tree1.json');
+    Map<String, dynamic> myMap = Map<String, dynamic>.from(json.decode(response));
 
 
-    final response = await rootBundle.loadString(
-        'lib/resources/cat_tree1.json');
-    //print(response);
-    Map<String, dynamic> myMap = new Map<String, dynamic>.from(
-        json.decode(response));
-
-
-    Map<String, int> categories = new Map<String, int>(); //new Map<String, int>();
+    //Map<String, int> categories = new Map<String, int>(); //new Map<String, int>();
     //print(myMap["result"][0]["subCategories"][0]["subCategories"][0]["subCategories"][0]["productCategories"][10]);
 
 
-    List<dynamic> elementsOfCategories = myMap["result"][0]["subCategories"][0]["subCategories"][0]["subCategories"][0]["productCategories"];
+    //List<dynamic> elementsOfCategories = myMap["result"][0]["subCategories"][0]["subCategories"][0]["subCategories"][0]["productCategories"];
     //print(myMap["result"][0]);
     List<dynamic> resultList = myMap["result"];
 
     //print("xsxx = ${myMap["result"][0]["subCategories"][0].toString().substring(1,14) == "subCategories"}");
     int i = 0;
 
-    int categoryID = translateTree("Digitalpianos" , resultList);
+    int categoryID = translateTree("RC-Ladegeräte", resultList);
+    print("CATEGORYID: $categoryID");
 
     final response2 = await http.get(
         Uri.parse(
-            "https://usjm35yny3.execute-api.eu-central-1.amazonaws.com/dev/pp-bargains?maxItems=20&minSaving=20&categoryIds=$categoryID"
+            "https://usjm35yny3.execute-api.eu-central-1.amazonaws.com/dev/pp-bargains?maxItems=20&minSaving=5&categoryIds=$categoryID"
         ));
 
-    Map<String, dynamic> map = new Map<String, dynamic>.from(json.decode(response2.body));
-    List<dynamic> fromUri = map["result"];
-    List<dynamic> bargains = findBargains(fromUri);
+    Map<String, dynamic> map = Map<String, dynamic>.from(json.decode(response2.body));
+    List<dynamic> fromUri = map["result"]; //TODO: InternalLinkedHashMap Error from here
+    findBargains(fromUri);
+    //List<dynamic> bargains = findBargains(fromUri);
 
 
       final products = <Product>[];

@@ -78,7 +78,8 @@ class _HomePageState extends State<HomePage> {
     widget.stream.listen((update) {
       updateHome(update);
     });
-    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
+    getProducts();
+    /*_timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
       getProducts();
 
       if(_scrollController.hasClients && !_isScrolling) {
@@ -93,7 +94,7 @@ class _HomePageState extends State<HomePage> {
 
         // dispose();
       }
-    });
+    });*/
   }
 
   updateHome(bool update) {
