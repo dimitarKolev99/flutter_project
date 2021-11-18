@@ -43,31 +43,43 @@ class ProductApi {
   };
 // List K
   List<dynamic> allSubCategories = [];
+  int currentCategory = 0;
   // given an Main Category ID this method returns all subcategories
   void findSubCategories(int id, List<dynamic> resultList){
     for (var element in resultList) {
       if(element["id"] == id) {
         // after finding ID of main Category ->
-          getSubCategories(element);//, resultList);
-
+          currentCategory = element["id"];
+          print("current Cat :  $currentCategory");
+          getSubCategories(element);
         }
       }
     }
 
+    Map <int, List<int>> categoriesAndSubcategories = new Map();
+    //MAP key = currentCategory = 3326, value = List of subcategories and Productcategories
+    List<int> subCatIds = [];
+    Map <int, List<int>> CategoriesAndProductcategories = new Map();
 
+    //TODO: Der plan war die Subcategories der jeweiligen currentCategory in einer Liste
+  // zu speichern. Die dann in einer Map über den Key current Category aufgerufen werden kann
+  // ? passen currentCategoryID und zugehörige SubCategories zusammen? Was ist mit Produktkategories
 
-  getSubCategories(dynamic element){//,List<dynamic> resultList){
-    //Map<String, int> temp = new Map();
-    print("worked !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    //kljkljdvf
+  getSubCategories(dynamic element){
+
     if (element.toString().substring(1, 14) == "subCategories") {
       for (var element2 in element["subCategories"]) {
+        currentCategory = element["id"];
+        print("id = $currentCategory  = element ${element2["name"]}");
+        categoriesAndSubcategories[currentCategory] =
         getSubCategories(element2);
       }
+
     }
-    if((element.toString().substring(1, 14) == "productCategories")){
+    if((element.toString().substring(1, 18) == "productCategories")){
       for (var element3 in element["productCategories"]) {
-        print(element3["name"]);
+        //print(element3["name"]);
+       // map.add[currentCategory] = element3["id"];
         getSubCategories(element3);
       }
     }
