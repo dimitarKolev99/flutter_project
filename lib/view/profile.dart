@@ -147,35 +147,25 @@ class _ProfilePageState extends State<ProfilePage> {
               },
             )
           ]),
-      body: Container(
-        margin: const EdgeInsets.symmetric(vertical: 20.0),
-        height: 200.0,
+      body: Center(
         child: ListView(
-          scrollDirection: Axis.horizontal,
-          children: <Widget>[
-            Container(
-              width: 160.0,
-              color: Colors.red,
+          padding: const EdgeInsets.only(left:100.0, top:150),
+          children: const <Widget>[
+            ListTile(
+              leading: Icon(Icons.map),
+              title: Text('Preferenzen'),
             ),
-            Container(
-              width: 160.0,
-              color: Colors.blue,
+            ListTile(
+              leading: Icon(Icons.photo_album),
+              title: Text('Optionen'),
             ),
-            Container(
-              width: 160.0,
-              color: Colors.green,
-            ),
-            Container(
-              width: 160.0,
-              color: Colors.yellow,
-            ),
-            Container(
-              width: 160.0,
-              color: Colors.orange,
+            ListTile(
+              leading: Icon(Icons.phone),
+              title: Text('Hilfe'),
             ),
           ],
         ),
-      ),
+      )
     );
   }
 }
