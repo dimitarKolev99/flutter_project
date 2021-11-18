@@ -1,12 +1,6 @@
-//import 'dart:html';
-
-import 'package:http/http.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:penny_pincher/models/preferences_articles.dart';
-import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/services/product_api.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 
 class ArticleCard extends StatelessWidget {
@@ -109,7 +103,7 @@ class ArticleCard extends StatelessWidget {
             Container(
               // title
               //color: Colors.blue,
-              margin: EdgeInsets.only(left: blockSizeHorizontal * 2, right: blockSizeHorizontal * 2, top: blockSizeVertical * 4),//(left: 4, right: 4, top: 20),
+              margin: EdgeInsets.only(left: blockSizeHorizontal * 2, right: blockSizeHorizontal * 2, top: blockSizeVertical * 7),//(left: 4, right: 4, top: 20),
               width: blockSizeHorizontal * 30,//displayWidth/3 ,
               height: blockSizeVertical * 20,
               child: Text(
@@ -129,7 +123,7 @@ class ArticleCard extends StatelessWidget {
             Container(
               //color: Colors.red,
                 width: blockSizeHorizontal * 25,//displayWidth / 3 -35,
-                height: blockSizeVertical * 20,
+                height: blockSizeVertical * 25,
                 child:
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -171,7 +165,7 @@ class ArticleCard extends StatelessWidget {
                       Column(
                           children: [
                             Text(
-                              "Current Price:",
+                              "Aktueller Preis:",
                               style: TextStyle(
                                   fontWeight: FontWeight
                                       .bold,
@@ -188,10 +182,10 @@ class ArticleCard extends StatelessWidget {
                                 color: ProductApi.orange),
                             ),
                             Text(
-                              //ToDO: add previous price
-                              "Previously " + prevpreis.toStringAsFixed(2) + "€",
+                              prevpreis.toStringAsFixed(2) + "€",
                               style: TextStyle(
-                                  fontSize: safeBlockHorizontal * 2.0,
+                                  decoration: TextDecoration.lineThrough,
+                                  fontSize: safeBlockHorizontal * 4.0,
                                   color: Colors
                                       .black),
                             ),
