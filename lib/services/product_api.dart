@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:ui';
 import 'package:penny_pincher/models/product.dart';
 import 'package:http/http.dart' as http;

@@ -1,11 +1,9 @@
 import 'dart:convert';
 
 import 'package:penny_pincher/models/product.dart';
-import 'package:penny_pincher/view/widget/article_card.dart';
-import 'package:penny_pincher/view/widget/favorite_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-//this class will store all the informations
+// this class will store all the informations
 class PreferencesArticles {
   dynamic preferences;
 

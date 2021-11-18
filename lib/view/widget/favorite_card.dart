@@ -27,17 +27,39 @@ class FavoriteCard extends StatelessWidget {
     required this.category,
     required this.callback,
   });
+
   @override
   Widget build(BuildContext context) {
     double newprice = price/100;
     int x = 100 - saving;
     double prevpreis = newprice/x * 100;
-    final displayWidth = MediaQuery.of(context).size.width;
-    final displayHeight = MediaQuery.of(context).size.height;
+
+    MediaQueryData _mediaQueryData;
+    double displayWidth;
+    double displayHeight;
+    double blockSizeHorizontal;
+    double blockSizeVertical;
+
+    double _safeAreaHorizontal;
+    double _safeAreaVertical;
+    double safeBlockHorizontal;
+    double safeBlockVertical;
+
+    _mediaQueryData = MediaQuery.of(context);
+    displayWidth = _mediaQueryData.size.width;
+    displayHeight = _mediaQueryData.size.height;
+    blockSizeHorizontal = displayWidth / 100;
+    blockSizeVertical = displayHeight / 100;
+
+    _safeAreaHorizontal = _mediaQueryData.padding.left + _mediaQueryData.padding.right;
+    _safeAreaVertical = _mediaQueryData.padding.top + _mediaQueryData.padding.bottom;
+    safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
+    safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
+
     return Container(
         margin: EdgeInsets.symmetric(horizontal: 14, vertical: 5),
         width: displayWidth,
-        height: displayHeight / 5 - 1,
+        height: blockSizeHorizontal * 35,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
@@ -53,112 +75,136 @@ class FavoriteCard extends StatelessWidget {
             ),
           ],
         ),
-        child: Row(
+        child:
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             // Picture + Rating / Discount%
             Align(
               child:
-                  // Product Image
-                  Container(
-                width: displayWidth / 3 - 20,
-                margin: EdgeInsets.only(left: 10),
-                child: ClipRRect(
+              // Product Image
+              Container(
+                //color: Colors.purple,
+                width: blockSizeHorizontal * 30,//displayWidth/3 - 20,
+                height: blockSizeVertical * 20,
+                margin: EdgeInsets.only(left: blockSizeHorizontal * 1),//(left: 10),
+                child:
+                ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
+                  child:
+                  Image.network(
                     image,
-                    width: displayWidth / 3 - 30,
-                    height: displayWidth / 3 - 30,
-                    fit: BoxFit.cover,
+                    width: blockSizeHorizontal * 50,//displayWidth / 3 - 30,
+                    height: blockSizeHorizontal * 30,//displayWidth / 3 - 30,
+                    fit: BoxFit.contain,
                   ),
                 ),
               ),
               alignment: Alignment.centerLeft,
             ),
 
+
             Container(
               // title
-              margin: EdgeInsets.only(left: 4, right: 4, top: 20),
-              width: displayWidth / 3,
+              //color: Colors.blue,
+              margin: EdgeInsets.only(left: blockSizeHorizontal * 2, right: blockSizeHorizontal * 2, top: blockSizeVertical * 7),//(left: 4, right: 4, top: 20),
+              width: blockSizeHorizontal * 30,//displayWidth/3 ,
+              height: blockSizeVertical * 20,
               child: Text(
                 title,
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: safeBlockHorizontal * 3.5,//16,
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
                 overflow: TextOverflow.ellipsis,
-                maxLines: 2,
+                maxLines: 4,
                 textAlign: TextAlign.center,
               ),
               alignment: Alignment.topCenter,
             ),
 
             Container(
-                width: displayWidth / 3 - 35,
-                child: Column(
+              //color: Colors.red,
+                width: blockSizeHorizontal * 25,//displayWidth / 3 -35,
+                height: blockSizeVertical * 25,
+                child:
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     // Favourite Icon
                     Align(
                       child: Padding(
-                        padding: EdgeInsets.only(right: 7),
-                        child: IconButton(
-                          icon: Icon(Icons.favorite, color: Colors.red),
+                        padding: EdgeInsets.only(right: blockSizeHorizontal * 2),
+                        child:
+                        IconButton(
+                          icon: (callback.isFavorite(id) ?
+                          const Icon(Icons.favorite,
+                              color: Colors.red) : const Icon(Icons.favorite_border,
+                              color: Colors.black)),
                           onPressed: _changeFavoriteState,
                         ),
                       ),
                       alignment: Alignment.centerRight,
                     ),
-                    Container(
-                      // % Badge
-                      padding: EdgeInsets.only(
-                          top: 3, bottom: 3, left: 10, right: 17),
-                      decoration: BoxDecoration(
-                        color: ProductApi.orange, // const Color.fromRGBO(23, 41, 111, 0.8),
+                    Container(                                                      // % Badge
+                      padding: EdgeInsets.only(top: blockSizeVertical * 1, bottom: blockSizeVertical * 1, left: blockSizeHorizontal * 3, right: blockSizeHorizontal * 3),//(top: 3, bottom: 3, left: 10, right: 17),
+                      decoration: BoxDecoration(color: ProductApi.orange,  // const Color.fromRGBO(23, 41, 111, 0.8),
                         borderRadius: BorderRadius.circular(0),
                       ),
-                      child: Text(
-                        "-" + saving.toString() + "%",
+                      child:
+                      Text("-" + saving.toString() + "%",
                         style: TextStyle(
                           color: ProductApi.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 15,
+                          fontSize: safeBlockHorizontal * 4,
                         ),
                       ),
                     ),
                     // current Price...
                     Container(
-                      margin: EdgeInsets.only(right: 10, bottom: 0),
-                      child: Column(children: [
-                        const Text(
-                          "Current Price:",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 10,
-                              color: Colors.black),
-                        ),
-                        Text(
-                          newprice.toStringAsFixed(2) + "€",
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: ProductApi.orange,
-                          ),
-                        ),
-                        Text(
-                          //ToDO: add previous price
-                          "Previously " + prevpreis.toStringAsFixed(2) + "€",
-                          style: TextStyle(fontSize: 8, color: Colors.black),
-                        ),
-                      ]),
+                      margin: EdgeInsets.only(right: blockSizeHorizontal * 2, bottom: blockSizeVertical * 0),
+                      child:
+                      Column(
+                          children: [
+                            Text(
+                              "Aktueller Preis:",
+                              style: TextStyle(
+                                  fontWeight: FontWeight
+                                      .bold,
+                                  fontSize: safeBlockHorizontal * 2.5,//10,
+                                  color: Colors
+                                      .black),
+                            ),
+                            Text(
+                              newprice.toStringAsFixed(2) + "€",
+                              style: TextStyle(
+                                  fontWeight: FontWeight
+                                      .bold,
+                                  fontSize: safeBlockHorizontal * 5,
+                                  color: ProductApi.orange),
+                            ),
+                            Text(
+                              prevpreis.toStringAsFixed(2) + "€",
+                              style: TextStyle(
+                                  decoration: TextDecoration.lineThrough,
+                                  fontSize: safeBlockHorizontal * 4.0,
+                                  color: Colors
+                                      .black),
+                            ),
+                          ]
+                      ),
                     ),
                   ],
-                )),
+                )
+            ),
           ],
-        ));
+        )
+    );
   }
+
+
 
   Future _changeFavoriteState() async {
     ArticleCard articleCard = ArticleCard(
