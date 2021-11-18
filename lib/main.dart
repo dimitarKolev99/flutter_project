@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:penny_pincher/view/app_navigator.dart';
 
 
 void main() {
+
+  // Always keep Portrait Orientation:
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]
+  );
+
   runApp(const MyApp());
 }
 

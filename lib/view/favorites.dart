@@ -111,7 +111,7 @@ class _FavoritePageState extends State<FavoritePage> {
                     shadows: [
                       Shadow(
                           color: Color.fromRGBO(240, 240, 240, 1),
-                          offset: Offset(0, -5))
+                          offset: Offset(0, -6))
                     ],
                     //fontFamily: '....',
                     fontSize: 21,
@@ -120,7 +120,7 @@ class _FavoritePageState extends State<FavoritePage> {
                     fontWeight: FontWeight.w900,
                     decoration:
                     TextDecoration.underline,
-                    decorationColor: Color.fromRGBO(220, 110, 30, 1),
+                    decorationColor: ProductApi.orange,
                     decorationThickness: 4,
                   ),
                 ), ),

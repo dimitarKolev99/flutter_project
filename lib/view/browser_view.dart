@@ -94,8 +94,8 @@ class _BrowserPageState extends State<BrowserPage> {
     MediaQueryData _mediaQueryData = MediaQuery.of(context);;
     double displayWidth = _mediaQueryData.size.width;
     double displayHeight = _mediaQueryData.size.height;
-    double blockSizeHorizontal = displayWidth / 100; // bildschirmbreite in 1%
-    double blockSizeVertical = displayHeight / 100; // bildschirmhöhe in 1%
+    double blockSizeHorizontal = displayWidth / 100; // screen width in 1%
+    double blockSizeVertical = displayHeight / 100; // screen height in 1%
     return Scaffold(
       appBar: AppBar(
           backgroundColor: ProductApi.darkBlue,
@@ -135,7 +135,7 @@ class _BrowserPageState extends State<BrowserPage> {
                     shadows: [
                       Shadow(
                           color: Color.fromRGBO(240, 240, 240, 1),
-                          offset: Offset(0, -5))
+                          offset: Offset(0, -6))
                     ],
                     //fontFamily: '....',
                     fontSize: 21,
@@ -144,7 +144,7 @@ class _BrowserPageState extends State<BrowserPage> {
                     fontWeight: FontWeight.w900,
                     decoration:
                     TextDecoration.underline,
-                    decorationColor: Color.fromRGBO(220, 110, 30, 1),
+                    decorationColor: ProductApi.orange,
                     decorationThickness: 4,
                   ),
                 ), ),
@@ -165,7 +165,7 @@ class _BrowserPageState extends State<BrowserPage> {
         // Create a grid with 2 columns. If you change the scrollDirection to
         // horizontal, this produces 2 rows.
         crossAxisCount: 2,
-        childAspectRatio: 0.8,
+        childAspectRatio: 0.75,
         children: List.generate(_products.length, (index) {
           return InkWell(
               onTap: () {
