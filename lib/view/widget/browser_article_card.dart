@@ -33,12 +33,12 @@ class BrowserArticleCard extends StatelessWidget {
     MediaQueryData _mediaQueryData = MediaQuery.of(context);;
     double displayWidth = _mediaQueryData.size.width;
     double displayHeight = _mediaQueryData.size.height;
-    double blockSizeHorizontal = displayWidth / 100; // bildschirmbreite in 1%
-    double blockSizeVertical = displayHeight / 100; // bildschirmhöhe in 1%
+    double blockSizeHorizontal = displayWidth / 100; // screen width in 1%
+    double blockSizeVertical = displayHeight / 100; // screen height in 1%
 
-    double _safeAreaHorizontal = _mediaQueryData.padding.left + _mediaQueryData.padding.right; //abstand links rechts
-    double _safeAreaVertical = _mediaQueryData.padding.top + _mediaQueryData.padding.bottom; //abstand oben unten
-    double safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100; // umrechnung in pro
+    double _safeAreaHorizontal = _mediaQueryData.padding.left + _mediaQueryData.padding.right; // padding left-right
+    double _safeAreaVertical = _mediaQueryData.padding.top + _mediaQueryData.padding.bottom; // padding top-bottom
+    double safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
     double safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
 
     return Container(
@@ -135,9 +135,11 @@ class BrowserArticleCard extends StatelessWidget {
               margin: EdgeInsets.only(bottom: blockSizeVertical*0.2),
               child: Column(children: [
                 Text(
-                  //ToDO: add previous price
-                  "Previously " + prevpreis.toStringAsFixed(2) + "€",
-                  style: TextStyle(fontSize: safeBlockHorizontal * 3, color: Colors.black),
+                  prevpreis.toStringAsFixed(2) + "€",
+                  style: TextStyle(
+                      decoration: TextDecoration.lineThrough,
+                      fontSize: safeBlockHorizontal * 4, color: Colors.black
+                  ),
                 ),
                 Text(
                   newprice.toStringAsFixed(2) + "€",
