@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:penny_pincher/view/widget/article_search.dart';
 import 'dart:async';
 
+
 import 'package:penny_pincher/view/widget/browser_article_card.dart';
 import 'package:penny_pincher/view/widget/extended_view.dart';
 
@@ -147,25 +148,45 @@ class _ProfilePageState extends State<ProfilePage> {
               },
             )
           ]),
-      body: Center(
-        child: ListView(
-          padding: const EdgeInsets.only(left:100.0, top:150),
-          children: const <Widget>[
-            ListTile(
-              leading: Icon(Icons.map),
-              title: Text('Preferenzen'),
+      body: Container(
+        padding: EdgeInsets.symmetric(vertical: 100),
+        child: Column(
+          children: [
+            SizedBox(
+            width: double.infinity,
+            child: TextButton(
+              onPressed: () {},
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.blue),
+                  foregroundColor: MaterialStateProperty.all(Colors.white),
+                  padding: MaterialStateProperty.all(
+                      EdgeInsets.symmetric(vertical: 25)),
+                  textStyle: MaterialStateProperty.all(TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                  ))),
+              child: Text("Suchverlauf"),
             ),
-            ListTile(
-              leading: Icon(Icons.photo_album),
-              title: Text('Optionen'),
-            ),
-            ListTile(
-              leading: Icon(Icons.phone),
-              title: Text('Hilfe'),
+          ),
+            SizedBox(
+              width: double.infinity,
+              child: TextButton(
+                onPressed: () {},
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.blue),
+                    foregroundColor: MaterialStateProperty.all(Colors.white),
+                    padding: MaterialStateProperty.all(
+                        EdgeInsets.symmetric(vertical: 25)),
+                    textStyle: MaterialStateProperty.all(TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ))),
+                child: Text("Hilfe"),
+              ),
             ),
           ],
         ),
-      )
+      ),
     );
   }
 }
