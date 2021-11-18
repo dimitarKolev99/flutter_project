@@ -5,7 +5,6 @@ import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/view/widget/browser_article_card.dart';
 
-
 class FilterView extends StatefulWidget {
   @override
   State<FilterView> createState() => _FilterViewState();
@@ -32,26 +31,27 @@ class _FilterViewState extends State<FilterView> {
   double _maxValue = 100;
 
   late final List<String> _subCategories = [
-    "EBooks", "blaue Buecher", "rote Beucher", "gelbe Buecher", "gründe Buecher",
-    "Phones", "Samsung Phone", "Apple Phone", "Huawei Phone hjakhfkjhasjd", "Sony Phone",
-    "Computers", "AAAA", "BBBB", "CCCC", "DDDD", "EEEE", "FFFFF", "GGGGGG", "HHHHH",
-  "IIIIII", "JJJJJJ", "KKKKKK", "KJSDHNKSD"
-
+    "EBooks",
+    "Buecher",
+    "Phones",
+    "Samsung",
+    "Apple",
+    "Huawei",
+    "Sony",
+    "Computers",
+    "AAAA",
+    "BBBB",
+    "CCCC",
+    "DDDD",
+    "EEEE",
+    "FFFFF",
+    "GGGGGG",
+    "HHHHH",
+    "IIIIII",
+    "JJJJJJ",
+    "KKKKKK",
+    "KJSDHNKSD"
   ];
-
-  bool viewVisible = true;
-
-  void showContainer() {
-    setState(() {
-      viewVisible = true;
-    });
-  }
-
-  void hideContainer() {
-    setState(() {
-      viewVisible = false;
-    });
-  }
 
 //"Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category",
 //     "Category", "Category", "Category", "Category", "Category", "Category"
@@ -195,8 +195,7 @@ class _FilterViewState extends State<FilterView> {
               ),
 
               //Slider for Discount
-              Row(mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
+              Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                 Container(
                   //color: Colors.green,
                   width: blockSizeHorizontal * 80,
@@ -260,99 +259,77 @@ class _FilterViewState extends State<FilterView> {
               itemBuilder: (context, index) {
                 return Column(children: [
                   ListTile(
-                    onTap: () {},
-                    title: Text(
-                      _categories[index],
-                      style: TextStyle(
-                        fontSize: safeBlockHorizontal * 4.2,
-                      ),
-                    ),
-                    leading: Column (
-                children: [
-                  CircleAvatar(
-                    backgroundColor: ProductApi.darkBlue,
-                    child: ElevatedButton(
-                      child: Icon(Icons.arrow_drop_down_circle_outlined),
-                      onPressed: showContainer,
-                    ),
-                  ),
-                  CircleAvatar(
-                    backgroundColor: ProductApi.darkBlue,
-                    child: ElevatedButton(
-                      child: Icon(Icons.arrow_drop_up_outlined),
-                      onPressed: hideContainer,
-                    ),
-                  ),
-                ]
-                )
-                ),
-                  Visibility(
-                    maintainAnimation: false,
-                    visible: viewVisible,
-                    child: Container(
-                      //color: Colors.red,
-                      height: blockSizeVertical * 20,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        border: Border(
-                            bottom: BorderSide(
-                              color: Colors.grey,
-                              width: 0.5,),
-                            top: BorderSide(
-                              color: Colors.grey,
-                              width: 0.5,
-                            )
+                      onTap: () {},
+                      title: Text(
+                        _categories[index],
+                        style: TextStyle(
+                          fontSize: safeBlockHorizontal * 4.2,
                         ),
                       ),
-                      child:  GridView.count(
-                        physics: ScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        childAspectRatio: 0.6,
-                        crossAxisCount: 2,
-                        shrinkWrap: true,
-                        children: List.generate(_subCategories.length, (index) {
-                          return Column (
-                            children: [
-                              Container(
-                                //color: Colors.red,
-                                  width: 500,
-                                  height: blockSizeVertical * 5,
-                                  alignment: Alignment.center,
-                                  //padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                                  margin: EdgeInsets.only(
-                                      right: blockSizeHorizontal * 1.0,
-                                      //bottom: blockSizeVertical * 0.8,
-                                      top: blockSizeVertical * 1.0,
-                                      left: blockSizeHorizontal * 1.0),
-                                  decoration: BoxDecoration(
-                                    color: ProductApi.lightBlue,
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                  //width: displayWidth / 1.5,
-                                  //height: displayHeight / 8,
-                                  child: Padding(
-                                    padding: EdgeInsets.all(5.0),
-                                    child: Text(
-                                      _subCategories[index],
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        //backgroundColor: ProductApi.orange,
-                                          color: ProductApi.white,
-                                          fontWeight: FontWeight.bold
-                                      ),
-                                    ),
-
-                                  )
-                              ),
-                            ],
-                          );
-
-                        }),
-                      ),
-
+                      leading: Column(children: [
+                        CircleAvatar(
+                          backgroundColor: ProductApi.darkBlue,
+                          child: Icon(Icons.arrow_drop_down_circle_outlined),
+                        ),
+                      ])),
+                  Container(
+                    //color: Colors.red,
+                    height: blockSizeVertical * 20,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      border: Border(
+                          bottom: BorderSide(
+                            color: Colors.grey,
+                            width: 0.5,
+                          ),
+                          top: BorderSide(
+                            color: Colors.grey,
+                            width: 0.5,
+                          )),
                     ),
-                  )
+                    child: GridView.count(
+                      physics: ScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      childAspectRatio: 0.6,
+                      crossAxisCount: 2,
+                      shrinkWrap: true,
+                      children: List.generate(_subCategories.length, (index) {
+                        return Column(
+                          children: [
+                            Container(
+                                //color: Colors.red,
+                                width: 500,
+                                height: blockSizeVertical * 5,
+                                alignment: Alignment.center,
+                                //padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                                margin: EdgeInsets.only(
+                                    right: blockSizeHorizontal * 1.0,
+                                    //bottom: blockSizeVertical * 0.8,
+                                    top: blockSizeVertical * 1.0,
+                                    left: blockSizeHorizontal * 1.0),
+                                decoration: BoxDecoration(
+                                  color: ProductApi.lightBlue,
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                //width: displayWidth / 1.5,
+                                //height: displayHeight / 8,
+                                child: Padding(
+                                  padding: EdgeInsets.all(5.0),
+                                  child: Text(
+                                    _subCategories[index],
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        //backgroundColor: ProductApi.orange,
+                                        color: ProductApi.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )),
+                          ],
+                        );
+                      }),
+                    ),
+                  ),
                 ]);
               }),
         ),
