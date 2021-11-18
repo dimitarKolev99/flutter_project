@@ -53,6 +53,8 @@ class _FilterViewState extends State<FilterView> {
     "KJSDHNKSD"
   ];
 
+  bool _show = false;
+
 //"Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category",
 //     "Category", "Category", "Category", "Category", "Category", "Category"
 
@@ -82,7 +84,7 @@ class _FilterViewState extends State<FilterView> {
     safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
 
-    bool _show = true;
+
 
     return Scaffold(
       appBar: AppBar(
@@ -269,8 +271,9 @@ class _FilterViewState extends State<FilterView> {
                       ),
                     ),
                     leading: CircleAvatar(
-                      backgroundColor: ProductApi.darkBlue,
+                     // backgroundColor: ProductApi.darkBlue,
                       child: FloatingActionButton(
+                        backgroundColor: ProductApi.darkBlue,
                         onPressed: () {
                           setState(() {
                             _show = !_show;
