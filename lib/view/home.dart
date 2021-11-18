@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
@@ -7,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:penny_pincher/view/widget/extended_view.dart';
+
+import 'filter_view.dart';
 
 StreamController<bool> streamController = StreamController<bool>.broadcast();
 
