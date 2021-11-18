@@ -59,6 +59,7 @@ class ProductApi {
   getSubCategories(dynamic element){//,List<dynamic> resultList){
     //Map<String, int> temp = new Map();
     print("worked !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    //kljkljdvf
     if (element.toString().substring(1, 14) == "subCategories") {
       for (var element2 in element["subCategories"]) {
         getSubCategories(element2);
