@@ -27,6 +27,11 @@ class _FilterViewState extends State<FilterView> {
     "Airplanes",
   ];
 
+  late final List<String> Books = [
+    "Ebooks", "Romane", "Krimis", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category",
+    "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category",
+  ];
+
   double _minValue = 0;
   double _maxValue = 100;
 
@@ -255,7 +260,7 @@ class _FilterViewState extends State<FilterView> {
                   ),
                   Container(
                     //color: Colors.red,
-                    height: blockSizeVertical * 35,
+                    height: blockSizeVertical * 20,
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -269,21 +274,22 @@ class _FilterViewState extends State<FilterView> {
                         )
                         ),
                     ),
-                    child: ListView.builder(
-                        shrinkWrap: true,
+                    child: GridView.count(
+                      crossAxisCount: 2,
+                        //shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        itemCount: 30,
-                        itemBuilder: (context, index) {
+                        children: List.generate(Books.length,(index){
                           return Column(children: [
                             Padding(
                               padding: EdgeInsets.all(10.0),
                               child: Container(
+                                alignment: Alignment.center,
                                 //color: Colors.green,
-                                height: blockSizeVertical * 31.0,
-                                width: blockSizeHorizontal * 50,
+                                height: blockSizeVertical * 5,
+                                width: blockSizeHorizontal * 15,
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(2),
+                                  color: ProductApi.lightBlue,
+                                  borderRadius: BorderRadius.circular(10),
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.black.withOpacity(0.6),
@@ -296,11 +302,14 @@ class _FilterViewState extends State<FilterView> {
                                     ),
                                   ],
                                 ),
-                                child: Text("Test"),
+                                child: Text(Books[index],
+                                style: TextStyle(
+                                  color: ProductApi.white,
+                                ),),
                               ),
                             )
                           ]);
-                        }),
+                        })),
                   )
                 ]);
               }),
