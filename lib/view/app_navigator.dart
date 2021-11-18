@@ -94,13 +94,13 @@ class AppState extends State<AppNavigator> {
                     padding: EdgeInsets.only(bottom: 5.0),
                     child: Icon(Icons.bookmarks_outlined, size: 33),
                     ),
-                  label: 'Watchlist',
+                  label: 'Merkzettel',
                 ),
                 BottomNavigationBarItem(
                   icon: Padding(
                   padding: EdgeInsets.only(bottom: 5.0),
                   child: Icon(Icons.account_circle, size: 33),),
-                  label: 'Profile',
+                  label: 'Profil',
                 ),
               ],
               type: BottomNavigationBarType.fixed,
