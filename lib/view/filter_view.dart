@@ -82,6 +82,8 @@ class _FilterViewState extends State<FilterView> {
     safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
 
+    bool _show = true;
+
     return Scaffold(
       appBar: AppBar(
           backgroundColor: ProductApi.darkBlue,
@@ -259,77 +261,86 @@ class _FilterViewState extends State<FilterView> {
               itemBuilder: (context, index) {
                 return Column(children: [
                   ListTile(
-                      onTap: () {},
-                      title: Text(
-                        _categories[index],
-                        style: TextStyle(
-                          fontSize: safeBlockHorizontal * 4.2,
-                        ),
+                    onTap: () {},
+                    title: Text(
+                      _categories[index],
+                      style: TextStyle(
+                        fontSize: safeBlockHorizontal * 4.2,
                       ),
-                      leading: Column(children: [
-                        CircleAvatar(
-                          backgroundColor: ProductApi.darkBlue,
-                          child: Icon(Icons.arrow_drop_down_circle_outlined),
-                        ),
-                      ])),
-                  Container(
-                    //color: Colors.red,
-                    height: blockSizeVertical * 20,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      border: Border(
-                          bottom: BorderSide(
-                            color: Colors.grey,
-                            width: 0.5,
-                          ),
-                          top: BorderSide(
-                            color: Colors.grey,
-                            width: 0.5,
-                          )),
                     ),
-                    child: GridView.count(
-                      physics: ScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      childAspectRatio: 0.6,
-                      crossAxisCount: 2,
-                      shrinkWrap: true,
-                      children: List.generate(_subCategories.length, (index) {
-                        return Column(
-                          children: [
-                            Container(
-                                //color: Colors.red,
-                                width: 500,
-                                height: blockSizeVertical * 5,
-                                alignment: Alignment.center,
-                                //padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                                margin: EdgeInsets.only(
-                                    right: blockSizeHorizontal * 1.0,
-                                    //bottom: blockSizeVertical * 0.8,
-                                    top: blockSizeVertical * 1.0,
-                                    left: blockSizeHorizontal * 1.0),
-                                decoration: BoxDecoration(
-                                  color: ProductApi.lightBlue,
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                //width: displayWidth / 1.5,
-                                //height: displayHeight / 8,
-                                child: Padding(
-                                  padding: EdgeInsets.all(5.0),
-                                  child: Text(
-                                    _subCategories[index],
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        //backgroundColor: ProductApi.orange,
-                                        color: ProductApi.white,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                )),
-                          ],
-                        );
-                      }),
+                    leading: CircleAvatar(
+                      backgroundColor: ProductApi.darkBlue,
+                      child: FloatingActionButton(
+                        onPressed: () {
+                          setState(() {
+                            _show = !_show;
+                          });
+                        },
+                        child: Icon(_show ? Icons.arrow_drop_up_outlined : Icons.arrow_drop_down),
+                      ),
                     ),
                   ),
+                  Visibility(
+                    visible: _show,
+                    child: Container(
+                      //color: Colors.red,
+                      height: blockSizeVertical * 20,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        border: Border(
+                            bottom: BorderSide(
+                              color: Colors.grey,
+                              width: 0.5,
+                            ),
+                            top: BorderSide(
+                              color: Colors.grey,
+                              width: 0.5,
+                            )),
+                      ),
+                      child: GridView.count(
+                        physics: ScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        childAspectRatio: 0.6,
+                        crossAxisCount: 2,
+                        shrinkWrap: true,
+                        children: List.generate(_subCategories.length, (index) {
+                          return Column(
+                            children: [
+                              Container(
+                                  //color: Colors.red,
+                                  width: 500,
+                                  height: blockSizeVertical * 5,
+                                  alignment: Alignment.center,
+                                  //padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                                  margin: EdgeInsets.only(
+                                      right: blockSizeHorizontal * 1.0,
+                                      //bottom: blockSizeVertical * 0.8,
+                                      top: blockSizeVertical * 1.0,
+                                      left: blockSizeHorizontal * 1.0),
+                                  decoration: BoxDecoration(
+                                    color: ProductApi.lightBlue,
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  //width: displayWidth / 1.5,
+                                  //height: displayHeight / 8,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(5.0),
+                                    child: Text(
+                                      _subCategories[index],
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          //backgroundColor: ProductApi.orange,
+                                          color: ProductApi.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  )),
+                            ],
+                          );
+                        }),
+                      ),
+                    ),
+                  )
                 ]);
               }),
         ),
