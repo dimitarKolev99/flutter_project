@@ -27,9 +27,10 @@ class _FavoritePageState extends State<FavoritePage> {
   //late Product _product;
 
   late List<Product> _product;
-  late final List<Product> _favoriteIds = [];
+  late final List<Product> favoriteIds = [];
   bool _isLoading = true;
   bool _isClosed = false;
+  String query = '';
 
   final _preferenceArticles = PreferencesArticles();
 
@@ -56,7 +57,7 @@ class _FavoritePageState extends State<FavoritePage> {
   }
 
   Future <void> getProducts() async {
-    _favoriteIds.clear();
+    favoriteIds.clear();
     _product = await _preferenceArticles.getAllFavorites();
     if (mounted) {
       setState(() {
@@ -64,7 +65,7 @@ class _FavoritePageState extends State<FavoritePage> {
       });
     }
     for (var i = 0; i < _product.length; i++) {
-      _favoriteIds.insert(i, _product[i]);
+      favoriteIds.insert(i, _product[i]);
     }
   }
 
@@ -132,18 +133,18 @@ class _FavoritePageState extends State<FavoritePage> {
               icon: Icon(Icons.search),
               onPressed: () {
                 final results =
-                showSearch(context: context, delegate: FavoriteSearch());
+                showSearch(context: context, delegate: FavoriteSearch(this, streamController));
               },
             )
           ]),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
-          : _favoriteIds.isNotEmpty
+          : favoriteIds.isNotEmpty
               ? Align(
                   alignment: Alignment.topCenter,
                   child: ListView.builder(
                       shrinkWrap: true,
-                      itemCount: _favoriteIds.length,
+                      itemCount: favoriteIds.length,
                       itemBuilder: (context, index) {
                         return InkWell(
                             onTap: () {
@@ -151,15 +152,15 @@ class _FavoritePageState extends State<FavoritePage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => ExtendedView(
-                                        id: _favoriteIds[index].productId,
-                                        title: _favoriteIds[index].title,
-                                        saving: _favoriteIds[index].saving,
+                                        id: favoriteIds[index].productId,
+                                        title: favoriteIds[index].title,
+                                        saving: favoriteIds[index].saving,
                                         category:
-                                            _favoriteIds[index].categoryName,
+                                        favoriteIds[index].categoryName,
                                         description:
-                                            _favoriteIds[index].description,
-                                        image: _favoriteIds[index].image,
-                                        price: _favoriteIds[index].price,
+                                        favoriteIds[index].description,
+                                        image: favoriteIds[index].image,
+                                        price: favoriteIds[index].price,
                                         stream: streamController.stream,
                                         callback: this)),
                               );
@@ -167,14 +168,14 @@ class _FavoritePageState extends State<FavoritePage> {
                               _isClosed = true;
                             },
                             child: FavoriteCard(
-                              id: _favoriteIds[index].productId,
+                              id: favoriteIds[index].productId,
                               index: index,
-                              title: _favoriteIds[index].title,
-                              saving: _favoriteIds[index].saving,
-                              category: _favoriteIds[index].categoryName,
-                              description: _favoriteIds[index].description,
-                              image: _favoriteIds[index].image,
-                              price: _favoriteIds[index].price,
+                              title: favoriteIds[index].title,
+                              saving: favoriteIds[index].saving,
+                              category: favoriteIds[index].categoryName,
+                              description: favoriteIds[index].description,
+                              image: favoriteIds[index].image,
+                              price: favoriteIds[index].price,
                               callback: this,
                             ));
                       }),
@@ -216,7 +217,7 @@ class _FavoritePageState extends State<FavoritePage> {
   // )
 
   bool isFavorite(int id) {
-    return _favoriteIds.where((p) => p.productId == id).toList().isNotEmpty;
+    return favoriteIds.where((p) => p.productId == id).toList().isNotEmpty;
   }
 
   Future changeFavoriteState(ArticleCard card) async {
@@ -226,11 +227,11 @@ class _FavoritePageState extends State<FavoritePage> {
   }
 
   Future removeFavorite(int id, bool close) async {
-    final product = _favoriteIds.where((p) => p.productId == id).toList()[0];
+    final product = favoriteIds.where((p) => p.productId == id).toList()[0];
     await _preferenceArticles.removeFavorite(id);
     if (mounted) {
       setState(() {
-        _favoriteIds.remove(product);
+        favoriteIds.remove(product);
       });
     }
     if (close) {
@@ -278,5 +279,15 @@ class _FavoritePageState extends State<FavoritePage> {
         return alert;
       },
     );
+  }
+
+  List<Product> filterFavorites() {
+    List<Product> result = [];
+    for (var i = 0; i < favoriteIds.length; i++) {
+      if (favoriteIds[i].title.toLowerCase().contains(query.toLowerCase())) {
+        result.add(favoriteIds[i]);
+      }
+    }
+    return result;
   }
 }
