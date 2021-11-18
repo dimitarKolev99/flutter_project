@@ -9,6 +9,8 @@ import 'dart:async';
 import 'package:penny_pincher/view/widget/browser_article_card.dart';
 import 'package:penny_pincher/view/widget/extended_view.dart';
 
+import 'filter_view.dart';
+
 StreamController<bool> streamController = StreamController<bool>.broadcast();
 
 class BrowserPage extends StatefulWidget {
@@ -97,6 +99,15 @@ class _BrowserPageState extends State<BrowserPage> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: ProductApi.darkBlue,
+          leading: IconButton(
+            icon: Icon(Icons.category),
+            onPressed: () {
+              Navigator.push (
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FilterView())
+            ); },
+          ),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -149,7 +160,6 @@ class _BrowserPageState extends State<BrowserPage> {
             )
           ]
       ),
-
 
       body: GridView.count(
         // Create a grid with 2 columns. If you change the scrollDirection to
