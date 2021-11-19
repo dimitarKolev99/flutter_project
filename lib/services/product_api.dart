@@ -1,6 +1,5 @@
 import 'dart:collection';
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:ui';
 import 'package:flutter/services.dart';
 import 'package:penny_pincher/models/product.dart';

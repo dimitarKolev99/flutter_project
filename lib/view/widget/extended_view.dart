@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:penny_pincher/services/product_api.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'article_card.dart';
 
@@ -75,7 +76,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                     shadows: [
                       Shadow(
                           color: Color.fromRGBO(240, 240, 240, 1),
-                          offset: Offset(0, -5))
+                          offset: Offset(0, -6))
                     ],
                     //fontFamily: '....',
                     fontSize: 21,
@@ -84,7 +85,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                     fontWeight: FontWeight.w900,
                     decoration:
                     TextDecoration.underline,
-                    decorationColor: Color.fromRGBO(220, 110, 30, 1),
+                    decorationColor: ProductApi.orange,
                     decorationThickness: 4,
                   ),
                 ),
@@ -250,11 +251,9 @@ class _ExtendedViewState extends State<ExtendedView> {
                                       ),
                                     ),
                                     Text(
-                                      //ToDO: add previous price
-                                      "Previously " +
-                                          prevpreis.toStringAsFixed(2) +
-                                          "€",
+                                      prevpreis.toStringAsFixed(2) + "€",
                                       style: TextStyle(
+                                        decoration: TextDecoration.lineThrough,
                                           fontSize: 15,
                                           color:
                                               ProductApi.white),
@@ -267,11 +266,11 @@ class _ExtendedViewState extends State<ExtendedView> {
                                 //width: displayWidth,
                                 //height: displayHeight / 4,
                                 child: TextButton(
-                                    onPressed: () {},
+                                    onPressed: _launchURL,
                                     child: Text(
-                                      "To Offer",
+                                      "Zum Angebot",
                                       style: TextStyle(
-                                        fontSize: 25,
+                                        fontSize: 20,
                                         color: ProductApi.white,
                                       ),
                                     ),
@@ -363,5 +362,16 @@ class _ExtendedViewState extends State<ExtendedView> {
         return alert;
       },
     );
+  }
+
+
+  // creating specific URL and launching it from available browser apps
+  _launchURL() async {
+    String url = 'https://www.idealo.de/preisvergleich/OffersOfProduct/' + widget.id.toString();
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

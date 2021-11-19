@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class Product {
   List<Map<String, dynamic>> bargains = [];
   Product({
