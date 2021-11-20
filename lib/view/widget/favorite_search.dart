@@ -42,20 +42,28 @@ class FavoriteSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    print("2");
     return buildScaffold();
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    print("1");
     return buildScaffold();
+  }
+
+  @override
+  Widget showResults(BuildContext context) {
+    return buildScaffold();
+  }
+
+  void updateSuggestions() {
+    query += " ";
+    query = query.substring(0, query.length - 1);
   }
 
   Scaffold buildScaffold() {
     callback.query = query;
 
-    final result = callback.filterFavorites();
+    final result = callback.filterFavorites(this);
 
     return Scaffold(
       body: result.isNotEmpty || query.isEmpty

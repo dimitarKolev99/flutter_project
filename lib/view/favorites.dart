@@ -31,6 +31,7 @@ class _FavoritePageState extends State<FavoritePage> {
   bool _isLoading = true;
   bool _isClosed = false;
   String query = '';
+  dynamic search;
 
   final _preferenceArticles = PreferencesArticles();
 
@@ -238,6 +239,9 @@ class _FavoritePageState extends State<FavoritePage> {
       Navigator.pop(context);
     }
     widget.updateStream.add(true);
+    if (search != null) {
+      search.updateSuggestions();
+    }
   }
 
   showAlertDialog(BuildContext context, int id) {
@@ -281,7 +285,9 @@ class _FavoritePageState extends State<FavoritePage> {
     );
   }
 
-  List<Product> filterFavorites() {
+  List<Product> filterFavorites(search) {
+    this.search = search;
+
     List<Product> result = [];
     for (var i = 0; i < favoriteIds.length; i++) {
       if (favoriteIds[i].title.toLowerCase().contains(query.toLowerCase())) {
