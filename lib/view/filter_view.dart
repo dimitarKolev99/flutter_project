@@ -11,7 +11,7 @@ class FilterView extends StatefulWidget {
 }
 
 class _FilterViewState extends State<FilterView> {
-  var _currentSliderValuePrice = 0.0;
+  RangeValues _currentSliderValuesPrice = const RangeValues(20, 70);
   var _currentSliderValueDiscount = 0.0;
 
   late final List<String> _categories = [
@@ -84,8 +84,6 @@ class _FilterViewState extends State<FilterView> {
     safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
 
-
-
     return Scaffold(
       appBar: AppBar(
           backgroundColor: ProductApi.darkBlue,
@@ -118,47 +116,27 @@ class _FilterViewState extends State<FilterView> {
         // Sliders
         Container(
             padding: EdgeInsets.only(left: blockSizeHorizontal * 0.5),
-            height: blockSizeVertical * 23.5,
+            height: blockSizeVertical * 35,
             width: displayWidth,
             //color: ProductApi.lightBlue,
 
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.start, children: [
               SizedBox(height: blockSizeVertical * 1.5),
-              Container(
-                alignment: Alignment.centerLeft,
-                margin: EdgeInsets.only(left: blockSizeHorizontal * 6),
-
-                //Headline: Price
-                child: Text("Price: ",
-                    style: TextStyle(
-                      color: Colors.black,
-                      //fontWeight: FontWeight.bold,
-                      fontSize: safeBlockHorizontal * 5,
-                    )),
-              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  //Slider for the Price Range
                   Container(
-                    //color: Colors.green,
-                    width: blockSizeHorizontal * 80,
-                    child: Slider(
-                      activeColor: ProductApi.darkBlue,
-                      //inactiveColor: ProductApi.orange,
-                      value: _currentSliderValuePrice,
-                      min: _minValue,
-                      max: _maxValue,
-                      divisions: 100,
-                      //label: _currentSliderValuePrice.round().toString() + "€",
-                      onChanged: (double value) {
-                        setState(() {
-                          _currentSliderValuePrice = value;
-                        });
-                      },
-                    ),
+                    alignment: Alignment.centerLeft,
+                    margin: EdgeInsets.only(left: blockSizeHorizontal * 6, right: blockSizeHorizontal * 1),
+                    //Headline: Price
+                    child: Text("Price limit: ",
+                        style: TextStyle(
+                          color: ProductApi.darkBlue,
+                          //fontWeight: FontWeight.bold,
+                          fontSize: safeBlockHorizontal * 5,
+                        )),
                   ),
 
                   //Output of slider
@@ -174,7 +152,10 @@ class _FilterViewState extends State<FilterView> {
                           BorderRadius.circular(blockSizeHorizontal * 3),
                     ),
                     child: Text(
-                      _currentSliderValuePrice.round().toString() + " €",
+                      _currentSliderValuesPrice.start.round().toString() +
+                          " - " +
+                          _currentSliderValuesPrice.end.round().toString() +
+                          " €",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: safeBlockHorizontal * 4.8,
@@ -186,36 +167,43 @@ class _FilterViewState extends State<FilterView> {
                 ],
               ),
 
-              //Headline: Discount
+              //Slider for the Price Range
               Container(
-                alignment: Alignment.centerLeft,
-                margin: EdgeInsets.only(left: blockSizeHorizontal * 6),
-                child: Text("Discount: ",
-                    style: TextStyle(
-                      color: Colors.black,
-                      //fontWeight: FontWeight.bold,
-                      fontSize: safeBlockHorizontal * 5,
-                    )),
+                //color: Colors.green,
+                width: blockSizeHorizontal * 100,
+                child: RangeSlider(
+                  activeColor: ProductApi.darkBlue,
+                  //inactiveColor: ProductApi.orange,
+                  values: _currentSliderValuesPrice,
+                  min: _minValue,
+                  max: _maxValue,
+                  divisions: 100,
+                  /*
+                      labels: RangeLabels(
+                        _currentSliderValuesPrice.start.round().toString() + "€",
+                        _currentSliderValuesPrice.end.round().toString() + "€",
+                      ),
+                       */
+                  onChanged: (RangeValues values) {
+                    setState(() {
+                      _currentSliderValuesPrice = values;
+                    });
+                  },
+                ),
               ),
 
               //Slider for Discount
               Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                //Headline: Discount
                 Container(
-                  //color: Colors.green,
-                  width: blockSizeHorizontal * 80,
-                  child: Slider(
-                    activeColor: ProductApi.darkBlue,
-                    value: _currentSliderValueDiscount,
-                    min: 0,
-                    max: 100,
-                    divisions: 100,
-                    // label: _currentSliderValueDiscount.round().toString() + "€",
-                    onChanged: (double value) {
-                      setState(() {
-                        _currentSliderValueDiscount = value;
-                      });
-                    },
-                  ),
+                  alignment: Alignment.centerLeft,
+                  margin: EdgeInsets.only(left: blockSizeHorizontal * 6, right: blockSizeHorizontal * 4),
+                  child: Text("Discount: ",
+                      style: TextStyle(
+                        color: ProductApi.darkBlue,
+                        //fontWeight: FontWeight.bold,
+                        fontSize: safeBlockHorizontal * 5,
+                      )),
                 ),
 
                 //Output for Discount
@@ -239,17 +227,34 @@ class _FilterViewState extends State<FilterView> {
                     ),
                   ),
                 )
-              ])
+              ]),
+              Container(
+                //color: Colors.green,
+                width: blockSizeHorizontal * 100,
+                child: Slider(
+                  activeColor: ProductApi.darkBlue,
+                  value: _currentSliderValueDiscount,
+                  min: 0,
+                  max: 80,
+                  divisions: 100,
+                  // label: _currentSliderValueDiscount.round().toString() + "€",
+                  onChanged: (double value) {
+                    setState(() {
+                      _currentSliderValueDiscount = value;
+                    });
+                  },
+                ),
+              ),
             ])),
         //SizedBox(height: 7),
 
         // Headline: Categories
         Container(
           alignment: Alignment.centerLeft,
-          margin: EdgeInsets.only(left: 21),
+          margin: EdgeInsets.only(left: blockSizeHorizontal * 7),
           child: Text("Categories",
               style: TextStyle(
-                color: Colors.black,
+                color: ProductApi.darkBlue,
                 //fontWeight: FontWeight.bold,
                 fontSize: safeBlockHorizontal * 5,
               )),
@@ -262,24 +267,34 @@ class _FilterViewState extends State<FilterView> {
               itemCount: _categories.length,
               itemBuilder: (context, index) {
                 return Column(children: [
+                  // Kategorienamen
                   ListTile(
-                    onTap: () {},
+                    onTap: () {
+                      // Öffnet die Unterkategorien, wenn man auf die Kategorienamen tippt
+                      setState(() {
+                        _show = !_show;
+                      });
+                    },
                     title: Text(
                       _categories[index],
                       style: TextStyle(
+                        color: ProductApi.darkBlue,
                         fontSize: safeBlockHorizontal * 4.2,
                       ),
                     ),
                     leading: CircleAvatar(
-                     // backgroundColor: ProductApi.darkBlue,
+                      // backgroundColor: ProductApi.darkBlue,
                       child: FloatingActionButton(
                         backgroundColor: ProductApi.darkBlue,
                         onPressed: () {
                           setState(() {
+                            // Öffnet die Unterkategorien, wenn man auf die Icons tippt
                             _show = !_show;
                           });
                         },
-                        child: Icon(_show ? Icons.arrow_drop_up_outlined : Icons.arrow_drop_down),
+                        child: Icon(_show
+                            ? Icons.arrow_drop_up_outlined
+                            : Icons.arrow_drop_down),
                       ),
                     ),
                   ),
@@ -287,24 +302,26 @@ class _FilterViewState extends State<FilterView> {
                     visible: _show,
                     child: Container(
                       //color: Colors.red,
-                      height: blockSizeVertical * 20,
+                      height: blockSizeVertical * 15,
                       width: MediaQuery.of(context).size.width,
                       decoration: const BoxDecoration(
-                        color: Colors.white,
+                        color: ProductApi.white,
                         border: Border(
-                            bottom: BorderSide(
-                              color: Colors.grey,
-                              width: 0.5,
-                            ),
+                          bottom: BorderSide(
+                            color: ProductApi.orange,
+                            width: 0.5,
+                          ),
+                          /*
                             top: BorderSide(
                               color: Colors.grey,
                               width: 0.5,
-                            )),
+                            )*/
+                        ),
                       ),
                       child: GridView.count(
                         physics: ScrollPhysics(),
                         scrollDirection: Axis.horizontal,
-                        childAspectRatio: 0.6,
+                        childAspectRatio: 0.45,
                         crossAxisCount: 2,
                         shrinkWrap: true,
                         children: List.generate(_subCategories.length, (index) {
@@ -312,18 +329,18 @@ class _FilterViewState extends State<FilterView> {
                             children: [
                               Container(
                                   //color: Colors.red,
-                                  width: 500,
+                                  //width: blockSizeHorizontal * 20,
                                   height: blockSizeVertical * 5,
                                   alignment: Alignment.center,
                                   //padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                                   margin: EdgeInsets.only(
-                                      right: blockSizeHorizontal * 1.0,
+                                      //right: blockSizeHorizontal * 1.0,
                                       //bottom: blockSizeVertical * 0.8,
-                                      top: blockSizeVertical * 1.0,
-                                      left: blockSizeHorizontal * 1.0),
+                                      //top: blockSizeVertical * 1.0,
+                                      left: blockSizeHorizontal * 2.0),
                                   decoration: BoxDecoration(
                                     color: ProductApi.lightBlue,
-                                    borderRadius: BorderRadius.circular(30),
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
                                   //width: displayWidth / 1.5,
                                   //height: displayHeight / 8,
