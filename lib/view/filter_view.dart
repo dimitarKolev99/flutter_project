@@ -113,6 +113,53 @@ class _FilterViewState extends State<FilterView> {
             ],
           )),
       body: Column(children: [
+        Visibility(
+          visible: _show,
+          child: Container(
+          height: blockSizeVertical * 3,
+          //margin: EdgeInsets.all(blockSizeHorizontal),
+          color: ProductApi.orange,
+          child: GridView.count(
+            physics: ScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
+            crossAxisCount: 1,
+            childAspectRatio: 0.3,
+
+            children: List.generate(_subCategories.length, (index) {
+              return Container(
+                alignment: Alignment.centerLeft,
+                margin: EdgeInsets.all(3),
+                padding: EdgeInsets.only(left: 3),
+                color: ProductApi.white,
+                child: Text(
+                  _subCategories[index],
+                  //textAlign: TextAlign.left,
+                  style: TextStyle(
+                    color: ProductApi.darkBlue,
+                  ),
+                ),
+              );
+            })
+          ),
+        ),
+        ),
+
+        Visibility(
+          visible: !_show,
+          child: Container(
+            color: ProductApi.orange,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Die gewählte Filter werden hier angezeigt",
+              style: TextStyle(
+                color: ProductApi.darkBlue,
+
+              ),
+            ),
+          ),
+        ),
+
         // Sliders
         Container(
             padding: EdgeInsets.only(left: blockSizeHorizontal * 0.5),
