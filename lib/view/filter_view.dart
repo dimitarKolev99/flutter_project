@@ -54,6 +54,7 @@ class _FilterViewState extends State<FilterView> {
   ];
 
   bool _show = false;
+  bool chosen = true;
 
 //"Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category",
 //     "Category", "Category", "Category", "Category", "Category", "Category"
@@ -379,7 +380,8 @@ class _FilterViewState extends State<FilterView> {
                         children: List.generate(_subCategories.length, (index) {
                           return Column(
                             children: [
-                              Container(
+                              InkWell(
+                          child: Container(
                                   //color: Colors.red,
                                   //width: blockSizeHorizontal * 20,
                                   height: blockSizeVertical * 5,
@@ -391,7 +393,8 @@ class _FilterViewState extends State<FilterView> {
                                       //top: blockSizeVertical * 1.0,
                                       left: blockSizeHorizontal * 2.0),
                                   decoration: BoxDecoration(
-                                    color: ProductApi.lightBlue,
+                                    color: chosen ? ProductApi.lightBlue
+                                                  : ProductApi.orange,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   //width: displayWidth / 1.5,
@@ -407,7 +410,13 @@ class _FilterViewState extends State<FilterView> {
                                           fontWeight: FontWeight.bold),
                                     ),
                                   )),
-                            ],
+                                onTap: () {
+                            setState(() {
+                              chosen ? chosen = false
+                                      : chosen = true;
+                            });
+                                },
+                              ),],
                           );
                         }),
                       ),
