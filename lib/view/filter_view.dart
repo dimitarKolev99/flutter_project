@@ -117,6 +117,7 @@ class _FilterViewState extends State<FilterView> {
           visible: _show,
           child: Container(
           height: blockSizeVertical * 3,
+          padding: EdgeInsets.only(left: 3),
           //margin: EdgeInsets.all(blockSizeHorizontal),
           color: ProductApi.orange,
           child: GridView.count(
@@ -129,14 +130,15 @@ class _FilterViewState extends State<FilterView> {
             children: List.generate(_subCategories.length, (index) {
               return Container(
                 alignment: Alignment.centerLeft,
-                margin: EdgeInsets.all(3),
-                padding: EdgeInsets.only(left: 3),
-                color: ProductApi.white,
+                margin: EdgeInsets.symmetric(horizontal: 3),
+                //color: ProductApi.white,
                 child: Text(
                   _subCategories[index],
                   //textAlign: TextAlign.left,
                   style: TextStyle(
                     color: ProductApi.darkBlue,
+                    fontSize: _safeAreaVertical * 0.6,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               );
@@ -150,11 +152,14 @@ class _FilterViewState extends State<FilterView> {
           child: Container(
             color: ProductApi.orange,
             alignment: Alignment.centerLeft,
+            padding: EdgeInsets.only(left: 6),
+            height: blockSizeVertical * 3,
             child: Text(
               "Die gewählte Filter werden hier angezeigt",
               style: TextStyle(
                 color: ProductApi.darkBlue,
-
+                fontSize: _safeAreaVertical * 0.6,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
