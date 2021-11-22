@@ -68,7 +68,7 @@ class ProductApi {
         List<dynamic> resultList = myMap["result"];
         JsonFunctions testFunctions = new JsonFunctions();
         // TODO: Test Call !
-        testFunctions.getMapOfSubOrProductCategories(15132,  resultList);
+        testFunctions.getMapOfSubOrProductCategories(12052,  resultList);
 
         var categoryID = produktKategorie["Handys & Smartphones"];
         print("CATEGORYID: $categoryID");

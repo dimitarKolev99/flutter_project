@@ -26,17 +26,17 @@ class JsonFunctions{
   }
   // this method returns all product and Subcategories, in case the id has both in the list
   Map<String, int> getSubAndProdCategories(List<dynamic> category, List<dynamic> category2){
-    Map<String, int>  subCategories = new Map();
+    Map<String, int>  categories = new Map();
     for (var element in category) {
       print("subCategories = ${element["name"]} = ${element["id"]} ");
-      subCategories[element["name"]] = element["id"];
+      categories[element["name"]] = element["id"];
     }
     for (var element in category2) {
-      print("subCategories = ${element["name"]} = ${element["id"]} ");
-      subCategories[element["name"]] = element["id"];
+      print("prodCategories = ${element["name"]} = ${element["id"]} ");
+      categories[element["name"]] = element["id"];
     }
-    print(subCategories);
-    return subCategories;
+    print(categories);
+    return categories;
   }
 
   //this method should locate the right location inside the category tree and call getSubCategories to get all subcategories in a Map
