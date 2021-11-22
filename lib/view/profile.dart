@@ -5,6 +5,7 @@ import 'package:penny_pincher/view/widget/article_card.dart';
 import 'package:flutter/material.dart';
 import 'package:penny_pincher/view/widget/article_search.dart';
 import 'dart:async';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
 
 import 'package:penny_pincher/view/widget/browser_article_card.dart';
@@ -96,6 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
     double blockSizeHorizontal = displayWidth / 100; // bildschirmbreite in 1%
     double blockSizeVertical = displayHeight / 100; // bildschirmhöhe in 1%
     return Scaffold(
+      //ScreenUtil.init(context, height:896, width:414, allowFontScaling: true);
       appBar: AppBar(
           backgroundColor: ProductApi.darkBlue,
           title: Row(
@@ -148,7 +150,30 @@ class _ProfilePageState extends State<ProfilePage> {
               },
             )
           ]),
-      body: Container(
+      body: Column(
+        children: <Widget>[
+          SizedBox(height: 20),
+          Expanded(
+            child: ListView(
+              children: <Widget>[
+                ProfileListItem(
+                  icon: LineAwesomeIcons.user_shield,
+                  text: "test 1",
+                ),
+                ProfileListItem(
+                  icon: LineAwesomeIcons.history,
+                  text: "test 2",
+                ),
+              ],
+            )
+          )
+        ]
+      )
+
+
+
+      /*
+        Container(
         padding: EdgeInsets.symmetric(vertical: 100),
         child: Column(
           children: [
@@ -186,7 +211,46 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ],
         ),
+      ),*/
+    );
+  }
+}
+
+class ProfileListItem extends StatelessWidget{
+  //Source: https://github.com/jameelsocorro/profile_app_ui/blob/master/lib/widgets/profile_list_item.dart
+  final IconData icon;
+  final String text;
+  final bool hasNavigation;
+
+  const ProfileListItem({
+    Key? key,
+    required this.icon,
+    required this.text,
+    this.hasNavigation = true,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 50,
+      margin: EdgeInsets.symmetric(horizontal: 25, vertical: 5),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(33),
+        color: Colors.blue,
+      ),
+      child: Row(
+        children: <Widget>[
+          Icon(this.icon, size: 33, color: Colors.white,),
+          SizedBox(width: 100),
+          Text(this.text,
+            style: TextStyle(
+              fontSize: 21,
+              fontWeight: FontWeight.w500,
+            ),
+          )],
       ),
     );
   }
+  
+  
 }
