@@ -91,25 +91,29 @@ class _FilterViewState extends State<FilterView> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'Categories',
-                style: TextStyle(
-                  // Shaddow is used to get Distance to the underline -> TextColor itself is transparent
-                  shadows: [
-                    Shadow(
-                        color: Color.fromRGBO(240, 240, 240, 1),
-                        offset: Offset(0, -5))
-                  ],
-                  //fontFamily: '....',
-                  fontSize: 21,
-                  letterSpacing: 3,
-                  color: Colors.transparent,
-                  fontWeight: FontWeight.w900,
-                  decoration: TextDecoration.underline,
-                  decorationColor: ProductApi.white,
-                  decorationThickness: 4,
-                ),
-              ),
+              Padding(
+                padding: EdgeInsets.only(top: 3),
+                child:
+                Text(
+                  'Categories',
+                  style: TextStyle(
+                    // Shaddow is used to get Distance to the underline -> TextColor itself is transparent
+                    shadows: [
+                      Shadow(
+                          color: Color.fromRGBO(240, 240, 240, 1),
+                          offset: Offset(0, -6))
+                    ],
+                    //fontFamily: '....',
+                    fontSize: 21,
+                    letterSpacing: 3,
+                    color: Colors.transparent,
+                    fontWeight: FontWeight.w900,
+                    decoration:
+                    TextDecoration.underline,
+                    decorationColor: ProductApi.orange,
+                    decorationThickness: 4,
+                  ),
+                ), ),
               SizedBox(width: blockSizeHorizontal * 10),
             ],
           )),
@@ -169,7 +173,7 @@ class _FilterViewState extends State<FilterView> {
         // Sliders
         Container(
             padding: EdgeInsets.only(left: blockSizeHorizontal * 0.5),
-            height: blockSizeVertical * 35,
+            height: blockSizeVertical * 30,
             width: displayWidth,
             //color: ProductApi.lightBlue,
 
@@ -228,8 +232,8 @@ class _FilterViewState extends State<FilterView> {
                   activeColor: ProductApi.darkBlue,
                   //inactiveColor: ProductApi.orange,
                   values: _currentSliderValuesPrice,
-                  min: _minValue,
-                  max: _maxValue,
+                  min: 0,
+                  max: 1000,
                   divisions: 100,
                   /*
                       labels: RangeLabels(
@@ -319,7 +323,9 @@ class _FilterViewState extends State<FilterView> {
               addAutomaticKeepAlives: false,
               itemCount: _categories.length,
               itemBuilder: (context, index) {
-                return Column(children: [
+                return Column(
+                    key: Key(_categories[index]),
+                    children: [
                   // Kategorienamen
                   ListTile(
                     onTap: () {
@@ -354,6 +360,7 @@ class _FilterViewState extends State<FilterView> {
                   Visibility(
                     visible: _show,
                     child: Container(
+                      key: Key(_categories[index]),
                       //color: Colors.red,
                       height: blockSizeVertical * 15,
                       width: MediaQuery.of(context).size.width,
