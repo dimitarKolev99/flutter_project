@@ -85,9 +85,11 @@ class ProductApi {
         List<dynamic> resultList = myMap["result"];
         JsonFunctions testFunctions = JsonFunctions();
         // TODO: Test Call !
-        testFunctions.getMapOfSubOrProductCategories(1940, resultList);
 
-        var categoryID = 0;
+        testFunctions.getMapOfSubOrProductCategories(12052,  resultList);
+
+        var categoryID = produktKategorie["Handys & Smartphones"];
+        print("CATEGORYID: $categoryID");
 
         final response2 = await http.get(Uri.parse(
             "https://usjm35yny3.execute-api.eu-central-1.amazonaws.com/dev/pp-bargains?maxItems=20&minSaving=5&categoryIds=$categoryID"));
