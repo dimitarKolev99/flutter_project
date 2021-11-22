@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:penny_pincher/services/json_functions.dart';
 
 class ProductApi {
   // IDEALO Colors
@@ -24,288 +25,14 @@ class ProductApi {
     produktKategorie[name] = id;
   }
 
-  // Map<SubkategorieName, ProduktID>
-  // Äste
-  Map<String, int> mainCategories = new Map<String, int>();
-  Map<String, int> subCategories1 = new Map<String, int>();
-
-  Map<String, int> mainCategories1 = {
-    "Elektroartikel" : 30311,
-    "Drogerie & Gesundheit" : 3932,
-    "Haus & Garten" :3686,
-    "Mode & Accessoires" : 9908,
-    "Tierbedarf" : 7032,
-    "Gaming & Spielen" : 3326,
-    "Essen & Trinken" : 12913,
-    "Baby & Kind" : 4033,
-    "Auto & Motorrad" : 2400,
-    "Haushaltselektronik" : 1940,
-  };
-// List K
-  List<dynamic> allSubCategories = [];
-  // given an Main Category ID this method returns all subcategories
-  void findSubCategories(int id, List<dynamic> resultList){
-    for (var element in resultList) {
-      if(element["id"] == id) {
-        // after finding ID of main Category ->
-          getSubCategories(element);//, resultList);
-
-        }
-      }
-    }
-
-
-  // this method should return all subcategories -> Method is called after finding the id inside the tree
-  Map<String, int> getSubCategories(List<dynamic> category){
-    Map<String, int>  subCategories = new Map();
-    for (var element in category) {
-      if (element.toString().substring(1, 14) == "subCategories") {
-        print("subCategories = ${element["name"]} = ${element["id"]} ");
-        subCategories[element["name"]] = element["id"];
-      }
-    }
-    print(subCategories);
-    return subCategories;
-  }
-
-  //this method should locate the right location inside the category tree and call getSubCategories to get all subcategories in a Map
-  Map<String, int> getMapOfSubOrProductCategories(int id, List<dynamic> resultList){
-    for (var element in resultList) {
-      print("element = ${element[id]}");
-        int elementId = element["id"];
-        if (elementId == id) {
-          print("id found");
-          // if we reached a subcategory which matches the id we're looking for, call the method getSubCategories
-          if (element.toString().substring(1, 14) == "subCategories") {
-            List<dynamic> resultList2 = element["subCategories"];
-            return getSubCategories(resultList2);
-          }
-          // if we reached the productCategories of the id -> fill a Map with all Productcategories and return the Map
-          else if (element.toString().substring(1, 18) == "productCategories") {
-            List<dynamic> resultList2 = element["productCategories"];
-            Map<String, int> finalCategories = new Map();
-            for (var element in resultList2) {
-              // TODO: Do all productcategories have a name and an id?
-              int elementId2 = element["id"];
-              String elementName = element["name"];
-              finalCategories[elementName] = elementId2;
-            }
-            return finalCategories;
-          }
-        }
-        // if the id couldnt be found call function again from the right spot
-        else {
-          if (element.toString().substring(1, 18) == "productCategories") {
-            List<dynamic> resultList3 = element["productCategories"];
-            getMapOfSubOrProductCategories(id, resultList3);
-          }
-          else if (element.toString().substring(1, 14) == "subCategories") {
-            List<dynamic> resultList3 = element["subCategories"];
-            getMapOfSubOrProductCategories(id, resultList3);
-          }
-        }
-    }
-    // TODO: ??
-    return new Map();
-
-  }
-
-
-
-
-
-  /*
-  getSubCategories(dynamic element){//,List<dynamic> resultList){
-    //Map<String, int> temp = new Map();
-    print("worked !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    //kljkljdvf
-    if (element.toString().substring(1, 14) == "subCategories") {
-      for (var element2 in element["subCategories"]) {
-        getSubCategories(element2);
-      }
-    }
-    if((element.toString().substring(1, 14) == "productCategories")){
-      for (var element3 in element["productCategories"]) {
-        print(element3["name"]);
-        getSubCategories(element3);
-      }
-    }
-    // add Map to List
-    // recall Method 1 step deeper with resultlist2
-  }
-
-   */
-
-
-
-
-
-
   List<dynamic> bargains = [];
-
   int count = 0;
   String name = "";
   int id = 0;
   int resultID = 0;
   bool stop = true;
 
-  //translateTree working function
-  /*
-  int translateTree(String category, List<dynamic> resultList) {
-    resultList.forEach((element) {
-      if (element.toString().substring(1, 14) == "subCategories") {
-        print("subCategorie");
-        List<dynamic> resultList2 = element["subCategories"];
-
-        if (element["subCategories"] != null &&
-            element["productCategories"] != null) {
-          List<dynamic> productList = element["productCategories"];
-          productList.forEach((element) {
-            name = element["name"];
-            id = element["id"];
-            //print("count =  $count");
-            print("Prod + $name");
-            print("Prod + $id");
-            if (category == name) resultID = id;
-            stop = false;
-            print("result: $resultID");
-          });
-        }
-
-        resultList2.forEach((element) {
-          if (element["name"] != null) {
-            name = element["name"];
-          }
-          id = element["id"];
-          //print("count =  $count");
-          print("subCat + $name");
-          print("subCat + $id");
-        });
-
-        //count++;
-        //print(count);
-        translateTree(category, resultList2);
-      } else if (element.toString().substring(1, 18) == "productCategories") {
-        List<dynamic> resultList2 = element["productCategories"];
-        print("productCategorie");
-        resultList2.forEach((element) {
-          name = element["name"];
-          id = element["id"];
-          //print("count =  $count");
-          print("Prod + $name");
-          print("Prod + $id");
-          if (category == name) resultID = id;
-          print("result: $resultID");
-        });
-
-        //count = 0;
-        translateTree(category, resultList2);
-      }
-    });
-
-    if (resultID != 0) {
-      return resultID;
-    } else {
-      return 0;
-    }
-  }
-*/
-
-
-
-  void findMainCategories (List<dynamic> resultList) {
-    for (var element in resultList) {
-      if (element.toString().substring(1, 14) == "subCategories") {
-        //print("${element["name"]}");
-        if (element["name"] != null && element["id"] != null) {
-          name = element["name"];
-          id = element["id"];
-          mainCategories[name] = id;
-         // print("${mainCategories[name]}");
-        }
-        else {
-          print("idididididididid ------   ${element["id"]}");
-        }
-        List<dynamic> resultList2 = element["subCategories"];
-        findMainCategories(resultList2);
-      }
-    }
-  }
-
-
-
-      int translateTree(String category, List<dynamic> resultList) {
-        for (var element in resultList) {
-          if (element.toString().substring(1, 14) == "subCategories") {
-            print("${element["name"]}");
-            if (element["name"] != null && element["id"] != null) {
-              name = element["name"];
-              id = element["id"];
-              mainCategories[name] = id;
-              print("${mainCategories[name]}");
-            }
-            List<dynamic> resultList2 = element["subCategories"];
-            if (false) {
-              List<dynamic> resultList2 = element["subCategories"];
-              // name = resultList2["name"];
-              if (element["subCategories"] != null &&
-                  element["productCategories"] != null) {
-                List<dynamic> productList = element["productCategories"];
-                for (var element in productList) {
-                  name = element["name"];
-                  id = element["id"];
-                  //print("count =  $count");
-                  //print("Prod + $name");
-                  //print("Prod + $id");
-                  fillMap(name, id);
-                  if (category == name) {
-                    resultID = id;
-                    //print("result: $resultID");
-                    return resultID;
-                  }
-                }
-              }
-
-              resultList2.forEach((element) {
-                if (element["name"] != null) {
-                  name = element["name"];
-                }
-                id = element["id"];
-                //print("count =  $count");
-                //print("subCat + $name");
-                //print("subCat + $id");
-              });
-            }
-            //count++;
-            //print(count);
-
-            translateTree(category, resultList2);
-
-          } else
-          if (element.toString().substring(1, 18) == "productCategories") {
-            List<dynamic> resultList2 = element["productCategories"];
-            //print("productCategorie");
-            for (var element in resultList2) {
-              name = element["name"];
-              id = element["id"];
-              //print("count =  $count");
-              // print("Prod + $name");
-              // print("Prod + $id");
-              fillMap(name, id);
-              if (category == name) {
-                resultID = id;
-                return resultID;
-                print("result: $resultID");
-              }
-            }
-            //count = 0;
-            translateTree(category, resultList2);
-          }
-        }
-        return resultID;
-      }
-
-      findBargains(List<dynamic> fromUri) {
+  findBargains(List<dynamic> fromUri) {
         String name = "";
         int id = 0;
 
@@ -325,14 +52,12 @@ class ProductApi {
               name = element["name"];
               id = element["id"];
               bargains = element["bargains"];
-              //categories.putIfAbsent(name, () => id);
             });
           }
         });
       }
 
       Future<List<Product>> fetchProduct() async {
-        //List<dynamic> list = <String>[];
         print("call APi");
 
         final response =
@@ -340,22 +65,11 @@ class ProductApi {
         Map<String, dynamic> myMap =
         Map<String, dynamic>.from(json.decode(response));
 
-        //Map<String, int> categories = new Map<String, int>(); //new Map<String, int>();
-        //print(myMap["result"][0]["subCategories"][0]["subCategories"][0]["subCategories"][0]["productCategories"][10]);
-
-        //List<dynamic> elementsOfCategories = myMap["result"][0]["subCategories"][0]["subCategories"][0]["subCategories"][0]["productCategories"];
-        //print(myMap["result"][0]);
         List<dynamic> resultList = myMap["result"];
+        JsonFunctions testFunctions = new JsonFunctions();
+        // TODO: Test Call !
+        testFunctions.getMapOfSubOrProductCategories(15132,  resultList);
 
-        //print("xsxx = ${myMap["result"][0]["subCategories"][0].toString().substring(1,14) == "subCategories"}");
-        int i = 0;
-        getMapOfSubOrProductCategories(30311,  resultList);
-        //translateTree("", resultList);
-        findMainCategories(resultList);
-        // 9908 MAin categorie
-        //findSubCategories(3326, resultList);
-
-        print("length                .::::     ${mainCategories.length}");
         var categoryID = produktKategorie["Handys & Smartphones"];
         print("CATEGORYID: $categoryID");
 
@@ -378,7 +92,6 @@ class ProductApi {
         for (var bargain in bargains) {
           products.add(Product.fromJson(bargain));
         }
-
         return products;
       }
 /* else {
@@ -387,5 +100,5 @@ class ProductApi {
       throw NullThrownError();
     }
   }*/
-    }
+}
 
