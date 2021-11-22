@@ -1,7 +1,9 @@
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:ui';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:penny_pincher/main.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart' show rootBundle;
@@ -18,15 +20,11 @@ class ProductApi {
   // Blätter -> aus dieser Id können wir Artikel Returnen, BlattID -> in URL
   Map<String, int> produktKategorie = <String, int>{};
 
-  //fill the map with all product categories
-  void fillMap(String name, int id) {
-    produktKategorie[name] = id;
-  }
-
   // Map<SubkategorieName, ProduktID>
   // Äste
-  Map<String, int> mainCategories = new Map<String, int>();
-  Map<String, int> subCategories1 = new Map<String, int>();
+  Map<String, int> mainCategories = Map<String, int>();
+  Map<String, int> subCategories1 = Map<String, int>();
+
 
   Map<String, int> mainCategories1 = {
     "Elektroartikel" : 30311,
@@ -39,24 +37,44 @@ class ProductApi {
     "Baby & Kind" : 4033,
     "Auto & Motorrad" : 2400,
     "Haushaltselektronik" : 1940,
+    "Sport & Outdoor" : 3626,
   };
 // List K
   List<dynamic> allSubCategories = [];
-  int currentCategory = 0;
+  int currentCategoryID = 0;
+  int ID = 0;
+  var length = 0;
   // given an Main Category ID this method returns all subcategories
   void findSubCategories(int id, List<dynamic> resultList){
+    List<dynamic> list = [];
     for (var element in resultList) {
-      if(element["id"] == id) {
-        // after finding ID of main Category ->
-          currentCategory = element["id"];
-          print("current Cat :  $currentCategory");
+      if (element["subCategories"] != null || element["productCategories"] != null) {
+        list.add(element["subCategories"]);
+        if (element["id"] == id) {
+          ID = element["id"];
+
+          // after finding ID of main Category ->
+          currentCategoryID = element["id"];
+          //print("current Cat :  $currentCategory");
           getSubCategories(element);
         }
+        else if(length == resultList.length - 1){
+          length = 0;
+          resultList = list;
+          findSubCategories(id, resultList);
+        }
       }
+      length++;
     }
+  }
+
+    //MAP key = currentCategory = 3326, value = List of subcategories
+    Map<int, List<String>> mainCategoriesSubCatLvl1 = <int, List<String>>{};
+    List<String> subCategories =  [];
+    List<Map<String, int>> productCategories = [];
+    Map<String, int> prodCatNameID = <String, int>{};
 
     Map <int, List<int>> categoriesAndSubcategories = new Map();
-    //MAP key = currentCategory = 3326, value = List of subcategories and Productcategories
     List<int> subCatIds = [];
     Map <int, List<int>> CategoriesAndProductcategories = new Map();
 
@@ -66,15 +84,27 @@ class ProductApi {
 
   getSubCategories(dynamic element){
 
-    if (element.toString().substring(1, 14) == "subCategories") {
+    if (element["id"] != 2400 && element["id"] != 9572 && element["id"] != 15112) { //ignoriere diese Kategorien, denn die haben keine Produkte drin
       for (var element2 in element["subCategories"]) {
+        //print("LEVEL 1 SUBCATEGORY:  ${element2["name"]}");
+        subCategories.add(element2["name"]);
+        //lvl1ProductCategories.add(lvl1ProdCatNameID[element["productCategories"]]);
+        /*
         currentCategory = element["id"];
         print("id = $currentCategory  = element ${element2["name"]}");
         categoriesAndSubcategories[currentCategory] =
         getSubCategories(element2);
-      }
 
+         */
+      }
+      if (element["productCategories"] != null) {
+        for (var element2 in element["productCategories"]) {
+          prodCatNameID[element2["name"]] = element2["id"];
+          productCategories.add(prodCatNameID);
+        }
+      }
     }
+    /*
     if((element.toString().substring(1, 18) == "productCategories")){
       for (var element3 in element["productCategories"]) {
         //print(element3["name"]);
@@ -82,6 +112,8 @@ class ProductApi {
         getSubCategories(element3);
       }
     }
+
+     */
     // add Map to List
     // recall Method 1 step deeper with resultlist2
   }
@@ -174,7 +206,7 @@ class ProductApi {
          // print("${mainCategories[name]}");
         }
         else {
-          print("idididididididid ------   ${element["id"]}");
+          //print("idididididididid ------   ${element["id"]}");
         }
         List<dynamic> resultList2 = element["subCategories"];
         findMainCategories(resultList2);
@@ -182,9 +214,14 @@ class ProductApi {
     }
   }
 
+  //fill the map with all product categories
+  void fillMap(String name, int id) {
+    produktKategorie[name] = id;
+  }
 
 
-      int translateTree(String category, List<dynamic> resultList) {
+
+  int translateTree(String category, List<dynamic> resultList) {
         for (var element in resultList) {
           if (element.toString().substring(1, 14) == "subCategories") {
             print("${element["name"]}");
@@ -229,8 +266,8 @@ class ProductApi {
             //count++;
             //print(count);
             translateTree(category, resultList2);
-          } else
-          if (element.toString().substring(1, 18) == "productCategories") {
+          }
+          else if (element.toString().substring(1, 18) == "productCategories") {
             List<dynamic> resultList2 = element["productCategories"];
             //print("productCategorie");
             for (var element in resultList2) {
@@ -243,7 +280,6 @@ class ProductApi {
               if (category == name) {
                 resultID = id;
                 return resultID;
-                print("result: $resultID");
               }
             }
             //count = 0;
@@ -299,17 +335,21 @@ class ProductApi {
         int i = 0;
 
         //translateTree("", resultList);
-        findMainCategories(resultList);
+        //findMainCategories(resultList);
         // 9908 MAin categorie
-        findSubCategories(3326, resultList);
+        findSubCategories(1760, resultList);
+        mainCategoriesSubCatLvl1[currentCategoryID] = subCategories;
+        print(mainCategoriesSubCatLvl1);
+        print(productCategories);
+        //print(lvl1ProdCatNameID["Bartschneider & Haarschneider"]);
 
-        print("length                .::::     ${mainCategories.length}");
+        //print("length                .::::     ${mainCategories.length}");
         var categoryID = produktKategorie["Handys & Smartphones"];
-        print("CATEGORYID: $categoryID");
+        //print("CATEGORYID: $categoryID");
 
         var sizeOfMap = produktKategorie.length;
-        print("MAP: $produktKategorie");
-        print("SIZE OF MAP: $sizeOfMap");
+        //print("MAP: $produktKategorie");
+        //print("SIZE OF MAP: $sizeOfMap");
 
         final response2 = await http.get(Uri.parse(
             "https://usjm35yny3.execute-api.eu-central-1.amazonaws.com/dev/pp-bargains?maxItems=20&minSaving=5&categoryIds=$categoryID"));
