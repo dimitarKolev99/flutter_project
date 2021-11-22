@@ -55,7 +55,66 @@ class ProductApi {
     }
 
 
+  // this method should return all subcategories -> Method is called after finding the id inside the tree
+  Map<String, int> getSubCategories(List<dynamic> category){
+    Map<String, int>  subCategories = new Map();
+    for (var element in category) {
+      if (element.toString().substring(1, 14) == "subCategories") {
+        print("subCategories = ${element["name"]} = ${element["id"]} ");
+        subCategories[element["name"]] = element["id"];
+      }
+    }
+    print(subCategories);
+    return subCategories;
+  }
 
+  //this method should locate the right location inside the category tree and call getSubCategories to get all subcategories in a Map
+  Map<String, int> getMapOfSubOrProductCategories(int id, List<dynamic> resultList){
+    for (var element in resultList) {
+      print("element = ${element[id]}");
+        int elementId = element["id"];
+        if (elementId == id) {
+          print("id found");
+          // if we reached a subcategory which matches the id we're looking for, call the method getSubCategories
+          if (element.toString().substring(1, 14) == "subCategories") {
+            List<dynamic> resultList2 = element["subCategories"];
+            return getSubCategories(resultList2);
+          }
+          // if we reached the productCategories of the id -> fill a Map with all Productcategories and return the Map
+          else if (element.toString().substring(1, 18) == "productCategories") {
+            List<dynamic> resultList2 = element["productCategories"];
+            Map<String, int> finalCategories = new Map();
+            for (var element in resultList2) {
+              // TODO: Do all productcategories have a name and an id?
+              int elementId2 = element["id"];
+              String elementName = element["name"];
+              finalCategories[elementName] = elementId2;
+            }
+            return finalCategories;
+          }
+        }
+        // if the id couldnt be found call function again from the right spot
+        else {
+          if (element.toString().substring(1, 18) == "productCategories") {
+            List<dynamic> resultList3 = element["productCategories"];
+            getMapOfSubOrProductCategories(id, resultList3);
+          }
+          else if (element.toString().substring(1, 14) == "subCategories") {
+            List<dynamic> resultList3 = element["subCategories"];
+            getMapOfSubOrProductCategories(id, resultList3);
+          }
+        }
+    }
+    // TODO: ??
+    return new Map();
+
+  }
+
+
+
+
+
+  /*
   getSubCategories(dynamic element){//,List<dynamic> resultList){
     //Map<String, int> temp = new Map();
     print("worked !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -74,6 +133,8 @@ class ProductApi {
     // add Map to List
     // recall Method 1 step deeper with resultlist2
   }
+
+   */
 
 
 
@@ -217,7 +278,9 @@ class ProductApi {
             }
             //count++;
             //print(count);
+
             translateTree(category, resultList2);
+
           } else
           if (element.toString().substring(1, 18) == "productCategories") {
             List<dynamic> resultList2 = element["productCategories"];
@@ -286,11 +349,11 @@ class ProductApi {
 
         //print("xsxx = ${myMap["result"][0]["subCategories"][0].toString().substring(1,14) == "subCategories"}");
         int i = 0;
-
+        getMapOfSubOrProductCategories(30311,  resultList);
         //translateTree("", resultList);
         findMainCategories(resultList);
         // 9908 MAin categorie
-        findSubCategories(3326, resultList);
+        //findSubCategories(3326, resultList);
 
         print("length                .::::     ${mainCategories.length}");
         var categoryID = produktKategorie["Handys & Smartphones"];
