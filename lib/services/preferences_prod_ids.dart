@@ -14,16 +14,13 @@ class PreferenceIDS {
   void translateTree(List<dynamic> resultList) {
     for (var element in resultList) {
       if (element.toString().substring(1, 14) == "subCategories") {
-        //print("${element["name"]}");
 
           List<dynamic> resultList2 = element["subCategories"];
-          // name = resultList2["name"];
           if (element["subCategories"] != null &&
               element["productCategories"] != null) {
             List<dynamic> productList = element["productCategories"];
             for (var element in productList) {
               id = element["id"];
-              //print(id);
               addToListOfIDs(id);
             }
           }
@@ -31,10 +28,8 @@ class PreferenceIDS {
       }
       else if (element.toString().substring(1, 18) == "productCategories") {
         List<dynamic> resultList2 = element["productCategories"];
-        //print("productCategorie");
         for (var element in resultList2) {
           id = element["id"];
-          //print(id);
           addToListOfIDs(id);
         }
         translateTree(resultList2);
@@ -50,7 +45,7 @@ class PreferenceIDS {
     return resultList;
   }
 
-  void fillListOfIDsAndSaveIt() async{
+  Future<void> fillListOfIDsAndSaveIt() async{
     List<dynamic> resultList = await getJson();
     translateTree(resultList);
     saveInPref();

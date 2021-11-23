@@ -92,6 +92,23 @@ class _HomePageState extends State<HomePage> {
     streamController.add(true);
   }
 
+  void function() async {
+    ids = await putInMemoryAndRetrieve();
+    _timer = Timer.periodic(const Duration(seconds: 2), (Timer timer) {
+      var index = _jsonFunctions.getRandomInt();
+      var randomCategory = ids[index];
+      getProducts(randomCategory);
+
+      if (_scrollController.hasClients && !isScrolling) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          curve: Curves.easeOut,
+          duration: const Duration(milliseconds: 300),
+        );
+      }
+    });
+  }
+
   @override
   void initState() {
     if (this.mounted) {
@@ -104,30 +121,17 @@ class _HomePageState extends State<HomePage> {
       updateHome(update);
     });
 
+    /*
+    _preferencesProdIDs.fillListOfIDsAndSaveIt();
+
     _preferencesProdIDs.getFromPref()
       .then((List<int> result) {
       ids = result;
     });
 
+     */
 
-
-    _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
-      var index = _jsonFunctions.getRandomInt();
-      var randomCategory = ids[index];
-      getProducts(randomCategory);
-
-      if(_scrollController.hasClients && !isScrolling) {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          curve: Curves.easeOut,
-          duration: const Duration(milliseconds: 300),
-        );
-      }
-      if(count >= _product.length - 1) {
-        // dispose();
-      }
-    });
-
+    function();
 
   }
 
@@ -315,5 +319,10 @@ class _HomePageState extends State<HomePage> {
         return alert;
       },
     );
+  }
+
+  Future<List<int>> putInMemoryAndRetrieve() async{
+    _preferencesProdIDs.fillListOfIDsAndSaveIt();
+    return _preferencesProdIDs.getFromPref();
   }
 }
