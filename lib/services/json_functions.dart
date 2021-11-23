@@ -1,3 +1,5 @@
+import 'dart:math';
+
 class JsonFunctions{
 
   Map<String, int> mainCategories1 = {
@@ -74,6 +76,9 @@ class JsonFunctions{
     return Map();
   }
 
-
+  int getRandomInt() {
+    var random = Random();
+    return random.nextInt(2100);
+  }
 
 }
