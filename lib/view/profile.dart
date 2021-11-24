@@ -152,7 +152,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ]),
       body: Column(
         children: <Widget>[
-          SizedBox(height: 100),
+          SizedBox(height: 75),
           Expanded(
             child: ListView(
               //padding: EdgeInsets.only(top: 50),
@@ -236,7 +236,7 @@ class ProfileListItem extends StatelessWidget{
   Widget build(BuildContext context) {
     return Container(
       height: 50,
-      margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+      margin: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(33),
         boxShadow: [
