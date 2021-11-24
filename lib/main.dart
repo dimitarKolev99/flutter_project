@@ -11,14 +11,6 @@ void main() {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]
   );
-
-  /*
-  //Save the list of ProductCat IDS
-  PreferenceIDS ids = PreferenceIDS();
-  ids.fillListOfIDsAndSaveIt();
-
-   */
-
   runApp(const MyApp());
 }
 

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart' show rootBundle;
 class PreferenceIDS {
   int id = 0;
   List<int> productCategoryIDs = [];
+  List<int> intProductList = [];
 
   //fill the list with all product category ids
   void addToListOfIDs(int id)  {
@@ -45,10 +46,11 @@ class PreferenceIDS {
     return resultList;
   }
 
-  Future<void> fillListOfIDsAndSaveIt() async{
+  Future<List<int>> fillListOfIDsAndSaveIt() async{
     List<dynamic> resultList = await getJson();
     translateTree(resultList);
     saveInPref();
+    return productCategoryIDs;
   }
 
   void saveInPref() async{
@@ -57,10 +59,12 @@ class PreferenceIDS {
     prefs.setStringList("productList", strList);
   }
 
-  Future<List<int>> getFromPref() async{
+  Future<List<int>> getFromPref(List<int> ids) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> savedStrList = prefs.getStringList("productList") ?? [];
-    List<int> intProductList = savedStrList.map((i) => int.parse(i)).toList();
+    List<String>? savedStrList = prefs.getStringList("productList");
+    if(savedStrList != null) {
+      intProductList = savedStrList.map((i) => int.parse(i)).toList();
+    }
     return intProductList;
   }
 

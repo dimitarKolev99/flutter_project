@@ -38,7 +38,8 @@ class _HomePageState extends State<HomePage> {
   final _preferenceArticles = PreferencesArticles();
   final _preferencesProdIDs = PreferenceIDS();
   final _jsonFunctions = JsonFunctions();
-  List<int> ids = [];
+  var index = 0;
+  var randomCategory = 0;
 
   _onUpdateScroll() {
     if (this.mounted) {
@@ -56,6 +57,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> getProducts(int categoryID) async {
     _product = await ProductApi().fetchProduct(categoryID);
+
     List<Product> favorites = await _preferenceArticles.getAllFavorites();
     for (var i in favorites) {
       if (!_favoriteIds.contains(i.productId)) {
@@ -92,22 +94,33 @@ class _HomePageState extends State<HomePage> {
     streamController.add(true);
   }
 
-  void function() async {
-    ids = await putInMemoryAndRetrieve();
-    _timer = Timer.periodic(const Duration(seconds: 2), (Timer timer) {
-      var index = _jsonFunctions.getRandomInt();
-      var randomCategory = ids[index];
-      getProducts(randomCategory);
-
-      if (_scrollController.hasClients && !isScrolling) {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          curve: Curves.easeOut,
-          duration: const Duration(milliseconds: 300),
-        );
-      }
+  void initCategoriesListFromMemory() {
+    _preferencesProdIDs.fillListOfIDsAndSaveIt()
+        .then((List<int> result) {
+      _preferencesProdIDs.getFromPref(result)
+          .then((List<int> result) {
+        List<int> ids = result;
+        timerFunction(ids);
+      });
     });
   }
+
+    timerFunction(List<int> ids) {
+    // every 2 seconds get a random category id, call the api with it, load the product and animate it
+      _timer = Timer.periodic(const Duration(seconds: 2), (Timer timer) {
+        index = _jsonFunctions.getRandomInt();
+        randomCategory = ids[index];
+        getProducts(randomCategory);
+        if (_scrollController.hasClients && !isScrolling) {
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent,
+            curve: Curves.easeOut,
+            duration: const Duration(milliseconds: 300),
+          );
+        }
+      });
+    }
+
 
   @override
   void initState() {
@@ -120,19 +133,7 @@ class _HomePageState extends State<HomePage> {
     widget.stream.listen((update) {
       updateHome(update);
     });
-
-    /*
-    _preferencesProdIDs.fillListOfIDsAndSaveIt();
-
-    _preferencesProdIDs.getFromPref()
-      .then((List<int> result) {
-      ids = result;
-    });
-
-     */
-
-    function();
-
+    initCategoriesListFromMemory();
   }
 
   @override
@@ -319,10 +320,5 @@ class _HomePageState extends State<HomePage> {
         return alert;
       },
     );
-  }
-
-  Future<List<int>> putInMemoryAndRetrieve() async{
-    _preferencesProdIDs.fillListOfIDsAndSaveIt();
-    return _preferencesProdIDs.getFromPref();
   }
 }
