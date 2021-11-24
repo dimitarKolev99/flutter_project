@@ -152,10 +152,10 @@ class _ProfilePageState extends State<ProfilePage> {
           ]),
       body: Column(
         children: <Widget>[
-          SizedBox(height: 20),
+          SizedBox(height: 100),
           Expanded(
             child: ListView(
-              padding: EdgeInsets.only(top: 50),
+              //padding: EdgeInsets.only(top: 50),
               children: <Widget>[
                 ProfileListItem(
                   icon: LineAwesomeIcons.user_shield,
@@ -173,54 +173,48 @@ class _ProfilePageState extends State<ProfilePage> {
                   icon: LineAwesomeIcons.address_book,
                   text: "Teilen",
                 ),
+              Container(
+                height: 50,
+                margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(33),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.6),
+                      offset: Offset(
+                        0.0,
+                        10.0,
+                      ),
+                      blurRadius: 20.0,
+                      spreadRadius: -3.0,
+                    ),
+                  ],
+                  color: Colors.white,
+                ),
+                child:
+                TextButton(
+                  onPressed: () {},
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.white),
+                      foregroundColor: MaterialStateProperty.all(Colors.black),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(33),
+                            //side: BorderSide(color: Colors.black)
+                        )
+                    ),
+                      textStyle: MaterialStateProperty.all(TextStyle(
+                        fontSize: 21,
+                        fontWeight: FontWeight.w500,
+                      ))),
+                  child: Text("Textbutton Test"),
+                ),
+              )
               ],
             )
           )
         ]
       )
-
-
-
-      /*
-        Container(
-        padding: EdgeInsets.symmetric(vertical: 100),
-        child: Column(
-          children: [
-            SizedBox(
-            width: double.infinity,
-            child: TextButton(
-              onPressed: () {},
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.blue),
-                  foregroundColor: MaterialStateProperty.all(Colors.white),
-                  padding: MaterialStateProperty.all(
-                      EdgeInsets.symmetric(vertical: 25)),
-                  textStyle: MaterialStateProperty.all(TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ))),
-              child: Text("Suchverlauf"),
-            ),
-          ),
-            SizedBox(
-              width: double.infinity,
-              child: TextButton(
-                onPressed: () {},
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.blue),
-                    foregroundColor: MaterialStateProperty.all(Colors.white),
-                    padding: MaterialStateProperty.all(
-                        EdgeInsets.symmetric(vertical: 25)),
-                    textStyle: MaterialStateProperty.all(TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                    ))),
-                child: Text("Hilfe"),
-              ),
-            ),
-          ],
-        ),
-      ),*/
     );
   }
 }
@@ -261,7 +255,7 @@ class ProfileListItem extends StatelessWidget{
       child: Row(
         children: <Widget>[
           Icon(this.icon, size: 33, color: Colors.black,),
-          SizedBox(width: 75), // space between icon and text 
+          SizedBox(width: 75), // space between icon and text
           Text(this.text,
             style: TextStyle(
               color: Colors.black,
@@ -272,6 +266,4 @@ class ProfileListItem extends StatelessWidget{
       ),
     );
   }
-  
-  
 }
