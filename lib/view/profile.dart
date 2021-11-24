@@ -155,14 +155,23 @@ class _ProfilePageState extends State<ProfilePage> {
           SizedBox(height: 20),
           Expanded(
             child: ListView(
+              padding: EdgeInsets.only(top: 50),
               children: <Widget>[
                 ProfileListItem(
                   icon: LineAwesomeIcons.user_shield,
-                  text: "test 1",
+                  text: "Optionen",
                 ),
                 ProfileListItem(
                   icon: LineAwesomeIcons.history,
-                  text: "test 2",
+                  text: "Kauf Verlauf",
+                ),
+                ProfileListItem(
+                  icon: LineAwesomeIcons.accessible_icon,
+                  text: "Hilfe",
+                ),
+                ProfileListItem(
+                  icon: LineAwesomeIcons.address_book,
+                  text: "Teilen",
                 ),
               ],
             )
@@ -233,17 +242,29 @@ class ProfileListItem extends StatelessWidget{
   Widget build(BuildContext context) {
     return Container(
       height: 50,
-      margin: EdgeInsets.symmetric(horizontal: 25, vertical: 5),
+      margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(33),
-        color: Colors.blue,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.6),
+            offset: Offset(
+              0.0,
+              10.0,
+            ),
+            blurRadius: 20.0,
+            spreadRadius: -3.0,
+          ),
+        ],
+        color: Colors.white,
       ),
       child: Row(
         children: <Widget>[
-          Icon(this.icon, size: 33, color: Colors.white,),
-          SizedBox(width: 100),
+          Icon(this.icon, size: 33, color: Colors.black,),
+          SizedBox(width: 75), // space between icon and text 
           Text(this.text,
             style: TextStyle(
+              color: Colors.black,
               fontSize: 21,
               fontWeight: FontWeight.w500,
             ),
