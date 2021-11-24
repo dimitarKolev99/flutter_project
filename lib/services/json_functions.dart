@@ -1,6 +1,10 @@
+import 'dart:convert';
 import 'dart:math';
+import 'package:flutter/services.dart' show rootBundle;
 
 class JsonFunctions{
+  int id = 0;
+  List<int> productCategoryIDs = [];
 
   Map<String, int> mainCategories1 = {
     "Elektroartikel" : 30311,
@@ -79,6 +83,46 @@ class JsonFunctions{
   int getRandomInt() {
     var random = Random();
     return random.nextInt(2215);
+  }
+
+  void translateTree(List<dynamic> resultList) {
+    for (var element in resultList) {
+      if (element.toString().substring(1, 14) == "subCategories") {
+
+        List<dynamic> resultList2 = element["subCategories"];
+        if (element["subCategories"] != null &&
+            element["productCategories"] != null) {
+          List<dynamic> productList = element["productCategories"];
+          for (var element in productList) {
+            id = element["id"];
+            productCategoryIDs.add(id);
+          }
+        }
+        translateTree(resultList2);
+      }
+      else if (element.toString().substring(1, 18) == "productCategories") {
+        List<dynamic> resultList2 = element["productCategories"];
+        for (var element in resultList2) {
+          id = element["id"];
+          productCategoryIDs.add(id);
+        }
+        translateTree(resultList2);
+      }
+    }
+  }
+
+  Future<List<dynamic>> getJson() async {
+    final response = await rootBundle.loadString('lib/resources/cat_tree1.json');
+    Map<String, dynamic> myMap =
+    Map<String, dynamic>.from(json.decode(response));
+    List<dynamic> resultList = myMap["result"];
+    return resultList;
+  }
+
+  Future<List<int>> getListOfProdCatIDs() async{
+    List<dynamic> resultList = await getJson();
+    translateTree(resultList);
+    return productCategoryIDs;
   }
 
 }

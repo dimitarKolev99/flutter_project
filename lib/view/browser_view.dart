@@ -45,7 +45,7 @@ class _BrowserPageState extends State<BrowserPage> {
     widget.stream.listen((update) {
       updateBrowser(update);
     });
-    getProducts(3832);
+    getProducts(3832); print("CALLED FROM BROWSER VIEW");
   }
 
   Future<void> getProducts(int categoryID) async {

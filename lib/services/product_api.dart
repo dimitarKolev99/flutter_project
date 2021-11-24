@@ -1,16 +1,11 @@
-import 'dart:collection';
 import 'dart:convert';
-import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:penny_pincher/main.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:penny_pincher/services/json_functions.dart';
-import 'package:penny_pincher/services/preferences_prod_ids.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductApi {
   // IDEALO Colors
@@ -19,9 +14,6 @@ class ProductApi {
   static const Color orange = Color.fromRGBO(255, 102, 0, 1);
   static const Color white = Color.fromRGBO(255, 255, 255, 1);
 
-  List<int> ids = [];
-  PreferenceIDS instance = PreferenceIDS();
-  int randomID = 0;
 
   Map<String, int> mainCategories1 = {
     "Elektroartikel" : 30311,
@@ -49,7 +41,6 @@ class ProductApi {
         int id = 0;
         fromUri.forEach((element) {
           if (element.toString().substring(1, 14) == "subCategories") {
-            print("subCategorie");
             List<dynamic> resultList2 = element["subCategories"];
             //name = element["subCategories"][0]["name"];
             id = element["subCategories"][0]["id"];
@@ -57,7 +48,6 @@ class ProductApi {
           } else
           if (element.toString().substring(1, 18) == "productCategories") {
             List<dynamic> resultList2 = element["productCategories"];
-            print("productCategorie");
 
             resultList2.forEach((element) {
               name = element["name"];

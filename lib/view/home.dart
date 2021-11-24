@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/services/json_functions.dart';
-import 'package:penny_pincher/services/preferences_prod_ids.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
@@ -36,7 +35,6 @@ class _HomePageState extends State<HomePage> {
   ScrollController _scrollController = ScrollController();
 
   final _preferenceArticles = PreferencesArticles();
-  final _preferencesProdIDs = PreferenceIDS();
   final _jsonFunctions = JsonFunctions();
   var index = 0;
   var randomCategory = 0;
@@ -94,15 +92,10 @@ class _HomePageState extends State<HomePage> {
     streamController.add(true);
   }
 
-  void initCategoriesListFromMemory() {
-    _preferencesProdIDs.fillListOfIDsAndSaveIt()
-        .then((List<int> result) {
-      _preferencesProdIDs.getFromPref(result)
-          .then((List<int> result) {
-        List<int> ids = result;
-        timerFunction(ids);
-      });
-    });
+
+  void initListOfIDs() {
+    _jsonFunctions.getListOfProdCatIDs()
+        .then((value) => timerFunction(value));
   }
 
     timerFunction(List<int> ids) {
@@ -133,7 +126,7 @@ class _HomePageState extends State<HomePage> {
     widget.stream.listen((update) {
       updateHome(update);
     });
-    initCategoriesListFromMemory();
+    initListOfIDs();
   }
 
   @override
