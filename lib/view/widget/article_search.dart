@@ -1,14 +1,21 @@
+import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/models/product.dart';
+import 'package:penny_pincher/services/product_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
+
 import '../browser_view.dart';
-import '../filter_view.dart';
+import 'article_card.dart';
+import 'extended_view.dart';
+
 
 
 class ArticleSearch extends SearchDelegate<String> {
 
   List<String> recentArticles = [];
-  late final List<Product> _products = [];
+  late List<Product> _products = [];
+  final _preferenceArticles = PreferencesArticles();
+  late final List _favoriteIds = [];
 
   ArticleSearch () {
     updateRecent(); // reading out storage on opening searchBar
@@ -46,28 +53,56 @@ class ArticleSearch extends SearchDelegate<String> {
         );
     }
 
+    Future<void> getProducts() async {
+      _products = await ProductApi().getProduct(18418, query);
+
+      List<Product> favorites = await _preferenceArticles.getAllFavorites();
+      for (var i in favorites) {
+        if (!_favoriteIds.contains(i.productId)) {
+          _favoriteIds.add(i.productId);
+        }
+      }
+    }
+
     @override
     Widget buildResults(BuildContext context) {
       storeToRecent(query);
       updateRecent();
 
-      return Center( //TODO: just a placeholder site yet. Have to call a rearrangement of the article stream
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.shop, size: 120),
-            const SizedBox(height: 48),
-            Text(
-              query,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 64,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      );
+      getProducts();
+
+      return ListView.builder(
+          reverse: true,
+          shrinkWrap: true,
+          itemCount: _products.length,
+          itemBuilder: (context, index) {
+            return InkWell(
+                onTap: () {
+                  Navigator.push(context,
+                    MaterialPageRoute(
+                        builder: (context) => ExtendedView(
+                            id: _products[index].productId,
+                            title: _products[index].title,
+                            saving: _products[index].saving,
+                            category: _products[index].categoryName,
+                            description: _products[index].description,
+                            image: _products[index].image,
+                            price: _products[index].price,
+                            stream: streamController.stream,
+                            callback: this)),
+                  );
+                },
+                child: ArticleCard(
+                  id: _products[index].productId,
+                  title: _products[index].title,
+                  saving: _products[index].saving,
+                  category: _products[index].categoryName,
+                  description: _products[index].description,
+                  image: _products[index].image,
+                  price: _products[index].price,
+                  callback: this,
+                ));
+          });
     }
 
     @override
@@ -135,6 +170,10 @@ class ArticleSearch extends SearchDelegate<String> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       recentArticles = prefs.getStringList('recentArticles') ?? []; // reading out permanent storage
     }
+
+  bool isFavorite(int id) {
+    return _favoriteIds.contains(id);
+  }
 }
 
     

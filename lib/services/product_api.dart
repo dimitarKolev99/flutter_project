@@ -86,7 +86,7 @@ class ProductApi {
         return bargains.map((data) => Product.fromJson(data)).toList();
       }
 
-      Future<List<Product>> getpProduct(int categoryID, String query) async {
+      Future<List<Product>> getProduct(int categoryID, String query) async {
         print("call APi");
 
         final response = await rootBundle.loadString('lib/resources/cat_tree1.json');
