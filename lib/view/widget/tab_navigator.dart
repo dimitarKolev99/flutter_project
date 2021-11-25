@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../browser_view.dart';
 import '../favorites.dart';
 import '../home.dart';
+import '../profile.dart';
 import 'dart:async';
 
 int count = 0;
@@ -11,6 +12,7 @@ int count = 0;
 StreamController<bool> streamControllerHome = StreamController<bool>.broadcast(sync: true);
 StreamController<bool> streamControllerBrowser = StreamController<bool>.broadcast(sync: true);
 StreamController<bool> streamControllerFavorites = StreamController<bool>.broadcast(sync: true);
+StreamController<bool> streamControllerProfile = StreamController<bool>.broadcast(sync: true);
 StreamController<bool> updateStream = StreamController<bool>.broadcast(sync: true);
 
 class TabNavigatorRoutes {
@@ -43,6 +45,7 @@ class _TabNavigatorState extends State<TabNavigator> {
     streamControllerHome.add(true);
     streamControllerBrowser.add(true);
     streamControllerFavorites.add(true);
+    streamControllerProfile.add(true);
   }
 
   @override
@@ -55,6 +58,8 @@ class _TabNavigatorState extends State<TabNavigator> {
       child = BrowserPage(streamControllerBrowser.stream, updateStream);
     } else if (widget.tabItem == "Page3") {
       child = FavoritePage(streamControllerFavorites.stream, updateStream);
+    } else if (widget.tabItem == "Page4"){
+      child = ProfilePage(streamControllerProfile.stream, updateStream);
     }
 
     // TODO: add Profile Page
