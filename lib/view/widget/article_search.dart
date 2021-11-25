@@ -14,9 +14,6 @@ class ArticleSearch extends SearchDelegate<String> {
     updateRecent(); // reading out storage on opening searchBar
   }
 
-
-
-
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
