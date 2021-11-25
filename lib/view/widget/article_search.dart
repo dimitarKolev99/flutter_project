@@ -16,9 +16,11 @@ class ArticleSearch extends SearchDelegate<String> {
   late List<Product> _products = [];
   final _preferenceArticles = PreferencesArticles();
   late final List _favoriteIds = [];
+  bool fromFeed = true;
 
-  ArticleSearch () {
+  ArticleSearch (bool fromFeed) {
     updateRecent(); // reading out storage on opening searchBar
+    this.fromFeed = fromFeed;
   }
 
   @override
@@ -66,43 +68,19 @@ class ArticleSearch extends SearchDelegate<String> {
 
     @override
     Widget buildResults(BuildContext context) {
-      storeToRecent(query);
+
       updateRecent();
 
-      getProducts();
-
-      return ListView.builder(
-          reverse: true,
-          shrinkWrap: true,
-          itemCount: _products.length,
-          itemBuilder: (context, index) {
-            return InkWell(
-                onTap: () {
-                  Navigator.push(context,
-                    MaterialPageRoute(
-                        builder: (context) => ExtendedView(
-                            id: _products[index].productId,
-                            title: _products[index].title,
-                            saving: _products[index].saving,
-                            category: _products[index].categoryName,
-                            description: _products[index].description,
-                            image: _products[index].image,
-                            price: _products[index].price,
-                            stream: streamController.stream,
-                            callback: this)),
-                  );
-                },
-                child: ArticleCard(
-                  id: _products[index].productId,
-                  title: _products[index].title,
-                  saving: _products[index].saving,
-                  category: _products[index].categoryName,
-                  description: _products[index].description,
-                  image: _products[index].image,
-                  price: _products[index].price,
-                  callback: this,
-                ));
-          });
+      return FutureBuilder(
+        future: getProducts(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return createResult();
+          } else {
+            return CircularProgressIndicator();
+          }
+        },
+      );
     }
 
     @override
@@ -173,6 +151,40 @@ class ArticleSearch extends SearchDelegate<String> {
 
   bool isFavorite(int id) {
     return _favoriteIds.contains(id);
+  }
+
+  Widget createResult() {
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: _products.length,
+        itemBuilder: (context, index) {
+          return InkWell(
+              onTap: () {
+                Navigator.push(context,
+                  MaterialPageRoute(
+                      builder: (context) => ExtendedView(
+                          id: _products[index].productId,
+                          title: _products[index].title,
+                          saving: _products[index].saving,
+                          category: _products[index].categoryName,
+                          description: _products[index].description,
+                          image: _products[index].image,
+                          price: _products[index].price,
+                          stream: streamController.stream,
+                          callback: this)),
+                );
+              },
+              child: ArticleCard(
+                id: _products[index].productId,
+                title: _products[index].title,
+                saving: _products[index].saving,
+                category: _products[index].categoryName,
+                description: _products[index].description,
+                image: _products[index].image,
+                price: _products[index].price,
+                callback: this,
+              ));
+        });
   }
 }
 

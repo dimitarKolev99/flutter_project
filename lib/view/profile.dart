@@ -77,15 +77,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ],
           ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {
-                final results =
-                    showSearch(context: context, delegate: ArticleSearch());
-              },
-            )
-          ]),
+          ),
       body: Column(
         children: <Widget>[
           SizedBox(height: 75),

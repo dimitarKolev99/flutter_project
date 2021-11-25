@@ -155,7 +155,7 @@ class _BrowserPageState extends State<BrowserPage> {
               icon: Icon(Icons.search),
               onPressed: () {
                 final results =
-                showSearch(context: context, delegate: ArticleSearch());
+                showSearch(context: context, delegate: ArticleSearch(false));
               },
             )
           ]
