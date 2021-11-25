@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:penny_pincher/models/preferences_articles.dart';
+import 'package:penny_pincher/services/json_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
 import 'package:penny_pincher/view/widget/article_search.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-
 import 'package:penny_pincher/view/widget/extended_view.dart';
 
 import 'filter_view.dart';
@@ -31,27 +31,31 @@ class _HomePageState extends State<HomePage> {
   bool _isLoading = true;
   var count = 0;
   Timer? _timer;
-  bool _isScrolling = false;
+  bool isScrolling = false;
   ScrollController _scrollController = ScrollController();
 
   final _preferenceArticles = PreferencesArticles();
+  final _jsonFunctions = JsonFunctions();
+  var index = 0;
+  var randomCategory = 0;
 
   _onUpdateScroll() {
     if (this.mounted) {
       setState(() {
         if (_scrollController.offset <
             _scrollController.position.maxScrollExtent) {
-          _isScrolling = true;
+          isScrolling = true;
         }
         else {
-          _isScrolling = false;
+          isScrolling = false;
         }
       });
     }
   }
 
-  Future<void> getProducts() async {
-    _product = await ProductApi.fetchProduct();
+  Future<void> getProducts(int categoryID) async {
+    _product = await ProductApi().fetchProduct(categoryID);
+
     List<Product> favorites = await _preferenceArticles.getAllFavorites();
     for (var i in favorites) {
       if (!_favoriteIds.contains(i.productId)) {
@@ -70,35 +74,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  @override
-  void initState() {
-    if (this.mounted) {
-      setState(() {
-        _isLoading = true;
-      });
-    }
-    super.initState();
-    widget.stream.listen((update) {
-      updateHome(update);
-    });
-    _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
-      getProducts();
-
-      if(_scrollController.hasClients && !_isScrolling) {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          curve: Curves.easeOut,
-          duration: const Duration(milliseconds: 300),
-        );
-      }
-
-      if(count >= _product.length - 1) {
-
-        // dispose();
-      }
-    });
-  }
-
   updateHome(bool update) {
     if (this.mounted) {
       updateFavorites();
@@ -115,6 +90,43 @@ class _HomePageState extends State<HomePage> {
     }
     setState(() {});
     streamController.add(true);
+  }
+
+
+  void initListOfIDs() {
+    _jsonFunctions.getListOfProdCatIDs()
+        .then((value) => timerFunction(value));
+  }
+
+    timerFunction(List<int> ids) {
+    // every 2 seconds get a random category id, call the api with it, load the product and animate it
+      _timer = Timer.periodic(const Duration(seconds: 2), (Timer timer) {
+        index = _jsonFunctions.getRandomInt();
+        randomCategory = ids[index];
+        getProducts(randomCategory);
+        if (_scrollController.hasClients && !isScrolling) {
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent,
+            curve: Curves.easeOut,
+            duration: const Duration(milliseconds: 300),
+          );
+        }
+      });
+    }
+
+
+  @override
+  void initState() {
+    if (this.mounted) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
+    super.initState();
+    widget.stream.listen((update) {
+      updateHome(update);
+    });
+    initListOfIDs();
   }
 
   @override

@@ -45,11 +45,11 @@ class _BrowserPageState extends State<BrowserPage> {
     widget.stream.listen((update) {
       updateBrowser(update);
     });
-    getProducts();
+    getProducts(3832); print("CALLED FROM BROWSER VIEW");
   }
 
-  Future<void> getProducts() async {
-    _product = await ProductApi.fetchProduct();
+  Future<void> getProducts(int categoryID) async {
+    _product = await ProductApi().fetchProduct(categoryID);
     List<Product> favorites = await _preferenceArticles.getAllFavorites();
     for (var i in favorites) {
       if (!_favoriteIds.contains(i.productId)) {
