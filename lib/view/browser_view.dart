@@ -91,7 +91,7 @@ class _BrowserPageState extends State<BrowserPage> {
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData _mediaQueryData = MediaQuery.of(context);;
+    MediaQueryData _mediaQueryData = MediaQuery.of(context);
     double displayWidth = _mediaQueryData.size.width;
     double displayHeight = _mediaQueryData.size.height;
     double blockSizeHorizontal = displayWidth / 100; // screen width in 1%
@@ -155,7 +155,7 @@ class _BrowserPageState extends State<BrowserPage> {
               icon: Icon(Icons.search),
               onPressed: () {
                 final results =
-                showSearch(context: context, delegate: ArticleSearch(false));
+                showSearch(context: context, delegate: ArticleSearch(false, this, streamController));
               },
             )
           ]

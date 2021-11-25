@@ -187,7 +187,7 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.search),
               onPressed: () {
                 final results =
-                    showSearch(context: context, delegate: ArticleSearch(true));
+                    showSearch(context: context, delegate: ArticleSearch(true, this, streamController));
               },
             )
           ]
