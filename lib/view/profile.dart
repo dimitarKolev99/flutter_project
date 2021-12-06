@@ -111,22 +111,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   TextButton(
                     onPressed: () {
                       if(_themeChanger.getTheme() == ThemeData.light()){
-                        ThemeChanger.navBarColor = Color.fromRGBO(60, 60, 60, 1);
-                        ThemeChanger.lightBlue = Color.fromRGBO(120, 120, 120, 1);
-                        ThemeChanger.highlightedColor = Color.fromRGBO(255, 102, 0, 1);
-                        ThemeChanger.textColor = Color.fromRGBO(255, 255, 255, 1);
-                        ThemeChanger.reversetextColor = Color.fromRGBO(255, 255, 255, 1);
-
-                        return _themeChanger.setTheme(ThemeData.dark());
+                        return _themeChanger.setdarkTheme(ThemeData.dark());
                       }
                       if(_themeChanger.getTheme() == ThemeData.dark()){
-                        ThemeChanger.navBarColor = Color.fromRGBO(10, 55, 97, 1);
-                        ThemeChanger.lightBlue = Color.fromRGBO(55, 95, 134, 1);
-                        ThemeChanger.highlightedColor = Color.fromRGBO(255, 102, 0, 1);
-                        ThemeChanger.textColor = Color.fromRGBO(255, 255, 255, 1);
-                        ThemeChanger.reversetextColor = Color.fromRGBO(0, 0, 0, 1);
-
-                        return _themeChanger.setTheme(ThemeData.light());
+                        return _themeChanger.setlightTheme(ThemeData.light());
                       }
                     },
                     style: ButtonStyle(

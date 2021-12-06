@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ThemeChanger>(
+      // ToDo: changing the start value from light mode into the state from app closing (shared preferences)
       create: (_) => ThemeChanger(ThemeData.light()),
     child: new MaterialAppWithTheme(),
     );
