@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/services/product_api.dart';
+import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/browser_article_card.dart';
+import 'package:provider/provider.dart';
 
 class FilterView extends StatefulWidget {
   @override
@@ -61,6 +63,7 @@ class _FilterViewState extends State<FilterView> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     MediaQueryData _mediaQueryData;
     double displayWidth;
     double displayHeight;
@@ -87,7 +90,7 @@ class _FilterViewState extends State<FilterView> {
 
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: ProductApi.darkBlue,
+          backgroundColor: ThemeChanger.navBarColor,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -110,7 +113,7 @@ class _FilterViewState extends State<FilterView> {
                     fontWeight: FontWeight.w900,
                     decoration:
                     TextDecoration.underline,
-                    decorationColor: ProductApi.orange,
+                    decorationColor: ThemeChanger.highlightedColor,
                     decorationThickness: 4,
                   ),
                 ), ),
@@ -124,7 +127,7 @@ class _FilterViewState extends State<FilterView> {
           height: blockSizeVertical * 3,
           padding: EdgeInsets.only(left: 3),
           //margin: EdgeInsets.all(blockSizeHorizontal),
-          color: ProductApi.orange,
+          color: ThemeChanger.highlightedColor,
           child: GridView.count(
             physics: ScrollPhysics(),
             scrollDirection: Axis.horizontal,
@@ -141,7 +144,7 @@ class _FilterViewState extends State<FilterView> {
                   _subCategories[index],
                   //textAlign: TextAlign.left,
                   style: TextStyle(
-                    color: ProductApi.darkBlue,
+                    color: ThemeChanger.navBarColor,
                     fontSize: _safeAreaVertical * 0.6,
                     fontWeight: FontWeight.bold,
                   ),
@@ -155,14 +158,14 @@ class _FilterViewState extends State<FilterView> {
         Visibility(
           visible: !_show,
           child: Container(
-            color: ProductApi.orange,
+            color: ThemeChanger.highlightedColor,
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.only(left: 6),
             height: blockSizeVertical * 3,
             child: Text(
               "Die gewählte Filter werden hier angezeigt",
               style: TextStyle(
-                color: ProductApi.darkBlue,
+                color: ThemeChanger.navBarColor,
                 fontSize: _safeAreaVertical * 0.6,
                 fontWeight: FontWeight.bold,
               ),
@@ -190,7 +193,7 @@ class _FilterViewState extends State<FilterView> {
                     //Headline: Price
                     child: Text("Price limit: ",
                         style: TextStyle(
-                          color: ProductApi.darkBlue,
+                          color: ThemeChanger.navBarColor,
                           //fontWeight: FontWeight.bold,
                           fontSize: safeBlockHorizontal * 5,
                         )),
@@ -204,7 +207,7 @@ class _FilterViewState extends State<FilterView> {
                         left: blockSizeHorizontal * 3,
                         right: blockSizeHorizontal * 3),
                     decoration: BoxDecoration(
-                      color: ProductApi.lightBlue,
+                      color: ThemeChanger.lightBlue,
                       borderRadius:
                           BorderRadius.circular(blockSizeHorizontal * 3),
                     ),
@@ -216,7 +219,7 @@ class _FilterViewState extends State<FilterView> {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: safeBlockHorizontal * 4.8,
-                        color: ProductApi.white,
+                        color: ThemeChanger.textColor,
                         //backgroundColor: ProductApi.lightBlue,
                       ),
                     ),
@@ -229,7 +232,7 @@ class _FilterViewState extends State<FilterView> {
                 //color: Colors.green,
                 width: blockSizeHorizontal * 100,
                 child: RangeSlider(
-                  activeColor: ProductApi.darkBlue,
+                  activeColor: ThemeChanger.navBarColor,
                   //inactiveColor: ProductApi.orange,
                   values: _currentSliderValuesPrice,
                   min: 0,
@@ -257,7 +260,7 @@ class _FilterViewState extends State<FilterView> {
                   margin: EdgeInsets.only(left: blockSizeHorizontal * 6, right: blockSizeHorizontal * 4),
                   child: Text("Discount: ",
                       style: TextStyle(
-                        color: ProductApi.darkBlue,
+                        color: ThemeChanger.navBarColor,
                         //fontWeight: FontWeight.bold,
                         fontSize: safeBlockHorizontal * 5,
                       )),
@@ -271,7 +274,7 @@ class _FilterViewState extends State<FilterView> {
                       left: blockSizeHorizontal * 3,
                       right: blockSizeHorizontal * 3),
                   decoration: BoxDecoration(
-                    color: ProductApi.lightBlue,
+                    color: ThemeChanger.lightBlue,
                     borderRadius:
                         BorderRadius.circular(blockSizeHorizontal * 3),
                   ),
@@ -280,7 +283,7 @@ class _FilterViewState extends State<FilterView> {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: safeBlockHorizontal * 4.8,
-                      color: ProductApi.white,
+                      color: ThemeChanger.textColor,
                     ),
                   ),
                 )
@@ -289,7 +292,7 @@ class _FilterViewState extends State<FilterView> {
                 //color: Colors.green,
                 width: blockSizeHorizontal * 100,
                 child: Slider(
-                  activeColor: ProductApi.darkBlue,
+                  activeColor: ThemeChanger.navBarColor,
                   value: _currentSliderValueDiscount,
                   min: 0,
                   max: 80,
@@ -311,7 +314,7 @@ class _FilterViewState extends State<FilterView> {
           margin: EdgeInsets.only(left: blockSizeHorizontal * 7),
           child: Text("Categories",
               style: TextStyle(
-                color: ProductApi.darkBlue,
+                color: ThemeChanger.navBarColor,
                 //fontWeight: FontWeight.bold,
                 fontSize: safeBlockHorizontal * 5,
               )),
@@ -337,14 +340,14 @@ class _FilterViewState extends State<FilterView> {
                     title: Text(
                       _categories[index],
                       style: TextStyle(
-                        color: ProductApi.darkBlue,
+                        color: ThemeChanger.navBarColor,
                         fontSize: safeBlockHorizontal * 4.2,
                       ),
                     ),
                     leading: CircleAvatar(
                       // backgroundColor: ProductApi.darkBlue,
                       child: FloatingActionButton(
-                        backgroundColor: ProductApi.darkBlue,
+                        backgroundColor: ThemeChanger.navBarColor,
                         onPressed: () {
                           setState(() {
                             // Öffnet die Unterkategorien, wenn man auf die Icons tippt
@@ -364,11 +367,11 @@ class _FilterViewState extends State<FilterView> {
                       //color: Colors.red,
                       height: blockSizeVertical * 15,
                       width: MediaQuery.of(context).size.width,
-                      decoration: const BoxDecoration(
-                        color: ProductApi.white,
+                      decoration: BoxDecoration(
+                        color: ThemeChanger.textColor,
                         border: Border(
                           bottom: BorderSide(
-                            color: ProductApi.orange,
+                            color: ThemeChanger.highlightedColor,
                             width: 0.5,
                           ),
                           /*
@@ -400,8 +403,8 @@ class _FilterViewState extends State<FilterView> {
                                       //top: blockSizeVertical * 1.0,
                                       left: blockSizeHorizontal * 2.0),
                                   decoration: BoxDecoration(
-                                    color: chosen ? ProductApi.lightBlue
-                                                  : ProductApi.orange,
+                                    color: chosen ? ThemeChanger.lightBlue
+                                                  : ThemeChanger.highlightedColor,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   //width: displayWidth / 1.5,
@@ -413,7 +416,7 @@ class _FilterViewState extends State<FilterView> {
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           //backgroundColor: ProductApi.orange,
-                                          color: ProductApi.white,
+                                          color: ThemeChanger.textColor,
                                           fontWeight: FontWeight.bold),
                                     ),
                                   )),

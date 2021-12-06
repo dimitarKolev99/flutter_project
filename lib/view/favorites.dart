@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
+import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
 import 'package:penny_pincher/view/widget/extended_view.dart';
 import 'package:penny_pincher/view/widget/favorite_card.dart';
 import 'package:flutter/material.dart';
 import 'package:penny_pincher/view/widget/favorite_search.dart';
+import 'package:provider/provider.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -84,9 +86,10 @@ class _FavoritePageState extends State<FavoritePage> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: ProductApi.darkBlue,
+          backgroundColor: ThemeChanger.navBarColor,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -123,7 +126,7 @@ class _FavoritePageState extends State<FavoritePage> {
                     fontWeight: FontWeight.w900,
                     decoration:
                     TextDecoration.underline,
-                    decorationColor: ProductApi.orange,
+                    decorationColor: ThemeChanger.highlightedColor,
                     decorationThickness: 4,
                   ),
                 ), ),

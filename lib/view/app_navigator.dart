@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:penny_pincher/services/product_api.dart';
+import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/tab_navigator.dart';
+import 'package:provider/provider.dart';
 
 
 class AppNavigator extends StatefulWidget {
@@ -37,6 +39,7 @@ class AppState extends State<AppNavigator> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     return WillPopScope(
       onWillPop: () async {
         final isFirstRouteInCurrentTab =
@@ -66,10 +69,10 @@ class AppState extends State<AppNavigator> {
             child:
             BottomNavigationBar(
 
-              selectedItemColor: ProductApi.orange,
-              unselectedItemColor: ProductApi.white,
+              selectedItemColor: ThemeChanger.highlightedColor,
+              unselectedItemColor: ThemeChanger.textColor,
               iconSize: 22,
-              backgroundColor: ProductApi.darkBlue,
+              backgroundColor: ThemeChanger.navBarColor,
 
               onTap: (int index) {
                 _selectTab(pageKeys[index], index);
