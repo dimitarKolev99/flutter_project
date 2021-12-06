@@ -8,6 +8,7 @@ class ThemeChanger with ChangeNotifier{
   static Color lightBlue = Color.fromRGBO(55, 95, 134, 1);
   static Color highlightedColor = Color.fromRGBO(255, 102, 0, 1);
   static Color textColor = Color.fromRGBO(255, 255, 255, 1);
+  static Color reversetextColor = Color.fromRGBO(0, 0, 0, 1);
 
   ThemeData _themeData;
 

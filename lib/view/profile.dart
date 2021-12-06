@@ -115,6 +115,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ThemeChanger.lightBlue = Color.fromRGBO(120, 120, 120, 1);
                         ThemeChanger.highlightedColor = Color.fromRGBO(255, 102, 0, 1);
                         ThemeChanger.textColor = Color.fromRGBO(255, 255, 255, 1);
+                        ThemeChanger.reversetextColor = Color.fromRGBO(255, 255, 255, 1);
 
                         return _themeChanger.setTheme(ThemeData.dark());
                       }
@@ -123,6 +124,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ThemeChanger.lightBlue = Color.fromRGBO(55, 95, 134, 1);
                         ThemeChanger.highlightedColor = Color.fromRGBO(255, 102, 0, 1);
                         ThemeChanger.textColor = Color.fromRGBO(255, 255, 255, 1);
+                        ThemeChanger.reversetextColor = Color.fromRGBO(0, 0, 0, 1);
 
                         return _themeChanger.setTheme(ThemeData.light());
                       }

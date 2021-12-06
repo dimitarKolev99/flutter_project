@@ -198,7 +198,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                 text:
                                     "Du hast noch keine Favorites gespeichert.\n \nDu kannst Favorites hinzufügen, indem du auf das ",
                                 style: TextStyle(
-                                    fontSize: 18, color: Colors.black)),
+                                    fontSize: 18, color: ThemeChanger.reversetextColor)),
                             WidgetSpan(
                               child: Icon(Icons.favorite,
                                   color: Colors.red, size: 20),
@@ -206,7 +206,7 @@ class _FavoritePageState extends State<FavoritePage> {
                             TextSpan(
                                 text: " klickst.",
                                 style: TextStyle(
-                                    fontSize: 18, color: Colors.black)),
+                                    fontSize: 18, color: ThemeChanger.reversetextColor)),
                           ],
                         ),
                       )
