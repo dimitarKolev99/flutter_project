@@ -6,7 +6,6 @@ import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
 import 'package:penny_pincher/view/widget/extended_view.dart';
-import 'package:penny_pincher/view/widget/favorite_card.dart';
 import 'package:flutter/material.dart';
 import 'package:penny_pincher/view/widget/favorite_search.dart';
 import 'package:provider/provider.dart';
@@ -226,5 +225,17 @@ class _FavoritePageState extends State<FavoritePage> {
 
   Future changeFavoriteState(ArticleCard card) async {
     FavFunctions.changeFavoriteState(card, this);
+  }
+
+  List<Product> filterFavorites(search) {
+    this.search = search;
+
+    List<Product> result = [];
+    for (var i = 0; i < favoriteProducts.length; i++) {
+      if (favoriteProducts[i].title.toLowerCase().contains(query.toLowerCase())) {
+        result.add(favoriteProducts[i]);
+      }
+    }
+    return result;
   }
 }

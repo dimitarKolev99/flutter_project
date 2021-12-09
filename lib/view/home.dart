@@ -12,7 +12,6 @@ import 'dart:async';
 import 'package:penny_pincher/view/widget/extended_view.dart';
 import 'package:provider/provider.dart';
 
-import 'filter_view.dart';
 
 StreamController<bool> streamController = StreamController<bool>.broadcast();
 

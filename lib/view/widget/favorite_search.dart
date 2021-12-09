@@ -5,8 +5,8 @@ import 'package:penny_pincher/services/product_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
+import 'article_card.dart';
 import 'extended_view.dart';
-import 'favorite_card.dart';
 
 class FavoriteSearch extends SearchDelegate<String> {
 
@@ -93,9 +93,8 @@ class FavoriteSearch extends SearchDelegate<String> {
                     );
                     streamController.add(true);
                   },
-                  child: FavoriteCard(
+                  child: ArticleCard(
                     id: result[index].productId,
-                    index: index,
                     title: result[index].title,
                     saving: result[index].saving,
                     category: result[index].categoryName,
