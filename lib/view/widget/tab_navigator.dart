@@ -21,9 +21,10 @@ class TabNavigatorRoutes {
 }
 
 class TabNavigator extends StatefulWidget {
-  const TabNavigator({Key? key, required this.navigatorKey, required this.tabItem}) : super(key: key);
+  const TabNavigator({Key? key, required this.navigatorKey, required this.tabItem, required this.callback}) : super(key: key);
   final GlobalKey<NavigatorState> navigatorKey;
   final String tabItem;
+  final dynamic callback;
 
   @override
   State<TabNavigator> createState() => _TabNavigatorState();
@@ -39,6 +40,7 @@ class _TabNavigatorState extends State<TabNavigator> {
         updateStreams(update);
       });
     }
+    this.callback.loadingFinished();
   }
 
   void updateStreams(bool update) {

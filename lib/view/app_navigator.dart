@@ -15,6 +15,7 @@ class AppNavigator extends StatefulWidget {
 
 
 class AppState extends State<AppNavigator> {
+  bool _isLoading = true;
   String _currentPage = "Page1";
   List<String> pageKeys = ["Page1", "Page2", "Page3", "Page4"];
   final Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
@@ -64,7 +65,7 @@ class AppState extends State<AppNavigator> {
               _buildOffstageNavigator("Page4"),
             ]
         ),
-        bottomNavigationBar: SizedBox(
+        bottomNavigationBar: _isLoading ? SizedBox() : SizedBox(
             height: 75,
             child:
             BottomNavigationBar(
@@ -116,13 +117,17 @@ class AppState extends State<AppNavigator> {
   }
 
   Widget _buildOffstageNavigator(String tabItem) {
-    return Offstage();
     return Offstage(
       offstage: _currentPage != tabItem,
       child: TabNavigator(
         navigatorKey: _navigatorKeys[tabItem]!,
         tabItem: tabItem,
+        callback: this,
       ),
     );
+  }
+
+  loadingFinished() {
+    _isLoading = false;
   }
 }
