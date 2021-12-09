@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/models/product.dart';
+import 'package:penny_pincher/services/fav_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
@@ -70,6 +71,7 @@ class ArticleSearch extends SearchDelegate<String> {
           _favoriteIds.add(i.productId);
         }
       }
+      FavFunctions.addProducts(_products);
     }
 
     @override

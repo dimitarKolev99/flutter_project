@@ -2,17 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
-import 'package:penny_pincher/view/widget/extended_view.dart';
 
 class FavFunctions {
 
   static final _preferenceArticles = PreferencesArticles();
-  static late final List _favoriteIds = [];
+  static late List _favoriteIds = [];
   static late List<Product> _products = [];
 
 
-  static void setProducts(List<Product> products) {
-    _products = products;
+  static void setFavs(List<Product> favs) {
+    for(Product p in favs) {
+      _favoriteIds.add(p.productId);
+    }
+  }
+
+  static void addProducts(List<Product> products) {
+    _products.addAll(products);
+    print(_favoriteIds.length);
   }
 
   static bool isFavorite(int id) {
@@ -29,13 +35,14 @@ class FavFunctions {
 
   static Future addFavorite(ArticleCard card, callback) async {
     final product = _products.where((p) => p.productId == card.id).toList()[0];
+
     await _preferenceArticles.addFavorite(product);
       if (callback.mounted) {
         callback.setState(() {
           _favoriteIds.add(card.id);
         });
       }
-      if(callback is! State<ExtendedView>) callback.widget.updateStream.add(true);
+      callback.widget.updateStream.add(true);
   }
 
   static Future removeFavorite(int id, bool close, callback) async {
@@ -45,7 +52,7 @@ class FavFunctions {
         _favoriteIds.remove(id);
       });
     }
-    if(callback is! State<ExtendedView> )callback.widget.updateStream.add(true);
+    callback.widget.updateStream.add(true);
   }
 
   static showAlertDialog(BuildContext context, int id, callback) {

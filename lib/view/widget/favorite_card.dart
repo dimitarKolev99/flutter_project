@@ -142,7 +142,7 @@ class FavoriteCard extends StatelessWidget {
                         padding: EdgeInsets.only(right: blockSizeHorizontal * 2),
                         child:
                         IconButton(
-                          icon: (callback.isFavorite(id) ?
+                          icon: (FavFunctions.isFavorite(id) ?
                           const Icon(Icons.favorite,
                               color: Colors.red) : const Icon(Icons.favorite_border,
                               color: Colors.black)),

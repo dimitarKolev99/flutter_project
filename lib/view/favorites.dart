@@ -30,7 +30,7 @@ class _FavoritePageState extends State<FavoritePage> {
   //late Product _product;
 
   late List<Product> _product;
-  late final List<Product> favoriteIds = [];
+  late final List<Product> favoriteProducts = [];
   bool _isLoading = true;
   bool _isClosed = false;
   String query = '';
@@ -45,12 +45,11 @@ class _FavoritePageState extends State<FavoritePage> {
         _isLoading = true;
       });
     }
-
+    getProducts();
     super.initState();
     widget.stream.listen((update) {
       updateFavorites(update);
     });
-    getProducts();
   }
 
   getData() async {
@@ -61,7 +60,7 @@ class _FavoritePageState extends State<FavoritePage> {
   }
 
   Future <void> getProducts() async {
-    favoriteIds.clear();
+    favoriteProducts.clear();
     _product = await _preferenceArticles.getAllFavorites();
     if (mounted) {
       setState(() {
@@ -69,9 +68,10 @@ class _FavoritePageState extends State<FavoritePage> {
       });
     }
     for (var i = 0; i < _product.length; i++) {
-      favoriteIds.insert(i, _product[i]);
+      favoriteProducts.insert(i, _product[i]);
     }
-    FavFunctions.setProducts(favoriteIds);
+    FavFunctions.setFavs(favoriteProducts);
+    FavFunctions.addProducts(favoriteProducts);
   }
 
   updateFavorites(bool update) {
@@ -131,7 +131,7 @@ class _FavoritePageState extends State<FavoritePage> {
                     decorationColor: ThemeChanger.highlightedColor,
                     decorationThickness: 4,
                   ),
-                ), ),
+                ),),
             ],
           ),
           actions: [
@@ -139,89 +139,92 @@ class _FavoritePageState extends State<FavoritePage> {
               icon: Icon(Icons.search),
               onPressed: () {
                 final results =
-                showSearch(context: context, delegate: FavoriteSearch(this, streamController));
+                showSearch(context: context,
+                    delegate: FavoriteSearch(this, streamController));
               },
             )
           ]),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
-          : favoriteIds.isNotEmpty
-              ? Align(
-                  alignment: Alignment.topCenter,
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: favoriteIds.length,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ExtendedView(
-                                        id: favoriteIds[index].productId,
-                                        title: favoriteIds[index].title,
-                                        saving: favoriteIds[index].saving,
-                                        category:
-                                        favoriteIds[index].categoryName,
-                                        description:
-                                        favoriteIds[index].description,
-                                        image: favoriteIds[index].image,
-                                        price: favoriteIds[index].price,
-                                        stream: streamController.stream,
-                                        callback: this)),
-                              );
-                              streamController.add(true);
-                              _isClosed = true;
-                            },
-                            child: ArticleCard(
-                              id: favoriteIds[index].productId,
-                              title: favoriteIds[index].title,
-                              saving: favoriteIds[index].saving,
-                              category: favoriteIds[index].categoryName,
-                              description: favoriteIds[index].description,
-                              image: favoriteIds[index].image,
-                              price: favoriteIds[index].price,
-                              callback: this,
-                            ));
-                      }),
-                )
-              : Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.edit_outlined, color: Colors.grey, size: 80),
-                      SizedBox(height: 30),
-                      RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                                text:
-                                    "Du hast noch keine Favorites gespeichert.\n \nDu kannst Favorites hinzufügen, indem du auf das ",
-                                style: TextStyle(
-                                    fontSize: 18, color: ThemeChanger.reversetextColor)),
-                            WidgetSpan(
-                              child: Icon(Icons.favorite,
-                                  color: Colors.red, size: 20),
-                            ),
-                            TextSpan(
-                                text: " klickst.",
-                                style: TextStyle(
-                                    fontSize: 18, color: ThemeChanger.reversetextColor)),
-                          ],
-                        ),
-                      )
-                    ],
+          : favoriteProducts.isNotEmpty
+          ? Align(
+        alignment: Alignment.topCenter,
+        child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: favoriteProducts.length,
+            itemBuilder: (context, index) {
+              return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ExtendedView(
+                                  id: favoriteProducts[index].productId,
+                                  title: favoriteProducts[index].title,
+                                  saving: favoriteProducts[index].saving,
+                                  category:
+                                  favoriteProducts[index].categoryName,
+                                  description:
+                                  favoriteProducts[index].description,
+                                  image: favoriteProducts[index].image,
+                                  price: favoriteProducts[index].price,
+                                  stream: streamController.stream,
+                                  callback: this)),
+                    );
+                    streamController.add(true);
+                    _isClosed = true;
+                  },
+                  child: ArticleCard(
+                    id: favoriteProducts[index].productId,
+                    title: favoriteProducts[index].title,
+                    saving: favoriteProducts[index].saving,
+                    category: favoriteProducts[index].categoryName,
+                    description: favoriteProducts[index].description,
+                    image: favoriteProducts[index].image,
+                    price: favoriteProducts[index].price,
+                    callback: this,
+                  ));
+            }),
+      )
+          : Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.edit_outlined, color: Colors.grey, size: 80),
+            SizedBox(height: 30),
+            RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                      text:
+                      "Du hast noch keine Favorites gespeichert.\n \nDu kannst Favorites hinzufügen, indem du auf das ",
+                      style: TextStyle(
+                          fontSize: 18, color: ThemeChanger.reversetextColor)),
+                  WidgetSpan(
+                    child: Icon(Icons.favorite,
+                        color: Colors.red, size: 20),
                   ),
-                ),
+                  TextSpan(
+                      text: " klickst.",
+                      style: TextStyle(
+                          fontSize: 18, color: ThemeChanger.reversetextColor)),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
+
   // Text("Du hast noch keine Favoriten gespeichert.\n \nDu kannst Favoriten hinzufügen, indem du auf das ❤ klickst.",
   // textAlign: TextAlign.center,
   // style: TextStyle(fontSize: 18, color: Colors.black),
   // )
 
   Future changeFavoriteState(ArticleCard card) async {
-
     FavFunctions.changeFavoriteState(card, this);
   }
+}

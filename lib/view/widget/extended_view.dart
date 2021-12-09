@@ -313,61 +313,6 @@ class _ExtendedViewState extends State<ExtendedView> {
     );
     FavFunctions.changeFavoriteState(articleCard, articleCard.callback);
   }
-/*
-    if (FavFunctions.isFavorite(widget.id)) {
-      showAlertDialog();
-    } else {
-      await FavFunctions.addFavorite(articleCard, this);
-      if (this.mounted) {
-        setState(() {});
-      }
-    }
-  }
-
-  showAlertDialog() {
-    // set up the buttons
-    Widget cancelButton = TextButton(
-      child: const Text("Nein"),
-      onPressed: () {
-        Navigator.of(context, rootNavigator: true).pop('dialog');
-      },
-    );
-    Widget continueButton = TextButton(
-      style: TextButton.styleFrom(
-        primary: Colors.red,
-      ),
-      child: const Text("Ja"),
-      onPressed: () async {
-        Navigator.of(context, rootNavigator: true).pop('dialog');
-        await FavFunctions.removeFavorite(widget.id, true, this);
-        if (this.mounted) {
-          setState(() {});
-        }
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: const Text("Artikel entfernen?"),
-      content: const Text(
-          "Willst du diesen Artikel wirklich aus deinen Favorites entfernen?"),
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10.0))),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }*/
-
 
   // creating specific URL and launching it from available browser apps
   _launchURL() async {

@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
       count++;
     }
 
-    FavFunctions.setProducts(_products);
+    FavFunctions.addProducts(_products);
   }
 
   updateHome(bool update) {
