@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../theme.dart';
 import 'article_card.dart';
 
 class ExtendedView extends StatefulWidget {
@@ -57,7 +58,7 @@ class _ExtendedViewState extends State<ExtendedView> {
     final displayHeight = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
-            backgroundColor: ProductApi.darkBlue,
+            backgroundColor: ThemeChanger.navBarColor,
             title: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -85,7 +86,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                     fontWeight: FontWeight.w900,
                     decoration:
                     TextDecoration.underline,
-                    decorationColor: ProductApi.orange,
+                    decorationColor: ThemeChanger.highlightedColor,
                     decorationThickness: 4,
                   ),
                 ),
@@ -147,13 +148,13 @@ class _ExtendedViewState extends State<ExtendedView> {
                           padding: EdgeInsets.only(
                               top: 3, bottom: 3, left: 13, right: 10),
                           decoration: BoxDecoration(
-                            color: ProductApi.orange, // const Color.fromRGBO(23, 41, 111, 0.8),
+                            color: ThemeChanger.highlightedColor, // const Color.fromRGBO(23, 41, 111, 0.8),
                             borderRadius: BorderRadius.circular(0),
                           ),
                           child: Text(
                             "-" + widget.saving.toString() + "%",
                             style: TextStyle(
-                              color: ProductApi.white,
+                              color: ThemeChanger.textColor,
                               fontWeight: FontWeight.bold,
                               fontSize: 25,
                               letterSpacing: 1.4,
@@ -169,7 +170,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                         padding:
                             EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                         decoration: BoxDecoration(
-                          color: ProductApi.lightBlue,
+                          color: ThemeChanger.lightBlue,
                           borderRadius: BorderRadius.circular(30),
                         ),
                         //width: displayWidth,
@@ -178,7 +179,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                           widget.category,
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                            color: ProductApi.white,
+                            color: ThemeChanger.textColor,
                           ),
                         ),
                       ),
@@ -221,7 +222,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                           borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(15),
                               bottomRight: Radius.circular(15)),
-                          color: ProductApi.darkBlue,
+                          color: ThemeChanger.navBarColor,
                         ),
                         child: Container(
                           margin: EdgeInsets.symmetric(
@@ -244,10 +245,10 @@ class _ExtendedViewState extends State<ExtendedView> {
                          */
                                     Text(
                                       newprice.toStringAsFixed(2) + " €",
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 35,
-                                        color: ProductApi.orange,
+                                        color: ThemeChanger.highlightedColor,
                                       ),
                                     ),
                                     Text(
@@ -256,7 +257,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                                         decoration: TextDecoration.lineThrough,
                                           fontSize: 15,
                                           color:
-                                              ProductApi.white),
+                                          ThemeChanger.textColor),
                                     ),
                                   ]),
                               Container(
@@ -271,7 +272,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                                       "Zum Angebot",
                                       style: TextStyle(
                                         fontSize: 20,
-                                        color: ProductApi.white,
+                                        color: ThemeChanger.textColor,
                                       ),
                                     ),
 
@@ -281,10 +282,10 @@ class _ExtendedViewState extends State<ExtendedView> {
                                       padding: EdgeInsets.symmetric(
                                           horizontal: 25, vertical: 10),
                                       backgroundColor:
-                                          ProductApi.lightBlue,
+                                      ThemeChanger.lightBlue,
                                       shape: RoundedRectangleBorder(
                                           side: BorderSide(
-                                              color: ProductApi.white,
+                                              color: ThemeChanger.textColor,
                                               width: 2,
                                               style: BorderStyle.solid),
                                           borderRadius:

@@ -1,11 +1,13 @@
 import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
+import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
 import 'package:flutter/material.dart';
 import 'package:penny_pincher/view/widget/article_search.dart';
 import 'dart:async';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 
 import 'package:penny_pincher/view/widget/browser_article_card.dart';
@@ -26,6 +28,8 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
+    ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
+
     MediaQueryData _mediaQueryData = MediaQuery.of(context);
     ;
     double displayWidth = _mediaQueryData.size.width;
@@ -35,7 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       //ScreenUtil.init(context, height:896, width:414, allowFontScaling: true);
       appBar: AppBar(
-          backgroundColor: ProductApi.darkBlue,
+          backgroundColor: ThemeChanger.navBarColor,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -61,7 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     // Shaddow is used to get Distance to the underline -> TextColor itself is transparent
                     shadows: [
                       Shadow(
-                          color: Color.fromRGBO(240, 240, 240, 1),
+                          color: ThemeChanger.textColor,
                           offset: Offset(0, -5))
                     ],
                     //fontFamily: '....',
@@ -70,7 +74,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     color: Colors.transparent,
                     fontWeight: FontWeight.w900,
                     decoration: TextDecoration.underline,
-                    decorationColor: Color.fromRGBO(220, 110, 30, 1),
+                    decorationColor: ThemeChanger.highlightedColor,
                     decorationThickness: 4,
                   ),
                 ),
@@ -85,113 +89,172 @@ class _ProfilePageState extends State<ProfilePage> {
             child: ListView(
               //padding: EdgeInsets.only(top: 50),
               children: <Widget>[
-                ProfileListItem(
-                  icon: LineAwesomeIcons.user_shield,
-                  text: "Optionen",
-                ),
-                ProfileListItem(
-                  icon: LineAwesomeIcons.history,
-                  text: "Kauf Verlauf",
-                ),
-                ProfileListItem(
-                  icon: LineAwesomeIcons.accessible_icon,
-                  text: "Hilfe",
-                ),
-                ProfileListItem(
-                  icon: LineAwesomeIcons.address_book,
-                  text: "Teilen",
-                ),
-              Container(
-                height: 50,
-                margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(33),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.6),
-                      offset: Offset(
-                        0.0,
-                        10.0,
+                Container(
+                  height: 50,
+                  margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(33),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.6),
+                        offset: Offset(
+                          0.0,
+                          10.0,
+                        ),
+                        blurRadius: 20.0,
+                        spreadRadius: -3.0,
                       ),
-                      blurRadius: 20.0,
-                      spreadRadius: -3.0,
-                    ),
-                  ],
-                  color: Colors.white,
+                    ],
+                    color: ThemeChanger.textColor,
+                  ),
+                  child:
+                  TextButton(
+                    onPressed: () {
+                      if(_themeChanger.getTheme() == ThemeData.light()){
+                        return _themeChanger.setdarkTheme(ThemeData.dark());
+                      }
+                      if(_themeChanger.getTheme() == ThemeData.dark()){
+                        return _themeChanger.setlightTheme(ThemeData.light());
+                      }
+                    },
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(ThemeChanger.textColor),
+                        foregroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 45, 45, 1)),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(33),
+                              //side: BorderSide(color: Colors.black)
+                            )
+                        ),
+                        textStyle: MaterialStateProperty.all(TextStyle(
+                          fontSize: 21,
+                          fontWeight: FontWeight.w500,
+                        ))),
+                    child: Text("Dark/Light Mode"),
+                  ),
                 ),
-                child:
-                TextButton(
-                  onPressed: () {},
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.white),
-                      foregroundColor: MaterialStateProperty.all(Colors.black),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(33),
-                            //side: BorderSide(color: Colors.black)
-                        )
-                    ),
-                      textStyle: MaterialStateProperty.all(TextStyle(
-                        fontSize: 21,
-                        fontWeight: FontWeight.w500,
-                      ))),
-                  child: Text("Textbutton Test"),
+                Container(
+                  height: 50,
+                  margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(33),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.6),
+                        offset: Offset(
+                          0.0,
+                          10.0,
+                        ),
+                        blurRadius: 20.0,
+                        spreadRadius: -3.0,
+                      ),
+                    ],
+                    color: ThemeChanger.textColor,
+                  ),
+                  child:
+                  TextButton(
+                    onPressed: () {
+
+                    },
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(ThemeChanger.textColor),
+                        foregroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 45, 45, 1)),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(33),
+                              //side: BorderSide(color: Colors.black)
+                            )
+                        ),
+                        textStyle: MaterialStateProperty.all(TextStyle(
+                          fontSize: 21,
+                          fontWeight: FontWeight.w500,
+                        ))),
+                    child: Text("Notification"),
+                  ),
                 ),
-              )
+                Container(
+                  height: 50,
+                  margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(33),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.6),
+                        offset: Offset(
+                          0.0,
+                          10.0,
+                        ),
+                        blurRadius: 20.0,
+                        spreadRadius: -3.0,
+                      ),
+                    ],
+                    color: ThemeChanger.textColor,
+                  ),
+                  child:
+                  TextButton(
+                    onPressed: () {
+
+                    },
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(ThemeChanger.textColor),
+                        foregroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 45, 45, 1)),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(33),
+                              //side: BorderSide(color: Colors.black)
+                            )
+                        ),
+                        textStyle: MaterialStateProperty.all(TextStyle(
+                          fontSize: 21,
+                          fontWeight: FontWeight.w500,
+                        ))),
+                    child: Text("About"),
+                  ),
+                ),
+                Container(
+                  height: 50,
+                  margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(33),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.6),
+                        offset: Offset(
+                          0.0,
+                          10.0,
+                        ),
+                        blurRadius: 20.0,
+                        spreadRadius: -3.0,
+                      ),
+                    ],
+                    color: ThemeChanger.textColor,
+                  ),
+                  child:
+                  TextButton(
+                    onPressed: () {
+
+                    },
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(ThemeChanger.textColor),
+                        foregroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 45, 45, 1)),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(33),
+                              //side: BorderSide(color: Colors.black)
+                            )
+                        ),
+                        textStyle: MaterialStateProperty.all(TextStyle(
+                          fontSize: 21,
+                          fontWeight: FontWeight.w500,
+                        ))),
+                    child: Text("Help"),
+                  ),
+                )
               ],
             )
           )
         ]
       )
-    );
-  }
-}
-
-class ProfileListItem extends StatelessWidget{
-  //Source: https://github.com/jameelsocorro/profile_app_ui/blob/master/lib/widgets/profile_list_item.dart
-  final IconData icon;
-  final String text;
-  final bool hasNavigation;
-
-  const ProfileListItem({
-    Key? key,
-    required this.icon,
-    required this.text,
-    this.hasNavigation = true,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      margin: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(33),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.6),
-            offset: Offset(
-              0.0,
-              10.0,
-            ),
-            blurRadius: 20.0,
-            spreadRadius: -3.0,
-          ),
-        ],
-        color: Colors.white,
-      ),
-      child: Row(
-        children: <Widget>[
-          Icon(this.icon, size: 33, color: Colors.black,),
-          SizedBox(width: 75), // space between icon and text
-          Text(this.text,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 21,
-              fontWeight: FontWeight.w500,
-            ),
-          )],
-      ),
     );
   }
 }

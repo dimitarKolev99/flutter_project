@@ -1,6 +1,7 @@
 import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
+import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
 import 'package:flutter/material.dart';
 import 'package:penny_pincher/view/widget/article_search.dart';
@@ -8,6 +9,7 @@ import 'dart:async';
 
 import 'package:penny_pincher/view/widget/browser_article_card.dart';
 import 'package:penny_pincher/view/widget/extended_view.dart';
+import 'package:provider/provider.dart';
 
 import 'filter_view.dart';
 
@@ -91,6 +93,7 @@ class _BrowserPageState extends State<BrowserPage> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     MediaQueryData _mediaQueryData = MediaQuery.of(context);
     double displayWidth = _mediaQueryData.size.width;
     double displayHeight = _mediaQueryData.size.height;
@@ -98,7 +101,7 @@ class _BrowserPageState extends State<BrowserPage> {
     double blockSizeVertical = displayHeight / 100; // screen height in 1%
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: ProductApi.darkBlue,
+          backgroundColor: ThemeChanger.navBarColor,
           leading: IconButton(
             icon: Icon(Icons.category),
             onPressed: () {
@@ -144,7 +147,7 @@ class _BrowserPageState extends State<BrowserPage> {
                     fontWeight: FontWeight.w900,
                     decoration:
                     TextDecoration.underline,
-                    decorationColor: ProductApi.orange,
+                    decorationColor: ThemeChanger.highlightedColor,
                     decorationThickness: 4,
                   ),
                 ), ),

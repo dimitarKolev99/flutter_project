@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:penny_pincher/services/product_api.dart';
 
+import '../theme.dart';
+
+
 
 class ArticleCard extends StatelessWidget {
   final int id;
@@ -57,7 +60,7 @@ class ArticleCard extends StatelessWidget {
         width: displayWidth,
         height: blockSizeHorizontal * 35,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: ThemeChanger.articlecardbackground,
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
@@ -146,13 +149,13 @@ class ArticleCard extends StatelessWidget {
                     ),
                     Container(                                                      // % Badge
                       padding: EdgeInsets.only(top: blockSizeVertical * 1, bottom: blockSizeVertical * 1, left: blockSizeHorizontal * 3, right: blockSizeHorizontal * 3),//(top: 3, bottom: 3, left: 10, right: 17),
-                      decoration: BoxDecoration(color: ProductApi.orange,  // const Color.fromRGBO(23, 41, 111, 0.8),
+                      decoration: BoxDecoration(color: ThemeChanger.highlightedColor,  // const Color.fromRGBO(23, 41, 111, 0.8),
                         borderRadius: BorderRadius.circular(0),
                       ),
                       child:
                       Text("-" + saving.toString() + "%",
                         style: TextStyle(
-                          color: ProductApi.white,
+                          color: ThemeChanger.textColor,
                           fontWeight: FontWeight.bold,
                           fontSize: safeBlockHorizontal * 4,
                         ),
@@ -179,7 +182,7 @@ class ArticleCard extends StatelessWidget {
                                 fontWeight: FontWeight
                                     .bold,
                                 fontSize: safeBlockHorizontal * 5,
-                                color: ProductApi.orange),
+                                color: ThemeChanger.highlightedColor),
                             ),
                             Text(
                               prevpreis.toStringAsFixed(2) + "€",

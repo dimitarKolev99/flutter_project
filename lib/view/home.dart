@@ -3,11 +3,13 @@ import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/services/json_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
+import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
 import 'package:penny_pincher/view/widget/article_search.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:penny_pincher/view/widget/extended_view.dart';
+import 'package:provider/provider.dart';
 
 import 'filter_view.dart';
 
@@ -137,9 +139,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: ProductApi.darkBlue,
+          backgroundColor: ThemeChanger.navBarColor,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -176,7 +179,7 @@ class _HomePageState extends State<HomePage> {
                   fontWeight: FontWeight.w900,
                   decoration:
                   TextDecoration.underline,
-                  decorationColor: ProductApi.orange,
+                  decorationColor: ThemeChanger.highlightedColor,
                   decorationThickness: 4,
                 ),
               ), ),
