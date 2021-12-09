@@ -5,6 +5,7 @@ import 'package:penny_pincher/services/product_api.dart';
 import '../theme.dart';
 
 
+
 class ArticleCard extends StatelessWidget {
   final int id;
   final String title;
@@ -59,7 +60,7 @@ class ArticleCard extends StatelessWidget {
         width: displayWidth,
         height: blockSizeHorizontal * 35,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: ThemeChanger.articlecardbackground,
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(

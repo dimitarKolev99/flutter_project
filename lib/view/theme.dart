@@ -10,6 +10,7 @@ class ThemeChanger with ChangeNotifier{
   static Color highlightedColor = Color.fromRGBO(255, 102, 0, 1);
   static Color textColor = Color.fromRGBO(255, 255, 255, 1);
   static Color reversetextColor = Color.fromRGBO(0, 0, 0, 1);
+  static Color articlecardbackground = Color.fromRGBO(255, 255, 255, 1);
 
   ThemeData _themeData;
 
@@ -47,6 +48,7 @@ class ThemeChanger with ChangeNotifier{
     highlightedColor = Color.fromRGBO(255, 102, 0, 1);
     textColor = Color.fromRGBO(255, 255, 255, 1);
     reversetextColor = Color.fromRGBO(0, 0, 0, 1);
+    articlecardbackground = Color.fromRGBO(255, 255, 255, 1);
 
     StorageManager.saveData('themeMode', 'light');
     notifyListeners();
@@ -60,6 +62,7 @@ class ThemeChanger with ChangeNotifier{
     highlightedColor = Color.fromRGBO(255, 102, 0, 1);
     textColor = Color.fromRGBO(255, 255, 255, 1);
     reversetextColor = Color.fromRGBO(255, 255, 255, 1);
+    articlecardbackground = Color.fromRGBO(60, 60, 60, 1);
 
     StorageManager.saveData('themeMode', 'dark');
     notifyListeners();

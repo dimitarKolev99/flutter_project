@@ -46,7 +46,7 @@ class BrowserArticleCard extends StatelessWidget {
       // card itself
       margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: ThemeChanger.articlecardbackground,
         borderRadius: BorderRadius.circular(2),
         boxShadow: [
           BoxShadow(
@@ -121,7 +121,7 @@ class BrowserArticleCard extends StatelessWidget {
                   title,
                   style: TextStyle(
                     fontSize: safeBlockHorizontal * 4,
-                    color: Colors.black,
+                    color: ThemeChanger.reversetextColor,
                     fontWeight: FontWeight.bold,
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -139,7 +139,7 @@ class BrowserArticleCard extends StatelessWidget {
                   prevpreis.toStringAsFixed(2) + "€",
                   style: TextStyle(
                       decoration: TextDecoration.lineThrough,
-                      fontSize: safeBlockHorizontal * 4, color: Colors.black
+                      fontSize: safeBlockHorizontal * 4, color: ThemeChanger.reversetextColor
                   ),
                 ),
                 Text(
