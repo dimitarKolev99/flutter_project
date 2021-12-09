@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:penny_pincher/services/fav_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -132,7 +133,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                           child: Padding(
                             padding: EdgeInsets.only(right: 7),
                             child: IconButton(
-                              icon: (widget.callback.isFavorite(widget.id)
+                              icon: (FavFunctions.isFavorite(widget.id)
                                   ? const Icon(Icons.favorite,
                                       color: Colors.red)
                                   : const Icon(Icons.favorite_border,
@@ -310,61 +311,8 @@ class _ExtendedViewState extends State<ExtendedView> {
       price: widget.price,
       callback: widget.callback,
     );
-
-    if (widget.callback.isFavorite(widget.id)) {
-      showAlertDialog();
-    } else {
-      await widget.callback.addFavorite(articleCard);
-      if (this.mounted) {
-        setState(() {});
-      }
-    }
+    FavFunctions.changeFavoriteState(articleCard, articleCard.callback);
   }
-
-  showAlertDialog() {
-    // set up the buttons
-    Widget cancelButton = TextButton(
-      child: const Text("Nein"),
-      onPressed: () {
-        Navigator.of(context, rootNavigator: true).pop('dialog');
-      },
-    );
-    Widget continueButton = TextButton(
-      style: TextButton.styleFrom(
-        primary: Colors.red,
-      ),
-      child: const Text("Ja"),
-      onPressed: () async {
-        Navigator.of(context, rootNavigator: true).pop('dialog');
-        await widget.callback.removeFavorite(widget.id, true);
-        if (this.mounted) {
-          setState(() {});
-        }
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: const Text("Artikel entfernen?"),
-      content: const Text(
-          "Willst du diesen Artikel wirklich aus deinen Favorites entfernen?"),
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10.0))),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
 
   // creating specific URL and launching it from available browser apps
   _launchURL() async {

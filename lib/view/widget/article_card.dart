@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:penny_pincher/services/fav_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 
 import '../theme.dart';
@@ -219,7 +220,8 @@ class ArticleCard extends StatelessWidget {
   }
 
   Future _changeFavoriteState() async {
-    await callback.changeFavoriteState(this);
+    //await callback.changeFavoriteState(this);
+    FavFunctions.changeFavoriteState(this, callback);
   }
 }
 
