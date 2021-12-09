@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:penny_pincher/services/fav_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
 
@@ -141,7 +142,7 @@ class FavoriteCard extends StatelessWidget {
                         padding: EdgeInsets.only(right: blockSizeHorizontal * 2),
                         child:
                         IconButton(
-                          icon: (callback.isFavorite(id) ?
+                          icon: (FavFunctions.isFavorite(id) ?
                           const Icon(Icons.favorite,
                               color: Colors.red) : const Icon(Icons.favorite_border,
                               color: Colors.black)),
@@ -217,6 +218,6 @@ class FavoriteCard extends StatelessWidget {
       price: price,
       callback: callback,
     );
-    await callback.changeFavoriteState(articleCard);
+    await FavFunctions.changeFavoriteState(articleCard, callback);
   }
 }

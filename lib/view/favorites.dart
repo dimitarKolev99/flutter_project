@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:penny_pincher/models/preferences_articles.dart';
+import 'package:penny_pincher/services/fav_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/theme.dart';
@@ -70,6 +71,7 @@ class _FavoritePageState extends State<FavoritePage> {
     for (var i = 0; i < _product.length; i++) {
       favoriteIds.insert(i, _product[i]);
     }
+    FavFunctions.setProducts(favoriteIds);
   }
 
   updateFavorites(bool update) {
@@ -171,9 +173,8 @@ class _FavoritePageState extends State<FavoritePage> {
                               streamController.add(true);
                               _isClosed = true;
                             },
-                            child: FavoriteCard(
+                            child: ArticleCard(
                               id: favoriteIds[index].productId,
-                              index: index,
                               title: favoriteIds[index].title,
                               saving: favoriteIds[index].saving,
                               category: favoriteIds[index].categoryName,
@@ -219,7 +220,7 @@ class _FavoritePageState extends State<FavoritePage> {
   // textAlign: TextAlign.center,
   // style: TextStyle(fontSize: 18, color: Colors.black),
   // )
-
+/*
   bool isFavorite(int id) {
     return favoriteIds.where((p) => p.productId == id).toList().isNotEmpty;
   }
@@ -298,5 +299,5 @@ class _FavoritePageState extends State<FavoritePage> {
       }
     }
     return result;
-  }
+  }*/
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
+import 'package:penny_pincher/view/widget/extended_view.dart';
 
 class FavFunctions {
 
@@ -34,7 +35,7 @@ class FavFunctions {
           _favoriteIds.add(card.id);
         });
       }
-      callback.widget.updateStream.add(true);
+      if(callback is! State<ExtendedView>) callback.widget.updateStream.add(true);
   }
 
   static Future removeFavorite(int id, bool close, callback) async {
@@ -44,7 +45,7 @@ class FavFunctions {
         _favoriteIds.remove(id);
       });
     }
-    callback.widget.updateStream.add(true);
+    if(callback is! State<ExtendedView> )callback.widget.updateStream.add(true);
   }
 
   static showAlertDialog(BuildContext context, int id, callback) {

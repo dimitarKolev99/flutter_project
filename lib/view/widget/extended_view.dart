@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:penny_pincher/services/fav_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -132,7 +133,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                           child: Padding(
                             padding: EdgeInsets.only(right: 7),
                             child: IconButton(
-                              icon: (widget.callback.isFavorite(widget.id)
+                              icon: (FavFunctions.isFavorite(widget.id)
                                   ? const Icon(Icons.favorite,
                                       color: Colors.red)
                                   : const Icon(Icons.favorite_border,
@@ -310,11 +311,13 @@ class _ExtendedViewState extends State<ExtendedView> {
       price: widget.price,
       callback: widget.callback,
     );
-
-    if (widget.callback.isFavorite(widget.id)) {
+    FavFunctions.changeFavoriteState(articleCard, this);
+  }
+/*
+    if (FavFunctions.isFavorite(widget.id)) {
       showAlertDialog();
     } else {
-      await widget.callback.addFavorite(articleCard);
+      await FavFunctions.addFavorite(articleCard, this);
       if (this.mounted) {
         setState(() {});
       }
@@ -336,7 +339,7 @@ class _ExtendedViewState extends State<ExtendedView> {
       child: const Text("Ja"),
       onPressed: () async {
         Navigator.of(context, rootNavigator: true).pop('dialog');
-        await widget.callback.removeFavorite(widget.id, true);
+        await FavFunctions.removeFavorite(widget.id, true, this);
         if (this.mounted) {
           setState(() {});
         }
@@ -363,7 +366,7 @@ class _ExtendedViewState extends State<ExtendedView> {
         return alert;
       },
     );
-  }
+  }*/
 
 
   // creating specific URL and launching it from available browser apps
