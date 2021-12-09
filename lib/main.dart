@@ -28,6 +28,9 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Future.delayed(Duration(seconds: this.duration), () {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => this.goToPage));
+    });
     return Scaffold(
       body: Container(
           color: ThemeChanger.lightBlue,
@@ -55,10 +58,7 @@ class MaterialAppWithTheme extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Provider.of<ThemeChanger>(context);
     return MaterialApp(
-      home: SplashPage(
-        duration: 3,
-        goToPage: AppNavigator(),
-      ), //const AppNavigator(),
+      home: const AppNavigator(),
       theme: theme.getTheme(),
     );
   }

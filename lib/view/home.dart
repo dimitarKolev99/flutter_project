@@ -143,108 +143,117 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
-    return Scaffold(
-      appBar: AppBar(
-          backgroundColor: ThemeChanger.navBarColor,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              //Icon(Icons.restaurant_menu),
-              Image.network(
-                "https://cdn.discordapp.com/attachments/899305939109302285/903270501781221426/photopenny.png",
-                width: 40,
-                height: 40,
-              ),
-              /*
+    if (_isLoading) {
+      return Scaffold(
+        body: Container(
+            color: ThemeChanger.lightBlue,
+            alignment: Alignment.center,
+            child: Icon(Icons.search, color: Colors.grey, size: 100)),
+      );
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+            backgroundColor: ThemeChanger.navBarColor,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                //Icon(Icons.restaurant_menu),
+                Image.network(
+                  "https://cdn.discordapp.com/attachments/899305939109302285/903270501781221426/photopenny.png",
+                  width: 40,
+                  height: 40,
+                ),
+                /*
             // Doesnt work yet
             Image.asset("pictures/logopenny.png"
             , width: 40,
               height: 40,
             ),
             */
-              SizedBox(width: 10),
-              Padding(
-               padding: EdgeInsets.only(top: 3),
-               child:
-              Text(
-                'Penny Pincher',
-                style: TextStyle(
-                  // Shaddow is used to get Distance to the underline -> TextColor itself is transparent
-                  shadows: [
-                    Shadow(
-                        color: Color.fromRGBO(240, 240, 240, 1),
-                        offset: Offset(0, -6))
-                  ],
-                  //fontFamily: '....',
-                  fontSize: 21,
-                  letterSpacing: 3,
-                  color: Colors.transparent,
-                  fontWeight: FontWeight.w900,
-                  decoration:
-                  TextDecoration.underline,
-                  decorationColor: ThemeChanger.highlightedColor,
-                  decorationThickness: 4,
-                ),
-              ), ),
-            ],
-          ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {
-                final results =
-                    showSearch(context: context, delegate: ArticleSearch(true, this, streamController));
-              },
-            )
-          ]
-      ),
-
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : Align(
-              alignment: Alignment.topCenter,
-              child: NotificationListener<ScrollNotification>(
-                onNotification: (scrollNotification) {
-                  if (scrollNotification is ScrollUpdateNotification) {
-                    _onUpdateScroll();
-                  }
-                  return true;
+                SizedBox(width: 10),
+                Padding(
+                  padding: EdgeInsets.only(top: 3),
+                  child:
+                  Text(
+                    'Penny Pincher',
+                    style: TextStyle(
+                      // Shaddow is used to get Distance to the underline -> TextColor itself is transparent
+                      shadows: [
+                        Shadow(
+                            color: Color.fromRGBO(240, 240, 240, 1),
+                            offset: Offset(0, -6))
+                      ],
+                      //fontFamily: '....',
+                      fontSize: 21,
+                      letterSpacing: 3,
+                      color: Colors.transparent,
+                      fontWeight: FontWeight.w900,
+                      decoration:
+                      TextDecoration.underline,
+                      decorationColor: ThemeChanger.highlightedColor,
+                      decorationThickness: 4,
+                    ),
+                  ), ),
+              ],
+            ),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  final results =
+                  showSearch(context: context, delegate: ArticleSearch(true, this, streamController));
                 },
-                child: ListView.builder(
-                    reverse: true,
-                    shrinkWrap: true,
-                    controller: _scrollController,
-                    itemCount: _products.length,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                          onTap: () {
-                            Navigator.push(context,
-                              MaterialPageRoute(
-                                  builder: (context) => ExtendedView(
-                                      id: _products[index].productId,
-                                      title: _products[index].title,
-                                      saving: _products[index].saving,
-                                      category: _products[index].categoryName,
-                                      description: _products[index].description,
-                                      image: _products[index].image,
-                                      price: _products[index].price,
-                                      stream: streamController.stream,
-                                      callback: this)),
-                            );
-                          },
-                          child: ArticleCard(
-                            id: _products[index].productId,
-                            title: _products[index].title,
-                            saving: _products[index].saving,
-                            category: _products[index].categoryName,
-                            description: _products[index].description,
-                            image: _products[index].image,
-                            price: _products[index].price,
-                            callback: this,
-                          ));
-                    }),
-              )),
-    );
+              )
+            ]
+        ),
+
+        body: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : Align(
+            alignment: Alignment.topCenter,
+            child: NotificationListener<ScrollNotification>(
+              onNotification: (scrollNotification) {
+                if (scrollNotification is ScrollUpdateNotification) {
+                  _onUpdateScroll();
+                }
+                return true;
+              },
+              child: ListView.builder(
+                  reverse: true,
+                  shrinkWrap: true,
+                  controller: _scrollController,
+                  itemCount: _products.length,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                        onTap: () {
+                          Navigator.push(context,
+                            MaterialPageRoute(
+                                builder: (context) => ExtendedView(
+                                    id: _products[index].productId,
+                                    title: _products[index].title,
+                                    saving: _products[index].saving,
+                                    category: _products[index].categoryName,
+                                    description: _products[index].description,
+                                    image: _products[index].image,
+                                    price: _products[index].price,
+                                    stream: streamController.stream,
+                                    callback: this)),
+                          );
+                        },
+                        child: ArticleCard(
+                          id: _products[index].productId,
+                          title: _products[index].title,
+                          saving: _products[index].saving,
+                          category: _products[index].categoryName,
+                          description: _products[index].description,
+                          image: _products[index].image,
+                          price: _products[index].price,
+                          callback: this,
+                        ));
+                  }),
+            )),
+      );
+    }
   }
 
   bool isFavorite(int id) {

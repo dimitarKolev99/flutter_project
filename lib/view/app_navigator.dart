@@ -116,6 +116,7 @@ class AppState extends State<AppNavigator> {
   }
 
   Widget _buildOffstageNavigator(String tabItem) {
+    return Offstage();
     return Offstage(
       offstage: _currentPage != tabItem,
       child: TabNavigator(
