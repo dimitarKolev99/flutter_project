@@ -311,7 +311,7 @@ class _ExtendedViewState extends State<ExtendedView> {
       price: widget.price,
       callback: widget.callback,
     );
-    FavFunctions.changeFavoriteState(articleCard, this);
+    FavFunctions.changeFavoriteState(articleCard, articleCard.callback);
   }
 /*
     if (FavFunctions.isFavorite(widget.id)) {

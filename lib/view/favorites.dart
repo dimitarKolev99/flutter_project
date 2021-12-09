@@ -220,84 +220,8 @@ class _FavoritePageState extends State<FavoritePage> {
   // textAlign: TextAlign.center,
   // style: TextStyle(fontSize: 18, color: Colors.black),
   // )
-/*
-  bool isFavorite(int id) {
-    return favoriteIds.where((p) => p.productId == id).toList().isNotEmpty;
-  }
 
   Future changeFavoriteState(ArticleCard card) async {
-    if (isFavorite(card.id)) {
-      showAlertDialog(context, card.id);
-    }
+
+    FavFunctions.changeFavoriteState(card, this);
   }
-
-  Future removeFavorite(int id, bool close) async {
-    final product = favoriteIds.where((p) => p.productId == id).toList()[0];
-    await _preferenceArticles.removeFavorite(id);
-    if (mounted) {
-      setState(() {
-        favoriteIds.remove(product);
-      });
-    }
-    if (close) {
-      Navigator.pop(context);
-    }
-    widget.updateStream.add(true);
-    if (search != null) {
-      search.updateSuggestions();
-    }
-  }
-
-  showAlertDialog(BuildContext context, int id) {
-    // set up the buttons
-    Widget cancelButton = TextButton(
-      child: const Text("Nein"),
-      onPressed: () {
-        Navigator.of(context, rootNavigator: true).pop('dialog');
-      },
-    );
-    Widget continueButton = TextButton(
-      style: TextButton.styleFrom(
-        primary: Colors.red,
-      ),
-      child: const Text("Ja"),
-      onPressed: () async {
-        Navigator.of(context, rootNavigator: true).pop('dialog');
-        await removeFavorite(id, false);
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: const Text("Artikel entfernen?"),
-      content: const Text(
-          "Willst du diesen Artikel wirklich aus deinen Favorites entfernen?"),
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10.0))),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
-  List<Product> filterFavorites(search) {
-    this.search = search;
-
-    List<Product> result = [];
-    for (var i = 0; i < favoriteIds.length; i++) {
-      if (favoriteIds[i].title.toLowerCase().contains(query.toLowerCase())) {
-        result.add(favoriteIds[i]);
-      }
-    }
-    return result;
-  }*/
-}
