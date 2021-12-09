@@ -29,7 +29,7 @@ class PreferencesArticles {
     await preferences.setString("favorites", jsonEncode(jsonData));
   }
 
-  Future getAllFavorites() async {
+  Future<List<Product>> getAllFavorites() async {
     if (preferences == null) {
       await _fetchData();
     }

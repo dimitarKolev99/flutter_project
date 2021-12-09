@@ -62,8 +62,6 @@ class _TabNavigatorState extends State<TabNavigator> {
       child = ProfilePage(streamControllerProfile.stream, updateStream);
     }
 
-    // TODO: add Profile Page
-
     return Navigator(
       key: widget.navigatorKey,
       onGenerateRoute: (routeSettings) {
