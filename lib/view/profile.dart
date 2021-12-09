@@ -13,6 +13,8 @@ import 'package:provider/provider.dart';
 import 'package:penny_pincher/view/widget/browser_article_card.dart';
 import 'package:penny_pincher/view/widget/extended_view.dart';
 
+import 'about.dart';
+
 StreamController<bool> streamController = StreamController<bool>.broadcast();
 
 class ProfilePage extends StatefulWidget {
@@ -193,7 +195,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   child:
                   TextButton(
                     onPressed: () {
-
+                      Navigator.push (
+                        context,
+                        MaterialPageRoute(builder: (context) => About()),
+                      );
                     },
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(ThemeChanger.textColor),
