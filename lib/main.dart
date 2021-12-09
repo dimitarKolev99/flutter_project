@@ -19,7 +19,12 @@ void main() {
 }
 
 class SplashPage extends StatelessWidget {
-  const SplashPage({Key? key}) : super(key: key);
+  //const SplashPage({Key? key}) : super(key: key);
+
+  int duration = 0;
+  Widget goToPage;
+
+  SplashPage({required this.goToPage, required this.duration});
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +55,10 @@ class MaterialAppWithTheme extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Provider.of<ThemeChanger>(context);
     return MaterialApp(
-      home: SplashPage(), //const AppNavigator(),
+      home: SplashPage(
+        duration: 3,
+        goToPage: AppNavigator(),
+      ), //const AppNavigator(),
       theme: theme.getTheme(),
     );
   }
