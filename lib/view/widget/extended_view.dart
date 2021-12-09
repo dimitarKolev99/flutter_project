@@ -101,7 +101,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                 width: displayWidth,
                 //height: displayHeight,
                 decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: ThemeChanger.articlecardbackground,
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(
@@ -195,7 +195,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
-                            color: Colors.black,
+                            color: ThemeChanger.reversetextColor,
                           ),
                         ),
                       ),
@@ -210,7 +210,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                           widget.description,
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                            color: Colors.black,
+                            color: ThemeChanger.reversetextColor,
                           ),
                         ),
                       ),

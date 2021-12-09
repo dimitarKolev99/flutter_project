@@ -63,7 +63,7 @@ class FavoriteCard extends StatelessWidget {
         width: displayWidth,
         height: blockSizeHorizontal * 35,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: ThemeChanger.articlecardbackground,
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
@@ -116,7 +116,7 @@ class FavoriteCard extends StatelessWidget {
                 title,
                 style: TextStyle(
                   fontSize: safeBlockHorizontal * 3.5,//16,
-                  color: Colors.black,
+                  color: ThemeChanger.reversetextColor,
                   fontWeight: FontWeight.bold,
                 ),
                 overflow: TextOverflow.ellipsis,
@@ -176,8 +176,7 @@ class FavoriteCard extends StatelessWidget {
                                   fontWeight: FontWeight
                                       .bold,
                                   fontSize: safeBlockHorizontal * 2.5,//10,
-                                  color: Colors
-                                      .black),
+                                  color: ThemeChanger.reversetextColor),
                             ),
                             Text(
                               newprice.toStringAsFixed(2) + "€",
@@ -192,8 +191,7 @@ class FavoriteCard extends StatelessWidget {
                               style: TextStyle(
                                   decoration: TextDecoration.lineThrough,
                                   fontSize: safeBlockHorizontal * 4.0,
-                                  color: Colors
-                                      .black),
+                                  color: ThemeChanger.reversetextColor),
                             ),
                           ]
                       ),
