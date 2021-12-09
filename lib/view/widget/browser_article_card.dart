@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:penny_pincher/services/product_api.dart';
 
+import '../theme.dart';
 import 'article_card.dart';
 
 class BrowserArticleCard extends StatelessWidget {
@@ -45,7 +46,7 @@ class BrowserArticleCard extends StatelessWidget {
       // card itself
       margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: ThemeChanger.articlecardbackground,
         borderRadius: BorderRadius.circular(2),
         boxShadow: [
           BoxShadow(
@@ -83,13 +84,13 @@ class BrowserArticleCard extends StatelessWidget {
                     margin: EdgeInsets.only(top: blockSizeVertical*0.8, left: blockSizeHorizontal*1),
                     //padding: EdgeInsets.only(top: 3, bottom: 3, left: 10, right: 17),
                     decoration: BoxDecoration(
-                      color: ProductApi.orange, // const Color.fromRGBO(23, 41, 111, 0.8),
+                      color: ThemeChanger.highlightedColor, // const Color.fromRGBO(23, 41, 111, 0.8),
                       borderRadius: BorderRadius.circular(0),
                     ),
                     child: Text(
                       " -" + saving.toString() + "% ",
                       style: TextStyle(
-                        color: ProductApi.white,
+                        color: ThemeChanger.textColor,
                         fontWeight: FontWeight.bold,
                         fontSize: safeBlockHorizontal * 4.5,
                       ),
@@ -120,7 +121,7 @@ class BrowserArticleCard extends StatelessWidget {
                   title,
                   style: TextStyle(
                     fontSize: safeBlockHorizontal * 4,
-                    color: Colors.black,
+                    color: ThemeChanger.reversetextColor,
                     fontWeight: FontWeight.bold,
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -138,7 +139,7 @@ class BrowserArticleCard extends StatelessWidget {
                   prevpreis.toStringAsFixed(2) + "€",
                   style: TextStyle(
                       decoration: TextDecoration.lineThrough,
-                      fontSize: safeBlockHorizontal * 4, color: Colors.black
+                      fontSize: safeBlockHorizontal * 4, color: ThemeChanger.reversetextColor
                   ),
                 ),
                 Text(
@@ -146,7 +147,7 @@ class BrowserArticleCard extends StatelessWidget {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: safeBlockHorizontal * 7,
-                    color: ProductApi.orange,
+                    color: ThemeChanger.highlightedColor,
                   ),
                 ),
               ]),

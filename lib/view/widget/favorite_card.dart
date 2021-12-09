@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
 
+import '../theme.dart';
+
 
 class FavoriteCard extends StatelessWidget {
   final int id;
@@ -150,13 +152,13 @@ class FavoriteCard extends StatelessWidget {
                     ),
                     Container(                                                      // % Badge
                       padding: EdgeInsets.only(top: blockSizeVertical * 1, bottom: blockSizeVertical * 1, left: blockSizeHorizontal * 3, right: blockSizeHorizontal * 3),//(top: 3, bottom: 3, left: 10, right: 17),
-                      decoration: BoxDecoration(color: ProductApi.orange,  // const Color.fromRGBO(23, 41, 111, 0.8),
+                      decoration: BoxDecoration(color: ThemeChanger.highlightedColor,  // const Color.fromRGBO(23, 41, 111, 0.8),
                         borderRadius: BorderRadius.circular(0),
                       ),
                       child:
                       Text("-" + saving.toString() + "%",
                         style: TextStyle(
-                          color: ProductApi.white,
+                          color: ThemeChanger.textColor,
                           fontWeight: FontWeight.bold,
                           fontSize: safeBlockHorizontal * 4,
                         ),
@@ -182,7 +184,7 @@ class FavoriteCard extends StatelessWidget {
                                   fontWeight: FontWeight
                                       .bold,
                                   fontSize: safeBlockHorizontal * 5,
-                                  color: ProductApi.orange),
+                                  color: ThemeChanger.highlightedColor),
                             ),
                             Text(
                               prevpreis.toStringAsFixed(2) + "€",
