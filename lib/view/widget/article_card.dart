@@ -110,7 +110,7 @@ class ArticleCard extends StatelessWidget {
                 title,
                 style: TextStyle(
                   fontSize: safeBlockHorizontal * 3.5,//16,
-                  color: Colors.black,
+                  color: ThemeChanger.reversetextColor,
                   fontWeight: FontWeight.bold,
                 ),
                 overflow: TextOverflow.ellipsis,
@@ -170,8 +170,7 @@ class ArticleCard extends StatelessWidget {
                                   fontWeight: FontWeight
                                       .bold,
                                   fontSize: safeBlockHorizontal * 2.5,//10,
-                                  color: Colors
-                                      .black),
+                                  color: ThemeChanger.reversetextColor),
                             ),
                             Text(
                               newprice.toStringAsFixed(2) + "€",
@@ -186,8 +185,7 @@ class ArticleCard extends StatelessWidget {
                               style: TextStyle(
                                   decoration: TextDecoration.lineThrough,
                                   fontSize: safeBlockHorizontal * 4.0,
-                                  color: Colors
-                                      .black),
+                                  color: ThemeChanger.reversetextColor),
                             ),
                           ]
                       ),
