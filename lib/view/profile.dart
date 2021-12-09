@@ -195,6 +195,45 @@ class _ProfilePageState extends State<ProfilePage> {
                   child:
                   TextButton(
                     onPressed: () {
+
+                    },
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(ThemeChanger.textColor),
+                        foregroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 45, 45, 1)),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(33),
+                              //side: BorderSide(color: Colors.black)
+                            )
+                        ),
+                        textStyle: MaterialStateProperty.all(TextStyle(
+                          fontSize: 21,
+                          fontWeight: FontWeight.w500,
+                        ))),
+                    child: Text("Suchverlauf Löschen"),
+                  ),
+                ),
+                Container(
+                  height: 50,
+                  margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(33),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.6),
+                        offset: Offset(
+                          0.0,
+                          10.0,
+                        ),
+                        blurRadius: 20.0,
+                        spreadRadius: -3.0,
+                      ),
+                    ],
+                    color: ThemeChanger.textColor,
+                  ),
+                  child:
+                  TextButton(
+                    onPressed: () {
                       Navigator.push (
                         context,
                         MaterialPageRoute(builder: (context) => About()),
