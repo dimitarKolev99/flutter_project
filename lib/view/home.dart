@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:penny_pincher/view/widget/extended_view.dart';
 import 'package:provider/provider.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 import 'filter_view.dart';
 
@@ -129,6 +130,8 @@ class _HomePageState extends State<HomePage> {
       updateHome(update);
     });
     initListOfIDs();
+
+    tz.initializeTimeZones();
   }
 
   @override

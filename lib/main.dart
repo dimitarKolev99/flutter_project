@@ -3,12 +3,18 @@ import 'package:flutter/services.dart';
 import 'package:penny_pincher/view/app_navigator.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:provider/provider.dart';
+import 'package:penny_pincher/services/notification_service.dart';
 
 
 void main() {
   // Always keep Portrait Orientation:
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  NotificationService().initNotification();
+
+  // Always keep Portrait Orientation:
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(const MyApp());
 }
 
@@ -23,7 +29,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider<ThemeChanger>(
       // ToDo: changing the start value from light mode into the state from app closing (shared preferences)
       create: (_) => ThemeChanger(ThemeData.light()),
-    child: new MaterialAppWithTheme(),
+      child: new MaterialAppWithTheme(),
     );
   }
 }
@@ -36,9 +42,6 @@ class MaterialAppWithTheme extends StatelessWidget {
     return MaterialApp(
       home: const AppNavigator(),
       theme: theme.getTheme(),
-      );
+    );
   }
 }
-
-
-
