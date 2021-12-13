@@ -10,6 +10,7 @@ import 'dart:async';
 import 'package:penny_pincher/view/widget/browser_article_card.dart';
 import 'package:penny_pincher/view/widget/extended_view.dart';
 import 'package:penny_pincher/view/subcategory_view.dart';
+import 'package:provider/provider.dart';
 
 import 'filter_view.dart';
 
@@ -137,6 +138,7 @@ class _BrowserPageState extends State<BrowserPage> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     MediaQueryData _mediaQueryData = MediaQuery.of(context);;
     double displayWidth = _mediaQueryData.size.width;
     double displayHeight = _mediaQueryData.size.height;
@@ -270,7 +272,7 @@ class _BrowserPageState extends State<BrowserPage> {
                             height: 40,
                             child: Text(widget.mainCategoryNames[index],
                               style: TextStyle(
-                                color: ThemeChanger.navBarColor,
+                                color: ThemeChanger.reversetextColor,
                               ),),
                           ));
                     }),
