@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:penny_pincher/models/preferences_articles.dart';
+import 'package:penny_pincher/services/fav_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
 import 'package:penny_pincher/view/widget/extended_view.dart';
-import 'package:penny_pincher/view/widget/favorite_card.dart';
 import 'package:flutter/material.dart';
 import 'package:penny_pincher/view/widget/favorite_search.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +29,7 @@ class _FavoritePageState extends State<FavoritePage> {
   //late Product _product;
 
   late List<Product> _product;
-  late final List<Product> favoriteIds = [];
+  late final List<Product> favoriteProducts = [];
   bool _isLoading = true;
   bool _isClosed = false;
   String query = '';
@@ -44,12 +44,11 @@ class _FavoritePageState extends State<FavoritePage> {
         _isLoading = true;
       });
     }
-
+    getProducts();
     super.initState();
     widget.stream.listen((update) {
       updateFavorites(update);
     });
-    getProducts();
   }
 
   getData() async {
@@ -60,7 +59,7 @@ class _FavoritePageState extends State<FavoritePage> {
   }
 
   Future <void> getProducts() async {
-    favoriteIds.clear();
+    favoriteProducts.clear();
     _product = await _preferenceArticles.getAllFavorites();
     if (mounted) {
       setState(() {
@@ -68,8 +67,10 @@ class _FavoritePageState extends State<FavoritePage> {
       });
     }
     for (var i = 0; i < _product.length; i++) {
-      favoriteIds.insert(i, _product[i]);
+      favoriteProducts.insert(i, _product[i]);
     }
+    FavFunctions.setFavs(favoriteProducts);
+    FavFunctions.addProducts(favoriteProducts);
   }
 
   updateFavorites(bool update) {
@@ -129,7 +130,7 @@ class _FavoritePageState extends State<FavoritePage> {
                     decorationColor: ThemeChanger.highlightedColor,
                     decorationThickness: 4,
                   ),
-                ), ),
+                ),),
             ],
           ),
           actions: [
@@ -137,164 +138,102 @@ class _FavoritePageState extends State<FavoritePage> {
               icon: Icon(Icons.search),
               onPressed: () {
                 final results =
-                showSearch(context: context, delegate: FavoriteSearch(this, streamController));
+                showSearch(context: context,
+                    delegate: FavoriteSearch(this, streamController));
               },
             )
           ]),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
-          : favoriteIds.isNotEmpty
-              ? Align(
-                  alignment: Alignment.topCenter,
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: favoriteIds.length,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ExtendedView(
-                                        id: favoriteIds[index].productId,
-                                        title: favoriteIds[index].title,
-                                        saving: favoriteIds[index].saving,
-                                        category:
-                                        favoriteIds[index].categoryName,
-                                        description:
-                                        favoriteIds[index].description,
-                                        image: favoriteIds[index].image,
-                                        price: favoriteIds[index].price,
-                                        stream: streamController.stream,
-                                        callback: this)),
-                              );
-                              streamController.add(true);
-                              _isClosed = true;
-                            },
-                            child: FavoriteCard(
-                              id: favoriteIds[index].productId,
-                              index: index,
-                              title: favoriteIds[index].title,
-                              saving: favoriteIds[index].saving,
-                              category: favoriteIds[index].categoryName,
-                              description: favoriteIds[index].description,
-                              image: favoriteIds[index].image,
-                              price: favoriteIds[index].price,
-                              callback: this,
-                            ));
-                      }),
-                )
-              : Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.edit_outlined, color: Colors.grey, size: 80),
-                      SizedBox(height: 30),
-                      RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                                text:
-                                    "Du hast noch keine Favorites gespeichert.\n \nDu kannst Favorites hinzufügen, indem du auf das ",
-                                style: TextStyle(
-                                    fontSize: 18, color: ThemeChanger.reversetextColor)),
-                            WidgetSpan(
-                              child: Icon(Icons.favorite,
-                                  color: Colors.red, size: 20),
-                            ),
-                            TextSpan(
-                                text: " klickst.",
-                                style: TextStyle(
-                                    fontSize: 18, color: ThemeChanger.reversetextColor)),
-                          ],
-                        ),
-                      )
-                    ],
+          : favoriteProducts.isNotEmpty
+          ? Align(
+        alignment: Alignment.topCenter,
+        child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: favoriteProducts.length,
+            itemBuilder: (context, index) {
+              return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ExtendedView(
+                                  id: favoriteProducts[index].productId,
+                                  title: favoriteProducts[index].title,
+                                  saving: favoriteProducts[index].saving,
+                                  category:
+                                  favoriteProducts[index].categoryName,
+                                  description:
+                                  favoriteProducts[index].description,
+                                  image: favoriteProducts[index].image,
+                                  price: favoriteProducts[index].price,
+                                  stream: streamController.stream,
+                                  callback: this)),
+                    );
+                    streamController.add(true);
+                    _isClosed = true;
+                  },
+                  child: ArticleCard(
+                    id: favoriteProducts[index].productId,
+                    title: favoriteProducts[index].title,
+                    saving: favoriteProducts[index].saving,
+                    category: favoriteProducts[index].categoryName,
+                    description: favoriteProducts[index].description,
+                    image: favoriteProducts[index].image,
+                    price: favoriteProducts[index].price,
+                    callback: this,
+                  ));
+            }),
+      )
+          : Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.edit_outlined, color: Colors.grey, size: 80),
+            SizedBox(height: 30),
+            RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                      text:
+                      "Du hast noch keine Favorites gespeichert.\n \nDu kannst Favorites hinzufügen, indem du auf das ",
+                      style: TextStyle(
+                          fontSize: 18, color: ThemeChanger.reversetextColor)),
+                  WidgetSpan(
+                    child: Icon(Icons.favorite,
+                        color: Colors.red, size: 20),
                   ),
-                ),
+                  TextSpan(
+                      text: " klickst.",
+                      style: TextStyle(
+                          fontSize: 18, color: ThemeChanger.reversetextColor)),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
+
   // Text("Du hast noch keine Favoriten gespeichert.\n \nDu kannst Favoriten hinzufügen, indem du auf das ❤ klickst.",
   // textAlign: TextAlign.center,
   // style: TextStyle(fontSize: 18, color: Colors.black),
   // )
 
-  bool isFavorite(int id) {
-    return favoriteIds.where((p) => p.productId == id).toList().isNotEmpty;
-  }
-
   Future changeFavoriteState(ArticleCard card) async {
-    if (isFavorite(card.id)) {
-      showAlertDialog(context, card.id);
-    }
-  }
-
-  Future removeFavorite(int id, bool close) async {
-    final product = favoriteIds.where((p) => p.productId == id).toList()[0];
-    await _preferenceArticles.removeFavorite(id);
-    if (mounted) {
-      setState(() {
-        favoriteIds.remove(product);
-      });
-    }
-    if (close) {
-      Navigator.pop(context);
-    }
-    widget.updateStream.add(true);
-    if (search != null) {
-      search.updateSuggestions();
-    }
-  }
-
-  showAlertDialog(BuildContext context, int id) {
-    // set up the buttons
-    Widget cancelButton = TextButton(
-      child: const Text("Nein"),
-      onPressed: () {
-        Navigator.of(context, rootNavigator: true).pop('dialog');
-      },
-    );
-    Widget continueButton = TextButton(
-      style: TextButton.styleFrom(
-        primary: Colors.red,
-      ),
-      child: const Text("Ja"),
-      onPressed: () async {
-        Navigator.of(context, rootNavigator: true).pop('dialog');
-        await removeFavorite(id, false);
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: const Text("Artikel entfernen?"),
-      content: const Text(
-          "Willst du diesen Artikel wirklich aus deinen Favorites entfernen?"),
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10.0))),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
+    FavFunctions.changeFavoriteState(card, this);
   }
 
   List<Product> filterFavorites(search) {
     this.search = search;
 
     List<Product> result = [];
-    for (var i = 0; i < favoriteIds.length; i++) {
-      if (favoriteIds[i].title.toLowerCase().contains(query.toLowerCase())) {
-        result.add(favoriteIds[i]);
+    for (var i = 0; i < favoriteProducts.length; i++) {
+      if (favoriteProducts[i].title.toLowerCase().contains(query.toLowerCase())) {
+        result.add(favoriteProducts[i]);
       }
     }
     return result;

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:penny_pincher/services/fav_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 
 import '../theme.dart';
@@ -56,9 +57,8 @@ class ArticleCard extends StatelessWidget {
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
 
     return Container(
-        margin: EdgeInsets.symmetric(horizontal: 14, vertical: 5),
-        width: displayWidth,
-        height: blockSizeHorizontal * 35,
+        margin: EdgeInsets.symmetric(horizontal: blockSizeHorizontal * 3, vertical: blockSizeVertical * 0.5),
+        height: blockSizeVertical * 20,
         decoration: BoxDecoration(
           color: ThemeChanger.articlecardbackground,
           borderRadius: BorderRadius.circular(15),
@@ -76,125 +76,143 @@ class ArticleCard extends StatelessWidget {
         ),
         child:
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Picture + Rating / Discount%
-            Align(
-              child:
+            // Picture + Discount%
+            Stack(
+              children:[
               // Product Image
               Container(
                 //color: Colors.purple,
-                width: blockSizeHorizontal * 30,//displayWidth/3 - 20,
-                height: blockSizeVertical * 20,
-                margin: EdgeInsets.only(left: blockSizeHorizontal * 1),//(left: 10),
+                //width: blockSizeHorizontal * 30,//displayWidth/3 - 20,
+                //height: blockSizeVertical * 15,
+                margin: EdgeInsets.only(left: blockSizeHorizontal * 3),//(left: 10),
                 child:
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(8.0),
                   child:
                   Image.network(
                     image,
-                    width: blockSizeHorizontal * 50,//displayWidth / 3 - 30,
-                    height: blockSizeHorizontal * 30,//displayWidth / 3 - 30,
+                    //width: blockSizeHorizontal * 50,//displayWidth / 3 - 30,
+                    //height: blockSizeHorizontal * 50,//displayWidth / 3 - 30,
                     fit: BoxFit.contain,
                   ),
                 ),
               ),
-              alignment: Alignment.centerLeft,
-            ),
-
-
-            Container(
-              // title
-              //color: Colors.blue,
-              margin: EdgeInsets.only(left: blockSizeHorizontal * 2, right: blockSizeHorizontal * 2, top: blockSizeVertical * 7),//(left: 4, right: 4, top: 20),
-              width: blockSizeHorizontal * 30,//displayWidth/3 ,
-              height: blockSizeVertical * 20,
-              child: Text(
-                title,
-                style: TextStyle(
-                  fontSize: safeBlockHorizontal * 3.5,//16,
-                  color: ThemeChanger.reversetextColor,
-                  fontWeight: FontWeight.bold,
+                // % Badge
+                Container(
+                  margin: EdgeInsets.only(top: blockSizeVertical*0.5),
+                  //padding: EdgeInsets.only(top: 3, bottom: 3, left: 7, right: 5),
+                  padding: EdgeInsets.only(top: blockSizeVertical * 0.5, bottom: blockSizeVertical * 0.5, left: blockSizeHorizontal *1, right: blockSizeHorizontal * 1),//(top: 3, bottom: 3, left: 10, right: 17),
+                  decoration: BoxDecoration(color: ThemeChanger.highlightedColor,  // const Color.fromRGBO(23, 41, 111, 0.8),
+                    borderRadius: BorderRadius.circular(0),
+                  ),
+                  child:
+                  Text("-" + saving.toString() + "%",
+                    style: TextStyle(
+                      color: ThemeChanger.textColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: safeBlockHorizontal * 4,
+                    ),
+                  ),
                 ),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 4,
-                textAlign: TextAlign.center,
-              ),
-              alignment: Alignment.topCenter,
+              ]
             ),
-
-            Container(
-              //color: Colors.red,
-                width: blockSizeHorizontal * 25,//displayWidth / 3 -35,
-                height: blockSizeVertical * 25,
-                child:
+            Stack(
+              children: [
+                //title/description/price
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    // Favourite Icon
-                    Align(
-                      child: Padding(
-                        padding: EdgeInsets.only(right: blockSizeHorizontal * 2),
-                        child:
-                          IconButton(
-                          icon: (callback.isFavorite(id) ?
-                            const Icon(Icons.favorite,
-                            color: Colors.red) : const Icon(Icons.favorite_border,
-                            color: Colors.black)),
-                            onPressed: _changeFavoriteState,
-                            ),
-                      ),
-                      alignment: Alignment.centerRight,
-                    ),
-                    Container(                                                      // % Badge
-                      padding: EdgeInsets.only(top: blockSizeVertical * 1, bottom: blockSizeVertical * 1, left: blockSizeHorizontal * 3, right: blockSizeHorizontal * 3),//(top: 3, bottom: 3, left: 10, right: 17),
-                      decoration: BoxDecoration(color: ThemeChanger.highlightedColor,  // const Color.fromRGBO(23, 41, 111, 0.8),
-                        borderRadius: BorderRadius.circular(0),
-                      ),
-                      child:
-                      Text("-" + saving.toString() + "%",
-                        style: TextStyle(
-                          color: ThemeChanger.textColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: safeBlockHorizontal * 4,
-                        ),
-                      ),
-                    ),
-                    // current Price...
-                    Container(
-                      margin: EdgeInsets.only(right: blockSizeHorizontal * 2, bottom: blockSizeVertical * 0),
-                      child:
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children:[
                       Column(
-                          children: [
-                            Text(
-                              "Aktueller Preis:",
+                        children: [
+                          //title
+                          Container(
+                            //color: Colors.blue,
+                            margin: EdgeInsets.only(left: blockSizeHorizontal * 2, top: blockSizeVertical * 2),//(left: 4, right: 4, top: 20),
+                            width: blockSizeHorizontal * 50,//displayWidth/3 ,
+                            //height: blockSizeVertical * 10,
+                            child: Text(
+                              title,
                               style: TextStyle(
-                                  fontWeight: FontWeight
-                                      .bold,
-                                  fontSize: safeBlockHorizontal * 2.5,//10,
-                                  color: ThemeChanger.reversetextColor),
+                                fontSize: safeBlockHorizontal * 4.5,//16,
+                                color: ThemeChanger.reversetextColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              textAlign: TextAlign.left,
                             ),
-                            Text(
-                              newprice.toStringAsFixed(2) + "€",
+                          ),
+                          // description
+                          Container(
+                            margin: EdgeInsets.only(left:  blockSizeHorizontal * 2,top: blockSizeVertical * 0.5),
+                            width: blockSizeHorizontal * 50,//displayWidth/3 ,
+                            child: Text(
+                              description,
+                              textAlign: TextAlign.left,
                               style: TextStyle(
-                                fontWeight: FontWeight
-                                    .bold,
-                                fontSize: safeBlockHorizontal * 5,
-                                color: ThemeChanger.highlightedColor),
+                                fontSize: safeBlockHorizontal * 3.5,
+                                color: ThemeChanger.reversetextColor,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
                             ),
-                            Text(
-                              prevpreis.toStringAsFixed(2) + "€",
-                              style: TextStyle(
-                                  decoration: TextDecoration.lineThrough,
-                                  fontSize: safeBlockHorizontal * 4.0,
-                                  color: ThemeChanger.reversetextColor),
+                          )
+                        ],),
+                      Column(
+                          children:[
+                            //old price
+                            Container(
+                              margin: EdgeInsets.only(left:  blockSizeHorizontal * 2),
+                              width: blockSizeHorizontal * 50,
+                              child: Text(
+                                prevpreis.toStringAsFixed(2) + "€",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    decoration: TextDecoration.lineThrough,
+                                    fontSize: safeBlockHorizontal * 4.0,
+                                    color: ThemeChanger.reversetextColor),
+                              ),
                             ),
-                          ]
-                      ),
+                            //Price
+                            Container(
+                              margin: EdgeInsets.only(bottom: blockSizeVertical*1, left:  blockSizeHorizontal * 2),
+                              //padding: EdgeInsets.only(top: blockSizeVertical * 3),
+                              //margin: EdgeInsets.only(bottom: blockSizeVertical*0.2),
+                              width: blockSizeHorizontal * 50,
+                              child:
+                              Text(
+                                newprice.toStringAsFixed(2) + "€",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  fontSize: safeBlockHorizontal * 6.0,//16,
+                                  color: ThemeChanger.highlightedColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ])
+                    ]),
+                //icon
+                Container(
+                  //margin: EdgeInsets.only(bottom: blockSizeVertical*5),
+                  width: blockSizeHorizontal * 60,//displayWidth / 3 -35,
+                  child:
+                  // Favourite Icon
+                  Align(
+                    child:
+                    IconButton(
+                      iconSize: 30.0,
+                      icon: (callback.isFavorite(id) ?
+                      Icon(Icons.favorite, color: Colors.red) :
+                      Icon(Icons.favorite_border, color: ThemeChanger.reversetextColor)),
+                      onPressed: _changeFavoriteState,
                     ),
-                  ],
-                )
+                    alignment: Alignment.centerRight,
+                  ),
+                ),
+              ],
             ),
           ],
         )
@@ -202,7 +220,8 @@ class ArticleCard extends StatelessWidget {
   }
 
   Future _changeFavoriteState() async {
-    await callback.changeFavoriteState(this);
+    //await callback.changeFavoriteState(this);
+    FavFunctions.changeFavoriteState(this, callback);
   }
 }
 
