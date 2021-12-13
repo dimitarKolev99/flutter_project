@@ -204,7 +204,7 @@ class ArticleCard extends StatelessWidget {
                     child:
                     IconButton(
                       iconSize: 30.0,
-                      icon: (callback.isFavorite(id) ?
+                      icon: (FavFunctions.isFavorite(id) ?
                       Icon(Icons.favorite, color: Colors.red) :
                       Icon(Icons.favorite_border, color: ThemeChanger.reversetextColor)),
                       onPressed: _changeFavoriteState,
