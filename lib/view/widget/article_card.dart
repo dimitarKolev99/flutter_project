@@ -89,7 +89,7 @@ class ArticleCard extends StatelessWidget {
                 margin: EdgeInsets.only(left: blockSizeHorizontal * 3),//(left: 10),
                 child:
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
+                  borderRadius: BorderRadius.circular(4.0),
                   child:
                   Image.network(
                     image,
@@ -104,7 +104,8 @@ class ArticleCard extends StatelessWidget {
                   margin: EdgeInsets.only(top: blockSizeVertical*0.5),
                   //padding: EdgeInsets.only(top: 3, bottom: 3, left: 7, right: 5),
                   padding: EdgeInsets.only(top: blockSizeVertical * 0.5, bottom: blockSizeVertical * 0.5, left: blockSizeHorizontal *1, right: blockSizeHorizontal * 1),//(top: 3, bottom: 3, left: 10, right: 17),
-                  decoration: BoxDecoration(color: ThemeChanger.highlightedColor,  // const Color.fromRGBO(23, 41, 111, 0.8),
+                  decoration: BoxDecoration(
+                    color: ThemeChanger.highlightedColor,  // const Color.fromRGBO(23, 41, 111, 0.8),
                     borderRadius: BorderRadius.circular(0),
                   ),
                   child:
@@ -130,7 +131,7 @@ class ArticleCard extends StatelessWidget {
                           Container(
                             //color: Colors.blue,
                             margin: EdgeInsets.only(left: blockSizeHorizontal * 2, top: blockSizeVertical * 2),//(left: 4, right: 4, top: 20),
-                            width: blockSizeHorizontal * 50,//displayWidth/3 ,
+                            width: blockSizeHorizontal * 45,//displayWidth/3 ,
                             //height: blockSizeVertical * 10,
                             child: Text(
                               title,
@@ -140,19 +141,19 @@ class ArticleCard extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                               overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
+                              maxLines: 2,
                               textAlign: TextAlign.left,
                             ),
                           ),
                           // description
                           Container(
                             margin: EdgeInsets.only(left:  blockSizeHorizontal * 2,top: blockSizeVertical * 0.5),
-                            width: blockSizeHorizontal * 50,//displayWidth/3 ,
+                            width: blockSizeHorizontal * 45,//displayWidth/3 ,
                             child: Text(
                               description,
                               textAlign: TextAlign.left,
                               style: TextStyle(
-                                fontSize: safeBlockHorizontal * 3.5,
+                                fontSize: safeBlockHorizontal * 3.25,
                                 color: ThemeChanger.reversetextColor,
                               ),
                               overflow: TextOverflow.ellipsis,
@@ -165,13 +166,13 @@ class ArticleCard extends StatelessWidget {
                             //old price
                             Container(
                               margin: EdgeInsets.only(left:  blockSizeHorizontal * 2),
-                              width: blockSizeHorizontal * 50,
+                              width: blockSizeHorizontal * 45,
                               child: Text(
                                 prevpreis.toStringAsFixed(2) + "€",
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                     decoration: TextDecoration.lineThrough,
-                                    fontSize: safeBlockHorizontal * 4.0,
+                                    fontSize: safeBlockHorizontal * 3.25,
                                     color: ThemeChanger.reversetextColor),
                               ),
                             ),
@@ -180,7 +181,7 @@ class ArticleCard extends StatelessWidget {
                               margin: EdgeInsets.only(bottom: blockSizeVertical*1, left:  blockSizeHorizontal * 2),
                               //padding: EdgeInsets.only(top: blockSizeVertical * 3),
                               //margin: EdgeInsets.only(bottom: blockSizeVertical*0.2),
-                              width: blockSizeHorizontal * 50,
+                              width: blockSizeHorizontal * 45,
                               child:
                               Text(
                                 newprice.toStringAsFixed(2) + "€",
@@ -195,6 +196,17 @@ class ArticleCard extends StatelessWidget {
                           ])
                     ]),
                 //icon
+                Container(
+                  //margin: EdgeInsets.only(bottom: blockSizeVertical*5),
+                  width: blockSizeHorizontal * 60,//displayWidth / 3 -35,
+                  child:
+                  // Favourite Icon
+                  Align(
+                    child:
+                    Icon(Icons.favorite, color: ThemeChanger.articlecardbackground),
+                    alignment: Alignment.centerRight,
+                  ),
+                ),
                 Container(
                   //margin: EdgeInsets.only(bottom: blockSizeVertical*5),
                   width: blockSizeHorizontal * 60,//displayWidth / 3 -35,
