@@ -311,7 +311,8 @@ class _ExtendedViewState extends State<ExtendedView> {
       price: widget.price,
       callback: widget.callback,
     );
-    FavFunctions.changeFavoriteState(articleCard, articleCard.callback);
+    FavFunctions.changeFavoriteState(articleCard, this);
+    setState(() {});
   }
 
   // creating specific URL and launching it from available browser apps
