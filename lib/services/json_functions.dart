@@ -2,10 +2,11 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/services.dart' show rootBundle;
 
+
 class JsonFunctions{
   int id = 0;
   List<int> productCategoryIDs = [];
-
+  Map<String, int> ret = new Map();
   Map<String, int> mainCategories1 = {
     "Elektroartikel" : 30311,
     "Drogerie & Gesundheit" : 3932,
@@ -19,53 +20,69 @@ class JsonFunctions{
     "Haushaltselektronik" : 1940,
   };
 
+  Map<String, int> getMainCategories(){
+    return mainCategories1;
+  }
+  //TODO: check if nullable is a Problem !
+  int? getMainId(String name){
+    return mainCategories1[name];
+  }
+
+
   // this method should return all subcategories -> Method is called after finding the id inside the tree
   Map<String, int> getSubOrProductCategories(List<dynamic> category){
     Map<String, int>  categories = new Map();
     for (var element in category) {
       categories[element["name"]] = element["id"];
     }
-    print(categories);
+    // print("Map1: $categories");
     return categories;
   }
   // this method returns all product and Subcategories, in case the id has both in the list
   Map<String, int> getSubAndProdCategories(List<dynamic> category, List<dynamic> category2){
     Map<String, int>  categories = new Map();
     for (var element in category) {
-      print("subCategories = ${element["name"]} = ${element["id"]} ");
+      //  print("subCategories = ${element["name"]} = ${element["id"]} ");
       categories[element["name"]] = element["id"];
     }
     for (var element in category2) {
-      print("prodCategories = ${element["name"]} = ${element["id"]} ");
+      // print("prodCategories = ${element["name"]} = ${element["id"]} ");
       categories[element["name"]] = element["id"];
     }
-    print(categories);
+    //print("Map2: $categories");
     return categories;
   }
 
   //this method should locate the right location inside the category tree and call getSubCategories to get all subcategories in a Map
   Map<String, int> getMapOfSubOrProductCategories(int id, List<dynamic> resultList){
     for (var element in resultList) {
-      print("element = ${element[id]}");
+      //print("element = ${element[id]}");
       int elementId = element["id"];
       if (elementId == id) {
-        print("id found");
+        //print("id found");
         // if we reached a subcategory which matches the id we're looking for, call the method getSubCategories
         // if (element.toString().substring(1, 14) == "subCategories") {
         if(element["productCategories"] != null && element["subCategories"] != null ){
+          //  print("there are prod & sub cats");
           List<dynamic> resultList2 = element["subCategories"];
           List<dynamic> resultList3 = element["productCategories"];
-          return getSubAndProdCategories(resultList2, resultList3);
+          ret.addAll(getSubAndProdCategories(resultList2, resultList3));
+          //print("ret = $ret");
+          //return ret;
         }
         if(element["subCategories"] != null ){
-          print(" were in sub Categories");
+          //  print(" were in sub Categories");
           List<dynamic> resultList2 = element["subCategories"];
-          return getSubOrProductCategories(resultList2);
+          ret.addAll(getSubOrProductCategories(resultList2));
+          //print("ret = $ret");
+          // return ret;
         }
         if(element["productCategories"] != null ){
-          print(" were in prod Categories");
+          //   print(" were in prod Categories");
           List<dynamic> resultList2 = element["productCategories"];
-          return getSubOrProductCategories(resultList2);
+          ret.addAll(getSubOrProductCategories(resultList2));
+          //print("ret = $ret");
+          //return ret;
         }
       }
       // if the id couldn't be found call function again from the right spot
@@ -77,7 +94,10 @@ class JsonFunctions{
         }
       }
     }
-    return Map();
+    // Map<String, int> x = new Map();
+    // x["Not Found"] = 2342;
+    //print("RET FINAL = $ret");
+    return ret;
   }
 
   int getRandomInt() {
