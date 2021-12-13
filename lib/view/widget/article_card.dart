@@ -61,7 +61,7 @@ class ArticleCard extends StatelessWidget {
         height: blockSizeVertical * 20,
         decoration: BoxDecoration(
           color: ThemeChanger.articlecardbackground,
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(3),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.6),

@@ -48,7 +48,7 @@ class BrowserArticleCard extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       decoration: BoxDecoration(
         color: ThemeChanger.articlecardbackground,
-        borderRadius: BorderRadius.circular(2),
+        borderRadius: BorderRadius.circular(3),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.6),
