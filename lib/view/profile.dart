@@ -1,4 +1,5 @@
 import 'package:penny_pincher/models/preferences_articles.dart';
+import 'package:penny_pincher/services/notification_service.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/theme.dart';
@@ -156,7 +157,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   child:
                   TextButton(
                     onPressed: () {
-
+                      NotificationService().showNotification(
+                          1,
+                          "Notification",
+                          "New items have been added to your favorite category. Check them out now!",
+                          5);
                     },
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(ThemeChanger.textColor),
