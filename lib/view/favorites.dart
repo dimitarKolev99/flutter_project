@@ -5,7 +5,7 @@ import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
-import 'package:penny_pincher/view/widget/extended_view.dart';
+import 'package:penny_pincher/view/extended_view.dart';
 import 'package:flutter/material.dart';
 import 'package:penny_pincher/view/widget/favorite_search.dart';
 import 'package:provider/provider.dart';

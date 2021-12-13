@@ -9,7 +9,7 @@ import 'package:penny_pincher/view/widget/article_card.dart';
 import 'package:penny_pincher/view/widget/article_search.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:penny_pincher/view/widget/extended_view.dart';
+import 'package:penny_pincher/view/extended_view.dart';
 import 'package:provider/provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
 

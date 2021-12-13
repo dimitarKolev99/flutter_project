@@ -4,8 +4,8 @@ import 'package:penny_pincher/services/fav_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../theme.dart';
-import 'article_card.dart';
+import 'theme.dart';
+import 'widget/article_card.dart';
 
 class ExtendedView extends StatefulWidget {
   final int id;
@@ -312,6 +312,7 @@ class _ExtendedViewState extends State<ExtendedView> {
       callback: widget.callback,
     );
     FavFunctions.changeFavoriteState(articleCard, this);
+    articleCard.callback.updateBrowser();
     setState(() {});
   }
 

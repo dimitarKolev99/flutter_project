@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import '../browser_view.dart';
 import 'article_card.dart';
 import 'browser_article_card.dart';
-import 'extended_view.dart';
+import '../extended_view.dart';
 
 
 

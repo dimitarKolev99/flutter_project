@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 
 
 import 'package:penny_pincher/view/widget/browser_article_card.dart';
-import 'package:penny_pincher/view/widget/extended_view.dart';
+import 'package:penny_pincher/view/extended_view.dart';
 
 import 'about.dart';
 

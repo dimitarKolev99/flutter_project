@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
 import 'article_card.dart';
-import 'extended_view.dart';
+import '../extended_view.dart';
 
 class FavoriteSearch extends SearchDelegate<String> {
 
