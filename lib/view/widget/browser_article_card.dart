@@ -48,7 +48,7 @@ class BrowserArticleCard extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       decoration: BoxDecoration(
         color: ThemeChanger.articlecardbackground,
-        borderRadius: BorderRadius.circular(2),
+        borderRadius: BorderRadius.circular(3),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.6),
@@ -70,20 +70,30 @@ class BrowserArticleCard extends StatelessWidget {
               Stack(
                 children: [
                   //Image
-                  Container(
-                    margin: EdgeInsets.only(top: blockSizeVertical*1),
-                    child: Image.network(
-                      image,
-                      width: blockSizeHorizontal * 33.33,
-                      height: blockSizeVertical * 16.67,
-                      fit: BoxFit.contain,
+                  Align(
+                    child:
+                    Container(
+                      margin: EdgeInsets.only(top: blockSizeVertical*1),
+                      //width: blockSizeHorizontal * 33.33, //width: blockSizeHorizontal * 33.33,
+                      //height: blockSizeVertical * 16.67, //height: blockSizeVertical * 16.67,
+                      child:
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(4.0),
+                        child:
+                        Image.network(
+                          image,
+                          width: blockSizeHorizontal * 33.33,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                      alignment: Alignment.topCenter,
                     ),
-                    alignment: Alignment.topCenter,
                   ),
                   // %Badge
                   Container(
-                    margin: EdgeInsets.only(top: blockSizeVertical*0.8, left: blockSizeHorizontal*1),
+                    margin: EdgeInsets.only(top: blockSizeVertical*0.8),
                     //padding: EdgeInsets.only(top: 3, bottom: 3, left: 10, right: 17),
+                    padding: EdgeInsets.only(top: blockSizeVertical * 0.5, bottom: blockSizeVertical * 0.5, left: blockSizeHorizontal *1, right: blockSizeHorizontal * 1),//(top: 3, bottom: 3, left: 10, right: 17),
                     decoration: BoxDecoration(
                       color: ThemeChanger.highlightedColor, // const Color.fromRGBO(23, 41, 111, 0.8),
                       borderRadius: BorderRadius.circular(0),
@@ -93,35 +103,53 @@ class BrowserArticleCard extends StatelessWidget {
                       style: TextStyle(
                         color: ThemeChanger.textColor,
                         fontWeight: FontWeight.bold,
-                        fontSize: safeBlockHorizontal * 4.5,
+                        fontSize: safeBlockHorizontal * 4,
                       ),
                     ),
                   ),
                   //Favorite icon
                   Container(
-                    margin: EdgeInsets.only(top: blockSizeVertical*0.1, right: blockSizeHorizontal*0.1),
-                    child: Align(
-                      child: IconButton(
-                        icon: (FavFunctions.isFavorite(id)
-                            ? const Icon(Icons.favorite,
-                            color: Colors.red)
-                            : const Icon(Icons.favorite_border,
-                            color: Colors.black)),
+                    padding: EdgeInsets.only(top: blockSizeVertical*1.3, right: blockSizeHorizontal*2.2),
+                    width: blockSizeHorizontal * 60,//displayWidth / 3 -35,
+                    child:
+                    // Favourite Icon
+                    Align(
+                      child:
+                      Icon(
+                        Icons.favorite,
+                        color: ThemeChanger.articlecardbackground,
+                        size: 29.0,
+                      ),
+                      alignment: Alignment.centerRight,
+                    ),
+                  ),
+                  Container(
+                    //margin: EdgeInsets.only(bottom: blockSizeVertical*5),
+                    width: blockSizeHorizontal * 60,//displayWidth / 3 -35,
+                    child:
+                    // Favourite Icon
+                    Align(
+                      child:
+                      IconButton(
+                        iconSize: 30.0,
+                        icon: (FavFunctions.isFavorite(id) ?
+                        Icon(Icons.favorite, color: Colors.red) :
+                        Icon(Icons.favorite_border, color: ThemeChanger.reversetextColor)),
                         onPressed: _changeFavorite,
                       ),
-                      alignment: Alignment.topRight,
+                      alignment: Alignment.centerRight,
                     ),
                   ),
                 ],
               ),
               // title
               Container(
-                margin: EdgeInsets.only(top: blockSizeVertical*0.1),
-                width: blockSizeVertical*20,
+                margin: EdgeInsets.only(top: blockSizeVertical*1),
+                width: blockSizeVertical*22.5,
                 child: Text(
                   title,
                   style: TextStyle(
-                    fontSize: safeBlockHorizontal * 4,
+                    fontSize: safeBlockHorizontal * 4.5,//16,
                     color: ThemeChanger.reversetextColor,
                     fontWeight: FontWeight.bold,
                   ),
@@ -131,24 +159,40 @@ class BrowserArticleCard extends StatelessWidget {
                 ),
                 alignment: Alignment.topCenter,
               ),
+              Container(
+                margin: EdgeInsets.only(top: blockSizeVertical * 0.5),
+                width: blockSizeVertical*22.5,
+                child: Text(
+                  description,
+                  style: TextStyle(
+                    fontSize: safeBlockHorizontal * 3.25,//16,
+                    color: ThemeChanger.reversetextColor,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ]),
             //price
             Container(
-              margin: EdgeInsets.only(bottom: blockSizeVertical*0.2),
+              margin: EdgeInsets.only(bottom: blockSizeVertical*0.5),
               child: Column(children: [
+                //oldprice
                 Text(
                   prevpreis.toStringAsFixed(2) + "€",
                   style: TextStyle(
                       decoration: TextDecoration.lineThrough,
-                      fontSize: safeBlockHorizontal * 4, color: ThemeChanger.reversetextColor
-                  ),
+                      fontSize: safeBlockHorizontal * 3.25,
+                      color: ThemeChanger.reversetextColor),
                 ),
+                //newprice
                 Text(
                   newprice.toStringAsFixed(2) + "€",
                   style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: safeBlockHorizontal * 7,
+                    fontSize: safeBlockHorizontal * 6.0,//16,
                     color: ThemeChanger.highlightedColor,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ]),
