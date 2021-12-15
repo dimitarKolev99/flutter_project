@@ -28,7 +28,10 @@ class SubcategoryView extends StatefulWidget{
 
 class _SubcategoryViewState extends State<SubcategoryView>{
   RangeValues _currentSliderValuesPrice = const RangeValues(20, 70);
-  var discounts = [10, 20, 30, 40, 50];
+  // Discount options combined with a boolean for when chosen
+  var discounts = [ [10, false], [20, false], [30, false], [40, false], [50, false]];
+
+  
 
   JsonFunctions json = JsonFunctions();
 
@@ -273,12 +276,28 @@ class _SubcategoryViewState extends State<SubcategoryView>{
                                 width: blockSizeHorizontal * 12,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: ThemeChanger.lightBlue,
+                                  // When a discount circle is clicked
+                                  color: (discounts[index][1] == true)
+                                      ? ThemeChanger.highlightedColor
+                                      : ThemeChanger.lightBlue,
                                 ),
                                 child: InkWell(
-                                  onTap: (){},
+                                  onTap: (){
+                                    // When a discount circle is clicked
+                                    setState(() {
+                                      if (discounts[index][1] == false){
+                                        // Only one discount can be selected
+                                        for (var discount in discounts) {
+                                          discount[1] = false;
+                                        }
+                                        discounts[index][1] = true;
+                                      }else{
+                                        discounts[index][1] = false;
+                                      }
+                                    });
+                                  },
                                   child: Text(
-                                    discounts[index].toString() + "%",
+                                    discounts[index][0].toString() + "%",
                                     style: TextStyle(
                                       color: ThemeChanger.articlecardbackground,
                                       fontSize: safeBlockHorizontal * 3.9,
