@@ -28,6 +28,7 @@ class SubcategoryView extends StatefulWidget{
 
 class _SubcategoryViewState extends State<SubcategoryView>{
   RangeValues _currentSliderValuesPrice = const RangeValues(20, 70);
+  var discounts = [10, 20, 30, 40, 50];
 
   JsonFunctions json = JsonFunctions();
 
@@ -147,15 +148,16 @@ class _SubcategoryViewState extends State<SubcategoryView>{
                 children: [
                   // Price and Discount
                   Container(
+                    padding: EdgeInsets.symmetric(horizontal: blockSizeHorizontal * 2),
                     child: Column(
                       children: [
 
                         // Title for Price-Slider
                         Container(
                           alignment: Alignment.centerLeft,
-                          margin: EdgeInsets.only(left: blockSizeHorizontal * 6, top: blockSizeHorizontal * 2),
+                          //margin: EdgeInsets.only(left: blockSizeHorizontal * 6, top: blockSizeHorizontal * 2),
                           //Headline: Price
-                          child: Text("Preisklasse : ",
+                          child: Text("Preisklasse",
                               style: TextStyle(
                                 color: ThemeChanger.navBarColor,
                                 //fontWeight: FontWeight.bold,
@@ -165,8 +167,11 @@ class _SubcategoryViewState extends State<SubcategoryView>{
 
                         // PriceSlider
                         Container(
-                          width: blockSizeHorizontal * 100,
+                          padding: EdgeInsets.all(0),
+                          margin: EdgeInsets.all(0),
+                          width: blockSizeHorizontal * 200,
                           child: RangeSlider(
+
                             activeColor: ThemeChanger.navBarColor,
                             //inactiveColor: ProductApi.orange,
                             values: _currentSliderValuesPrice,
@@ -189,6 +194,8 @@ class _SubcategoryViewState extends State<SubcategoryView>{
 
                         // Output of Price-Slider
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.max,
                           children: [
                             Container(
                               margin: EdgeInsets.only(bottom: blockSizeVertical * 2),
@@ -202,34 +209,85 @@ class _SubcategoryViewState extends State<SubcategoryView>{
                                 borderRadius:
                                 BorderRadius.circular(blockSizeHorizontal * 3),
                               ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Text(
-                                    _currentSliderValuesPrice.start.round().toString() +
-                                        " €",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: safeBlockHorizontal * 4.8,
-                                      color: ThemeChanger.textColor,
-                                      //backgroundColor: ProductApi.lightBlue,
-                                    ),
-                                  ),
-                                  Text(
-                                    _currentSliderValuesPrice.end.round().toString() +
-                                        " €",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: safeBlockHorizontal * 4.8,
-                                      color: ThemeChanger.textColor,
-                                      //backgroundColor: ProductApi.lightBlue,
-                                    ),
-                                  ),
-                                ],
+                              child:
+                              Text(
+                                _currentSliderValuesPrice.start.round().toString() +
+                                    " €",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: safeBlockHorizontal * 4.8,
+                                  color: ThemeChanger.textColor,
+                                  //backgroundColor: ProductApi.lightBlue,
+                                ),
                               ),
-                            )
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(bottom: blockSizeVertical * 2),
+                              padding: EdgeInsets.only(
+                                  top: blockSizeVertical * 1,
+                                  bottom: blockSizeVertical * 1,
+                                  left: blockSizeHorizontal * 3,
+                                  right: blockSizeHorizontal * 3),
+                              decoration: BoxDecoration(
+                                color: ThemeChanger.lightBlue,
+                                borderRadius:
+                                BorderRadius.circular(blockSizeHorizontal * 3),
+                              ),
+                              child:
+                              Text(
+                                _currentSliderValuesPrice.end.round().toString() +
+                                    " €",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: safeBlockHorizontal * 4.8,
+                                  color: ThemeChanger.textColor,
+                                  //backgroundColor: ProductApi.lightBlue,
+                                ),
+                              ),
+                            ),
                           ],
+                        ),
+
+                        // Title for Discount Options
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          //margin: EdgeInsets.only(left: blockSizeHorizontal * 6, top: blockSizeHorizontal * 2),
+                          //Headline: Price
+                          child: Text("Rabatte",
+                              style: TextStyle(
+                                color: ThemeChanger.navBarColor,
+                                //fontWeight: FontWeight.bold,
+                                fontSize: safeBlockHorizontal * 5,
+                              )),
+                        ),
+
+                        // Discount Options
+                        Container(
+                          height: blockSizeVertical * 10,
+                          //color: Colors.amberAccent,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: List.generate(discounts.length, (index) {
+                              return Container(
+                                alignment: Alignment.center,
+                                width: blockSizeHorizontal * 12,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: ThemeChanger.lightBlue,
+                                ),
+                                child: InkWell(
+                                  onTap: (){},
+                                  child: Text(
+                                    discounts[index].toString() + "%",
+                                    style: TextStyle(
+                                      color: ThemeChanger.articlecardbackground,
+                                      fontSize: safeBlockHorizontal * 3.9,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            })
+                          ),
                         ),
                       ],
                     ),
