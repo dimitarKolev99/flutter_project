@@ -7,6 +7,7 @@ import 'package:penny_pincher/services/json_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/subcat_button.dart';
+import 'package:provider/provider.dart';
 
 class SubcategoryView extends StatefulWidget{
   int categoryId;
@@ -26,6 +27,8 @@ class SubcategoryView extends StatefulWidget{
   }
 
 class _SubcategoryViewState extends State<SubcategoryView>{
+  RangeValues _currentSliderValuesPrice = const RangeValues(20, 70);
+
   JsonFunctions json = JsonFunctions();
 
 
@@ -78,15 +81,31 @@ class _SubcategoryViewState extends State<SubcategoryView>{
 
   @override
     Widget build (BuildContext context){
+    ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
 
-    // This method fills the List subCategories for the clicked main Categories -> To show subcategories on the first Category
     MediaQueryData _mediaQueryData;
     double displayWidth;
     double displayHeight;
+    double blockSizeHorizontal;
+    double blockSizeVertical;
+
+    double _safeAreaHorizontal;
+    double _safeAreaVertical;
+    double safeBlockHorizontal;
+    double safeBlockVertical;
+
     _mediaQueryData = MediaQuery.of(context);
     displayWidth = _mediaQueryData.size.width;
     displayHeight = _mediaQueryData.size.height;
-    //print("button Created");
+    blockSizeHorizontal = displayWidth / 100;
+    blockSizeVertical = displayHeight / 100;
+
+    _safeAreaHorizontal =
+        _mediaQueryData.padding.left + _mediaQueryData.padding.right;
+    _safeAreaVertical =
+        _mediaQueryData.padding.top + _mediaQueryData.padding.bottom;
+    safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
+    safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
 
 
     return
@@ -122,19 +141,116 @@ class _SubcategoryViewState extends State<SubcategoryView>{
                 ],
               )),
           body:
-              // Waits for the lists of categories before it builds the widgets
-              FutureBuilder(
-                future: getCats(),
-                builder: (context, snapshot){
-                  return
-                ListView.builder(
-                    itemCount: subCatButtons.length,
-                    itemBuilder: (context, index) {
-                     // print("length of categories : ${subCatButtons.length}");
-                      return subCatButtons[index];
-                    });
-                }
-                )
+              // Everything shown in body
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  // Price and Discount
+                  Container(
+                    child: Column(
+                      children: [
+
+                        // Title for Price-Slider
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          margin: EdgeInsets.only(left: blockSizeHorizontal * 6, top: blockSizeHorizontal * 2),
+                          //Headline: Price
+                          child: Text("Preisklasse : ",
+                              style: TextStyle(
+                                color: ThemeChanger.navBarColor,
+                                //fontWeight: FontWeight.bold,
+                                fontSize: safeBlockHorizontal * 5,
+                              )),
+                        ),
+
+                        // PriceSlider
+                        Container(
+                          width: blockSizeHorizontal * 100,
+                          child: RangeSlider(
+                            activeColor: ThemeChanger.navBarColor,
+                            //inactiveColor: ProductApi.orange,
+                            values: _currentSliderValuesPrice,
+                            min: 0,
+                            max: 1000,
+                            divisions: 100,
+                            /*
+                      labels: RangeLabels(
+                        _currentSliderValuesPrice.start.round().toString() + "€",
+                        _currentSliderValuesPrice.end.round().toString() + "€",
+                      ),
+                       */
+                            onChanged: (RangeValues values) {
+                              setState(() {
+                                _currentSliderValuesPrice = values;
+                              });
+                            },
+                          ),
+                        ),
+
+                        // Output of Price-Slider
+                        Row(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(bottom: blockSizeVertical * 2),
+                              padding: EdgeInsets.only(
+                                  top: blockSizeVertical * 1,
+                                  bottom: blockSizeVertical * 1,
+                                  left: blockSizeHorizontal * 3,
+                                  right: blockSizeHorizontal * 3),
+                              decoration: BoxDecoration(
+                                color: ThemeChanger.lightBlue,
+                                borderRadius:
+                                BorderRadius.circular(blockSizeHorizontal * 3),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Text(
+                                    _currentSliderValuesPrice.start.round().toString() +
+                                        " €",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: safeBlockHorizontal * 4.8,
+                                      color: ThemeChanger.textColor,
+                                      //backgroundColor: ProductApi.lightBlue,
+                                    ),
+                                  ),
+                                  Text(
+                                    _currentSliderValuesPrice.end.round().toString() +
+                                        " €",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: safeBlockHorizontal * 4.8,
+                                      color: ThemeChanger.textColor,
+                                      //backgroundColor: ProductApi.lightBlue,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Waits for the lists of categories before it builds the widgets
+                  Expanded(
+                    child: FutureBuilder(
+                        future: getCats(),
+                        builder: (context, snapshot){
+                          return
+                            ListView.builder(
+                                itemCount: subCatButtons.length,
+                                itemBuilder: (context, index) {
+                                  // print("length of categories : ${subCatButtons.length}");
+                                  return subCatButtons[index];
+                                });
+                        }
+                    )
+                  ),
+                ],
+              )
               );
   }
 }
