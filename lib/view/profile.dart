@@ -45,7 +45,7 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: const ProfileAppBar(),
       body: Column(
         children: <Widget>[
-          SizedBox(height: 75),
+          SizedBox(height: blockSizeVertical * 5),
           Expanded(
             child: ListView(
               //padding: EdgeInsets.only(top: 50),

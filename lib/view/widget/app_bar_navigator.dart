@@ -61,7 +61,7 @@ class HomeBrowserAppBar extends StatelessWidget implements PreferredSizeWidget {
                       offset: Offset(0, -6))
                 ],
                 //fontFamily: '....',
-                fontSize: safeBlockVertical * 4,
+                fontSize: safeBlockVertical * 3.5,
                 letterSpacing: safeBlockHorizontal * 0.5,
                 color: Colors.transparent,
                 fontWeight: FontWeight.w900,
@@ -90,7 +90,7 @@ class HomeBrowserAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  // TODO: implement preferredSize
+  // TODO: change to responsive height
   Size get preferredSize => Size.fromHeight(55.0);
 }
 
@@ -144,7 +144,7 @@ class FavoriteAppBar extends StatelessWidget implements PreferredSizeWidget {
                       offset: Offset(0, -6))
                 ],
                 //fontFamily: '....',
-                fontSize: safeBlockVertical * 4,
+                fontSize: safeBlockVertical * 3.5,
                 letterSpacing: safeBlockHorizontal * 0.5,
                 color: Colors.transparent,
                 fontWeight: FontWeight.w900,
@@ -173,7 +173,7 @@ class FavoriteAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  // TODO: implement preferredSize
+  // TODO: change to responsive height
   Size get preferredSize => Size.fromHeight(55.0);
 
 }
@@ -209,9 +209,9 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: ThemeChanger.navBarColor,
       title: Row(
-        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(width: blockSizeHorizontal * 17.8),
+          SizedBox(width: blockSizeHorizontal * 2.4),
           Padding(
             padding: EdgeInsets.only(top: blockSizeVertical * 1),
             child:
@@ -225,7 +225,77 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
                       offset: Offset(0, -6))
                 ],
                 //fontFamily: '....',
-                fontSize: safeBlockVertical * 4,
+                fontSize: safeBlockVertical * 3.5,
+                letterSpacing: safeBlockHorizontal * 0.5,
+                color: Colors.transparent,
+                fontWeight: FontWeight.w900,
+                decoration:
+                TextDecoration.underline,
+                decorationColor: ThemeChanger.highlightedColor,
+                decorationThickness: safeBlockVertical * 0.5,
+              ),
+            ),
+          ),
+         // SizedBox(width: safeBlockHorizontal * 3),
+
+        ],
+      ),
+    );
+  }
+
+  @override
+  // TODO: change to responsive height
+  Size get preferredSize => Size.fromHeight(55.0);
+}
+
+class ExtendedViewAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const ExtendedViewAppBar({Key? key}) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    MediaQueryData _mediaQueryData;
+    double displayWidth;
+    double displayHeight;
+    double blockSizeHorizontal;
+    double blockSizeVertical;
+
+    double _safeAreaHorizontal;
+    double _safeAreaVertical;
+    double safeBlockHorizontal;
+    double safeBlockVertical;
+
+    _mediaQueryData = MediaQuery.of(context);
+    displayWidth = _mediaQueryData.size.width;
+    displayHeight = _mediaQueryData.size.height;
+    blockSizeHorizontal = displayWidth / 100;
+    blockSizeVertical = displayHeight / 100;
+
+    _safeAreaHorizontal = _mediaQueryData.padding.left + _mediaQueryData.padding.right;
+    _safeAreaVertical = _mediaQueryData.padding.top + _mediaQueryData.padding.bottom;
+    safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
+    safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
+
+    return AppBar(
+      backgroundColor: ThemeChanger.navBarColor,
+      title: Row(
+        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(width: blockSizeHorizontal * 11.9),
+          Padding(
+            padding: EdgeInsets.only(top: blockSizeVertical * 1),
+            child:
+            Text(
+              'Penny Pincher',
+              style: TextStyle(
+                // Shaddow is used to get Distance to the underline -> TextColor itself is transparent
+                shadows: [
+                  Shadow(
+                      color: Color.fromRGBO(240, 240, 240, 1),
+                      offset: Offset(0, -6))
+                ],
+                //fontFamily: '....',
+                fontSize: safeBlockVertical * 3.5,
                 letterSpacing: safeBlockHorizontal * 0.5,
                 color: Colors.transparent,
                 fontWeight: FontWeight.w900,
@@ -244,8 +314,7 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  // TODO: implement preferredSize
+  // TODO: change to responsive height
   Size get preferredSize => Size.fromHeight(55.0);
-
 
 }
