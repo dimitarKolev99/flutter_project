@@ -139,6 +139,7 @@ class _BrowserPageState extends State<BrowserPage> {
 
   @override
   Widget build(BuildContext context) {
+
     print("got the new categorie : ${widget._currentProductId}");
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     MediaQueryData _mediaQueryData = MediaQuery.of(context);
@@ -195,6 +196,7 @@ class _BrowserPageState extends State<BrowserPage> {
                                     categoryId: widget.mainCategoryIds[index],
                                     stream: widget.stream,
                                     updateStream: widget.updateStream,
+                                    callback: this,
                                   ),
                                 ));
                           },
@@ -259,5 +261,11 @@ class _BrowserPageState extends State<BrowserPage> {
             )
           ],
         ));
+  }
+  void updateBrowserblabla(int catID){
+    _products.clear();
+    widget._currentProductId = catID;
+    getProducts(widget._currentProductId);
+    setState(() {});
   }
 }

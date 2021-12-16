@@ -17,6 +17,7 @@ class SubcatButton extends StatefulWidget {
   bool _isProdCat = false;
   late final Stream<bool> stream;
   late final StreamController updateStream;
+  final dynamic callback;
 
 
   SubcatButton({
@@ -24,6 +25,7 @@ class SubcatButton extends StatefulWidget {
     required this.categoryId,
     required this.stream,
     required this.updateStream,
+    required this.callback,
     //required this.isProdCat,
   });
 
@@ -45,7 +47,11 @@ class _SubcatButtonState extends State<SubcatButton> {
     if(subCatButtons.isEmpty) {
       for (int i = 0; i < subCategoriesNames.length; i++) {
         subCatButtons.add(
-            SubcatButton(categoryName: subCategoriesNames[i], categoryId: subCategoriesIds[i], stream: widget.stream, updateStream: widget.updateStream,));
+            SubcatButton(categoryName: subCategoriesNames[i],
+              categoryId: subCategoriesIds[i],
+              stream: widget.stream,
+              updateStream: widget.updateStream,
+            callback: widget.callback,));
       }
     }
   }
@@ -95,11 +101,9 @@ class _SubcatButtonState extends State<SubcatButton> {
                 if(prodCatColor == Colors.blue){
                   prodCatColor = Colors.red;
                   // function needed that leads to browser and shows results
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => BrowserPage(widget.stream, widget.updateStream, widget.categoryId)
-                    )
+                  widget.callback.updateBrowserblabla(widget.categoryId);
+                  Navigator.pop(
+                    context
                     );
 
                 }
@@ -109,7 +113,8 @@ class _SubcatButtonState extends State<SubcatButton> {
                 widget.show = !widget.show;
                 subCatcolor = Colors.green;
               }
-            });
+             }
+            );
           },
           child: Container(
             color: widget._isProdCat ? prodCatColor : subCatcolor,
