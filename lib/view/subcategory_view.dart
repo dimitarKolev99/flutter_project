@@ -14,12 +14,14 @@ class SubcategoryView extends StatefulWidget{
   String categoryName;
   late final Stream<bool> stream;
   late final StreamController updateStream;
+  final dynamic callback;
 
   SubcategoryView({
     required this.categoryId,
     required this.categoryName,
     required this.stream,
     required this.updateStream,
+    required this.callback,
   });
 
 
@@ -52,7 +54,12 @@ class _SubcategoryViewState extends State<SubcategoryView>{
     if(subCatButtons.isEmpty) {
       for (int i = 0; i < subCategoriesNames.length; i++) {
         subCatButtons.add(
-            SubcatButton(categoryName: subCategoriesNames[i], categoryId: subCategoriesIds[i],stream: widget.stream, updateStream: widget.updateStream,));
+            SubcatButton(
+              categoryName: subCategoriesNames[i],
+              categoryId: subCategoriesIds[i],
+              stream: widget.stream,
+              updateStream: widget.updateStream,
+            callback: widget.callback,));
       }
     }
   }
