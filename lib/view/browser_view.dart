@@ -16,8 +16,6 @@ import 'package:provider/provider.dart';
 
 import 'filter_view.dart';
 
-StreamController<bool> streamController = StreamController<bool>.broadcast();
-
 class BrowserPage extends StatefulWidget {
   late final Stream<bool> stream;
   late final StreamController updateStream;
@@ -71,6 +69,7 @@ class BrowserPage extends StatefulWidget {
 }
 
 class _BrowserPageState extends State<BrowserPage> {
+  StreamController<bool> streamController = StreamController<bool>.broadcast();
   late List<Product> _product;
   late final List _favoriteIds = [];
   late final List<Product> _products = [];
@@ -90,7 +89,9 @@ class _BrowserPageState extends State<BrowserPage> {
 
     super.initState();
     widget.stream.listen((update) {
-      updateBrowser();
+      if (this.mounted) {
+        FavFunctions.updateFavorites(this);
+      }
     });
     getProducts(widget._currentProductId);
     print("CALLED FROM BROWSER VIEW");
@@ -112,23 +113,6 @@ class _BrowserPageState extends State<BrowserPage> {
     }
     _products.addAll(_product);
     FavFunctions.addProducts(_products);
-  }
-
-  updateBrowser() {
-    if (this.mounted) {
-      updateFavorites();
-    }
-  }
-
-  Future<void> updateFavorites() async {
-    _favoriteIds.clear();
-    List<Product> favorites = await _preferenceArticles.getAllFavorites();
-    for (var i in favorites) {
-      if (!_favoriteIds.contains(i.productId)) {
-        _favoriteIds.add(i.productId);
-      }
-    }
-    setState(() {});
   }
 
   @override

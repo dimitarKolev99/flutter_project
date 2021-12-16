@@ -16,6 +16,30 @@ class FavFunctions {
     }
   }
 
+  static Future<void> updateFavorites(callback) async {
+    _favoriteIds.clear();
+    List<Product> favorites = await _preferenceArticles.getAllFavorites();
+    for (var i in favorites) {
+      if (!_favoriteIds.contains(i.productId)) {
+        _favoriteIds.add(i.productId);
+      }
+    }
+    callback.setState(() {});
+    callback.streamController.add(true); // note: was not called for browser view before refactoring
+  }
+/*
+  updateFavorites(bool update) {
+    if (this.mounted) {
+      setState(() {
+        getProducts();
+      });
+    }
+    if (_isClosed) {
+      _isClosed = false;
+      Navigator.maybePop(context);
+    }
+  }
+  */
   static void addProducts(List<Product> products) {
     _products.addAll(products);
   }

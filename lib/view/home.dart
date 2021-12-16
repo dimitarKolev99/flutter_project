@@ -14,8 +14,6 @@ import 'package:penny_pincher/view/extended_view.dart';
 import 'package:provider/provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
-StreamController<bool> streamController = StreamController<bool>.broadcast();
-
 class HomePage extends StatefulWidget {
   late final Stream<bool> stream;
   late final StreamController updateStream;
@@ -27,6 +25,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  StreamController<bool> streamController = StreamController<bool>.broadcast();
+
   late List<Product> _product;
   late final List _favoriteIds = [];
   late final List<Product> _products = [];
@@ -74,26 +75,7 @@ class _HomePageState extends State<HomePage> {
       _products.insert(count, _product[count]);
       count++;
     }
-
     FavFunctions.addProducts(_products);
-  }
-
-  updateHome(bool update) {
-    if (this.mounted) {
-      updateFavorites();
-    }
-  }
-
-  Future<void> updateFavorites() async {
-    _favoriteIds.clear();
-    List<Product> favorites = await _preferenceArticles.getAllFavorites();
-    for (var i in favorites) {
-      if (!_favoriteIds.contains(i.productId)) {
-        _favoriteIds.add(i.productId);
-      }
-    }
-    setState(() {});
-    streamController.add(true);
   }
 
   void initListOfIDs() {
@@ -125,7 +107,9 @@ class _HomePageState extends State<HomePage> {
     }
     super.initState();
     widget.stream.listen((update) {
-      updateHome(update);
+      if (this.mounted) {
+        FavFunctions.updateFavorites(this);
+      }
     });
     initListOfIDs();
 

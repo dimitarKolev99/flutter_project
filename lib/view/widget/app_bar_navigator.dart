@@ -82,7 +82,7 @@ class HomeBrowserAppBar extends StatelessWidget implements PreferredSizeWidget {
           icon: Icon(Icons.search),
           onPressed: () {
             final results =
-            showSearch(context: context, delegate: ArticleSearch(true, callback, streamController));
+            showSearch(context: context, delegate: ArticleSearch(true, callback, callback.streamController));
           },
         )
       ],
@@ -165,7 +165,7 @@ class FavoriteAppBar extends StatelessWidget implements PreferredSizeWidget {
           icon: Icon(Icons.search),
           onPressed: () {
             final results =
-            showSearch(context: context, delegate: FavoriteSearch(callback, streamController));
+            showSearch(context: context, delegate: FavoriteSearch(callback, callback.streamController));
           },
         )
       ],

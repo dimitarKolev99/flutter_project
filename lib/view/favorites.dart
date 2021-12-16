@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
-StreamController<bool> streamController = StreamController<bool>.broadcast();
+
 
 class FavoritePage extends StatefulWidget {
 
@@ -28,7 +28,7 @@ class FavoritePage extends StatefulWidget {
 
 class _FavoritePageState extends State<FavoritePage> {
   //late Product _product;
-
+  StreamController<bool> streamController = StreamController<bool>.broadcast();
   late List<Product> _product;
   late final List<Product> favoriteProducts = [];
   bool _isLoading = true;
