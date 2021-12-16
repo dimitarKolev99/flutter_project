@@ -4,6 +4,7 @@ import 'package:penny_pincher/services/fav_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/theme.dart';
+import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
 import 'package:penny_pincher/view/extended_view.dart';
 import 'package:flutter/material.dart';
@@ -89,60 +90,7 @@ class _FavoritePageState extends State<FavoritePage> {
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     return Scaffold(
-      appBar: AppBar(
-          backgroundColor: ThemeChanger.navBarColor,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              //Icon(Icons.restaurant_menu),
-              Image.network(
-                "https://cdn.discordapp.com/attachments/899305939109302285/903270501781221426/photopenny.png",
-                width: 40,
-                height: 40,
-              ),
-              /*
-            // Doesnt work yet
-            Image.asset("pictures/logopenny.png"
-            , width: 40,
-              height: 40,
-            ),
-            */
-              SizedBox(width: 10),
-              Padding(
-                padding: EdgeInsets.only(top: 3),
-                child:
-                Text(
-                  'Penny Pincher',
-                  style: TextStyle(
-                    // Shaddow is used to get Distance to the underline -> TextColor itself is transparent
-                    shadows: [
-                      Shadow(
-                          color: Color.fromRGBO(240, 240, 240, 1),
-                          offset: Offset(0, -6))
-                    ],
-                    //fontFamily: '....',
-                    fontSize: 21,
-                    letterSpacing: 3,
-                    color: Colors.transparent,
-                    fontWeight: FontWeight.w900,
-                    decoration:
-                    TextDecoration.underline,
-                    decorationColor: ThemeChanger.highlightedColor,
-                    decorationThickness: 4,
-                  ),
-                ),),
-            ],
-          ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {
-                final results =
-                showSearch(context: context,
-                    delegate: FavoriteSearch(this, streamController));
-              },
-            )
-          ]),
+      appBar: const FavoriteAppBar(),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : favoriteProducts.isNotEmpty
