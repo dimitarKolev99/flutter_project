@@ -228,7 +228,7 @@ class _BrowserPageState extends State<BrowserPage> {
                 alignment: Alignment.center,
                 child:
                 Container(
-                  height: displayHeight - 40 - 40 - 75 -41,
+                  height: displayHeight - 40 - 40 - 75 -33.738,
                   child:
                   GridView.count(
                     // Create a grid with 2 columns. If you change the scrollDirection to
