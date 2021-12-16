@@ -208,7 +208,8 @@ class _ExtendedViewState extends State<ExtendedView> {
                           */
                       ///IMAGE
                       Center(
-                        child: Container(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(6.0),
                           //color: Colors.grey,
                             child: Image.network(
                               widget.image,

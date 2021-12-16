@@ -78,13 +78,13 @@ class AppState extends State<AppNavigator> {
     if (displayHeight > 683) { //1280 Pixels Höhe
       isLargeDevice = true;
     } else  {
-      print("here");
+     // print("here");
 
       isLargeDevice = false;
     }
 
-    print("Höhe: $displayHeight");
-    print("Breite: $displayWidth");
+   // print("Höhe: $displayHeight");
+   // print("Breite: $displayWidth");
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     return WillPopScope(
         onWillPop: () async {
@@ -111,7 +111,7 @@ class AppState extends State<AppNavigator> {
           bottomNavigationBar: _isLoading
               ? SizedBox()
               : SizedBox(
-                  height: isLargeDevice ? (displayHeight / 100) * 10.0 : (displayHeight / 100) * 9.5,
+                  height: isLargeDevice ? (displayHeight / 100) * 9 : (displayHeight / 100) * 8.8,
                   child: BottomNavigationBar(
                     selectedItemColor: ThemeChanger.highlightedColor,
                     unselectedItemColor: ThemeChanger.textColor,

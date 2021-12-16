@@ -209,9 +209,9 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: ThemeChanger.navBarColor,
       title: Row(
-        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(width: blockSizeHorizontal * 21),
+          SizedBox(width: blockSizeHorizontal * 2.4),
           Padding(
             padding: EdgeInsets.only(top: blockSizeVertical * 1),
             child:
@@ -236,7 +236,7 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
           ),
-          SizedBox(width: safeBlockHorizontal * 4.5),
+         // SizedBox(width: safeBlockHorizontal * 3),
 
         ],
       ),
@@ -281,7 +281,7 @@ class ExtendedViewAppBar extends StatelessWidget implements PreferredSizeWidget 
       title: Row(
         //mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(width: blockSizeHorizontal * 5.4),
+          SizedBox(width: blockSizeHorizontal * 11.9),
           Padding(
             padding: EdgeInsets.only(top: blockSizeVertical * 1),
             child:
