@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:penny_pincher/models/preferences_articles.dart';
-import 'package:penny_pincher/services/fav_functions.dart';
+import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/theme.dart';
@@ -16,8 +16,6 @@ import 'package:penny_pincher/view/subcategory_view.dart';
 import 'package:provider/provider.dart';
 
 import 'filter_view.dart';
-
-StreamController<bool> streamController = StreamController<bool>.broadcast();
 
 class BrowserPage extends StatefulWidget {
   late final Stream<bool> stream;
@@ -73,6 +71,7 @@ class BrowserPage extends StatefulWidget {
 }
 
 class _BrowserPageState extends State<BrowserPage> {
+  StreamController<bool> streamController = StreamController<bool>.broadcast();
   late List<Product> _product;
   late final List _favoriteIds = [];
   late final List<Product> _products = [];
@@ -114,7 +113,9 @@ class _BrowserPageState extends State<BrowserPage> {
 
     super.initState();
     widget.stream.listen((update) {
-      updateBrowser(update);
+      if (this.mounted) {
+        ProductController.updateFavorites(this);
+      }
     });
     getProducts(widget._currentProductId);
     print("CALLED FROM BROWSER VIEW");
@@ -135,24 +136,7 @@ class _BrowserPageState extends State<BrowserPage> {
       });
     }
     _products.addAll(_product);
-    FavFunctions.addProducts(_products);
-  }
-
-  updateBrowser(bool update) {
-    if (this.mounted) {
-      updateFavorites();
-    }
-  }
-
-  Future<void> updateFavorites() async {
-    _favoriteIds.clear();
-    List<Product> favorites = await _preferenceArticles.getAllFavorites();
-    for (var i in favorites) {
-      if (!_favoriteIds.contains(i.productId)) {
-        _favoriteIds.add(i.productId);
-      }
-    }
-    setState(() {});
+    ProductController.addProducts(_products);
   }
 
   @override
@@ -242,28 +226,11 @@ class _BrowserPageState extends State<BrowserPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ExtendedView(
-                                  id: _products[index].productId,
-                                  title: _products[index].title,
-                                  saving: _products[index].saving,
-                                  category: _products[index].categoryName,
-                                  description: _products[index].description,
-                                  image: _products[index].image,
-                                  price: _products[index].price,
-                                  stream: streamController.stream,
-                                  callback: this)),
+                              builder: (context) => ExtendedView(_products[index], this, streamController.stream)),
                         );
                         streamController.add(true);
                       },
-                      child: BrowserArticleCard(
-                          id: _products[index].productId,
-                          title: _products[index].title,
-                          saving: _products[index].saving,
-                          category: _products[index].categoryName,
-                          description: _products[index].description,
-                          image: _products[index].image,
-                          price: _products[index].price,
-                          callback: this));
+                      child: BrowserArticleCard(_products[index], this));
                 }),
               ),
             )

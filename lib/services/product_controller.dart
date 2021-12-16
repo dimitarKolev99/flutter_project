@@ -3,25 +3,52 @@ import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
 
-class FavFunctions {
+class ProductController {
 
   static final _preferenceArticles = PreferencesArticles();
-  static late List _favoriteIds = []; // all favorites IDs
+  static late List<Product> favoriteProducts = []; // all favorites IDs as cache
   static late List<Product> _products = []; // all products cached
 
 
   static void setFavs(List<Product> favs) {
     for(Product p in favs) {
-       if(!_favoriteIds.contains(p.productId)) _favoriteIds.add(p.productId);
+       if(!favoriteProducts.contains(p)) favoriteProducts.add(p);
     }
   }
 
+  static Future<void> updateFavorites(callback) async {
+    favoriteProducts.clear();
+    List<Product> favorites = await _preferenceArticles.getAllFavorites();
+    for (var i in favorites) {
+      if (!favoriteProducts.contains(i)) {
+        favoriteProducts.add(i);
+      }
+    }
+    callback.setState(() {});
+    callback.streamController.add(true); // note: was not called for browser view before refactoring
+  }
+/*
+  updateFavorites(bool update) {
+    if (this.mounted) {
+      setState(() {
+        getProducts();
+      });
+    }
+    if (_isClosed) {
+      _isClosed = false;
+      Navigator.maybePop(context);
+    }
+  }
+  */
   static void addProducts(List<Product> products) {
     _products.addAll(products);
   }
 
   static bool isFavorite(int id) {
-    return _favoriteIds.contains(id);
+    for(Product p in favoriteProducts) {
+      if(p.productId == id) return true;
+    }
+    return false;
   }
 
   static Future changeFavoriteState(ArticleCard card, dynamic callback) async {
@@ -32,19 +59,13 @@ class FavFunctions {
     }
   }
 
-  static Future changeFavoriteStateForExt(ArticleCard card, dynamic callback, dynamic origin) async {
-    await changeFavoriteState(card, callback);
-    origin.setState(() {
-    });
-  }
-
   static Future addFavorite(ArticleCard card, callback) async {
     final product = _products.where((p) => p.productId == card.id).toList()[0];
 
     await _preferenceArticles.addFavorite(product);
     if (callback.mounted) {
       callback.setState(() {
-        _favoriteIds.add(card.id);
+        favoriteProducts.add(card.product);
       });
     }
     callback.widget.updateStream.add(true);
@@ -54,7 +75,9 @@ class FavFunctions {
     await _preferenceArticles.removeFavorite(id);
     if (callback.mounted) {
       callback.setState(() {
-        _favoriteIds.remove(id);
+        for(Product p in favoriteProducts) {
+          if(p.productId == id) favoriteProducts.remove(id);
+        }
       });
     }
     callback.widget.updateStream.add(true);

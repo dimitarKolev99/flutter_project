@@ -1,3 +1,5 @@
+//import 'dart:html';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:penny_pincher/services/app_icons.dart';
@@ -15,6 +17,7 @@ class AppNavigator extends StatefulWidget {
 
 class AppState extends State<AppNavigator> {
   bool _isLoading = true;
+  bool isLargeDevice = true;
   String _currentPage = "Page1";
   List<String> pageKeys = ["Page1", "Page2", "Page3", "Page4"];
   final Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
@@ -36,8 +39,11 @@ class AppState extends State<AppNavigator> {
     }
   }
 
+
+
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     MediaQueryData _mediaQueryData;
     double displayWidth;
     double displayHeight;
@@ -67,6 +73,18 @@ class AppState extends State<AppNavigator> {
 
     safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
+
+
+    if (displayHeight > 683) { //1280 Pixels Höhe
+      isLargeDevice = true;
+    } else  {
+     // print("here");
+
+      isLargeDevice = false;
+    }
+
+   // print("Höhe: $displayHeight");
+   // print("Breite: $displayWidth");
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     return WillPopScope(
         onWillPop: () async {
@@ -93,7 +111,7 @@ class AppState extends State<AppNavigator> {
           bottomNavigationBar: _isLoading
               ? SizedBox()
               : SizedBox(
-                  height: (displayHeight / 100) * 9,
+                  height: isLargeDevice ? (displayHeight / 100) * 9 : (displayHeight / 100) * 8.8,
                   child: BottomNavigationBar(
                     selectedItemColor: ThemeChanger.highlightedColor,
                     unselectedItemColor: ThemeChanger.textColor,
@@ -107,14 +125,14 @@ class AppState extends State<AppNavigator> {
                       BottomNavigationBarItem(
                         icon: Padding(
                           padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
-                          child: Icon(Icons.update, size: safeBlockHorizontal * 6),
+                          child: Icon(Icons.update, size: isLargeDevice ? safeBlockHorizontal * 7 : safeBlockHorizontal * 6.5),
                         ),
                         label: 'LiveFeed',
                       ),
                       BottomNavigationBarItem(
                         icon: Padding(
                           padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
-                          child: Icon(AppIcon.view_tile, size: safeBlockHorizontal * 6),
+                          child: Icon(AppIcon.view_tile, size: isLargeDevice ? safeBlockHorizontal * 7 : safeBlockHorizontal * 6.5),
                         ),
                         label: 'Browser',
                       ),
@@ -122,22 +140,23 @@ class AppState extends State<AppNavigator> {
                       BottomNavigationBarItem(
                         icon: Padding(
                           padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
-                          child: Icon(Icons.bookmarks_outlined, size: safeBlockHorizontal * 6),
+                          child: Icon(Icons.bookmarks_outlined, size: isLargeDevice ? safeBlockHorizontal * 7 : safeBlockHorizontal * 6.5),
                         ),
                         label: 'Merkzettel',
                       ),
                       BottomNavigationBarItem(
                         icon: Padding(
                           padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
-                          child: Icon(Icons.account_circle, size: safeBlockHorizontal * 6),
+                          child: Icon(Icons.account_circle, size: isLargeDevice ? safeBlockHorizontal * 7 : safeBlockHorizontal * 6.5),
                         ),
                         label: 'Profil',
                       ),
                     ],
                     type: BottomNavigationBarType.fixed,
                   ),
-                ),
-        ));
+              ),
+        )
+    );
   }
 
   Widget _buildOffstageNavigator(String tabItem) {

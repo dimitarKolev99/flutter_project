@@ -78,31 +78,11 @@ class FavoriteSearch extends SearchDelegate<String> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ExtendedView(
-                              id: result[index].productId,
-                              title: result[index].title,
-                              saving: result[index].saving,
-                              category:
-                              result[index].categoryName,
-                              description:
-                              result[index].description,
-                              image: result[index].image,
-                              price: result[index].price,
-                              stream: streamController.stream,
-                              callback: callback)),
+                          builder: (context) => ExtendedView(result[index], callback, streamController.stream)),
                     );
                     streamController.add(true);
                   },
-                  child: ArticleCard(
-                    id: result[index].productId,
-                    title: result[index].title,
-                    saving: result[index].saving,
-                    category: result[index].categoryName,
-                    description: result[index].description,
-                    image: result[index].image,
-                    price: result[index].price,
-                    callback: callback,
-                  ));
+                  child: ArticleCard(result[index], callback));
             }),
       )
           : Center(
