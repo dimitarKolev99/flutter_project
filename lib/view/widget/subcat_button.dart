@@ -90,6 +90,7 @@ class _SubcatButtonState extends State<SubcatButton> {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children:[
+
           InkWell(
           onTap: (){
             setState(() {
@@ -97,21 +98,30 @@ class _SubcatButtonState extends State<SubcatButton> {
               // if empty chosen category = Productcategory
               if(subCatButtons.isEmpty){
                 widget._isProdCat = true;
-
                 if(prodCatColor == Colors.blue){
+                  widget.callback.addCategory(widget.categoryName);
                   prodCatColor = Colors.red;
                   // function needed that leads to browser and shows results
                   widget.callback.updateBrowserblabla(widget.categoryId);
                   Navigator.pop(
                     context
-                    );
-
+                  );
                 }
-                else prodCatColor = Colors.blue;
+                else{
+                  prodCatColor = Colors.blue;
+                  widget.callback.deleteCategory(widget.categoryName);
+                }
               }
-              else{
+              // Subcategories
+              else if(subCatcolor == Colors.blue){ // blue = unselected
+                widget.callback.addCategory(widget.categoryName);
                 widget.show = !widget.show;
                 subCatcolor = Colors.green;
+              }
+              else{  // selected
+                widget.callback.deleteCategory(widget.categoryName);
+                widget.show = !widget.show;
+                subCatcolor = Colors.blue;
               }
              }
             );

@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/services/fav_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
@@ -22,6 +23,7 @@ class BrowserPage extends StatefulWidget {
   late final Stream<bool> stream;
   late final StreamController updateStream;
   int _currentProductId;
+
 
   BrowserPage(this.stream, this.updateStream, this._currentProductId);
 
@@ -79,6 +81,28 @@ class _BrowserPageState extends State<BrowserPage> {
   Timer? _timer;
 
   final _preferenceArticles = PreferencesArticles();
+
+  List<String> chosenCategories = [];
+
+  String getMainCategoryName(int i){
+    return widget.mainCategoryNames[i];
+  }
+
+  int getMainCategoryId(int i){
+    return widget.mainCategoryIds[i];
+  }
+
+  void addCategory(String s){
+    chosenCategories.add(s);
+  }
+
+  void deleteCategory(String s){
+    int index = chosenCategories.indexOf(s);
+    for(int i = chosenCategories.length-1; i >= index ; i--){
+      chosenCategories.remove(chosenCategories[i]);
+    }
+  }
+
 
   @override
   void initState() {
@@ -143,7 +167,6 @@ class _BrowserPageState extends State<BrowserPage> {
     print("got the new categorie : ${widget._currentProductId}");
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     MediaQueryData _mediaQueryData = MediaQuery.of(context);
-    ;
     double displayWidth = _mediaQueryData.size.width;
     double displayHeight = _mediaQueryData.size.height;
     double blockSizeHorizontal = displayWidth / 100; // screen width in 1%
@@ -159,34 +182,16 @@ class _BrowserPageState extends State<BrowserPage> {
               child: Container(
                 color: ThemeChanger.lightBlue,
                 height: 40,
+                width: displayWidth,
                 child: ListView.builder(
                     physics: ScrollPhysics(),
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
-                    itemCount: widget.mainCategories.length,
+                    itemCount: chosenCategories.isEmpty? widget.mainCategories.length : chosenCategories.length,
                     itemBuilder: (context, index) {
                       return InkWell(
-
-                          /*
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ExtendedView(
-                                      id: _products[index].productId,
-                                      title: _products[index].title,
-                                      saving: _products[index].saving,
-                                      category: _products[index].categoryName,
-                                      description: _products[index].description,
-                                      image: _products[index].image,
-                                      price: _products[index].price,
-                                      stream: streamController.stream,
-                                      callback: this)),
-                            );
-                            streamController.add(true);
-                          },
-                           */
-                          onTap: () {
+                            chosenCategories = [];
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -202,24 +207,27 @@ class _BrowserPageState extends State<BrowserPage> {
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                              color: ThemeChanger.articlecardbackground,
+                              color: chosenCategories.isEmpty? ThemeChanger.articlecardbackground : ThemeChanger.highlightedColor,
                               borderRadius: BorderRadius.circular(2),
                             ),
-                            alignment: Alignment.center,
+                            alignment: Alignment.centerRight,
                             margin: EdgeInsets.all(4),
                             //padding: EdgeInsets.all(4),
                             padding: EdgeInsets.symmetric(horizontal: 6),
                             height: 40,
                             child: Text(
-                              widget.mainCategoryNames[index],
+                              chosenCategories.isEmpty? widget.mainCategoryNames[index] : chosenCategories[index],
                               style: TextStyle(
                                 color: ThemeChanger.reversetextColor,
+                                fontWeight:  !chosenCategories.isEmpty && index == chosenCategories.length-1?  FontWeight.bold :FontWeight.normal,
                               ),
                             ),
                           ));
                     }),
               ),
             ),
+
+
 
             // This Grid View is supposed to show the main categories on top of the screen in the browser view
             Expanded(
