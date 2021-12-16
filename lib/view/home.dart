@@ -5,6 +5,7 @@ import 'package:penny_pincher/services/json_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/theme.dart';
+import 'package:penny_pincher/view/welcome_screen.dart';
 import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
 import 'package:penny_pincher/view/widget/article_search.dart';
@@ -66,10 +67,10 @@ class _HomePageState extends State<HomePage> {
 
     if (this.mounted) {
       setState(() {
-        _isLoading = false;
+        //_isLoading = false;
       });
     }
-    widget.callback.loadingFinished();
+    //widget.callback.loadingFinished();
     if (count < _product.length) {
       _products.insert(count, _product[count]);
       count++;
@@ -142,6 +143,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     if (_isLoading) {
+      return WelcomePage();
       return Scaffold(
         body: Container(
             color: ThemeChanger.lightBlue,

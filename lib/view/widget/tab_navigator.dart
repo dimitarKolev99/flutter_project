@@ -42,6 +42,8 @@ class TabNavigator extends StatefulWidget {
 }
 
 class _TabNavigatorState extends State<TabNavigator> {
+  bool welcomeScreen = true;
+
   @override
   void initState() {
     super.initState();
@@ -59,12 +61,16 @@ class _TabNavigatorState extends State<TabNavigator> {
     streamControllerProfile.add(true);
   }
 
+
+  void rebuild() {
+    setState(() {
+      welcomeScreen = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    Widget child = WelcomePage();
-    /*Widget child =
-    HomePage(streamControllerHome.stream, updateStream, widget.callback);
-    if (widget.tabItem == "Page1") {
+    Widget child = HomePage(streamControllerHome.stream, updateStream, widget.callback);if (widget.tabItem == "Page1") {
       child =
           HomePage(streamControllerHome.stream, updateStream, widget.callback);
     } else if (widget.tabItem == "Page2") {
@@ -73,7 +79,7 @@ class _TabNavigatorState extends State<TabNavigator> {
       child = FavoritePage(streamControllerFavorites.stream, updateStream);
     } else if (widget.tabItem == "Page4") {
       child = ProfilePage(streamControllerProfile.stream, updateStream);
-    }*/
+    }
 
     return Navigator(
       key: widget.navigatorKey,

@@ -14,8 +14,6 @@ import 'package:penny_pincher/view/extended_view.dart';
 import 'package:provider/provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
-StreamController<bool> streamController = StreamController<bool>.broadcast();
-
 class WelcomePage extends StatefulWidget {
   WelcomePage();
 
@@ -24,8 +22,65 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
+  List<bool> isSelected = [true, false, false, false];
+  List<IconData> iconList = [
+    Icons.dry_cleaning,
+    Icons.laptop,
+    Icons.ad_units,
+    Icons.book
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    //wrap the GridView wiget in an Ink wiget and set the width and height,
+    //otherwise the GridView widget will fill up all the space of its parent widget
+    return Ink(
+      width: 100,
+      height: 60,
+      color: Colors.white,
+      child: GridView.count(
+        primary: true,
+        crossAxisCount: 4, //set the number of buttons in a row
+        crossAxisSpacing: 16, //set the spacing between the buttons
+        childAspectRatio: 1, //set the width-to-height ratio of the button,
+        //>1 is a horizontal rectangle
+        children: List.generate(isSelected.length, (index) {
+          //using Inkwell widget to create a button
+          return InkWell(
+              splashColor: Colors.yellow, //the default splashColor is grey
+              onTap: () {
+                //set the toggle logic
+                setState(() {
+                  for (int indexBtn = 0;
+                      indexBtn < isSelected.length;
+                      indexBtn++) {
+                    if (indexBtn == index) {
+                      isSelected[indexBtn] = true;
+                    } else {
+                      isSelected[indexBtn] = false;
+                    }
+                  }
+                });
+              },
+              child: Ink(
+                decoration: BoxDecoration(
+                  //set the background color of the button when it is selected/ not selected
+                  color: isSelected[index] ? Color(0xffD6EAF8) : Colors.white,
+                  // here is where we set the rounded corner
+                  borderRadius: BorderRadius.circular(8),
+                  //don't forget to set the border,
+                  //otherwise there will be no rounded corner
+                  border: Border.all(color: Colors.red),
+                ),
+                child: Icon(
+                  iconList[index],
+                  //set the color of the icon when it is selected/ not selected
+                  color: isSelected[index] ? Colors.blue : Colors.grey,
+                  size: 50,
+                ),
+              ));
+        }),
+      ),
+    );
   }
 }
