@@ -25,9 +25,8 @@ class ArticleSearch extends SearchDelegate<String> {
   dynamic callback;
 
 
-  ArticleSearch (bool fromFeed, this.callback, this.streamController) {
+  ArticleSearch (this.fromFeed, this.callback, this.streamController) {
     updateRecent(); // reading out storage on opening searchBar
-    this.fromFeed = fromFeed;
   }
 
   @override
@@ -84,12 +83,11 @@ class ArticleSearch extends SearchDelegate<String> {
       return FutureBuilder(
         future: getProducts(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
+         // if (snapshot.connectionState == ConnectionState.done) {
             return createResult(context);
-          } else {
-            return createResult(context);
-           // return CircularProgressIndicator(); // This was the reload causing line.
-          }
+          //} else {
+           // return CircularProgressIndicator(); // This was the reload causing line. // TODO: DO NOT DELETE COMMENTS HERE
+         // }
         },
       );
     }
