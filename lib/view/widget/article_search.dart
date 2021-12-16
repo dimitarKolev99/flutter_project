@@ -63,7 +63,9 @@ class ArticleSearch extends SearchDelegate<String> {
     }
 
     Future<void> getProducts() async {
-      _products = await ProductApi().getProduct(18418, query);
+      _products = await ProductApi().getProduct(3832, query);
+
+      storeToRecent(query);
 
       List<Product> favorites = await _preferenceArticles.getAllFavorites();
       for (var i in favorites) {
@@ -101,6 +103,7 @@ class ArticleSearch extends SearchDelegate<String> {
 
         return articleLower.startsWith(queryLower);
       }).toList();
+
 
       return buildSuggestionsSuccess(suggestions);
     }
