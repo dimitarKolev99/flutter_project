@@ -22,8 +22,9 @@ class BrowserPage extends StatefulWidget {
 
   late final Stream<bool> stream;
   late final StreamController updateStream;
+  int _currentProductId;
 
-  BrowserPage(this.stream, this.updateStream);
+  BrowserPage(this.stream, this.updateStream, this._currentProductId);
 
   @override
   State<BrowserPage> createState() => _BrowserPageState();
@@ -90,11 +91,12 @@ class _BrowserPageState extends State<BrowserPage> {
         _isLoading = true;
       });
     }
+
     super.initState();
     widget.stream.listen((update) {
       updateBrowser(update);
     });
-    getProducts(3832); print("CALLED FROM BROWSER VIEW");
+    getProducts(widget._currentProductId); print("CALLED FROM BROWSER VIEW");
   }
 
   Future<void> getProducts(int categoryID) async {
@@ -140,6 +142,7 @@ class _BrowserPageState extends State<BrowserPage> {
 
   @override
   Widget build(BuildContext context) {
+    print("got the new categorie : ${widget._currentProductId}");
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     MediaQueryData _mediaQueryData = MediaQuery.of(context);;
     double displayWidth = _mediaQueryData.size.width;
@@ -194,6 +197,7 @@ class _BrowserPageState extends State<BrowserPage> {
                                   builder: (context) =>
                                       SubcategoryView(categoryName: widget.mainCategoryNames[index] ,
                                         categoryId: widget.mainCategoryIds[index],
+                                        stream: widget.stream, updateStream: widget.updateStream,
                                       ),
                                 )
                             );
