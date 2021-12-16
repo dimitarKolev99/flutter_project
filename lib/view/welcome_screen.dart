@@ -50,17 +50,16 @@ class _WelcomePageState extends State<WelcomePage> {
               splashColor: Colors.yellow, //the default splashColor is grey
               onTap: () {
                 //set the toggle logic
-                setState(() {
-                  for (int indexBtn = 0;
-                      indexBtn < isSelected.length;
-                      indexBtn++) {
-                    if (indexBtn == index) {
-                      isSelected[indexBtn] = true;
-                    } else {
-                      isSelected[indexBtn] = false;
-                    }
-                  }
+                int count = 0;
+                isSelected.forEach((bool val) {
+                  if (val) count++;
                 });
+                if (isSelected[index] && count < 1) return;
+                setState(() {
+                  isSelected[index] = !isSelected[index];
+                });
+                isSelected:
+                isSelected;
               },
               child: Ink(
                 decoration: BoxDecoration(
