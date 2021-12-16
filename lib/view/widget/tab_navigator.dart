@@ -6,6 +6,8 @@ import '../home.dart';
 import '../profile.dart';
 import 'dart:async';
 
+import '../welcome_screen.dart';
+
 int count = 0;
 
 StreamController<bool> streamControllerHome =
@@ -59,8 +61,9 @@ class _TabNavigatorState extends State<TabNavigator> {
 
   @override
   Widget build(BuildContext context) {
-    Widget child =
-        HomePage(streamControllerHome.stream, updateStream, widget.callback);
+    Widget child = WelcomePage();
+    /*Widget child =
+    HomePage(streamControllerHome.stream, updateStream, widget.callback);
     if (widget.tabItem == "Page1") {
       child =
           HomePage(streamControllerHome.stream, updateStream, widget.callback);
@@ -70,7 +73,7 @@ class _TabNavigatorState extends State<TabNavigator> {
       child = FavoritePage(streamControllerFavorites.stream, updateStream);
     } else if (widget.tabItem == "Page4") {
       child = ProfilePage(streamControllerProfile.stream, updateStream);
-    }
+    }*/
 
     return Navigator(
       key: widget.navigatorKey,
