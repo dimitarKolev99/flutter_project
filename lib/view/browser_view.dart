@@ -1,5 +1,5 @@
 import 'package:penny_pincher/models/preferences_articles.dart';
-import 'package:penny_pincher/services/fav_functions.dart';
+import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/theme.dart';
@@ -90,7 +90,7 @@ class _BrowserPageState extends State<BrowserPage> {
     super.initState();
     widget.stream.listen((update) {
       if (this.mounted) {
-        FavFunctions.updateFavorites(this);
+        ProductController.updateFavorites(this);
       }
     });
     getProducts(widget._currentProductId);
@@ -112,7 +112,7 @@ class _BrowserPageState extends State<BrowserPage> {
       });
     }
     _products.addAll(_product);
-    FavFunctions.addProducts(_products);
+    ProductController.addProducts(_products);
   }
 
   @override
@@ -216,28 +216,11 @@ class _BrowserPageState extends State<BrowserPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ExtendedView(
-                                  id: _products[index].productId,
-                                  title: _products[index].title,
-                                  saving: _products[index].saving,
-                                  category: _products[index].categoryName,
-                                  description: _products[index].description,
-                                  image: _products[index].image,
-                                  price: _products[index].price,
-                                  stream: streamController.stream,
-                                  callback: this)),
+                              builder: (context) => ExtendedView(_products[index], this, streamController.stream)),
                         );
                         streamController.add(true);
                       },
-                      child: BrowserArticleCard(
-                          id: _products[index].productId,
-                          title: _products[index].title,
-                          saving: _products[index].saving,
-                          category: _products[index].categoryName,
-                          description: _products[index].description,
-                          image: _products[index].image,
-                          price: _products[index].price,
-                          callback: this));
+                      child: BrowserArticleCard(_products[index], this));
                 }),
               ),
             )
