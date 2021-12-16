@@ -19,27 +19,27 @@ import 'filter_view.dart';
 StreamController<bool> streamController = StreamController<bool>.broadcast();
 
 class BrowserPage extends StatefulWidget {
-
   late final Stream<bool> stream;
   late final StreamController updateStream;
+  int _currentProductId;
 
-  BrowserPage(this.stream, this.updateStream);
+  BrowserPage(this.stream, this.updateStream, this._currentProductId);
 
   @override
   State<BrowserPage> createState() => _BrowserPageState();
 
   Map<String, int> mainCategories = {
-    "Elektroartikel" : 30311,
-    "Drogerie & Gesundheit" : 3932,
-    "Haus & Garten" :3686,
-    "Mode & Accessoires" : 9908,
-    "Tierbedarf" : 7032,
-    "Gaming & Spielen" : 3326,
-    "Essen & Trinken" : 12913,
-    "Baby & Kind" : 4033,
-    "Auto & Motorrad" : 2400,
-    "Haushaltselektronik" : 1940,
-    "Sport & Outdoor" : 3626,
+    "Elektroartikel": 30311,
+    "Drogerie & Gesundheit": 3932,
+    "Haus & Garten": 3686,
+    "Mode & Accessoires": 9908,
+    "Tierbedarf": 7032,
+    "Gaming & Spielen": 3326,
+    "Essen & Trinken": 12913,
+    "Baby & Kind": 4033,
+    "Auto & Motorrad": 2400,
+    "Haushaltselektronik": 1940,
+    "Sport & Outdoor": 3626,
   };
 
   List<String> mainCategoryNames = [
@@ -56,7 +56,7 @@ class BrowserPage extends StatefulWidget {
     "Sport & Outdoor"
   ];
   List<int> mainCategoryIds = [
-    30311,//
+    30311, //
     3932,
     3686,
     9908,
@@ -68,10 +68,7 @@ class BrowserPage extends StatefulWidget {
     1940,
     3626,
   ];
-
-
 }
-
 
 class _BrowserPageState extends State<BrowserPage> {
   late List<Product> _product;
@@ -90,11 +87,13 @@ class _BrowserPageState extends State<BrowserPage> {
         _isLoading = true;
       });
     }
+
     super.initState();
     widget.stream.listen((update) {
       updateBrowser();
     });
-    getProducts(3832); print("CALLED FROM BROWSER VIEW");
+    getProducts(widget._currentProductId);
+    print("CALLED FROM BROWSER VIEW");
   }
 
   Future<void> getProducts(int categoryID) async {
@@ -140,8 +139,10 @@ class _BrowserPageState extends State<BrowserPage> {
 
   @override
   Widget build(BuildContext context) {
+    print("got the new categorie : ${widget._currentProductId}");
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
-    MediaQueryData _mediaQueryData = MediaQuery.of(context);;
+    MediaQueryData _mediaQueryData = MediaQuery.of(context);
+    ;
     double displayWidth = _mediaQueryData.size.width;
     double displayHeight = _mediaQueryData.size.height;
     double blockSizeHorizontal = displayWidth / 100; // screen width in 1%
@@ -150,25 +151,22 @@ class _BrowserPageState extends State<BrowserPage> {
         appBar: HomeBrowserAppBar(this),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-
           children: [
             //MainCategories to click to get to edit the filter categories / search
             Align(
               alignment: Alignment.topCenter,
-              child:
-              Container(
+              child: Container(
                 color: ThemeChanger.lightBlue,
                 height: 40,
-                child:
-                ListView.builder(
+                child: ListView.builder(
                     physics: ScrollPhysics(),
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
                     itemCount: widget.mainCategories.length,
-                    itemBuilder: (context,  index) {
+                    itemBuilder: (context, index) {
                       return InkWell(
 
-                        /*
+                          /*
                           onTap: () {
                             Navigator.push(
                               context,
@@ -191,12 +189,14 @@ class _BrowserPageState extends State<BrowserPage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      SubcategoryView(categoryName: widget.mainCategoryNames[index] ,
-                                        categoryId: widget.mainCategoryIds[index],
-                                      ),
-                                )
-                            );
+                                  builder: (context) => SubcategoryView(
+                                    categoryName:
+                                        widget.mainCategoryNames[index],
+                                    categoryId: widget.mainCategoryIds[index],
+                                    stream: widget.stream,
+                                    updateStream: widget.updateStream,
+                                  ),
+                                ));
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -206,66 +206,58 @@ class _BrowserPageState extends State<BrowserPage> {
                             alignment: Alignment.center,
                             margin: EdgeInsets.all(4),
                             //padding: EdgeInsets.all(4),
-                            padding: EdgeInsets.symmetric( horizontal:  6),
+                            padding: EdgeInsets.symmetric(horizontal: 6),
                             height: 40,
-                            child: Text(widget.mainCategoryNames[index],
+                            child: Text(
+                              widget.mainCategoryNames[index],
                               style: TextStyle(
                                 color: ThemeChanger.reversetextColor,
-                              ),),
+                              ),
+                            ),
                           ));
                     }),
-
               ),
             ),
 
-
-// This Grid View is supposed to show the main categories on top of the screen in the browser view
-            Align(
-                alignment: Alignment.center,
-                child:
-                Container(
-                  height: displayHeight - 40 - 40 - 75 -41,
-                  child:
-                  GridView.count(
-                    // Create a grid with 2 columns. If you change the scrollDirection to
-                    // horizontal, this produces 2 rows.
-                    crossAxisCount: 2,
-                    childAspectRatio: 0.75,
-                    children: List.generate(_products.length, (index) {
-                      return InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ExtendedView(
-                                      id: _products[index].productId,
-                                      title: _products[index].title,
-                                      saving: _products[index].saving,
-                                      category: _products[index].categoryName,
-                                      description: _products[index].description,
-                                      image: _products[index].image,
-                                      price: _products[index].price,
-                                      stream: streamController.stream,
-                                      callback: this)),
-                            );
-                            streamController.add(true);
-                          },
-                          child: BrowserArticleCard(
-                              id: _products[index].productId,
-                              title: _products[index].title,
-                              saving: _products[index].saving,
-                              category: _products[index].categoryName,
-                              description: _products[index].description,
-                              image: _products[index].image,
-                              price: _products[index].price,
-                              callback: this));
-                    }),
-                  ),
-                )
-            ),
+            // This Grid View is supposed to show the main categories on top of the screen in the browser view
+            Expanded(
+              child: GridView.count(
+                // Create a grid with 2 columns. If you change the scrollDirection to
+                // horizontal, this produces 2 rows.
+                crossAxisCount: 2,
+                childAspectRatio: 0.75,
+                children: List.generate(_products.length, (index) {
+                  return InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ExtendedView(
+                                  id: _products[index].productId,
+                                  title: _products[index].title,
+                                  saving: _products[index].saving,
+                                  category: _products[index].categoryName,
+                                  description: _products[index].description,
+                                  image: _products[index].image,
+                                  price: _products[index].price,
+                                  stream: streamController.stream,
+                                  callback: this)),
+                        );
+                        streamController.add(true);
+                      },
+                      child: BrowserArticleCard(
+                          id: _products[index].productId,
+                          title: _products[index].title,
+                          saving: _products[index].saving,
+                          category: _products[index].categoryName,
+                          description: _products[index].description,
+                          image: _products[index].image,
+                          price: _products[index].price,
+                          callback: this));
+                }),
+              ),
+            )
           ],
-        )
-
-    );
+        ));
   }
 }

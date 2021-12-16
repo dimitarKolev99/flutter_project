@@ -65,7 +65,8 @@ class _TabNavigatorState extends State<TabNavigator> {
       child =
           HomePage(streamControllerHome.stream, updateStream, widget.callback);
     } else if (widget.tabItem == "Page2") {
-      child = BrowserPage(streamControllerBrowser.stream, updateStream);
+      // TODO: set Default ID for BrowserPage after selcetion on welcomesreen  !! PRODUCTCATEGORY
+      child = BrowserPage(streamControllerBrowser.stream, updateStream, 19116);
     } else if (widget.tabItem == "Page3") {
       child = FavoritePage(streamControllerFavorites.stream, updateStream);
     } else if (widget.tabItem == "Page4") {
