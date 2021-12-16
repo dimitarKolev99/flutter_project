@@ -20,7 +20,8 @@ class HomePage extends StatefulWidget {
   late final Stream<bool> stream;
   late final StreamController updateStream;
   final dynamic callback;
-  HomePage(this.stream, this.updateStream, this.callback);
+  var height;
+  HomePage(this.stream, this.updateStream, this.callback, {this.height});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -36,6 +37,8 @@ class _HomePageState extends State<HomePage> {
   bool isScrolling = false;
   ScrollController _scrollController = ScrollController();
   var x = 0.0;
+
+  //var screenHeight = ;
 
   final _preferenceArticles = PreferencesArticles();
   final _jsonFunctions = JsonFunctions();
@@ -143,6 +146,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
 
+
     MediaQueryData _mediaQueryData;
     double displayWidth;
     double displayHeight;
@@ -174,6 +178,7 @@ class _HomePageState extends State<HomePage> {
 
     safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
+
 
     if (_isLoading) {
       return Scaffold(

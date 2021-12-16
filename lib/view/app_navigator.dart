@@ -1,3 +1,5 @@
+//import 'dart:html';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:penny_pincher/services/app_icons.dart';
@@ -72,10 +74,12 @@ class AppState extends State<AppNavigator> {
     safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
 
+
     if (displayHeight > 683) { //1280 Pixels Höhe
       isLargeDevice = true;
     } else  {
       print("here");
+
       isLargeDevice = false;
     }
 
