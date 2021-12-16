@@ -32,12 +32,6 @@ class FavFunctions {
     }
   }
 
-  static Future changeFavoriteStateForExt(ArticleCard card, dynamic callback, dynamic origin) async {
-    await changeFavoriteState(card, callback);
-    origin.setState(() {
-    });
-  }
-
   static Future addFavorite(ArticleCard card, callback) async {
     final product = _products.where((p) => p.productId == card.id).toList()[0];
 
