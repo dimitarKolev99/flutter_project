@@ -147,7 +147,7 @@ class _BrowserPageState extends State<BrowserPage> {
     double blockSizeHorizontal = displayWidth / 100; // screen width in 1%
     double blockSizeVertical = displayHeight / 100; // screen height in 1%
     return Scaffold(
-        appBar: const HomeBrowserAppBar(),
+        appBar: HomeBrowserAppBar(this),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
 

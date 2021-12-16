@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:penny_pincher/services/fav_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/view/theme.dart';
@@ -10,7 +11,10 @@ import 'favorite_search.dart';
 
 
 class HomeBrowserAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const HomeBrowserAppBar({Key? key}) : super(key: key);
+  dynamic callback;
+  HomeBrowserAppBar(callback) {
+    this.callback = callback;
+  }
 
 
   @override
@@ -78,7 +82,7 @@ class HomeBrowserAppBar extends StatelessWidget implements PreferredSizeWidget {
           icon: Icon(Icons.search),
           onPressed: () {
             final results =
-            showSearch(context: context, delegate: ArticleSearch(true, this, streamController));
+            showSearch(context: context, delegate: ArticleSearch(true, callback, streamController));
           },
         )
       ],
@@ -91,7 +95,10 @@ class HomeBrowserAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class FavoriteAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const FavoriteAppBar({Key? key}) : super(key: key);
+  dynamic callback;
+  FavoriteAppBar(callback) {
+    this.callback = callback;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +165,7 @@ class FavoriteAppBar extends StatelessWidget implements PreferredSizeWidget {
           icon: Icon(Icons.search),
           onPressed: () {
             final results =
-            showSearch(context: context, delegate: FavoriteSearch(this, streamController));
+            showSearch(context: context, delegate: FavoriteSearch(callback, streamController));
           },
         )
       ],

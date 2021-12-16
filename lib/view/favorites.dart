@@ -90,7 +90,7 @@ class _FavoritePageState extends State<FavoritePage> {
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     return Scaffold(
-      appBar: const FavoriteAppBar(),
+      appBar: FavoriteAppBar(this),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : favoriteProducts.isNotEmpty

@@ -150,7 +150,7 @@ class _HomePageState extends State<HomePage> {
       );
     } else {
       return Scaffold(
-        appBar: const HomeBrowserAppBar(),
+        appBar: HomeBrowserAppBar(this),
         body: _isLoading
             ? Center(child: CircularProgressIndicator())
             : Align(
