@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:penny_pincher/services/app_icons.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/tab_navigator.dart';
@@ -37,6 +38,35 @@ class AppState extends State<AppNavigator> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData _mediaQueryData;
+    double displayWidth;
+    double displayHeight;
+    double blockSizeHorizontal;
+    double blockSizeVertical;
+
+    double _safeAreaHorizontal;
+    double _safeAreaVertical;
+
+    double _safeAreaBottomPadding;
+    double safeBlockBottom;
+
+    double safeBlockHorizontal;
+    double safeBlockVertical;
+
+    _mediaQueryData = MediaQuery.of(context);
+    displayWidth = _mediaQueryData.size.width;
+    displayHeight = _mediaQueryData.size.height;
+    blockSizeHorizontal = displayWidth / 100;
+    blockSizeVertical = displayHeight / 100;
+
+    _safeAreaHorizontal = _mediaQueryData.padding.left + _mediaQueryData.padding.right;
+    _safeAreaVertical = _mediaQueryData.padding.top + _mediaQueryData.padding.bottom;
+
+    _safeAreaBottomPadding = _mediaQueryData.padding.bottom;
+    safeBlockBottom = (displayWidth - _safeAreaBottomPadding) / 100;
+
+    safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
+    safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     return WillPopScope(
         onWillPop: () async {
@@ -63,43 +93,43 @@ class AppState extends State<AppNavigator> {
           bottomNavigationBar: _isLoading
               ? SizedBox()
               : SizedBox(
-                  height: 75,
+                  height: (displayHeight / 100) * 9,
                   child: BottomNavigationBar(
                     selectedItemColor: ThemeChanger.highlightedColor,
                     unselectedItemColor: ThemeChanger.textColor,
-                    iconSize: 22,
+                    iconSize: safeBlockHorizontal * 6,
                     backgroundColor: ThemeChanger.navBarColor,
                     onTap: (int index) {
                       _selectTab(pageKeys[index], index);
                     },
                     currentIndex: _selectedIndex,
-                    items: const [
+                    items: [
                       BottomNavigationBarItem(
                         icon: Padding(
-                          padding: EdgeInsets.only(bottom: 5.0),
-                          child: Icon(Icons.update, size: 33),
+                          padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
+                          child: Icon(Icons.update, size: safeBlockHorizontal * 6),
                         ),
                         label: 'LiveFeed',
                       ),
                       BottomNavigationBarItem(
                         icon: Padding(
-                          padding: EdgeInsets.only(bottom: 5.0),
-                          child: Icon(Icons.filter_list_alt, size: 33),
+                          padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
+                          child: Icon(AppIcon.view_tile, size: safeBlockHorizontal * 6),
                         ),
                         label: 'Browser',
                       ),
                       // TODO: change heart Icon to bookmark_add_outlined ?
                       BottomNavigationBarItem(
                         icon: Padding(
-                          padding: EdgeInsets.only(bottom: 5.0),
-                          child: Icon(Icons.bookmarks_outlined, size: 33),
+                          padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
+                          child: Icon(Icons.bookmarks_outlined, size: safeBlockHorizontal * 6),
                         ),
                         label: 'Merkzettel',
                       ),
                       BottomNavigationBarItem(
                         icon: Padding(
-                          padding: EdgeInsets.only(bottom: 5.0),
-                          child: Icon(Icons.account_circle, size: 33),
+                          padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
+                          child: Icon(Icons.account_circle, size: safeBlockHorizontal * 6),
                         ),
                         label: 'Profil',
                       ),
