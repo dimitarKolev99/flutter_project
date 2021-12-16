@@ -1,31 +1,33 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:penny_pincher/services/fav_functions.dart';
+import 'package:penny_pincher/models/product.dart';
+import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/product_api.dart';
 
 import '../theme.dart';
 import 'article_card.dart';
 
 class BrowserArticleCard extends StatelessWidget {
-  final int id;
-  final String title;
-  final int saving;
-  final double price;
-  final String image;
-  final String description;
-  final String category;
+  late final int id;
+  late final String title;
+  late final int saving;
+  late final double price;
+  late final String image;
+  late final String description;
+  late final String category;
   dynamic callback;
+  Product product;
 
-  BrowserArticleCard({
-    required this.id,
-    required this.title,
-    required this.saving,
-    required this.price,
-    required this.image,
-    required this.description,
-    required this.category,
-    required this.callback,
-  });
+  BrowserArticleCard(this.product, this.callback){
+    this.id = product.productId;
+    this.title = product.title;
+    this.saving = product.saving;
+    this.price = product.price;
+    this.image = product.image;
+    this.description = product.description;
+    this.category = product.categoryName;
+  }
+
   @override
   Widget build(BuildContext context) {
     double newprice = price/100;
@@ -132,7 +134,7 @@ class BrowserArticleCard extends StatelessWidget {
                       child:
                       IconButton(
                         iconSize: 30.0,
-                        icon: (FavFunctions.isFavorite(id) ?
+                        icon: (ProductController.isFavorite(id) ?
                         Icon(Icons.favorite, color: Colors.red) :
                         Icon(Icons.favorite_border, color: ThemeChanger.reversetextColor)),
                         onPressed: _changeFavorite,
@@ -205,15 +207,7 @@ class BrowserArticleCard extends StatelessWidget {
   }
 
   Future _changeFavorite() async {
-    ArticleCard articleCard = ArticleCard(
-      id: id,
-      title: title,
-      saving: saving,
-      category: category,
-      description: description,
-      image: image,
-      price:price,
-      callback: callback,);
-    await FavFunctions.changeFavoriteState(articleCard, articleCard.callback);
+    ArticleCard articleCard = ArticleCard(product, callback);
+    await ProductController.changeFavoriteState(articleCard, articleCard.callback);
   }
 }

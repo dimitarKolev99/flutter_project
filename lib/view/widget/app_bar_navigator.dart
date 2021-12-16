@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:penny_pincher/services/fav_functions.dart';
+import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/view/theme.dart';
 
@@ -82,7 +82,7 @@ class HomeBrowserAppBar extends StatelessWidget implements PreferredSizeWidget {
           icon: Icon(Icons.search),
           onPressed: () {
             final results =
-            showSearch(context: context, delegate: ArticleSearch(true, callback, streamController));
+            showSearch(context: context, delegate: ArticleSearch(true, callback, callback.streamController));
           },
         )
       ],
@@ -165,7 +165,7 @@ class FavoriteAppBar extends StatelessWidget implements PreferredSizeWidget {
           icon: Icon(Icons.search),
           onPressed: () {
             final results =
-            showSearch(context: context, delegate: FavoriteSearch(callback, streamController));
+            showSearch(context: context, delegate: FavoriteSearch(callback, callback.streamController));
           },
         )
       ],

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:penny_pincher/models/preferences_articles.dart';
-import 'package:penny_pincher/services/fav_functions.dart';
+import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/json_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
@@ -14,8 +14,6 @@ import 'package:penny_pincher/view/extended_view.dart';
 import 'package:provider/provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
-StreamController<bool> streamController = StreamController<bool>.broadcast();
-
 class HomePage extends StatefulWidget {
   late final Stream<bool> stream;
   late final StreamController updateStream;
@@ -28,6 +26,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  StreamController<bool> streamController = StreamController<bool>.broadcast();
+
   late List<Product> _product;
   late final List _favoriteIds = [];
   late final List<Product> _products = [];
@@ -78,26 +79,7 @@ class _HomePageState extends State<HomePage> {
       _products.insert(count, _product[count]);
       count++;
     }
-
-    FavFunctions.addProducts(_products);
-  }
-
-  updateHome(bool update) {
-    if (this.mounted) {
-      updateFavorites();
-    }
-  }
-
-  Future<void> updateFavorites() async {
-    _favoriteIds.clear();
-    List<Product> favorites = await _preferenceArticles.getAllFavorites();
-    for (var i in favorites) {
-      if (!_favoriteIds.contains(i.productId)) {
-        _favoriteIds.add(i.productId);
-      }
-    }
-    setState(() {});
-    streamController.add(true);
+    ProductController.addProducts(_products);
   }
 
   void initListOfIDs() {
@@ -129,7 +111,9 @@ class _HomePageState extends State<HomePage> {
     }
     super.initState();
     widget.stream.listen((update) {
-      updateHome(update);
+      if (this.mounted) {
+        ProductController.updateFavorites(this);
+      }
     });
     initListOfIDs();
 
@@ -212,29 +196,10 @@ class _HomePageState extends State<HomePage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ExtendedView(
-                                        id: _products[index].productId,
-                                        title: _products[index].title,
-                                        saving: _products[index].saving,
-                                        category: _products[index].categoryName,
-                                        description:
-                                            _products[index].description,
-                                        image: _products[index].image,
-                                        price: _products[index].price,
-                                        stream: streamController.stream,
-                                        callback: this)),
+                                    builder: (context) => ExtendedView(_products[index], this, streamController.stream)),
                               );
                             },
-                            child: ArticleCard(
-                              id: _products[index].productId,
-                              title: _products[index].title,
-                              saving: _products[index].saving,
-                              category: _products[index].categoryName,
-                              description: _products[index].description,
-                              image: _products[index].image,
-                              price: _products[index].price,
-                              callback: this,
-                            ));
+                            child: ArticleCard(_products[index], this));
                       }),
                 )),
       );

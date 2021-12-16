@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:penny_pincher/models/product.dart';
+import 'package:penny_pincher/services/product_controller.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:penny_pincher/services/fav_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -10,27 +11,26 @@ import 'theme.dart';
 import 'widget/article_card.dart';
 
 class ExtendedView extends StatefulWidget {
-  final int id;
-  final String title;
-  final int saving;
-  final double price;
-  final String image;
-  final String description;
-  final String category;
+  late final int id;
+  late final String title;
+  late final int saving;
+  late final double price;
+  late final String image;
+  late final String description;
+  late final String category;
   final Stream<bool> stream;
-  final dynamic callback;
+  dynamic callback;
+  Product product;
 
-  ExtendedView({
-    required this.id,
-    required this.title,
-    required this.saving,
-    required this.price,
-    required this.image,
-    required this.description,
-    required this.category,
-    required this.stream,
-    required this.callback,
-  });
+  ExtendedView(this.product, this.callback, this.stream){
+    this.id = product.productId;
+    this.title = product.title;
+    this.saving = product.saving;
+    this.price = product.price;
+    this.image = product.image;
+    this.description = product.description;
+    this.category = product.categoryName;
+  }
 
   @override
   State<ExtendedView> createState() => _ExtendedViewState();
@@ -318,7 +318,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                                 ),
                                 child: IconButton(
                                   iconSize: safeBlockHorizontal * 7,
-                                  icon: (FavFunctions.isFavorite(widget.id)
+                                  icon: (ProductController.isFavorite(widget.id)
                                       ? const Icon(Icons.favorite,
                                       color: Colors.red)
                                       : const Icon(Icons.favorite_border,
@@ -337,19 +337,8 @@ class _ExtendedViewState extends State<ExtendedView> {
   }
 
   Future _changeFavoriteState() async {
-    ArticleCard articleCard = ArticleCard(
-      id: widget.id,
-      title: widget.title,
-      saving: widget.saving,
-      category: widget.category,
-      description: widget.description,
-      image: widget.image,
-      price: widget.price,
-      callback: widget.callback,
-    );
-
-    FavFunctions.changeFavoriteState(articleCard, this);
-    articleCard.callback.updateBrowser();
+    ArticleCard articleCard = ArticleCard(widget.product, widget.callback);
+    ProductController.changeFavoriteState(articleCard, widget.callback);
   }
 
   // creating specific URL and launching it from available browser apps
