@@ -16,6 +16,7 @@ class SubcategoryView extends StatefulWidget{
   late final StreamController updateStream;
   final dynamic callback;
 
+
   SubcategoryView({
     required this.categoryId,
     required this.categoryName,
@@ -23,6 +24,7 @@ class SubcategoryView extends StatefulWidget{
     required this.updateStream,
     required this.callback,
   });
+
 
 
   @override
@@ -159,6 +161,58 @@ class _SubcategoryViewState extends State<SubcategoryView>{
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  // Main Categories
+                  Align(
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                          color: ThemeChanger.lightBlue,
+                          height: 40,
+                          child: ListView.builder(
+                              physics: ScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount: 10,
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        widget.categoryId = widget.callback.widget.mainCategoryIds[index];
+                                        print("lasdköjflöaksjf ${widget.callback.widget.mainCategoryIds[index]}");
+                                        widget.callback.chosenCategories.clear();
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => SubcategoryView(
+                                                categoryName:
+                                                widget.callback.widget.mainCategoryNames[index],
+                                                categoryId: widget.callback.widget.mainCategoryIds[index],
+                                                stream: widget.stream,
+                                                updateStream: widget.updateStream,
+                                                callback: widget.callback,
+                                              ),
+                                            ));
+                                      });
+                                    },
+                                    child:  Container(
+                                      decoration: BoxDecoration(
+                                        color: ThemeChanger.articlecardbackground,
+                                        borderRadius: BorderRadius.circular(2),
+                                      ),
+                                      alignment: Alignment.centerRight,
+                                      margin: EdgeInsets.all(4),
+                                      //padding: EdgeInsets.all(4),
+                                      padding: EdgeInsets.symmetric(horizontal: 6),
+                                      height: 40,
+                                      child: Text(
+                                        widget.callback.widget.mainCategoryNames[index],
+                                        style: TextStyle(
+                                          color: ThemeChanger.reversetextColor,
+                                        ),
+                                      ),
+                                    )
+                                );
+                              }
+                          ))),
                   // Price and Discount
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: blockSizeHorizontal * 2),
@@ -191,12 +245,6 @@ class _SubcategoryViewState extends State<SubcategoryView>{
                             min: 0,
                             max: 1000,
                             divisions: 100,
-                            /*
-                      labels: RangeLabels(
-                        _currentSliderValuesPrice.start.round().toString() + "€",
-                        _currentSliderValuesPrice.end.round().toString() + "€",
-                      ),
-                       */
                             onChanged: (RangeValues values) {
                               setState(() {
                                 _currentSliderValuesPrice = values;
