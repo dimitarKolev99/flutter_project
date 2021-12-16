@@ -35,6 +35,7 @@ class _HomePageState extends State<HomePage> {
   Timer? _timer;
   bool isScrolling = false;
   ScrollController _scrollController = ScrollController();
+  var x = 0.0;
 
   final _preferenceArticles = PreferencesArticles();
   final _jsonFunctions = JsonFunctions();
@@ -141,6 +142,39 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
+
+    MediaQueryData _mediaQueryData;
+    double displayWidth;
+    double displayHeight;
+    double blockSizeHorizontal;
+    double blockSizeVertical;
+
+    double _safeAreaHorizontal;
+    double _safeAreaVertical;
+
+    double _safeAreaBottomPadding;
+    double safeBlockBottom;
+
+    double safeBlockHorizontal;
+    double safeBlockVertical;
+
+    _mediaQueryData = MediaQuery.of(context);
+    displayWidth = _mediaQueryData.size.width;
+    displayHeight = _mediaQueryData.size.height;
+    blockSizeHorizontal = displayWidth / 100;
+    blockSizeVertical = displayHeight / 100;
+
+    displayHeight = x;
+
+    _safeAreaHorizontal = _mediaQueryData.padding.left + _mediaQueryData.padding.right;
+    _safeAreaVertical = _mediaQueryData.padding.top + _mediaQueryData.padding.bottom;
+
+    _safeAreaBottomPadding = _mediaQueryData.padding.bottom;
+    safeBlockBottom = (displayWidth - _safeAreaBottomPadding) / 100;
+
+    safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
+    safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
+
     if (_isLoading) {
       return Scaffold(
         body: Container(
