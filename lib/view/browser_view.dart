@@ -92,7 +92,7 @@ class _BrowserPageState extends State<BrowserPage> {
     }
     super.initState();
     widget.stream.listen((update) {
-      updateBrowser(update);
+      updateBrowser();
     });
     getProducts(3832); print("CALLED FROM BROWSER VIEW");
   }
@@ -115,7 +115,7 @@ class _BrowserPageState extends State<BrowserPage> {
     FavFunctions.addProducts(_products);
   }
 
-  updateBrowser(bool update) {
+  updateBrowser() {
     if (this.mounted) {
       updateFavorites();
     }
