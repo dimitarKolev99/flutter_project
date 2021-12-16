@@ -12,11 +12,14 @@ import 'package:provider/provider.dart';
 class SubcategoryView extends StatefulWidget{
   int categoryId;
   String categoryName;
-
+  late final Stream<bool> stream;
+  late final StreamController updateStream;
 
   SubcategoryView({
     required this.categoryId,
     required this.categoryName,
+    required this.stream,
+    required this.updateStream,
   });
 
 
@@ -49,7 +52,7 @@ class _SubcategoryViewState extends State<SubcategoryView>{
     if(subCatButtons.isEmpty) {
       for (int i = 0; i < subCategoriesNames.length; i++) {
         subCatButtons.add(
-            SubcatButton(categoryName: subCategoriesNames[i], categoryId: subCategoriesIds[i]));
+            SubcatButton(categoryName: subCategoriesNames[i], categoryId: subCategoriesIds[i],stream: widget.stream, updateStream: widget.updateStream,));
       }
     }
   }
