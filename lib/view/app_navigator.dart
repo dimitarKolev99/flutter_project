@@ -1,3 +1,5 @@
+//import 'dart:html';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:penny_pincher/services/app_icons.dart';
@@ -15,7 +17,7 @@ class AppNavigator extends StatefulWidget {
 
 class AppState extends State<AppNavigator> {
   bool _isLoading = true;
-  bool isLargeDevice = false;
+  bool isLargeDevice = true;
   String _currentPage = "Page1";
   List<String> pageKeys = ["Page1", "Page2", "Page3", "Page4"];
   final Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
@@ -73,9 +75,9 @@ class AppState extends State<AppNavigator> {
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
 
     if (displayHeight > 800) {
-      isLargeDevice = false;
-    } else if (displayHeight < 800) {
       isLargeDevice = true;
+    } else if (displayHeight < 800) {
+      isLargeDevice = false;
     }
 
    // print("Höhe: $displayHeight");

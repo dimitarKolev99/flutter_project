@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:penny_pincher/services/fav_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
+import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'theme.dart';
@@ -80,49 +81,17 @@ class _ExtendedViewState extends State<ExtendedView> {
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
 
     return Scaffold(
-        appBar: AppBar(
-            backgroundColor: ThemeChanger.navBarColor,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                //Icon(Icons.restaurant_menu),
-                Image.network(
-                  "https://cdn.discordapp.com/attachments/899305939109302285/903270501781221426/photopenny.png",
-                  width: 40,
-                  height: 40,
-                ),
-
-                SizedBox(width: 10),
-                Text(
-                  'Penny Pincher',
-                  style: TextStyle(
-                    // Shaddow is used to get Distance to the underline -> TextColor itself is transparent
-                    shadows: [
-                      Shadow(
-                          color: Color.fromRGBO(240, 240, 240, 1),
-                          offset: Offset(0, -6))
-                    ],
-                    //fontFamily: '....',
-                    fontSize: 21,
-                    letterSpacing: 3,
-                    color: Colors.transparent,
-                    fontWeight: FontWeight.w900,
-                    decoration: TextDecoration.underline,
-                    decorationColor: ThemeChanger.highlightedColor,
-                    decorationThickness: 4,
-                  ),
-                ),
-              ],
-            )),
+        appBar: const ExtendedViewAppBar(),
         body: SingleChildScrollView(
           // this will make your body scrollable
 
             child: Container(
+
                 alignment: Alignment.topLeft,
                 margin: EdgeInsets.symmetric(horizontal: 2, vertical: 5),
                 width: displayWidth,
                 //height: displayHeight,
-                decoration: BoxDecoration(color: Colors.white,
+                decoration: BoxDecoration( color: ThemeChanger.articlecardbackground,
                     // borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(
@@ -144,6 +113,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                       ///Title
                       Container(
                         //color: Colors.yellow,
+                        alignment: Alignment.centerLeft,
                         margin: EdgeInsets.only(left: blockSizeHorizontal * 2),
                         child: Text(
                             widget.title,
@@ -151,7 +121,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                             style: GoogleFonts.roboto(
                               textStyle: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: safeBlockHorizontal * 5.5,
+                                fontSize: safeBlockHorizontal * 6,
                                 color: Colors.black,
                               ),
                             )
@@ -285,10 +255,13 @@ class _ExtendedViewState extends State<ExtendedView> {
                         child: Text(
                           widget.description,
                           textAlign: TextAlign.left,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: safeBlockHorizontal * 3.3
-                          ),
+                          style: GoogleFonts.roboto(
+                          textStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: safeBlockHorizontal * 3,
+                          color: ThemeChanger.reversetextColor,
+                        ),
+                      )
                         ),
                       ),
 
@@ -298,65 +271,63 @@ class _ExtendedViewState extends State<ExtendedView> {
                        */
                       SizedBox(height: blockSizeVertical * 0.5),
                       Container(
-                        height: blockSizeVertical * 10,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(15),
-                              bottomRight: Radius.circular(15)),
-                          //color: ProductApi.darkBlue,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(left: blockSizeHorizontal * 2),
-                              width: blockSizeHorizontal * 81.5,
-                              height: blockSizeVertical * 8,
-                              child: TextButton(
-                                  onPressed: _launchURL,
-                                  child: Text(
-                                    "Zum Angebot",
-                                    style: TextStyle(
-                                      fontSize: safeBlockHorizontal * 5,
-                                      color: ThemeChanger.textColor,
+                          height: blockSizeVertical * 10,
+                          width: blockSizeHorizontal * 100,
+                          //color: Colors.red,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(left: blockSizeHorizontal * 2),
+                                width: blockSizeHorizontal * 81.5,
+                                height: blockSizeVertical * 8,
+                                child: TextButton(
+                                    onPressed: _launchURL,
+                                    child: Text(
+                                      "Zum Angebot",
+                                      style: TextStyle(
+                                        fontSize: safeBlockHorizontal * 5,
+                                        color: ThemeChanger.textColor,
+                                      ),
                                     ),
-                                  ),
-                                  style: TextButton.styleFrom(
-                                    //fontWeight: FontWeight.bold,
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 25, vertical: 10),  //TODO: make it responsive
-                                    backgroundColor: ThemeChanger.lightBlue,
-                                    shape: RoundedRectangleBorder(
-                                        side: BorderSide(
-                                            color: ThemeChanger.textColor,
-                                            width: 2,
-                                            style: BorderStyle.solid),
-                                        borderRadius:
-                                        BorderRadius.circular(5)),
-                                  )
+                                    style: TextButton.styleFrom(
+                                      //fontWeight: FontWeight.bold,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: blockSizeHorizontal * 20, vertical: blockSizeVertical * 1),  //TODO: make it responsive
+                                      backgroundColor: ThemeChanger.lightBlue,
+                                      shape: RoundedRectangleBorder(
+                                          side: BorderSide(
+                                              color: ThemeChanger.navBarColor,
+                                              width: 2,
+                                              style: BorderStyle.solid),
+                                          borderRadius:
+                                          BorderRadius.circular(5)),
+                                    )
 
+                                ),
                               ),
-                            ),
-                            Container(
-                              height: blockSizeVertical * 7.5,
-                              margin: EdgeInsets.only(right: 10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: ThemeChanger.lightBlue,
-                              ),
-                              child: IconButton(
-                                iconSize: safeBlockHorizontal * 7,
-                                icon: (FavFunctions.isFavorite(widget.id)
-                                    ? const Icon(Icons.favorite,
-                                    color: Colors.red)
-                                    : const Icon(Icons.favorite_border,
-                                    color: Colors.white)),
-                                onPressed: _changeFavoriteState,
-                              ),
-                            )
-                          ],
+                              Container(
+                                height: blockSizeVertical * 7.9,
+                                //margin: EdgeInsets.only(right: 10),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: ThemeChanger.navBarColor, width: 2, style: BorderStyle.solid),
+                                  borderRadius: BorderRadius.circular(5),
+
+                                  color: ThemeChanger.lightBlue,
+                                ),
+                                child: IconButton(
+                                  iconSize: safeBlockHorizontal * 7,
+                                  icon: (FavFunctions.isFavorite(widget.id)
+                                      ? const Icon(Icons.favorite,
+                                      color: Colors.red)
+                                      : const Icon(Icons.favorite_border,
+                                      color: Colors.white)),
+                                  onPressed: _changeFavoriteState,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
-                      )
                     ]
                 )
             )
