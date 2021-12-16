@@ -6,7 +6,7 @@ import 'package:penny_pincher/view/widget/article_card.dart';
 class FavFunctions {
 
   static final _preferenceArticles = PreferencesArticles();
-  static late List _favoriteIds = []; // all favorites IDs
+  static late List _favoriteIds = []; // all favorites IDs as cache
   static late List<Product> _products = []; // all products cached
 
 

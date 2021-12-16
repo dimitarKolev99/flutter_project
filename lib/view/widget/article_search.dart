@@ -85,7 +85,8 @@ class ArticleSearch extends SearchDelegate<String> {
           if (snapshot.connectionState == ConnectionState.done) {
             return createResult(context);
           } else {
-            return CircularProgressIndicator();
+            return createResult(context);
+           // return CircularProgressIndicator(); // This was the reload causing line.
           }
         },
       );
@@ -156,10 +157,6 @@ class ArticleSearch extends SearchDelegate<String> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       recentArticles = prefs.getStringList('recentArticles') ?? []; // reading out permanent storage
     }
-
-  bool isFavorite(int id) {
-    return _favoriteIds.contains(id);
-  }
 
   Widget createResult(BuildContext context) {
       if(fromFeed) {
