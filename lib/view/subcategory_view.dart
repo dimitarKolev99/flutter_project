@@ -39,7 +39,8 @@ class _SubcategoryViewState extends State<SubcategoryView>{
   var discounts = [ [10, false], [20, false], [30, false], [40, false], [50, false]];
 
   // boolean Variable used to hide the Price Slider and Discounts
-  bool _hide = false;
+  bool _hidePrice = false;
+  bool _hideDiscount = false;
 
   
 
@@ -233,81 +234,96 @@ class _SubcategoryViewState extends State<SubcategoryView>{
                                   //fontWeight: FontWeight.bold,
                                   fontSize: safeBlockHorizontal * 5,
                                 )),
-                            Icon(_hide
-                            ? Icons.arrow_drop_down
-                            : Icons.arrow_drop_up),
+                            IconButton(
+                              icon: Icon(_hidePrice
+                                  ? Icons.arrow_drop_down
+                                  : Icons.arrow_drop_up),
+                              tooltip: "Hide",
+                              onPressed: () {
+                                setState(() {
+                                  _hidePrice = !_hidePrice;
+                                });
+                              },
+                            ),
                           ]
                         ),
 
                         // PriceSlider
-                        RangeSlider(
-                            activeColor: ThemeChanger.navBarColor,
-                            //inactiveColor: ProductApi.orange,
-                            values: _currentSliderValuesPrice,
-                            min: 0,
-                            max: 1000,
-                            divisions: 100,
-                            onChanged: (RangeValues values) {
-                              setState(() {
-                                _currentSliderValuesPrice = values;
-                              });
-                            },
-                          ),
+                        Visibility(
+                          visible: !_hidePrice,
+                          child: Column(
+                            children: [
+                              RangeSlider(
+                                activeColor: ThemeChanger.navBarColor,
+                                //inactiveColor: ProductApi.orange,
+                                values: _currentSliderValuesPrice,
+                                min: 0,
+                                max: 1000,
+                                divisions: 100,
+                                onChanged: (RangeValues values) {
+                                  setState(() {
+                                    _currentSliderValuesPrice = values;
+                                  });
+                                },
+                              ),
 
-                        // Output of Price-Slider
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(bottom: blockSizeVertical * 2),
-                              padding: EdgeInsets.only(
-                                  top: blockSizeVertical * 1,
-                                  bottom: blockSizeVertical * 1,
-                                  left: blockSizeHorizontal * 3,
-                                  right: blockSizeHorizontal * 3),
-                              decoration: BoxDecoration(
-                                color: ThemeChanger.lightBlue,
-                                borderRadius:
-                                BorderRadius.circular(blockSizeHorizontal * 3),
+                              // Output of Price-Slider
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(bottom: blockSizeVertical * 2),
+                                    padding: EdgeInsets.only(
+                                        top: blockSizeVertical * 1,
+                                        bottom: blockSizeVertical * 1,
+                                        left: blockSizeHorizontal * 3,
+                                        right: blockSizeHorizontal * 3),
+                                    decoration: BoxDecoration(
+                                      color: ThemeChanger.lightBlue,
+                                      borderRadius:
+                                      BorderRadius.circular(blockSizeHorizontal * 3),
+                                    ),
+                                    child:
+                                    Text(
+                                      _currentSliderValuesPrice.start.round().toString() +
+                                          " €",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: safeBlockHorizontal * 4.8,
+                                        color: ThemeChanger.textColor,
+                                        //backgroundColor: ProductApi.lightBlue,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(bottom: blockSizeVertical * 2),
+                                    padding: EdgeInsets.only(
+                                        top: blockSizeVertical * 1,
+                                        bottom: blockSizeVertical * 1,
+                                        left: blockSizeHorizontal * 3,
+                                        right: blockSizeHorizontal * 3),
+                                    decoration: BoxDecoration(
+                                      color: ThemeChanger.lightBlue,
+                                      borderRadius:
+                                      BorderRadius.circular(blockSizeHorizontal * 3),
+                                    ),
+                                    child:
+                                    Text(
+                                      _currentSliderValuesPrice.end.round().toString() +
+                                          " €",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: safeBlockHorizontal * 4.8,
+                                        color: ThemeChanger.textColor,
+                                        //backgroundColor: ProductApi.lightBlue,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              child:
-                              Text(
-                                _currentSliderValuesPrice.start.round().toString() +
-                                    " €",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: safeBlockHorizontal * 4.8,
-                                  color: ThemeChanger.textColor,
-                                  //backgroundColor: ProductApi.lightBlue,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(bottom: blockSizeVertical * 2),
-                              padding: EdgeInsets.only(
-                                  top: blockSizeVertical * 1,
-                                  bottom: blockSizeVertical * 1,
-                                  left: blockSizeHorizontal * 3,
-                                  right: blockSizeHorizontal * 3),
-                              decoration: BoxDecoration(
-                                color: ThemeChanger.lightBlue,
-                                borderRadius:
-                                BorderRadius.circular(blockSizeHorizontal * 3),
-                              ),
-                              child:
-                              Text(
-                                _currentSliderValuesPrice.end.round().toString() +
-                                    " €",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: safeBlockHorizontal * 4.8,
-                                  color: ThemeChanger.textColor,
-                                  //backgroundColor: ProductApi.lightBlue,
-                                ),
-                              ),
-                            ),
-                          ],
+                            ],
+                          )
                         ),
 
                         // Title for Discount Options
@@ -320,58 +336,66 @@ class _SubcategoryViewState extends State<SubcategoryView>{
                                   //fontWeight: FontWeight.bold,
                                   fontSize: safeBlockHorizontal * 5,
                                 )),
-                            Icon(_hide
-                                ? Icons.arrow_drop_down
-                                : Icons.arrow_drop_up),
+                            IconButton(
+                              icon: Icon(_hideDiscount
+                                  ? Icons.arrow_drop_down
+                                  : Icons.arrow_drop_up),
+                              tooltip: "Hide",
+                              onPressed: () {
+                                setState(() {
+                                  _hideDiscount = !_hideDiscount;
+                                });
+                              },
+                            ),
                           ],
-
-                          //Headline: Price
-
                         ),
 
                         // Discount Options
-                        Container(
-                          height: blockSizeVertical * 10,
-                          //color: Colors.amberAccent,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: List.generate(discounts.length, (index) {
-                              return Container(
-                                alignment: Alignment.center,
-                                width: blockSizeHorizontal * 12,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  // When a discount circle is clicked
-                                  color: (discounts[index][1] == true)
-                                      ? ThemeChanger.highlightedColor
-                                      : ThemeChanger.lightBlue,
-                                ),
-                                child: InkWell(
-                                  onTap: (){
-                                    // When a discount circle is clicked
-                                    setState(() {
-                                      if (discounts[index][1] == false){
-                                        // Only one discount can be selected
-                                        for (var discount in discounts) {
-                                          discount[1] = false;
-                                        }
-                                        discounts[index][1] = true;
-                                      }else{
-                                        discounts[index][1] = false;
-                                      }
-                                    });
-                                  },
-                                  child: Text(
-                                    discounts[index][0].toString() + "%",
-                                    style: TextStyle(
-                                      color: ThemeChanger.articlecardbackground,
-                                      fontSize: safeBlockHorizontal * 3.9,
+                        Visibility(
+                          visible: !_hideDiscount,
+                          child: Container(
+                            height: blockSizeVertical * 10,
+                            //color: Colors.amberAccent,
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: List.generate(discounts.length, (index) {
+                                  return Container(
+                                    alignment: Alignment.center,
+                                    width: blockSizeHorizontal * 12,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      // When a discount circle is clicked
+                                      color: (discounts[index][1] == true)
+                                          ? ThemeChanger.highlightedColor
+                                          : ThemeChanger.lightBlue,
                                     ),
-                                  ),
-                                ),
-                              );
-                            })
-                          ),
+                                    child: InkWell(
+                                      onTap: (){
+                                        // When a discount circle is clicked
+                                        setState(() {
+                                          if (discounts[index][1] == false){
+                                            // Only one discount can be selected
+                                            for (var discount in discounts) {
+                                              discount[1] = false;
+                                            }
+                                            discounts[index][1] = true;
+                                          }else{
+                                            discounts[index][1] = false;
+                                          }
+                                        });
+                                      },
+                                      child: Text(
+                                        discounts[index][0].toString() + "%",
+                                        style: TextStyle(
+                                          color: ThemeChanger.articlecardbackground,
+                                          fontSize: safeBlockHorizontal * 3.9,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                })
+                            ),
+                          )
                         ),
                       ],
                     ),
