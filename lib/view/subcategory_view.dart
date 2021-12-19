@@ -38,6 +38,9 @@ class _SubcategoryViewState extends State<SubcategoryView>{
   // Discount options combined with a boolean for when chosen
   var discounts = [ [10, false], [20, false], [30, false], [40, false], [50, false]];
 
+  // boolean Variable used to hide the Price Slider and Discounts
+  bool _hide = false;
+
   
 
   JsonFunctions json = JsonFunctions();
@@ -220,25 +223,24 @@ class _SubcategoryViewState extends State<SubcategoryView>{
                       children: [
 
                         // Title for Price-Slider
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          //margin: EdgeInsets.only(left: blockSizeHorizontal * 6, top: blockSizeHorizontal * 2),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           //Headline: Price
-                          child: Text("Preisklasse",
-                              style: TextStyle(
-                                color: ThemeChanger.navBarColor,
-                                //fontWeight: FontWeight.bold,
-                                fontSize: safeBlockHorizontal * 5,
-                              )),
+                          children: [
+                            Text("Preisklasse",
+                                style: TextStyle(
+                                  color: ThemeChanger.navBarColor,
+                                  //fontWeight: FontWeight.bold,
+                                  fontSize: safeBlockHorizontal * 5,
+                                )),
+                            Icon(_hide
+                            ? Icons.arrow_drop_down
+                            : Icons.arrow_drop_up),
+                          ]
                         ),
 
                         // PriceSlider
-                        Container(
-                          padding: EdgeInsets.all(0),
-                          margin: EdgeInsets.all(0),
-                          width: blockSizeHorizontal * 200,
-                          child: RangeSlider(
-
+                        RangeSlider(
                             activeColor: ThemeChanger.navBarColor,
                             //inactiveColor: ProductApi.orange,
                             values: _currentSliderValuesPrice,
@@ -251,7 +253,6 @@ class _SubcategoryViewState extends State<SubcategoryView>{
                               });
                             },
                           ),
-                        ),
 
                         // Output of Price-Slider
                         Row(
@@ -310,16 +311,22 @@ class _SubcategoryViewState extends State<SubcategoryView>{
                         ),
 
                         // Title for Discount Options
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          //margin: EdgeInsets.only(left: blockSizeHorizontal * 6, top: blockSizeHorizontal * 2),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Rabatte",
+                                style: TextStyle(
+                                  color: ThemeChanger.navBarColor,
+                                  //fontWeight: FontWeight.bold,
+                                  fontSize: safeBlockHorizontal * 5,
+                                )),
+                            Icon(_hide
+                                ? Icons.arrow_drop_down
+                                : Icons.arrow_drop_up),
+                          ],
+
                           //Headline: Price
-                          child: Text("Rabatte",
-                              style: TextStyle(
-                                color: ThemeChanger.navBarColor,
-                                //fontWeight: FontWeight.bold,
-                                fontSize: safeBlockHorizontal * 5,
-                              )),
+
                         ),
 
                         // Discount Options

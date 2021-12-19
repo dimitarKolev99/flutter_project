@@ -138,6 +138,7 @@ class _SubcatButtonState extends State<SubcatButton> {
                 visible: widget.show,
                 child: Container(
                   height: 300,
+                  margin: EdgeInsets.only(left: 5),
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     color: ThemeChanger.articlecardbackground,
