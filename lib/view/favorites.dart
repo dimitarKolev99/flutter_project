@@ -39,15 +39,19 @@ class _FavoritePageState extends State<FavoritePage> {
 
   @override
   void initState() {
-    favoriteProducts = ProductController.favoriteProducts;
     super.initState();
     widget.stream.listen((update) {
       updateScreen(update);
     });
+
+    favoriteProducts = ProductController.favoriteProducts;
+    getData();
   }
 
   getData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<Product> saved = await _preferenceArticles.getAllFavorites();
+    favoriteProducts.addAll(saved);
     setState(() {
       // displayName = prefs.getStringList('displayName');
     });
