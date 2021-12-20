@@ -23,6 +23,7 @@ class BrowserPage extends StatefulWidget {
   int _currentProductId;
 
 
+
   BrowserPage(this.stream, this.updateStream, this._currentProductId);
 
   @override
@@ -71,6 +72,7 @@ class BrowserPage extends StatefulWidget {
 }
 
 class _BrowserPageState extends State<BrowserPage> {
+  int currentCategory = 0;
   StreamController<bool> streamController = StreamController<bool>.broadcast();
   late List<Product> _product;
   late final List _favoriteIds = [];
@@ -92,7 +94,15 @@ class _BrowserPageState extends State<BrowserPage> {
   }
 
   void addCategory(String s){
+    //chosenCategories.add(s);
+    //TODO: change to propper working category List, this is juts to show only the last cat
     chosenCategories.add(s);
+  }
+
+  void removeOneCategory(String s ){
+    int index = chosenCategories.indexOf(s);
+    //print("removing : ! ${s}");
+    chosenCategories.remove(chosenCategories[index]);
   }
 
   void deleteCategory(String s){
@@ -165,8 +175,10 @@ class _BrowserPageState extends State<BrowserPage> {
               alignment: Alignment.topCenter,
               child: Container(
                 color: ThemeChanger.lightBlue,
-                height: 40,
+                height: 35,
                 width: displayWidth,
+                //TODO:ListView Bulider to show the route of the categories, works only for choosing 1 Prod. Cat.
+
                 child: ListView.builder(
                     physics: ScrollPhysics(),
                     scrollDirection: Axis.horizontal,
@@ -189,27 +201,54 @@ class _BrowserPageState extends State<BrowserPage> {
                                   ),
                                 ));
                           },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: chosenCategories.isEmpty? ThemeChanger.articlecardbackground : ThemeChanger.highlightedColor,
-                              borderRadius: BorderRadius.circular(2),
-                            ),
+                          child:
+                              Container(
+                              decoration: BoxDecoration(
+                              color: chosenCategories.isEmpty? ThemeChanger.articlecardbackground : ThemeChanger.navBarColor,
+                                borderRadius: BorderRadius.circular(2),
+                              ),
                             alignment: Alignment.centerRight,
                             margin: EdgeInsets.all(4),
-                            //padding: EdgeInsets.all(4),
-                            padding: EdgeInsets.symmetric(horizontal: 6),
-                            height: 40,
-                            child: Text(
+                            padding: EdgeInsets.symmetric(horizontal: 4),
+                            child: Row(
+                              mainAxisAlignment : MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
                               chosenCategories.isEmpty? widget.mainCategoryNames[index] : chosenCategories[index],
                               style: TextStyle(
-                                color: ThemeChanger.reversetextColor,
-                                fontWeight:  !chosenCategories.isEmpty && index == chosenCategories.length-1?  FontWeight.bold :FontWeight.normal,
+                                color: chosenCategories.isEmpty? ThemeChanger.navBarColor : ThemeChanger.articlecardbackground,
+                                //fontWeight:  !chosenCategories.isEmpty && index == chosenCategories.length-1?  FontWeight.w600 :FontWeight.normal,
+                                fontWeight:  FontWeight.w400,
                               ),
+                              ),
+                                chosenCategories.isEmpty?
+                                SizedBox(width: 0,):
+                                IconButton(
+                                  alignment: Alignment.centerRight,
+                                    constraints: const BoxConstraints(),
+                                    padding : const EdgeInsets.only(top: 1.3),
+                                    onPressed: (){
+                                  setState((){
+                                    if(!chosenCategories.isEmpty) {
+                                      //TODO: Reload Products
+                                      removeOneCategory(chosenCategories[index]);
+                                      updateBrowserblabla(currentCategory);
+                                    }
+                                  });},
+                                icon: Icon(Icons.clear, size: 18, color: ThemeChanger.articlecardbackground,) )
+                              ],
                             ),
+
+
+
                           ));
+
+
                     }),
               ),
             ),
+
+
 
 
 
