@@ -18,6 +18,7 @@ class SubcatButton extends StatefulWidget {
   late final Stream<bool> stream;
   late final StreamController updateStream;
   final dynamic callback;
+  final ScrollController controller;
 
 
   SubcatButton({
@@ -26,6 +27,7 @@ class SubcatButton extends StatefulWidget {
     required this.stream,
     required this.updateStream,
     required this.callback,
+    required this.controller,gb
     //required this.isProdCat,
   });
 
@@ -51,7 +53,8 @@ class _SubcatButtonState extends State<SubcatButton> {
               categoryId: subCategoriesIds[i],
               stream: widget.stream,
               updateStream: widget.updateStream,
-            callback: widget.callback,));
+            callback: widget.callback,
+            controller: widget.controller));
       }
     }
   }
@@ -82,8 +85,8 @@ class _SubcatButtonState extends State<SubcatButton> {
     mapToLists();
     listToButtons();
   }
-  Color subCatcolor = Colors.blue;
-  Color prodCatColor = Colors.blue;
+  Color subCatcolor = ThemeChanger.navBarColor;
+  Color prodCatColor = ThemeChanger.navBarColor;
   @override
   Widget build(BuildContext context) {
 
@@ -94,50 +97,66 @@ class _SubcatButtonState extends State<SubcatButton> {
           InkWell(
           onTap: (){
             setState(() {
-              getCats();
-              // if empty chosen category = Productcategory
-              if(subCatButtons.isEmpty){
-                widget._isProdCat = true;
-                if(prodCatColor == Colors.blue){
+             // if(widget.controller.hasClients) {
+              //  widget.controller.animateTo(
+               //     widget.controller.position.minScrollExtent, //widget.controller.position.,
+               //     duration: Duration(microseconds: 200),
+               //     curve: Curves.easeOut);
+              //}
+                getCats();
+                // if empty chosen category = Productcategory
+                if(subCatButtons.isEmpty){
+                  widget._isProdCat = true;
+                  if(prodCatColor == ThemeChanger.navBarColor){
+                    widget.callback.addCategory(widget.categoryName);
+                    prodCatColor = Colors.lightBlue;
+                    // function needed that leads to browser and shows results
+                    // TODO: Add CategoryIDs to a Collection ,
+                    // TODO: Call Json Function to updayte the resultList and Update Button Text
+                    widget.callback.currentCategory = widget.categoryId;
+
+                  }
+                  else{
+                    prodCatColor = ThemeChanger.navBarColor;
+                    widget.callback.deleteCategory(widget.categoryName);
+                  }
+                }
+                // Subcategories
+                else if(subCatcolor == ThemeChanger.navBarColor){ // blue = unselected
                   widget.callback.addCategory(widget.categoryName);
-                  prodCatColor = Colors.red;
-                  // function needed that leads to browser and shows results
-                  widget.callback.updateBrowserblabla(widget.categoryId);
-                  Navigator.pop(
-                    context
-                  );
+                  widget.show = !widget.show;
+                  subCatcolor = ThemeChanger.highlightedColor;
                 }
-                else{
-                  prodCatColor = Colors.blue;
+                else{  // selected
                   widget.callback.deleteCategory(widget.categoryName);
+                  widget.show = !widget.show;
+                  subCatcolor = ThemeChanger.navBarColor;
                 }
-              }
-              // Subcategories
-              else if(subCatcolor == Colors.blue){ // blue = unselected
-                widget.callback.addCategory(widget.categoryName);
-                widget.show = !widget.show;
-                subCatcolor = Colors.green;
-              }
-              else{  // selected
-                widget.callback.deleteCategory(widget.categoryName);
-                widget.show = !widget.show;
-                subCatcolor = Colors.blue;
-              }
-             }
+            }
             );
           },
           child: Container(
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.all(5),
             color: widget._isProdCat ? prodCatColor : subCatcolor,
-            height: 50,
+            width: MediaQuery.of(context).size.width,
+            height: 30,
             margin: EdgeInsets.all(4),
-            child: Text(widget.categoryName),
+            child: Text(widget.categoryName, style:
+              TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
+                color: Colors.white
+              ),
+            textAlign: TextAlign.left,
+            ),
           )
         ),
 
               Visibility(
                 visible: widget.show,
                 child: Container(
-                  height: 300,
+                  height: MediaQuery.of(context).size.height,
                   margin: EdgeInsets.only(left: 5),
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
@@ -155,10 +174,10 @@ class _SubcatButtonState extends State<SubcatButton> {
                  builder: (context, snapshot) {
     return
     ListView.builder(
-    itemCount: subCatButtons.length,
-    itemBuilder: (context, index) {
-   // print("length of categories : ${subCatButtons.length}");
-    return subCatButtons[index];
+      controller: widget.controller,
+      itemCount: subCatButtons.length,
+      itemBuilder: (context, index) {
+      return subCatButtons[index];
     },
     );}
     )))]);

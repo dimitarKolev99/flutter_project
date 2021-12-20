@@ -23,6 +23,7 @@ class BrowserPage extends StatefulWidget {
   int _currentProductId;
 
 
+
   BrowserPage(this.stream, this.updateStream, this._currentProductId);
 
   @override
@@ -71,6 +72,7 @@ class BrowserPage extends StatefulWidget {
 }
 
 class _BrowserPageState extends State<BrowserPage> {
+  int currentCategory = 0;
   StreamController<bool> streamController = StreamController<bool>.broadcast();
   late List<Product> _product;
   late final List _favoriteIds = [];
