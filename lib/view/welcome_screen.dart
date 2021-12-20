@@ -17,7 +17,6 @@ StreamController<bool> streamController = StreamController<bool>.broadcast();
 
 class WelcomePage extends StatefulWidget {
   final dynamic callback;
-
   WelcomePage(this.callback);
 
   @override
@@ -26,6 +25,12 @@ class WelcomePage extends StatefulWidget {
 
 class _WelcomePageState extends State<WelcomePage> {
   List<bool> isSelected = [false, false, false, false];
+  late bool _isButtonDisabled;
+
+  @override
+  void initState() {
+    _isButtonDisabled = true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +78,14 @@ class _WelcomePageState extends State<WelcomePage> {
                           if (val) count++;
                         });
 
-                        if (isSelected[index] && count < 1) return;
+                        if (isSelected[index]) {
+                          if (count < 1) {
+                            _isButtonDisabled = false;
+                            return;
+                          } else {
+                            _isButtonDisabled = true;
+                          }
+                        }
 
                         setState(() {
                           isSelected[index] = !isSelected[index];
@@ -112,7 +124,8 @@ class _WelcomePageState extends State<WelcomePage> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        widget.callback.closeWelcomeScreen();
+                        if (!_isButtonDisabled)
+                          widget.callback.closeWelcomeScreen();
                       },
                       style: ButtonStyle(
                           backgroundColor:
