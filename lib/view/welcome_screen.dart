@@ -42,23 +42,25 @@ class _WelcomePageState extends State<WelcomePage> {
                     "Choose your favorite categories!",
                     textAlign: TextAlign.center,
                     style: TextStyle(
+                      fontSize: 21,
+                      fontWeight: FontWeight.w500,
                       color: Colors.black,
-                      fontSize: 40.0,
                     ),
                   ),
                 ),
                 SizedBox(height: 45),
                 Container(
-                    child: Column(
+                    child: new Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     ToggleButtons(
-                      borderColor: Colors.black,
-                      fillColor: Colors.grey,
+                      color: ThemeChanger.navBarColor,
+                      borderColor: ThemeChanger.navBarColor,
+                      fillColor: ThemeChanger.lightBlue,
                       borderWidth: 2,
-                      selectedBorderColor: Colors.black,
+                      selectedBorderColor: ThemeChanger.navBarColor,
                       selectedColor: Colors.white,
-                      borderRadius: BorderRadius.circular(0),
+                      borderRadius: BorderRadius.circular(4),
                       children: <Widget>[
                         Icon(Icons.dry_cleaning),
                         Icon(Icons.laptop),
@@ -77,6 +79,8 @@ class _WelcomePageState extends State<WelcomePage> {
                           isSelected[index] = !isSelected[index];
                         });
                       },
+                      renderBorder: false,
+                      constraints: BoxConstraints(minWidth: 70, minHeight: 70),
                       isSelected: isSelected,
                     ),
                   ],
