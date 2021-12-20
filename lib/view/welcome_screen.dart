@@ -100,106 +100,114 @@ class _WelcomePageState extends State<WelcomePage> {
                 )),
               ]),
             ),
-            Align(
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Container(
-                    height: 50,
-                    margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(33),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.6),
-                          offset: Offset(
-                            0.0,
-                            10.0,
-                          ),
-                          blurRadius: 20.0,
-                          spreadRadius: -3.0,
+            Row(
+              children: <Widget>[
+                Expanded(
+                    child: Align(
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Container(
+                        height: 50,
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(33),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.6),
+                              offset: Offset(
+                                0.0,
+                                10.0,
+                              ),
+                              blurRadius: 20.0,
+                              spreadRadius: -3.0,
+                            ),
+                          ],
+                          color: ThemeChanger.textColor,
                         ),
-                      ],
-                      color: ThemeChanger.textColor,
-                    ),
-                    child: TextButton(
-                      onPressed: _isButtonDisabled
-                          ? null
-                          : () {
-                              widget.callback.closeWelcomeScreen();
-                            },
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(ThemeChanger.textColor),
-                          foregroundColor: MaterialStateProperty.all(
-                              Color.fromRGBO(45, 45, 45, 1)),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                        child: TextButton(
+                          onPressed: _isButtonDisabled
+                              ? null
+                              : () {
+                                  widget.callback.closeWelcomeScreen();
+                                },
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  ThemeChanger.textColor),
+                              foregroundColor: MaterialStateProperty.all(
+                                  Color.fromRGBO(45, 45, 45, 1)),
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(33),
-                            //side: BorderSide(color: Colors.black)
-                          )),
-                          textStyle: MaterialStateProperty.all(TextStyle(
-                            fontSize: 21,
-                            fontWeight: FontWeight.w500,
-                          ))),
-                      child: Text("Fortfahren"),
-                    ),
+                                borderRadius: BorderRadius.circular(33),
+                                //side: BorderSide(color: Colors.black)
+                              )),
+                              textStyle: MaterialStateProperty.all(TextStyle(
+                                fontSize: 21,
+                                fontWeight: FontWeight.w500,
+                              ))),
+                          child: Text("Fortfahren"),
+                        ),
+                      ),
+                      SizedBox(height: 30),
+                    ],
                   ),
-                  SizedBox(height: 30),
-                ],
-              ),
+                )),
+                Expanded(
+                    child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Container(
+                        height: 50,
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(33),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.6),
+                              offset: Offset(
+                                0.0,
+                                10.0,
+                              ),
+                              blurRadius: 20.0,
+                              spreadRadius: -3.0,
+                            ),
+                          ],
+                          color: ThemeChanger.textColor,
+                        ),
+                        child: TextButton(
+                          onPressed: () {
+                            widget.callback.closeWelcomeScreen();
+                          },
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  ThemeChanger.textColor),
+                              foregroundColor: MaterialStateProperty.all(
+                                  Color.fromRGBO(45, 45, 45, 1)),
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(33),
+                                //side: BorderSide(color: Colors.black)
+                              )),
+                              textStyle: MaterialStateProperty.all(TextStyle(
+                                fontSize: 21,
+                                fontWeight: FontWeight.w500,
+                              ))),
+                          child: Text("Überspringen"),
+                        ),
+                      ),
+                      SizedBox(height: 30),
+                    ],
+                  ),
+                )),
+              ],
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Container(
-                    height: 50,
-                    margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(33),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.6),
-                          offset: Offset(
-                            0.0,
-                            10.0,
-                          ),
-                          blurRadius: 20.0,
-                          spreadRadius: -3.0,
-                        ),
-                      ],
-                      color: ThemeChanger.textColor,
-                    ),
-                    child: TextButton(
-                      onPressed: () {
-                        widget.callback.closeWelcomeScreen();
-                      },
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(ThemeChanger.textColor),
-                          foregroundColor: MaterialStateProperty.all(
-                              Color.fromRGBO(45, 45, 45, 1)),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(33),
-                            //side: BorderSide(color: Colors.black)
-                          )),
-                          textStyle: MaterialStateProperty.all(TextStyle(
-                            fontSize: 21,
-                            fontWeight: FontWeight.w500,
-                          ))),
-                      child: Text("Überspringen"),
-                    ),
-                  ),
-                  SizedBox(height: 30),
-                ],
-              ),
-            )
           ],
         ),
       ],
