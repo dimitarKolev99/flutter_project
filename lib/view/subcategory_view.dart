@@ -8,6 +8,7 @@ import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/subcat_button.dart';
 import 'package:provider/provider.dart';
+import 'dart:math';
 
 class SubcategoryView extends StatefulWidget {
   int categoryId;
@@ -31,7 +32,10 @@ class SubcategoryView extends StatefulWidget {
 }
 
 class _SubcategoryViewState extends State<SubcategoryView> {
-  RangeValues _currentSliderValuesPrice = const RangeValues(20, 70);
+  var minValue = 400;
+  var maxValue = 2500;
+  RangeValues _currentSliderValuesPrice = const RangeValues(20, 50);
+
 
   // Discount options combined with a boolean for when chosen
   var discounts = [
@@ -226,46 +230,71 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                       EdgeInsets.symmetric(horizontal: blockSizeHorizontal * 2),
                       child: Column(
                         children: [
-                          // Title for Price-Slider
-                          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              //Headline: Price
-                              children: [
-                                Text("Preisklasse",
-                                    style: TextStyle(
-                                      color: ThemeChanger.navBarColor,
-                                      //fontWeight: FontWeight.bold,
-                                      fontSize: safeBlockHorizontal * 5,
-                                    )),
-                                IconButton(
-                                  icon: Icon(_hide
-                                      ? Icons.arrow_drop_down
-                                      : Icons.arrow_drop_up),
-                                  tooltip: "Hide",
-                                  onPressed: () {
-                                    setState(() {
-                                      _hide = !_hide;
-                                    });
-                                  },
+                          RangeSlider(
+                            activeColor: ThemeChanger.navBarColor,
+                            //inactiveColor: ProductApi.orange,
+                            values: _currentSliderValuesPrice,
+                            min: 0,
+                            max: 100,
+                            divisions: 100,
+                            onChanged: (RangeValues values) {
+                              setState(() {
+                                _currentSliderValuesPrice = values;
+                                minValue = pow(_currentSliderValuesPrice.start, 2).round();
+                                maxValue = pow(_currentSliderValuesPrice.end, 2).round();
+                              });
+                            },
+                          ),
+
+                          // Output of Price-Slider
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              // Linke Output
+                              Container(
+                                margin: EdgeInsets.only(
+                                    bottom: blockSizeVertical * 2),
+                                padding: EdgeInsets.only(
+                                    top: blockSizeVertical * 1,
+                                    bottom: blockSizeVertical * 1,
+                                    left: blockSizeHorizontal * 3,
+                                    right: blockSizeHorizontal * 3),
+                                decoration: BoxDecoration(
+                                  color: ThemeChanger.lightBlue,
+                                  borderRadius: BorderRadius.circular(
+                                      blockSizeHorizontal * 3),
+                                ),
+                                child: Text(minValue.toString() + " €",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: safeBlockHorizontal * 4.8,
+                                    color: ThemeChanger.textColor,
+                                    //backgroundColor: ProductApi.lightBlue,
+                                  ),
                                 ),
                               ]),
 
-                          // PriceSlider
-                          Visibility(
-                              visible: !_hide,
-                              child: Column(
-                                children: [
-                                  RangeSlider(
-                                    activeColor: ThemeChanger.navBarColor,
-                                    //inactiveColor: ProductApi.orange,
-                                    values: _currentSliderValuesPrice,
-                                    min: 0,
-                                    max: 1000,
-                                    divisions: 100,
-                                    onChanged: (RangeValues values) {
-                                      setState(() {
-                                        _currentSliderValuesPrice = values;
-                                      });
-                                    },
+                              // Rechte Output
+                              Container(
+                                margin: EdgeInsets.only(
+                                    bottom: blockSizeVertical * 2),
+                                padding: EdgeInsets.only(
+                                    top: blockSizeVertical * 1,
+                                    bottom: blockSizeVertical * 1,
+                                    left: blockSizeHorizontal * 3,
+                                    right: blockSizeHorizontal * 3),
+                                decoration: BoxDecoration(
+                                  color: ThemeChanger.lightBlue,
+                                  borderRadius: BorderRadius.circular(
+                                      blockSizeHorizontal * 3),
+                                ),
+                                child: Text(maxValue.toString() + " €",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: safeBlockHorizontal * 4.8,
+                                    color: ThemeChanger.textColor,
+                                    //backgroundColor: ProductApi.lightBlue,
                                   ),
 
                                   // Output of Price-Slider
