@@ -134,10 +134,10 @@ class _SubcategoryViewState extends State<SubcategoryView>{
           appBar: AppBar(
               backgroundColor: ThemeChanger.navBarColor,
               title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(top: 3),
+                    padding: EdgeInsets.only(top: 3, right: 50),
                     child:
                     Text(
                       'Categories',
@@ -415,6 +415,27 @@ class _SubcategoryViewState extends State<SubcategoryView>{
                       ),
                     ),
                   ),
+
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: blockSizeHorizontal * 2),
+                    child:Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Kategorien",
+                            style: TextStyle(
+                              color: ThemeChanger.navBarColor,
+                              //fontWeight: FontWeight.bold,
+                              fontSize: safeBlockHorizontal * 5,
+                            )),
+                        Text("31754 Produkte",
+                          style: TextStyle(
+                            color: ThemeChanger.navBarColor,
+                            //fontWeight: FontWeight.bold,
+                            fontSize: safeBlockHorizontal * 3),),
+                      ],
+                    ),
+                  ),
+
                   // Waits for the lists of categories before it builds the widgets
                   Expanded(
                     child: FutureBuilder(
