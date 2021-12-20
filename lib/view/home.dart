@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
     "Sport & Outdoor"
   ];
   List<int> mainCategoryIds = [
-    30311, //
+    30311,
     3932,
     3686,
     9908,
