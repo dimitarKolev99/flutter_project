@@ -230,7 +230,7 @@ class _HomePageState extends State<HomePage> {
 
   firstAppStart() async {
     preferences = await SharedPreferences.getInstance();
-    //await preferences.setBool("nofirstTime", false); // reset
+    await preferences.setBool("nofirstTime", false); // reset
 
     var nofirstTime = preferences.getBool('nofirstTime');
     if (!nofirstTime) {
