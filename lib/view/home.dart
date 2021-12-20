@@ -217,6 +217,7 @@ class _HomePageState extends State<HomePage> {
         body:
         //_isLoading ? Center(child: CircularProgressIndicator()) :
         Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Align(
               alignment: Alignment.topCenter,
@@ -255,6 +256,8 @@ class _HomePageState extends State<HomePage> {
                     }),
               ),
             ),
+          Expanded(
+            child:
             Align(
                 alignment: Alignment.topCenter,
                 child: NotificationListener<ScrollNotification>(
@@ -280,7 +283,7 @@ class _HomePageState extends State<HomePage> {
                             },
                             child: ArticleCard(_products[index], this));
                       }),
-                )),
+                )),)
           ],
         )
 
