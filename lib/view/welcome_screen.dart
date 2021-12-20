@@ -60,10 +60,15 @@ class _WelcomePageState extends State<WelcomePage> {
                 Icon(Icons.book),
               ],
               onPressed: (int index) {
+                int count = 0;
+                isSelected.forEach((bool val) {
+                  if (val) count++;
+                });
+
+                if (isSelected[index] && count < 1) return;
+
                 setState(() {
-                  for (int i = 0; i < isSelected.length; i++) {
-                    isSelected[i] = i == index;
-                  }
+                  isSelected[index] = !isSelected[index];
                 });
               },
               isSelected: isSelected,
