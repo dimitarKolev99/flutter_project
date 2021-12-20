@@ -6,6 +6,8 @@ import '../home.dart';
 import '../profile.dart';
 import 'dart:async';
 
+import '../welcome_screen.dart';
+
 int count = 0;
 
 StreamController<bool> streamControllerHome =
@@ -40,6 +42,8 @@ class TabNavigator extends StatefulWidget {
 }
 
 class _TabNavigatorState extends State<TabNavigator> {
+  bool welcomeScreen = true;
+
   @override
   void initState() {
     super.initState();
@@ -57,11 +61,16 @@ class _TabNavigatorState extends State<TabNavigator> {
     streamControllerProfile.add(true);
   }
 
+
+  void rebuild() {
+    setState(() {
+      welcomeScreen = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    Widget child =
-        HomePage(streamControllerHome.stream, updateStream, widget.callback);
-    if (widget.tabItem == "Page1") {
+    Widget child = HomePage(streamControllerHome.stream, updateStream, widget.callback);if (widget.tabItem == "Page1") {
       child =
           HomePage(streamControllerHome.stream, updateStream, widget.callback);
     } else if (widget.tabItem == "Page2") {
