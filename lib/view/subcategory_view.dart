@@ -8,6 +8,7 @@ import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/subcat_button.dart';
 import 'package:provider/provider.dart';
+import 'dart:math';
 
 class SubcategoryView extends StatefulWidget {
   int categoryId;
@@ -29,7 +30,10 @@ class SubcategoryView extends StatefulWidget {
 }
 
 class _SubcategoryViewState extends State<SubcategoryView> {
-  RangeValues _currentSliderValuesPrice = const RangeValues(20, 70);
+  var minValue = 400;
+  var maxValue = 2500;
+  RangeValues _currentSliderValuesPrice = const RangeValues(20, 50);
+
 
   // Discount options combined with a boolean for when chosen
   var discounts = [
@@ -255,11 +259,13 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                             //inactiveColor: ProductApi.orange,
                             values: _currentSliderValuesPrice,
                             min: 0,
-                            max: 1000,
+                            max: 100,
                             divisions: 100,
                             onChanged: (RangeValues values) {
                               setState(() {
                                 _currentSliderValuesPrice = values;
+                                minValue = pow(_currentSliderValuesPrice.start, 2).round();
+                                maxValue = pow(_currentSliderValuesPrice.end, 2).round();
                               });
                             },
                           ),
@@ -283,11 +289,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                   borderRadius: BorderRadius.circular(
                                       blockSizeHorizontal * 3),
                                 ),
-                                child: Text(
-                                  _currentSliderValuesPrice.start
-                                          .round()
-                                          .toString() +
-                                      " €",
+                                child: Text(minValue.toString() + " €",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: safeBlockHorizontal * 4.8,
@@ -311,11 +313,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                   borderRadius: BorderRadius.circular(
                                       blockSizeHorizontal * 3),
                                 ),
-                                child: Text(
-                                  _currentSliderValuesPrice.end
-                                          .round()
-                                          .toString() +
-                                      " €",
+                                child: Text(maxValue.toString() + " €",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: safeBlockHorizontal * 4.8,
