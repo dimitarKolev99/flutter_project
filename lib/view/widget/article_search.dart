@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/models/product.dart';
-import 'package:penny_pincher/services/fav_functions.dart';
+import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
@@ -25,9 +25,8 @@ class ArticleSearch extends SearchDelegate<String> {
   dynamic callback;
 
 
-  ArticleSearch (bool fromFeed, this.callback, this.streamController) {
+  ArticleSearch (this.fromFeed, this.callback, this.streamController) {
     updateRecent(); // reading out storage on opening searchBar
-    this.fromFeed = fromFeed;
   }
 
   @override
@@ -63,7 +62,9 @@ class ArticleSearch extends SearchDelegate<String> {
     }
 
     Future<void> getProducts() async {
-      _products = await ProductApi().getProduct(18418, query);
+      _products = await ProductApi().getProduct(3832, query);
+
+      storeToRecent(query);
 
       List<Product> favorites = await _preferenceArticles.getAllFavorites();
       for (var i in favorites) {
@@ -71,7 +72,7 @@ class ArticleSearch extends SearchDelegate<String> {
           _favoriteIds.add(i.productId);
         }
       }
-      FavFunctions.addProducts(_products);
+      ProductController.addProducts(_products);
     }
 
     @override
@@ -82,11 +83,11 @@ class ArticleSearch extends SearchDelegate<String> {
       return FutureBuilder(
         future: getProducts(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
+         // if (snapshot.connectionState == ConnectionState.done) {
             return createResult(context);
-          } else {
-            return CircularProgressIndicator();
-          }
+          //} else {
+           // return CircularProgressIndicator(); // This was the reload causing line. // TODO: DO NOT DELETE COMMENTS HERE
+         // }
         },
       );
     }
@@ -100,6 +101,7 @@ class ArticleSearch extends SearchDelegate<String> {
 
         return articleLower.startsWith(queryLower);
       }).toList();
+
 
       return buildSuggestionsSuccess(suggestions);
     }
@@ -157,10 +159,6 @@ class ArticleSearch extends SearchDelegate<String> {
       recentArticles = prefs.getStringList('recentArticles') ?? []; // reading out permanent storage
     }
 
-  bool isFavorite(int id) {
-    return _favoriteIds.contains(id);
-  }
-
   Widget createResult(BuildContext context) {
       if(fromFeed) {
       return ListView.builder(
@@ -171,28 +169,10 @@ class ArticleSearch extends SearchDelegate<String> {
                 onTap: () {
                   Navigator.push(context,
                     MaterialPageRoute(
-                        builder: (context) => ExtendedView(
-                            id: _products[index].productId,
-                            title: _products[index].title,
-                            saving: _products[index].saving,
-                            category: _products[index].categoryName,
-                            description: _products[index].description,
-                            image: _products[index].image,
-                            price: _products[index].price,
-                            stream: streamController.stream,
-                            callback: callback)),
+                        builder: (context) => ExtendedView(_products[index], callback, streamController.stream)),
                   );
                 },
-                child: ArticleCard(
-                  id: _products[index].productId,
-                  title: _products[index].title,
-                  saving: _products[index].saving,
-                  category: _products[index].categoryName,
-                  description: _products[index].description,
-                  image: _products[index].image,
-                  price: _products[index].price,
-                  callback: callback,
-                ));
+                child: ArticleCard(_products[index], callback));
           });
       } else {
         return GridView.count(
@@ -205,27 +185,10 @@ class ArticleSearch extends SearchDelegate<String> {
                 onTap: () {
                   Navigator.push(context,
                     MaterialPageRoute(
-                        builder: (context) => ExtendedView(
-                            id: _products[index].productId,
-                            title: _products[index].title,
-                            saving: _products[index].saving,
-                            category: _products[index].categoryName,
-                            description: _products[index].description,
-                            image: _products[index].image,
-                            price: _products[index].price,
-                            stream: streamController.stream,
-                            callback: callback)),
+                        builder: (context) => ExtendedView(_products[index], callback ,streamController.stream)),
                   );
                 },
-                child: BrowserArticleCard(
-                    id: _products[index].productId,
-                    title: _products[index].title,
-                    saving: _products[index].saving,
-                    category: _products[index].categoryName,
-                    description: _products[index].description,
-                    image: _products[index].image,
-                    price: _products[index].price,
-                    callback: callback));
+                child: BrowserArticleCard(_products[index], callback));
           }),
         );
       }

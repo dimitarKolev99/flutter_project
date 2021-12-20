@@ -55,7 +55,7 @@ class ProductApi {
       }
 
       Future<List<Product>> fetchProduct(int categoryID) async {
-        print("call APi");
+        //print("call APi");
 
         final response = await rootBundle.loadString('lib/resources/cat_tree1.json');
         Map<String, dynamic> myMap = Map<String, dynamic>.from(json.decode(response));
@@ -67,10 +67,10 @@ class ProductApi {
         //testFunctions.getMapOfSubOrProductCategories(1760, resultList);
 
 
-        print("CATEGORYID: $categoryID");
+       // print("CATEGORYID: $categoryID");
 
         final response2 = await http.get(Uri.parse(
-            "https://usjm35yny3.execute-api.eu-central-1.amazonaws.com/dev/pp-bargains?maxItems=20&minSaving=5&categoryIds=$categoryID"));
+            "https://usjm35yny3.execute-api.eu-central-1.amazonaws.com/dev/pp-bargains?maxItems=20&minSaving=1&categoryIds=$categoryID"));
 
         Map<String, dynamic> map = Map<String, dynamic>.from(json.decode(response2.body));
         List<dynamic> fromUri = map["result"]; //TODO: InternalLinkedHashMap Error from here
@@ -82,7 +82,7 @@ class ProductApi {
       }
 
       Future<List<Product>> getProduct(int categoryID, String query) async {
-        print("call APi");
+       // print("call APi");
 
         final response = await rootBundle.loadString('lib/resources/cat_tree1.json');
         Map<String, dynamic> myMap = Map<String, dynamic>.from(json.decode(response));
@@ -94,7 +94,7 @@ class ProductApi {
         //testFunctions.getMapOfSubOrProductCategories(1760, resultList);
 
 
-        print("CATEGORYID: $categoryID");
+       // print("CATEGORYID: $categoryID");
 
         final response2 = await http.get(Uri.parse(
             "https://usjm35yny3.execute-api.eu-central-1.amazonaws.com/dev/pp-bargains?maxItems=20&minSaving=5&categoryIds=$categoryID"));

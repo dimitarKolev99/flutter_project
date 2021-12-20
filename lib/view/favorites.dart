@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:penny_pincher/models/preferences_articles.dart';
-import 'package:penny_pincher/services/fav_functions.dart';
+import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/theme.dart';
@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
-StreamController<bool> streamController = StreamController<bool>.broadcast();
+
 
 class FavoritePage extends StatefulWidget {
 
@@ -28,10 +28,9 @@ class FavoritePage extends StatefulWidget {
 
 class _FavoritePageState extends State<FavoritePage> {
   //late Product _product;
-
+  StreamController<bool> streamController = StreamController<bool>.broadcast();
   late List<Product> _product;
-  late final List<Product> favoriteProducts = [];
-  bool _isLoading = true;
+  List<Product> favoriteProducts = [];
   bool _isClosed = false;
   String query = '';
   dynamic search;
@@ -40,15 +39,10 @@ class _FavoritePageState extends State<FavoritePage> {
 
   @override
   void initState() {
-    if (mounted) {
-      setState(() {
-        _isLoading = true;
-      });
-    }
-    getProducts();
+    favoriteProducts = ProductController.favoriteProducts;
     super.initState();
     widget.stream.listen((update) {
-      updateFavorites(update);
+      updateScreen(update);
     });
   }
 
@@ -58,7 +52,7 @@ class _FavoritePageState extends State<FavoritePage> {
       // displayName = prefs.getStringList('displayName');
     });
   }
-
+/* //TODO DO NOT DELETE TEMPLATE FOR FURTHER REAFCTORING
   Future <void> getProducts() async {
     favoriteProducts.clear();
     _product = await _preferenceArticles.getAllFavorites();
@@ -70,15 +64,13 @@ class _FavoritePageState extends State<FavoritePage> {
     for (var i = 0; i < _product.length; i++) {
       favoriteProducts.insert(i, _product[i]);
     }
-    FavFunctions.setFavs(favoriteProducts);
-    FavFunctions.addProducts(favoriteProducts);
+    ProductController.setFavs(favoriteProducts);
+    ProductController.addProducts(favoriteProducts);
   }
-
-  updateFavorites(bool update) {
+*/
+  updateScreen(bool update) {
     if (this.mounted) {
-      setState(() {
-        getProducts();
-      });
+      ProductController.updateFavorites(this);
     }
     if (_isClosed) {
       _isClosed = false;
@@ -91,9 +83,7 @@ class _FavoritePageState extends State<FavoritePage> {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     return Scaffold(
       appBar: FavoriteAppBar(this),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : favoriteProducts.isNotEmpty
+      body: favoriteProducts.isNotEmpty
           ? Align(
         alignment: Alignment.topCenter,
         child: ListView.builder(
@@ -106,32 +96,12 @@ class _FavoritePageState extends State<FavoritePage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              ExtendedView(
-                                  id: favoriteProducts[index].productId,
-                                  title: favoriteProducts[index].title,
-                                  saving: favoriteProducts[index].saving,
-                                  category:
-                                  favoriteProducts[index].categoryName,
-                                  description:
-                                  favoriteProducts[index].description,
-                                  image: favoriteProducts[index].image,
-                                  price: favoriteProducts[index].price,
-                                  stream: streamController.stream,
-                                  callback: this)),
+                              ExtendedView(favoriteProducts[index], this, streamController.stream)),
                     );
                     streamController.add(true);
                     _isClosed = true;
                   },
-                  child: ArticleCard(
-                    id: favoriteProducts[index].productId,
-                    title: favoriteProducts[index].title,
-                    saving: favoriteProducts[index].saving,
-                    category: favoriteProducts[index].categoryName,
-                    description: favoriteProducts[index].description,
-                    image: favoriteProducts[index].image,
-                    price: favoriteProducts[index].price,
-                    callback: this,
-                  ));
+                  child: ArticleCard(favoriteProducts[index], this));
             }),
       )
           : Center(
@@ -172,7 +142,7 @@ class _FavoritePageState extends State<FavoritePage> {
   // )
 
   Future changeFavoriteState(ArticleCard card) async {
-    FavFunctions.changeFavoriteState(card, this);
+    ProductController.changeFavoriteState(card, this);
   }
 
   List<Product> filterFavorites(search) {

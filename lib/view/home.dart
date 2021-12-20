@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:penny_pincher/models/preferences_articles.dart';
-import 'package:penny_pincher/services/fav_functions.dart';
+import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/json_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
@@ -15,19 +15,21 @@ import 'package:penny_pincher/view/extended_view.dart';
 import 'package:provider/provider.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
-StreamController<bool> streamController = StreamController<bool>.broadcast();
-
 class HomePage extends StatefulWidget {
   late final Stream<bool> stream;
   late final StreamController updateStream;
   final dynamic callback;
-  HomePage(this.stream, this.updateStream, this.callback);
+  var height;
+  HomePage(this.stream, this.updateStream, this.callback, {this.height});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+
+  StreamController<bool> streamController = StreamController<bool>.broadcast();
+
   late List<Product> _product;
   late final List _favoriteIds = [];
   late final List<Product> _products = [];
@@ -36,6 +38,9 @@ class _HomePageState extends State<HomePage> {
   Timer? _timer;
   bool isScrolling = false;
   ScrollController _scrollController = ScrollController();
+  var x = 0.0;
+
+  //var screenHeight = ;
 
   final _preferenceArticles = PreferencesArticles();
   final _jsonFunctions = JsonFunctions();
@@ -75,26 +80,7 @@ class _HomePageState extends State<HomePage> {
       _products.insert(count, _product[count]);
       count++;
     }
-
-    FavFunctions.addProducts(_products);
-  }
-
-  updateHome(bool update) {
-    if (this.mounted) {
-      updateFavorites();
-    }
-  }
-
-  Future<void> updateFavorites() async {
-    _favoriteIds.clear();
-    List<Product> favorites = await _preferenceArticles.getAllFavorites();
-    for (var i in favorites) {
-      if (!_favoriteIds.contains(i.productId)) {
-        _favoriteIds.add(i.productId);
-      }
-    }
-    setState(() {});
-    streamController.add(true);
+    ProductController.addProducts(_products);
   }
 
   void initListOfIDs() {
@@ -126,7 +112,9 @@ class _HomePageState extends State<HomePage> {
     }
     super.initState();
     widget.stream.listen((update) {
-      updateHome(update);
+      if (this.mounted) {
+        ProductController.updateFavorites(this);
+      }
     });
     initListOfIDs();
 
@@ -142,6 +130,41 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
+
+
+    MediaQueryData _mediaQueryData;
+    double displayWidth;
+    double displayHeight;
+    double blockSizeHorizontal;
+    double blockSizeVertical;
+
+    double _safeAreaHorizontal;
+    double _safeAreaVertical;
+
+    double _safeAreaBottomPadding;
+    double safeBlockBottom;
+
+    double safeBlockHorizontal;
+    double safeBlockVertical;
+
+    _mediaQueryData = MediaQuery.of(context);
+    displayWidth = _mediaQueryData.size.width;
+    displayHeight = _mediaQueryData.size.height;
+    blockSizeHorizontal = displayWidth / 100;
+    blockSizeVertical = displayHeight / 100;
+
+    displayHeight = x;
+
+    _safeAreaHorizontal = _mediaQueryData.padding.left + _mediaQueryData.padding.right;
+    _safeAreaVertical = _mediaQueryData.padding.top + _mediaQueryData.padding.bottom;
+
+    _safeAreaBottomPadding = _mediaQueryData.padding.bottom;
+    safeBlockBottom = (displayWidth - _safeAreaBottomPadding) / 100;
+
+    safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
+    safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
+
+
     if (_isLoading) {
       return WelcomePage();
       return Scaffold(
@@ -175,29 +198,10 @@ class _HomePageState extends State<HomePage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ExtendedView(
-                                        id: _products[index].productId,
-                                        title: _products[index].title,
-                                        saving: _products[index].saving,
-                                        category: _products[index].categoryName,
-                                        description:
-                                            _products[index].description,
-                                        image: _products[index].image,
-                                        price: _products[index].price,
-                                        stream: streamController.stream,
-                                        callback: this)),
+                                    builder: (context) => ExtendedView(_products[index], this, streamController.stream)),
                               );
                             },
-                            child: ArticleCard(
-                              id: _products[index].productId,
-                              title: _products[index].title,
-                              saving: _products[index].saving,
-                              category: _products[index].categoryName,
-                              description: _products[index].description,
-                              image: _products[index].image,
-                              price: _products[index].price,
-                              callback: this,
-                            ));
+                            child: ArticleCard(_products[index], this));
                       }),
                 )),
       );
