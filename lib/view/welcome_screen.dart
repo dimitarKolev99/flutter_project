@@ -78,17 +78,18 @@ class _WelcomePageState extends State<WelcomePage> {
                           if (val) count++;
                         });
 
-                        if (isSelected[index]) {
-                          if (count < 1) {
-                            _isButtonDisabled = false;
-                            return;
-                          } else {
-                            _isButtonDisabled = true;
-                          }
+                        if (isSelected[index] && count < 1) {
+                          _isButtonDisabled = true;
+                          return;
                         }
 
                         setState(() {
                           isSelected[index] = !isSelected[index];
+                          if (count <= 1 && !isSelected[index]) {
+                            _isButtonDisabled = true;
+                          } else {
+                            _isButtonDisabled = false;
+                          }
                         });
                       },
                       renderBorder: false,
@@ -123,10 +124,11 @@ class _WelcomePageState extends State<WelcomePage> {
                       color: ThemeChanger.textColor,
                     ),
                     child: TextButton(
-                      onPressed: () {
-                        if (!_isButtonDisabled)
-                          widget.callback.closeWelcomeScreen();
-                      },
+                      onPressed: _isButtonDisabled
+                          ? null
+                          : () {
+                              widget.callback.closeWelcomeScreen();
+                            },
                       style: ButtonStyle(
                           backgroundColor:
                               MaterialStateProperty.all(ThemeChanger.textColor),
