@@ -27,7 +27,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   StreamController<bool> streamController = StreamController<bool>.broadcast();
 
   late List<Product> _product;
@@ -131,7 +130,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
 
-
     MediaQueryData _mediaQueryData;
     double displayWidth;
     double displayHeight;
@@ -155,15 +153,16 @@ class _HomePageState extends State<HomePage> {
 
     displayHeight = x;
 
-    _safeAreaHorizontal = _mediaQueryData.padding.left + _mediaQueryData.padding.right;
-    _safeAreaVertical = _mediaQueryData.padding.top + _mediaQueryData.padding.bottom;
+    _safeAreaHorizontal =
+        _mediaQueryData.padding.left + _mediaQueryData.padding.right;
+    _safeAreaVertical =
+        _mediaQueryData.padding.top + _mediaQueryData.padding.bottom;
 
     _safeAreaBottomPadding = _mediaQueryData.padding.bottom;
     safeBlockBottom = (displayWidth - _safeAreaBottomPadding) / 100;
 
     safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
-
 
     if (_isLoading) {
       return WelcomePage();
@@ -198,7 +197,10 @@ class _HomePageState extends State<HomePage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ExtendedView(_products[index], this, streamController.stream)),
+                                    builder: (context) => ExtendedView(
+                                        _products[index],
+                                        this,
+                                        streamController.stream)),
                               );
                             },
                             child: ArticleCard(_products[index], this));
