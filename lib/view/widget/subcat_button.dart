@@ -28,7 +28,7 @@ class SubcatButton extends StatefulWidget {
     required this.stream,
     required this.updateStream,
     required this.callback,
-    required this.controller,gb
+    required this.controller,
     //required this.isProdCat,
   });
 
@@ -86,8 +86,9 @@ class _SubcatButtonState extends State<SubcatButton> {
     mapToLists();
     listToButtons();
   }
-  Color subCatcolor = ThemeChanger.navBarColor;
-  Color prodCatColor = ThemeChanger.navBarColor;
+  late Color subCatcolor = widget._isChosen ? ThemeChanger.lightBlue : ThemeChanger.articlecardbackground;
+  late Color prodCatColor = widget._isChosen ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground;
+  late Color textColor = widget._isChosen ? ThemeChanger.articlecardbackground : ThemeChanger.navBarColor;
   @override
   Widget build(BuildContext context) {
 
@@ -98,14 +99,15 @@ class _SubcatButtonState extends State<SubcatButton> {
           InkWell(
           onTap: (){
             setState(() {
-                getCats();
+               getCats();
                 // if empty chosen category = Productcategory
                 if(subCatButtons.isEmpty){
                   widget._isProdCat = true;
                   if(widget._isChosen == false){ //unselected
                     widget._isChosen = !widget._isChosen;
                     widget.callback.addCategory(widget.categoryName);
-                    prodCatColor = Colors.lightBlue;
+                    prodCatColor = ThemeChanger.highlightedColor;
+                    textColor = ThemeChanger.articlecardbackground;
                     // function needed that leads to browser and shows results
                     // TODO: Add CategoryIDs to a Collection ,
                     // TODO: Call Json Function to updayte the resultList and Update Button Text
@@ -116,7 +118,8 @@ class _SubcatButtonState extends State<SubcatButton> {
                     widget._isChosen = !widget._isChosen;
                     //print("try to remove : ! ${widget.categoryName}");
                     widget.callback.removeOneCategory(widget.categoryName);
-                    prodCatColor = ThemeChanger.navBarColor;
+                    prodCatColor = ThemeChanger.articlecardbackground;
+                    textColor = ThemeChanger.navBarColor;
                   }
                 }
                 // Subcategories
@@ -125,12 +128,14 @@ class _SubcatButtonState extends State<SubcatButton> {
                     //widget.callback.addCategory(widget.categoryName);
                     widget._isChosen = !widget._isChosen;
                     widget.show = !widget.show;
-                    subCatcolor = ThemeChanger.highlightedColor;
+                    subCatcolor = ThemeChanger.lightBlue;
+                    textColor = ThemeChanger.articlecardbackground;
                   }
                   else{  // selected
                     widget._isChosen = !widget._isChosen;
-                    subCatcolor = ThemeChanger.navBarColor;
+                    subCatcolor = ThemeChanger.articlecardbackground;
                     widget.show = !widget.show;
+                    textColor = ThemeChanger.navBarColor;
                    // widget.callback.removeOneCategory(widget.categoryName);
                   }
                 }
@@ -140,15 +145,22 @@ class _SubcatButtonState extends State<SubcatButton> {
           child: Container(
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.all(5),
-            color: widget._isProdCat ? prodCatColor : subCatcolor,
+
             width: MediaQuery.of(context).size.width,
             height: 30,
             margin: EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: widget._isProdCat ? prodCatColor : subCatcolor,
+              border: Border.all(
+                  color: Colors.blueGrey,
+                  width: 1,
+              ),
+            ),
             child: Text(widget.categoryName, style:
               TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w400,
-                color: Colors.white
+                color: textColor,
               ),
             textAlign: TextAlign.left,
             ),
@@ -166,7 +178,7 @@ class _SubcatButtonState extends State<SubcatButton> {
                     border: Border(
                       bottom: BorderSide(
                         color: ThemeChanger.highlightedColor,
-                        width: 0.5,
+                        width: 1,
                       ),
                     ),
                   ),
