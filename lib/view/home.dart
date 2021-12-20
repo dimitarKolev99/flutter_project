@@ -38,6 +38,7 @@ class _HomePageState extends State<HomePage> {
   bool isScrolling = false;
   ScrollController _scrollController = ScrollController();
   var x = 0.0;
+  bool showWelcomeScreen = true;
 
   //var screenHeight = ;
 
@@ -165,7 +166,7 @@ class _HomePageState extends State<HomePage> {
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
 
     if (_isLoading) {
-      return WelcomePage();
+      return WelcomePage(this);
       return Scaffold(
         body: Container(
             color: ThemeChanger.lightBlue,
@@ -208,6 +209,14 @@ class _HomePageState extends State<HomePage> {
                 )),
       );
     }
+  }
+
+  void closeWelcomeScreen() {
+    setState(() {
+      showWelcomeScreen = false;
+      _isLoading = false;
+      widget.callback.loadingFinished();
+    });
   }
 
   bool getLoading() {

@@ -16,7 +16,9 @@ import 'package:timezone/data/latest.dart' as tz;
 StreamController<bool> streamController = StreamController<bool>.broadcast();
 
 class WelcomePage extends StatefulWidget {
-  WelcomePage();
+  final dynamic callback;
+
+  WelcomePage(this.callback);
 
   @override
   State<WelcomePage> createState() => _WelcomePageState();
@@ -24,7 +26,6 @@ class WelcomePage extends StatefulWidget {
 
 class _WelcomePageState extends State<WelcomePage> {
   List<bool> isSelected = [true, false, false, false];
-  var itemData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +107,9 @@ class _WelcomePageState extends State<WelcomePage> {
                       color: ThemeChanger.textColor,
                     ),
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        widget.callback.closeWelcomeScreen();
+                      },
                       style: ButtonStyle(
                           backgroundColor:
                               MaterialStateProperty.all(ThemeChanger.textColor),
