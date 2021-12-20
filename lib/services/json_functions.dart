@@ -131,6 +131,32 @@ class JsonFunctions{
     }
   }
 
+  void translateTreeOneMain(List<dynamic> resultList) {
+    for (var element in resultList) {
+      if (element.toString().substring(1, 14) == "subCategories") {
+
+        List<dynamic> resultList2 = element["subCategories"];
+        if (element["subCategories"] != null &&
+            element["productCategories"] != null) {
+          List<dynamic> productList = element["productCategories"];
+          for (var element in productList) {
+            id = element["id"];
+            productCategoryIDs.add(id);
+          }
+        }
+        translateTree(resultList2);
+      }
+      else if (element.toString().substring(1, 18) == "productCategories") {
+        List<dynamic> resultList2 = element["productCategories"];
+        for (var element in resultList2) {
+          id = element["id"];
+          productCategoryIDs.add(id);
+        }
+        translateTree(resultList2);
+      }
+    }
+  }
+
   Future<List<dynamic>> getJson() async {
     final response = await rootBundle.loadString('lib/resources/cat_tree1.json');
     Map<String, dynamic> myMap =
@@ -139,8 +165,16 @@ class JsonFunctions{
     return resultList;
   }
 
+  Future<List<dynamic>> getJsonOneMain() async {
+    final response = await rootBundle.loadString('lib/resources/cat_tree1.json');
+    Map<String, dynamic> myMap =
+    Map<String, dynamic>.from(json.decode(response));
+    List<dynamic> resultList = myMap["result"][0]["subCategories"];
+    return resultList;
+  }
+
   Future<List<int>> getListOfProdCatIDs() async{
-    List<dynamic> resultList = await getJson();
+    List<dynamic> resultList = await getJsonOneMain();
     translateTree(resultList);
     return productCategoryIDs;
   }
