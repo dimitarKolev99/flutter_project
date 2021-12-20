@@ -15,6 +15,7 @@ class SubcatButton extends StatefulWidget {
   final int categoryId;
   bool show = false;
   bool _isProdCat = false;
+  bool _isChosen = false;
   late final Stream<bool> stream;
   late final StreamController updateStream;
   final dynamic callback;
@@ -97,17 +98,12 @@ class _SubcatButtonState extends State<SubcatButton> {
           InkWell(
           onTap: (){
             setState(() {
-             // if(widget.controller.hasClients) {
-              //  widget.controller.animateTo(
-               //     widget.controller.position.minScrollExtent, //widget.controller.position.,
-               //     duration: Duration(microseconds: 200),
-               //     curve: Curves.easeOut);
-              //}
                 getCats();
                 // if empty chosen category = Productcategory
                 if(subCatButtons.isEmpty){
                   widget._isProdCat = true;
-                  if(prodCatColor == ThemeChanger.navBarColor){
+                  if(widget._isChosen == false){ //unselected
+                    widget._isChosen = !widget._isChosen;
                     widget.callback.addCategory(widget.categoryName);
                     prodCatColor = Colors.lightBlue;
                     // function needed that leads to browser and shows results
@@ -117,21 +113,26 @@ class _SubcatButtonState extends State<SubcatButton> {
 
                   }
                   else{
+                    widget._isChosen = !widget._isChosen;
+                    //print("try to remove : ! ${widget.categoryName}");
                     widget.callback.removeOneCategory(widget.categoryName);
                     prodCatColor = ThemeChanger.navBarColor;
-                    widget.callback.deleteCategory(widget.categoryName);
                   }
                 }
                 // Subcategories
-                else if(subCatcolor == ThemeChanger.navBarColor){ // blue = unselected
-                  //widget.callback.addCategory(widget.categoryName);
-                  widget.show = !widget.show;
-                  subCatcolor = ThemeChanger.highlightedColor;
-                }
-                else{  // selected
-                  widget.callback.deleteCategory(widget.categoryName);
-                  widget.show = !widget.show;
-                  subCatcolor = ThemeChanger.navBarColor;
+                else {
+                  if(widget._isChosen == false){ // unselected
+                    //widget.callback.addCategory(widget.categoryName);
+                    widget._isChosen = !widget._isChosen;
+                    widget.show = !widget.show;
+                    subCatcolor = ThemeChanger.highlightedColor;
+                  }
+                  else{  // selected
+                    widget._isChosen = !widget._isChosen;
+                    subCatcolor = ThemeChanger.navBarColor;
+                    widget.show = !widget.show;
+                   // widget.callback.removeOneCategory(widget.categoryName);
+                  }
                 }
             }
             );

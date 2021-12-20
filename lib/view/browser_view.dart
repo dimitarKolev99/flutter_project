@@ -101,6 +101,7 @@ class _BrowserPageState extends State<BrowserPage> {
 
   void removeOneCategory(String s ){
     int index = chosenCategories.indexOf(s);
+    //print("removing : ! ${s}");
     chosenCategories.remove(chosenCategories[index]);
   }
 
