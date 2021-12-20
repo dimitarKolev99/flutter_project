@@ -25,7 +25,7 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-  List<bool> isSelected = [true, false, false, false];
+  List<bool> isSelected = [false, false, false, false];
 
   @override
   Widget build(BuildContext context) {
@@ -62,10 +62,10 @@ class _WelcomePageState extends State<WelcomePage> {
                       selectedColor: Colors.white,
                       borderRadius: BorderRadius.circular(4),
                       children: <Widget>[
-                        Icon(Icons.dry_cleaning),
-                        Icon(Icons.laptop),
-                        Icon(Icons.ad_units),
-                        Icon(Icons.book),
+                        Icon(Icons.dry_cleaning, size: 35),
+                        Icon(Icons.laptop, size: 35),
+                        Icon(Icons.ad_units, size: 35),
+                        Icon(Icons.book, size: 35),
                       ],
                       onPressed: (int index) {
                         int count = 0;
@@ -86,6 +86,55 @@ class _WelcomePageState extends State<WelcomePage> {
                   ],
                 )),
               ]),
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Container(
+                    height: 50,
+                    margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(33),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.6),
+                          offset: Offset(
+                            0.0,
+                            10.0,
+                          ),
+                          blurRadius: 20.0,
+                          spreadRadius: -3.0,
+                        ),
+                      ],
+                      color: ThemeChanger.textColor,
+                    ),
+                    child: TextButton(
+                      onPressed: () {
+                        widget.callback.closeWelcomeScreen();
+                      },
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(ThemeChanger.textColor),
+                          foregroundColor: MaterialStateProperty.all(
+                              Color.fromRGBO(45, 45, 45, 1)),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(33),
+                            //side: BorderSide(color: Colors.black)
+                          )),
+                          textStyle: MaterialStateProperty.all(TextStyle(
+                            fontSize: 21,
+                            fontWeight: FontWeight.w500,
+                          ))),
+                      child: Text("Fortfahren"),
+                    ),
+                  ),
+                  SizedBox(height: 30),
+                ],
+              ),
             ),
             Align(
               alignment: Alignment.bottomCenter,
