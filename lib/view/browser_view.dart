@@ -210,9 +210,6 @@ class _BrowserPageState extends State<BrowserPage> {
                     }),
               ),
             ),
-
-
-
             // This Grid View is supposed to show the main categories on top of the screen in the browser view
             Expanded(
               child: GridView.count(

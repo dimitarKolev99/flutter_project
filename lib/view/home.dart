@@ -27,6 +27,46 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  Map<String, int> mainCategories = {
+    "Elektroartikel": 30311,
+    "Drogerie & Gesundheit": 3932,
+    "Haus & Garten": 3686,
+    "Mode & Accessoires": 9908,
+    "Tierbedarf": 7032,
+    "Gaming & Spielen": 3326,
+    "Essen & Trinken": 12913,
+    "Baby & Kind": 4033,
+    "Auto & Motorrad": 2400,
+    "Haushaltselektronik": 1940,
+    "Sport & Outdoor": 3626,
+  };
+  List<String> mainCategoryNames = [
+    "Elektroartikel",
+    "Drogerie & Gesundheit",
+    "Haus & Garten",
+    "Mode & Accessoires",
+    "Tierbedarf",
+    "Gaming & Spielen",
+    "Essen & Trinken",
+    "Baby & Kind",
+    "Auto & Motorrad",
+    "Haushaltselektronik",
+    "Sport & Outdoor"
+  ];
+  List<int> mainCategoryIds = [
+    30311, //
+    3932,
+    3686,
+    9908,
+    7032,
+    3326,
+    12913,
+    4033,
+    2400,
+    1940,
+    3626,
+  ];
+
   StreamController<bool> streamController = StreamController<bool>.broadcast();
 
   late List<Product> _product;
@@ -174,9 +214,48 @@ class _HomePageState extends State<HomePage> {
     } else {
       return Scaffold(
         appBar: HomeBrowserAppBar(this),
-        body: _isLoading
-            ? Center(child: CircularProgressIndicator())
-            : Align(
+        body:
+        //_isLoading ? Center(child: CircularProgressIndicator()) :
+        Column(
+          children: [
+            Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                color: ThemeChanger.lightBlue,
+                height: 40,
+                width: displayWidth,
+                child: ListView.builder(
+                    physics: ScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemCount: mainCategories.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                          onTap: () {
+
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: ThemeChanger.articlecardbackground,
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                            alignment: Alignment.centerRight,
+                            margin: EdgeInsets.all(4),
+                            //padding: EdgeInsets.all(4),
+                            padding: EdgeInsets.symmetric(horizontal: 6),
+                            height: 40,
+                            child: Text(
+                              mainCategoryNames[index],
+                              style: TextStyle(
+                                color: ThemeChanger.reversetextColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ));
+                    }),
+              ),
+            ),
+            Align(
                 alignment: Alignment.topCenter,
                 child: NotificationListener<ScrollNotification>(
                   onNotification: (scrollNotification) {
@@ -202,6 +281,9 @@ class _HomePageState extends State<HomePage> {
                             child: ArticleCard(_products[index], this));
                       }),
                 )),
+          ],
+        )
+
       );
     }
   }
