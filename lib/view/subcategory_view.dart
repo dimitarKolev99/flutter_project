@@ -170,7 +170,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                         alignment: Alignment.topCenter,
                         child: Container(
                             color: ThemeChanger.lightBlue,
-                            height: 40,
+                            height: 35,
                             child: ListView.builder(
                                 physics: ScrollPhysics(),
                                 scrollDirection: Axis.horizontal,
@@ -209,12 +209,12 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                         margin: EdgeInsets.all(4),
                                         //padding: EdgeInsets.all(4),
                                         padding: EdgeInsets.symmetric(horizontal: 6),
-                                        height: 40,
                                         child: Text(
                                           widget
                                               .callback.widget.mainCategoryNames[index],
                                           style: TextStyle(
-                                            color: ThemeChanger.reversetextColor,
+                                            fontWeight: FontWeight.w400,
+                                            color: ThemeChanger.navBarColor,
                                           ),
                                         ),
                                       ));

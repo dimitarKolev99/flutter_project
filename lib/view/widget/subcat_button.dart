@@ -117,13 +117,14 @@ class _SubcatButtonState extends State<SubcatButton> {
 
                   }
                   else{
+                    widget.callback.removeOneCategory(widget.categoryName);
                     prodCatColor = ThemeChanger.navBarColor;
                     widget.callback.deleteCategory(widget.categoryName);
                   }
                 }
                 // Subcategories
                 else if(subCatcolor == ThemeChanger.navBarColor){ // blue = unselected
-                  widget.callback.addCategory(widget.categoryName);
+                  //widget.callback.addCategory(widget.categoryName);
                   widget.show = !widget.show;
                   subCatcolor = ThemeChanger.highlightedColor;
                 }
