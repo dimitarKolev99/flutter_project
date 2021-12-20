@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/services/product_controller.dart';
@@ -66,8 +68,39 @@ class _HomePageState extends State<HomePage> {
     1940,
     3626,
   ];
+  JsonFunctions json = JsonFunctions();
+  Map<String, int> subCategoriesMap = new Map();
+  // names and Ids have matching indexes for name and id of the category
+  List<String> subCategoriesNames = [];
+  List<int> subCategoriesIds = [];
+  late int categoryId;
+  late String categoryName;
+
+  //when map is empty then json funtions is called
+  Future<void> getSubCategories() async{
+    if(subCategoriesMap.isEmpty) {
+      json.getJson().then((List<dynamic> result) {
+        List<dynamic> resultList = [];
+        resultList = result;
+        subCategoriesMap = json.getMapOfSubOrProductCategories(categoryId, resultList);
+      });
+    }
+  }
+  //seperate the sub map into 2 lists 1 with names and 1 with ids
+  Future<void> mapToLists() async {
+    if(subCategoriesNames.isEmpty) {
+      subCategoriesMap.forEach((name, id) {
+        subCategoriesNames.add(name);
+        subCategoriesIds.add(id);
+        // print("added $name");
+      });
+    }
+  }
+
+
 
   StreamController<bool> streamController = StreamController<bool>.broadcast();
+
 
   late List<Product> _product;
   late final List _favoriteIds = [];
@@ -232,8 +265,14 @@ class _HomePageState extends State<HomePage> {
                     itemCount: mainCategories.length,
                     itemBuilder: (context, index) {
                       return InkWell(
-                          onTap: () {
-
+                          onTap: () async {
+                            //categoryName: mainCategoryNames[index]
+                            categoryId = mainCategoryIds[index];
+                            print("categoryid = ${categoryId}");
+                            await getSubCategories();
+                            await mapToLists();
+                            print("map = ${subCategoriesMap}");
+                            print("mapid = ${subCategoriesIds}");
                           },
                           child: Container(
                             decoration: BoxDecoration(

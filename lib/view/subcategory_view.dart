@@ -16,7 +16,6 @@ class SubcategoryView extends StatefulWidget{
   late final StreamController updateStream;
   final dynamic callback;
 
-
   SubcategoryView({
     required this.categoryId,
     required this.categoryName,
