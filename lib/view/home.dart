@@ -70,13 +70,15 @@ class _HomePageState extends State<HomePage> {
     1940,
     3626,
   ];
+
   JsonFunctions json = JsonFunctions();
-  Map<String, int> subCategoriesMap = new Map();
+  Map<String, int> subCategoriesMap = Map();
   // names and Ids have matching indexes for name and id of the category
   List<String> subCategoriesNames = [];
   List<int> subCategoriesIds = [];
   late int categoryId;
   late String categoryName;
+  List<int> productCategoryIDs = [];
 
   //when map is empty then json funtions is called
   Future<void> getSubCategories() async{
@@ -163,14 +165,34 @@ class _HomePageState extends State<HomePage> {
     ProductController.addProducts(_products);
   }
 
+  /*
   void initListOfIDs() {
     _jsonFunctions.getListOfProdCatIDs().then((value) => timerFunction(value));
+  }
+
+   */
+  
+
+
+  timerFunctionn(List<int> ids) {
+    // every 2 seconds get a random category id, call the api with it, load the product and animate it
+    _timer = Timer.periodic(const Duration(seconds: 2), (Timer timer) {
+      randomCategory = ids[0];
+      getProducts(randomCategory);
+      if (_scrollController.hasClients && !isScrolling) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          curve: Curves.easeOut,
+          duration: const Duration(milliseconds: 300),
+        );
+      }
+    });
   }
 
   timerFunction(List<int> ids) {
     // every 2 seconds get a random category id, call the api with it, load the product and animate it
     _timer = Timer.periodic(const Duration(seconds: 2), (Timer timer) {
-      index = _jsonFunctions.getRandomInt();
+      index = _jsonFunctions.getRandomInt(_jsonFunctions.count);
       randomCategory = ids[index];
       getProducts(randomCategory);
       if (_scrollController.hasClients && !isScrolling) {
@@ -197,7 +219,7 @@ class _HomePageState extends State<HomePage> {
       }
     });
     firstAppStart();
-    initListOfIDs();
+    //initListOfIDs();
 
     tz.initializeTimeZones();
   }
@@ -283,6 +305,15 @@ class _HomePageState extends State<HomePage> {
                             print("categoryid = ${categoryId}");
                             await getSubCategories();
                             await mapToLists();
+
+                            setState(() {
+                              _jsonFunctions.getListOfProdCatIDs(mainCategoryIds.indexOf(categoryId))
+                                  .then((value) {
+                                    timerFunction(value);
+                                    //_jsonFunctions.count = 1;
+                                print(_jsonFunctions.count);
+                                  });
+                            });
                             print("map = ${subCategoriesMap}");
                             print("mapid = ${subCategoriesIds}");
                           },
@@ -355,7 +386,7 @@ class _HomePageState extends State<HomePage> {
 
   firstAppStart() async {
     preferences = await SharedPreferences.getInstance();
-    //await preferences.setBool("nofirstTime", false); // run welcome screen everytime
+    await preferences.setBool("nofirstTime", false); // run welcome screen everytime
 
     var nofirstTime = preferences.getBool('nofirstTime');
     if (!nofirstTime) {
