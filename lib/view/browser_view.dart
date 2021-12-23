@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/product_api.dart';
@@ -20,6 +21,8 @@ class BrowserPage extends StatefulWidget {
   late final Stream<bool> stream;
   late final StreamController updateStream;
   int _currentProductId;
+
+
 
   BrowserPage(this.stream, this.updateStream, this._currentProductId);
 
@@ -69,6 +72,7 @@ class BrowserPage extends StatefulWidget {
 }
 
 class _BrowserPageState extends State<BrowserPage> {
+  int currentCategory = 0;
   StreamController<bool> streamController = StreamController<bool>.broadcast();
   late List<Product> _product;
   late final List _favoriteIds = [];
@@ -78,6 +82,36 @@ class _BrowserPageState extends State<BrowserPage> {
   Timer? _timer;
 
   final _preferenceArticles = PreferencesArticles();
+
+  List<String> chosenCategories = [];
+
+  String getMainCategoryName(int i){
+    return widget.mainCategoryNames[i];
+  }
+
+  int getMainCategoryId(int i){
+    return widget.mainCategoryIds[i];
+  }
+
+  void addCategory(String s){
+    //chosenCategories.add(s);
+    //TODO: change to propper working category List, this is juts to show only the last cat
+    chosenCategories.add(s);
+  }
+
+  void removeOneCategory(String s ){
+    int index = chosenCategories.indexOf(s);
+    //print("removing : ! ${s}");
+    chosenCategories.remove(chosenCategories[index]);
+  }
+
+  void deleteCategory(String s){
+    int index = chosenCategories.indexOf(s);
+    for(int i = chosenCategories.length-1; i >= index ; i--){
+      chosenCategories.remove(chosenCategories[i]);
+    }
+  }
+
 
   @override
   void initState() {
@@ -127,7 +161,6 @@ class _BrowserPageState extends State<BrowserPage> {
     print("got the new categorie : ${widget._currentProductId}");
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     MediaQueryData _mediaQueryData = MediaQuery.of(context);
-    ;
     double displayWidth = _mediaQueryData.size.width;
     double displayHeight = _mediaQueryData.size.height;
     double blockSizeHorizontal = displayWidth / 100; // screen width in 1%
@@ -142,35 +175,19 @@ class _BrowserPageState extends State<BrowserPage> {
               alignment: Alignment.topCenter,
               child: Container(
                 color: ThemeChanger.lightBlue,
-                height: 40,
+                height: 35,
+                width: displayWidth,
+                //TODO:ListView Bulider to show the route of the categories, works only for choosing 1 Prod. Cat.
+
                 child: ListView.builder(
                     physics: ScrollPhysics(),
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
-                    itemCount: widget.mainCategories.length,
+                    itemCount: chosenCategories.isEmpty? widget.mainCategories.length : chosenCategories.length,
                     itemBuilder: (context, index) {
                       return InkWell(
-
-                          /*
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ExtendedView(
-                                      id: _products[index].productId,
-                                      title: _products[index].title,
-                                      saving: _products[index].saving,
-                                      category: _products[index].categoryName,
-                                      description: _products[index].description,
-                                      image: _products[index].image,
-                                      price: _products[index].price,
-                                      stream: streamController.stream,
-                                      callback: this)),
-                            );
-                            streamController.add(true);
-                          },
-                           */
-                          onTap: () {
+                            chosenCategories = [];
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -184,26 +201,56 @@ class _BrowserPageState extends State<BrowserPage> {
                                   ),
                                 ));
                           },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: ThemeChanger.articlecardbackground,
-                              borderRadius: BorderRadius.circular(2),
-                            ),
-                            alignment: Alignment.center,
-                            margin: EdgeInsets.all(4),
-                            //padding: EdgeInsets.all(4),
-                            padding: EdgeInsets.symmetric(horizontal: 6),
-                            height: 40,
-                            child: Text(
-                              widget.mainCategoryNames[index],
-                              style: TextStyle(
-                                color: ThemeChanger.reversetextColor,
+                          child:
+                              Container(
+                              decoration: BoxDecoration(
+                              color: chosenCategories.isEmpty? ThemeChanger.articlecardbackground : ThemeChanger.navBarColor,
+                                borderRadius: BorderRadius.circular(2),
                               ),
+                            alignment: Alignment.centerRight,
+                            margin: EdgeInsets.all(4),
+                            padding: EdgeInsets.symmetric(horizontal: 4),
+                            child: Row(
+                              mainAxisAlignment : MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                              chosenCategories.isEmpty? widget.mainCategoryNames[index] : chosenCategories[index],
+                              style: TextStyle(
+                                color: chosenCategories.isEmpty? ThemeChanger.navBarColor : ThemeChanger.articlecardbackground,
+                                //fontWeight:  !chosenCategories.isEmpty && index == chosenCategories.length-1?  FontWeight.w600 :FontWeight.normal,
+                                fontWeight:  FontWeight.w400,
+                              ),
+                              ),
+                                chosenCategories.isEmpty?
+                                SizedBox(width: 0,):
+                                IconButton(
+                                  alignment: Alignment.centerRight,
+                                    constraints: const BoxConstraints(),
+                                    padding : const EdgeInsets.only(top: 1.3),
+                                    onPressed: (){
+                                  setState((){
+                                    if(!chosenCategories.isEmpty) {
+                                      //TODO: Reload Products
+                                      removeOneCategory(chosenCategories[index]);
+                                      updateBrowserblabla(currentCategory);
+                                    }
+                                  });},
+                                icon: Icon(Icons.clear, size: 18, color: ThemeChanger.articlecardbackground,) )
+                              ],
                             ),
+
+
+
                           ));
+
+
                     }),
               ),
             ),
+
+
+
+
 
             // This Grid View is supposed to show the main categories on top of the screen in the browser view
             Expanded(

@@ -5,6 +5,7 @@ import 'package:penny_pincher/services/json_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/theme.dart';
+import 'package:penny_pincher/view/welcome_screen.dart';
 import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
 import 'package:penny_pincher/view/widget/article_search.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:penny_pincher/view/extended_view.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 class HomePage extends StatefulWidget {
@@ -26,7 +28,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   StreamController<bool> streamController = StreamController<bool>.broadcast();
 
   late List<Product> _product;
@@ -38,6 +39,8 @@ class _HomePageState extends State<HomePage> {
   bool isScrolling = false;
   ScrollController _scrollController = ScrollController();
   var x = 0.0;
+  WelcomeStatus status = WelcomeStatus.loading;
+  dynamic preferences;
 
   //var screenHeight = ;
 
@@ -71,10 +74,14 @@ class _HomePageState extends State<HomePage> {
 
     if (this.mounted) {
       setState(() {
-        _isLoading = false;
+        if (status == WelcomeStatus.noFirstTime) {
+          _isLoading = false;
+        }
       });
     }
-    widget.callback.loadingFinished();
+    if (status == WelcomeStatus.noFirstTime) {
+      widget.callback.loadingFinished();
+    }
     if (count < _product.length) {
       _products.insert(count, _product[count]);
       count++;
@@ -115,6 +122,7 @@ class _HomePageState extends State<HomePage> {
         ProductController.updateFavorites(this);
       }
     });
+    firstAppStart();
     initListOfIDs();
 
     tz.initializeTimeZones();
@@ -129,7 +137,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
-
 
     MediaQueryData _mediaQueryData;
     double displayWidth;
@@ -154,8 +161,10 @@ class _HomePageState extends State<HomePage> {
 
     displayHeight = x;
 
-    _safeAreaHorizontal = _mediaQueryData.padding.left + _mediaQueryData.padding.right;
-    _safeAreaVertical = _mediaQueryData.padding.top + _mediaQueryData.padding.bottom;
+    _safeAreaHorizontal =
+        _mediaQueryData.padding.left + _mediaQueryData.padding.right;
+    _safeAreaVertical =
+        _mediaQueryData.padding.top + _mediaQueryData.padding.bottom;
 
     _safeAreaBottomPadding = _mediaQueryData.padding.bottom;
     safeBlockBottom = (displayWidth - _safeAreaBottomPadding) / 100;
@@ -163,8 +172,10 @@ class _HomePageState extends State<HomePage> {
     safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
 
-
-    if (_isLoading) {
+    if (status == WelcomeStatus.firstTime) {
+      return WelcomePage(this);
+    }
+    if (_isLoading || status == WelcomeStatus.loading) {
       return Scaffold(
         body: Container(
             color: ThemeChanger.lightBlue,
@@ -196,7 +207,10 @@ class _HomePageState extends State<HomePage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ExtendedView(_products[index], this, streamController.stream)),
+                                    builder: (context) => ExtendedView(
+                                        _products[index],
+                                        this,
+                                        streamController.stream)),
                               );
                             },
                             child: ArticleCard(_products[index], this));
@@ -204,6 +218,31 @@ class _HomePageState extends State<HomePage> {
                 )),
       );
     }
+  }
+
+  void closeWelcomeScreen() {
+    setState(() {
+      _isLoading = false;
+      widget.callback.loadingFinished();
+      status = WelcomeStatus.noFirstTime;
+    });
+  }
+
+  firstAppStart() async {
+    preferences = await SharedPreferences.getInstance();
+    await preferences.setBool("nofirstTime", false); // run welcome screen everytime
+
+    var nofirstTime = preferences.getBool('nofirstTime');
+    if (!nofirstTime) {
+      await preferences.setBool("nofirstTime", true);
+    }
+    setState(() {
+      if (nofirstTime) {
+        status = WelcomeStatus.noFirstTime;
+      } else {
+        status = WelcomeStatus.firstTime;
+      }
+    });
   }
 
   bool getLoading() {
@@ -214,3 +253,5 @@ class _HomePageState extends State<HomePage> {
     _isLoading = b;
   }
 }
+
+enum WelcomeStatus { loading, firstTime, noFirstTime }
