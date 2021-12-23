@@ -18,6 +18,9 @@ class AppNavigator extends StatefulWidget {
 class AppState extends State<AppNavigator> {
   bool _isLoading = true;
   bool isLargeDevice = true;
+  bool isWeb = false;
+  var sizedBoxHeight = 0.0;
+  var iconSize = 0.0;
   String _currentPage = "Page1";
   List<String> pageKeys = ["Page1", "Page2", "Page3", "Page4"];
   final Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
@@ -74,13 +77,20 @@ class AppState extends State<AppNavigator> {
     safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
 
-
     if (displayHeight > 683) { //1280 Pixels Höhe
       isLargeDevice = true;
+      sizedBoxHeight = (displayHeight / 100) * 9;
+      iconSize = safeBlockHorizontal * 7;
     } else  {
-     // print("here");
-
       isLargeDevice = false;
+      sizedBoxHeight = (displayHeight / 100) * 8.8;
+      iconSize = safeBlockHorizontal * 6.5;
+    }
+
+    if (displayWidth > 412) {
+      isWeb = true;
+    } else  {
+      isWeb = false;
     }
 
    // print("Höhe: $displayHeight");
@@ -111,7 +121,7 @@ class AppState extends State<AppNavigator> {
           bottomNavigationBar: _isLoading
               ? SizedBox()
               : SizedBox(
-                  height: isLargeDevice ? (displayHeight / 100) * 9 : (displayHeight / 100) * 8.8,
+                  height: isWeb ? (displayHeight / 100) * 9 : sizedBoxHeight,
                   child: BottomNavigationBar(
                     selectedItemColor: ThemeChanger.highlightedColor,
                     unselectedItemColor: ThemeChanger.textColor,
@@ -125,14 +135,14 @@ class AppState extends State<AppNavigator> {
                       BottomNavigationBarItem(
                         icon: Padding(
                           padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
-                          child: Icon(Icons.update, size: isLargeDevice ? safeBlockHorizontal * 7 : safeBlockHorizontal * 6.5),
+                          child: Icon(Icons.update, size: isWeb ? iconSize = safeBlockHorizontal * 1.9 : iconSize),
                         ),
                         label: 'LiveFeed',
                       ),
                       BottomNavigationBarItem(
                         icon: Padding(
                           padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
-                          child: Icon(AppIcon.view_tile, size: isLargeDevice ? safeBlockHorizontal * 7 : safeBlockHorizontal * 6.5),
+                          child: Icon(AppIcon.view_tile, size: isWeb ? iconSize = safeBlockHorizontal * 1.9 : iconSize),
                         ),
                         label: 'Browser',
                       ),
@@ -140,14 +150,14 @@ class AppState extends State<AppNavigator> {
                       BottomNavigationBarItem(
                         icon: Padding(
                           padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
-                          child: Icon(Icons.bookmarks_outlined, size: isLargeDevice ? safeBlockHorizontal * 7 : safeBlockHorizontal * 6.5),
+                          child: Icon(Icons.bookmarks_outlined,  size: isWeb ? iconSize = safeBlockHorizontal * 1.9 : iconSize),
                         ),
                         label: 'Merkzettel',
                       ),
                       BottomNavigationBarItem(
                         icon: Padding(
                           padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
-                          child: Icon(Icons.account_circle, size: isLargeDevice ? safeBlockHorizontal * 7 : safeBlockHorizontal * 6.5),
+                          child: Icon(Icons.account_circle, size: isWeb ? iconSize = safeBlockHorizontal * 1.9 : iconSize),
                         ),
                         label: 'Profil',
                       ),

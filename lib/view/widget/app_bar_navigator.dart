@@ -16,6 +16,8 @@ class HomeBrowserAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.callback = callback;
   }
 
+  bool isWeb = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +43,12 @@ class HomeBrowserAppBar extends StatelessWidget implements PreferredSizeWidget {
     _safeAreaVertical = _mediaQueryData.padding.top + _mediaQueryData.padding.bottom;
     safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
+
+    if (displayWidth > 412) {
+      isWeb = true;
+    } else  {
+      isWeb = false;
+    }
 
     return AppBar(
       backgroundColor: ThemeChanger.navBarColor,
@@ -78,7 +86,7 @@ class HomeBrowserAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         IconButton(
-          iconSize: safeBlockHorizontal * 7.5,
+          iconSize: isWeb ? safeBlockHorizontal * 2 : safeBlockHorizontal * 7.5,
           icon: Icon(Icons.search),
           onPressed: () {
             final results =
@@ -100,6 +108,9 @@ class FavoriteAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.callback = callback;
   }
 
+  bool isWeb = false;
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -124,6 +135,12 @@ class FavoriteAppBar extends StatelessWidget implements PreferredSizeWidget {
     _safeAreaVertical = _mediaQueryData.padding.top + _mediaQueryData.padding.bottom;
     safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
+
+    if (displayWidth > 412) {
+      isWeb = true;
+    } else  {
+      isWeb = false;
+    }
 
     return AppBar(
       backgroundColor: ThemeChanger.navBarColor,
@@ -161,7 +178,7 @@ class FavoriteAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         IconButton(
-          iconSize: safeBlockHorizontal * 7.5,
+          iconSize: isWeb ? safeBlockHorizontal * 2 : safeBlockHorizontal * 7.5,
           icon: Icon(Icons.search),
           onPressed: () {
             final results =

@@ -172,6 +172,9 @@ class _HomePageState extends State<HomePage> {
     safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
 
+    print("Width: $displayWidth");
+    print("Height: $displayHeight");
+
     if (status == WelcomeStatus.firstTime) {
       return WelcomePage(this);
     }
