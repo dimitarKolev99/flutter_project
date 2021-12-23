@@ -172,9 +172,6 @@ class _HomePageState extends State<HomePage> {
     safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
 
-    print("Width: $displayWidth");
-    print("Height: $displayHeight");
-
     if (status == WelcomeStatus.firstTime) {
       return WelcomePage(this);
     }
@@ -187,38 +184,83 @@ class _HomePageState extends State<HomePage> {
       );
     } else {
       return Scaffold(
-        appBar: HomeBrowserAppBar(this),
-        body: _isLoading
-            ? Center(child: CircularProgressIndicator())
-            : Align(
+          appBar: HomeBrowserAppBar(this),
+          body:
+          //_isLoading ? Center(child: CircularProgressIndicator()) :
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Align(
                 alignment: Alignment.topCenter,
-                child: NotificationListener<ScrollNotification>(
-                  onNotification: (scrollNotification) {
-                    if (scrollNotification is ScrollUpdateNotification) {
-                      _onUpdateScroll();
-                    }
-                    return true;
-                  },
+                child: Container(
+                  color: ThemeChanger.lightBlue,
+                  height: 40,
+                  width: displayWidth,
                   child: ListView.builder(
-                      reverse: true,
+                      physics: ScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
-                      controller: _scrollController,
                       itemCount: _products.length,
                       itemBuilder: (context, index) {
                         return InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ExtendedView(
-                                        _products[index],
-                                        this,
-                                        streamController.stream)),
-                              );
+                            onTap: () async {
                             },
-                            child: ArticleCard(_products[index], this));
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: ThemeChanger.articlecardbackground,
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                              alignment: Alignment.centerRight,
+                              margin: EdgeInsets.all(4),
+                              //padding: EdgeInsets.all(4),
+                              padding: EdgeInsets.symmetric(horizontal: 6),
+                              height: 40,
+                              child: Text(
+                                "bs",
+                                style: TextStyle(
+                                  color: ThemeChanger.reversetextColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ));
                       }),
-                )),
+                ),
+              ),
+              Expanded(
+                child:
+                Align(
+                    alignment: Alignment.topCenter,
+                    child: NotificationListener<ScrollNotification>(
+                      onNotification: (scrollNotification) {
+                        if (scrollNotification is ScrollUpdateNotification) {
+                          _onUpdateScroll();
+                        }
+                        return true;
+                      },
+                      child: ListView.builder(
+                          reverse: true,
+                          shrinkWrap: true,
+                          controller: _scrollController,
+                          itemCount: _products.length,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ExtendedView(
+                                            _products[index],
+                                            this,
+                                            streamController.stream)),
+                                  );
+                                },
+                                child: ArticleCard(_products[index], this));
+                          }),
+                    )
+                ),
+              )
+            ],
+          )
       );
     }
   }
@@ -255,6 +297,7 @@ class _HomePageState extends State<HomePage> {
   void setLoading(bool b) {
     _isLoading = b;
   }
+
 }
 
 enum WelcomeStatus { loading, firstTime, noFirstTime }

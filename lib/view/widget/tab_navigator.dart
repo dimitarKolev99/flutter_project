@@ -70,9 +70,9 @@ class _TabNavigatorState extends State<TabNavigator> {
 
   @override
   Widget build(BuildContext context) {
-    Widget child = HomePage(streamControllerHome.stream, updateStream, widget.callback);if (widget.tabItem == "Page1") {
-      child =
-          HomePage(streamControllerHome.stream, updateStream, widget.callback);
+    Widget child = HomePage(streamControllerHome.stream, updateStream, widget.callback);
+    if (widget.tabItem == "Page1") {
+      child = HomePage(streamControllerHome.stream, updateStream, widget.callback);
     } else if (widget.tabItem == "Page2") {
       // TODO: set Default ID for BrowserPage after selcetion on welcomesreen  !! PRODUCTCATEGORY
       child = BrowserPage(streamControllerBrowser.stream, updateStream, 19116);

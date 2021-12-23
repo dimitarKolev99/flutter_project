@@ -56,10 +56,12 @@ class ArticleCard extends StatelessWidget {
     _safeAreaVertical = _mediaQueryData.padding.top + _mediaQueryData.padding.bottom;
     safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
+    print("Width: $displayWidth");
+    print("Height: $displayHeight");
 
     return Container(
         margin: EdgeInsets.symmetric(horizontal: blockSizeHorizontal * 3, vertical: blockSizeVertical * 0.5),
-        height: blockSizeVertical * 20,
+        height: blockSizeVertical * 40,
         decoration: BoxDecoration(
           color: ThemeChanger.articlecardbackground,
           borderRadius: BorderRadius.circular(3),
@@ -75,127 +77,144 @@ class ArticleCard extends StatelessWidget {
             ),
           ],
         ),
-        child:
-        Row(
+        child: Row(
           //mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             // Picture + Discount%
-            Stack(
-              children:[
-              // Product Image
-              Container(
-                //color: Colors.purple,
-                //width: blockSizeHorizontal * 30,//displayWidth/3 - 20,
-                //height: blockSizeVertical * 15,
-                margin: EdgeInsets.only(left: blockSizeHorizontal * 3),//(left: 10),
-                child:
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(4.0),
-                  child:
-                  Image.network(
-                    image,
-                    //width: blockSizeHorizontal * 50,//displayWidth / 3 - 30,
-                    //height: blockSizeHorizontal * 50,//displayWidth / 3 - 30,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-                // % Badge
+            Expanded(
+              child: Stack(
+                children:[
+                // Product Image
                 Container(
-                  margin: EdgeInsets.only(top: blockSizeVertical*0.5),
-                  //padding: EdgeInsets.only(top: 3, bottom: 3, left: 7, right: 5),
-                  padding: EdgeInsets.only(top: blockSizeVertical * 0.5, bottom: blockSizeVertical * 0.5, left: blockSizeHorizontal *1, right: blockSizeHorizontal * 1),//(top: 3, bottom: 3, left: 10, right: 17),
-                  decoration: BoxDecoration(
-                    color: ThemeChanger.highlightedColor,  // const Color.fromRGBO(23, 41, 111, 0.8),
-                    borderRadius: BorderRadius.circular(0),
-                  ),
+                  //color: Colors.purple,
+                  //width: blockSizeHorizontal * 30,//displayWidth/3 - 20,
+                  //height: blockSizeVertical * 15,
+                  margin: EdgeInsets.only(left: blockSizeHorizontal * 3),//(left: 10),
                   child:
-                  Text("-" + saving.toString() + "%",
-                    style: TextStyle(
-                      color: ThemeChanger.textColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: safeBlockHorizontal * 4,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(4.0),
+                    child:
+                    Image.network(
+                      image,
+                      //width: blockSizeHorizontal * 50,//displayWidth / 3 - 30,
+                      //height: blockSizeHorizontal * 50,//displayWidth / 3 - 30,
+                      fit: BoxFit.contain,
                     ),
                   ),
                 ),
-              ]
+                  // % Badge
+                  Container(
+                    margin: EdgeInsets.only(top: blockSizeVertical*0.5),
+                    //padding: EdgeInsets.only(top: 3, bottom: 3, left: 7, right: 5),
+                    padding: EdgeInsets.only(top: blockSizeVertical * 0.5, bottom: blockSizeVertical * 0.5, left: blockSizeHorizontal *1, right: blockSizeHorizontal * 1),//(top: 3, bottom: 3, left: 10, right: 17),
+                    decoration: BoxDecoration(
+                      color: ThemeChanger.highlightedColor,  // const Color.fromRGBO(23, 41, 111, 0.8),
+                      borderRadius: BorderRadius.circular(0),
+                    ),
+                    child:
+                    Text("-" + saving.toString() + "%",
+                      style: TextStyle(
+                        color: ThemeChanger.textColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: safeBlockHorizontal * 3,
+                      ),
+                    ),
+                  ),
+                ]
+              ),
             ),
             Stack(
               children: [
                 //title/description/price
-                Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children:[
-                      Column(
-                        children: [
-                          //title
-                          Container(
-                            //color: Colors.blue,
-                            margin: EdgeInsets.only(left: blockSizeHorizontal * 2, top: blockSizeVertical * 2),//(left: 4, right: 4, top: 20),
-                            width: blockSizeHorizontal * 45,//displayWidth/3 ,
-                            //height: blockSizeVertical * 10,
-                            child: Text(
-                              title,
-                              style: TextStyle(
-                                fontSize: safeBlockHorizontal * 4.5,//16,
-                                color: ThemeChanger.reversetextColor,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              textAlign: TextAlign.left,
-                            ),
-                          ),
-                          // description
-                          Container(
-                            margin: EdgeInsets.only(left:  blockSizeHorizontal * 2,top: blockSizeVertical * 0.5),
-                            width: blockSizeHorizontal * 45,//displayWidth/3 ,
-                            child: Text(
-                              description,
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontSize: safeBlockHorizontal * 3.25,
-                                color: ThemeChanger.reversetextColor,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                          )
-                        ],),
-                      Column(
-                          children:[
-                            //old price
-                            Container(
-                              margin: EdgeInsets.only(left:  blockSizeHorizontal * 2),
-                              width: blockSizeHorizontal * 45,
-                              child: Text(
-                                prevpreis.toStringAsFixed(2) + "€",
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    decoration: TextDecoration.lineThrough,
-                                    fontSize: safeBlockHorizontal * 3.25,
-                                    color: ThemeChanger.reversetextColor),
-                              ),
-                            ),
-                            //Price
-                            Container(
-                              margin: EdgeInsets.only(bottom: blockSizeVertical*1, left:  blockSizeHorizontal * 2),
-                              //padding: EdgeInsets.only(top: blockSizeVertical * 3),
-                              //margin: EdgeInsets.only(bottom: blockSizeVertical*0.2),
-                              width: blockSizeHorizontal * 45,
-                              child:
-                              Text(
-                                newprice.toStringAsFixed(2) + "€",
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  fontSize: safeBlockHorizontal * 6.0,//16,
-                                  color: ThemeChanger.highlightedColor,
-                                  fontWeight: FontWeight.bold,
+                  Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children:[
+                        Expanded(
+                        child: Column(
+                          children: [
+                            //title
+                            Expanded(
+                              child: Container(
+                                //color: Colors.blue,
+                                margin: EdgeInsets.only(left: blockSizeHorizontal * 2, top: blockSizeVertical * 2),//(left: 4, right: 4, top: 20),
+                                width: blockSizeHorizontal * 45,//displayWidth/3 ,
+                                //height: blockSizeVertical * 10,
+                                child: Text(
+                                  title,
+                                  style: TextStyle(
+                                    fontSize: safeBlockHorizontal * 3.0,//16,
+                                    color: ThemeChanger.reversetextColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                  textAlign: TextAlign.left,
                                 ),
                               ),
                             ),
-                          ])
-                    ]),
+                            // description
+                            Expanded(
+                              child: Container(
+                                margin: EdgeInsets.only(left:  blockSizeHorizontal * 2,top: blockSizeVertical * 0.5),
+                                width: blockSizeHorizontal * 45,//displayWidth/3 ,
+                                child: Text(
+                                  description,
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    fontSize: safeBlockHorizontal * 2.25,
+                                    color: ThemeChanger.reversetextColor,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ),
+                            )
+                          ],),
+                        ),
+                        Expanded(
+                          child: Column(
+                              children:[
+                                //old price
+                                Expanded(
+                                  child: Container(
+                                    margin: EdgeInsets.only(left:  blockSizeHorizontal * 2),
+                                    width: blockSizeHorizontal * 45,
+                                    child: Text(
+                                      prevpreis.toStringAsFixed(2) + "€",
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                          decoration: TextDecoration.lineThrough,
+                                          fontSize: safeBlockHorizontal * 2.25,
+                                          color: ThemeChanger.reversetextColor),
+                                    ),
+                                  ),
+                                ),
+
+                                //Price
+                                Expanded(
+                                  child: Container(
+                                    margin: EdgeInsets.only(bottom: blockSizeVertical*1, left:  blockSizeHorizontal * 2),
+                                    //padding: EdgeInsets.only(top: blockSizeVertical * 3),
+                                    //margin: EdgeInsets.only(bottom: blockSizeVertical*0.2),
+                                    width: blockSizeHorizontal * 45,
+                                    child:
+                                    Text(
+                                      newprice.toStringAsFixed(2) + "€",
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontSize: safeBlockHorizontal * 3.0,//16,
+                                        color: ThemeChanger.highlightedColor,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ]
+                          ),
+                        )
+                      ]
+                  ),
+
                 //icon
                 Container(
                   //margin: EdgeInsets.only(bottom: blockSizeVertical*5),
@@ -204,7 +223,7 @@ class ArticleCard extends StatelessWidget {
                   // Favourite Icon
                   Align(
                     child:
-                    Icon(Icons.favorite, color: ThemeChanger.articlecardbackground),
+                    Icon(Icons.favorite, color: ThemeChanger.articlecardbackground, size: 10,),
                     alignment: Alignment.centerRight,
                   ),
                 ),
