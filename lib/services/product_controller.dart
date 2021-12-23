@@ -9,20 +9,20 @@ class ProductController {
   static late List<Product> favoriteProducts = []; // all favorites IDs as cache
   static late List<Product> _products = []; // all products cached
 
-
+/* TODO DO NOT DELETE YET
   static void setFavs(List<Product> favs) {
     for(Product p in favs) {
        if(!favoriteProducts.contains(p)) favoriteProducts.add(p);
     }
-  }
+  }*/
 
   static Future<void> updateFavorites(callback) async {
     favoriteProducts.clear();
     List<Product> favorites = await _preferenceArticles.getAllFavorites();
-    for (var i in favorites) {
-      if (!favoriteProducts.contains(i)) {
-        favoriteProducts.add(i);
-      }
+    favoriteProducts.addAll(favorites.toSet());
+    for(Product p in favorites) {
+      favoriteProducts.removeWhere((element) => element.equals(p));
+      favoriteProducts.add(p);
     }
     callback.setState(() {});
     callback.streamController.add(true); // note: was not called for browser view before refactoring
@@ -41,17 +41,20 @@ class ProductController {
   }
   */
   static void addProducts(List<Product> products) {
-    _products.addAll(products);
+    for(Product p in products) {
+      if(!_products.contains(p)) _products.add(p);
+    }
   }
 
   static bool isFavorite(int id) {
-    for(Product p in favoriteProducts) {
-      if(p.productId == id) return true;
+    for(Product fav in favoriteProducts) {
+      if(fav.productId == id) return true;
     }
     return false;
   }
 
   static Future changeFavoriteState(ArticleCard card, dynamic callback) async {
+
     if (isFavorite(card.id)) {
       showAlertDialog(callback.context, card.id, callback);
     } else {

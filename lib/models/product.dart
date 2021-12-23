@@ -41,5 +41,9 @@ class Product {
   String toString(){
     return 'Product {title: $title, image: $image, description: $description}';
   }
+
+  bool equals(Product p) {
+    return this.productId == p.productId;
+  }
 }
 
