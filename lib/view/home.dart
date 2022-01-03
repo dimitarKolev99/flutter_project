@@ -79,24 +79,49 @@ class _HomePageState extends State<HomePage> {
   late int categoryId;
   late String categoryName;
   List<int> productCategoryIDs = [];
+ // bool check = false;
 
   //when map is empty then json funtions is called
   Future<void> getSubCategories() async{
     if(subCategoriesMap.isEmpty) {
+      print("getSubCategories is empty");
       json.getJson().then((List<dynamic> result) {
         List<dynamic> resultList = [];
         resultList = result;
         subCategoriesMap = json.getMapOfSubOrProductCategories(categoryId, resultList);
+        print("subCategoriesMap in getSubCategories $subCategoriesMap");
+      });
+    }
+    if(subCategoriesMap.isNotEmpty) {
+      print("getSubCategories is not empty");
+      subCategoriesMap.clear();
+      json.getJson().then((List<dynamic> result) {
+        List<dynamic> resultList = [];
+        resultList = result;
+        subCategoriesMap = json.getMapOfSubOrProductCategories(categoryId, resultList);
+        print("subCategoriesMap in getSubCategories $subCategoriesMap");
       });
     }
   }
   //seperate the sub map into 2 lists 1 with names and 1 with ids
   Future<void> mapToLists() async {
     if(subCategoriesNames.isEmpty) {
+      print("mapToLists Is emtpy");
       subCategoriesMap.forEach((name, id) {
         subCategoriesNames.add(name);
         subCategoriesIds.add(id);
-        // print("added $name");
+        print("added $name");
+      });
+    }
+    if (subCategoriesNames.isNotEmpty) {
+      print("mapToLists Its Not Empty");
+      subCategoriesNames.clear();
+      subCategoriesIds.clear();
+        subCategoriesMap.forEach((name, id) {
+        subCategoriesNames.add(name);
+        subCategoriesIds.add(id);
+        print("added $name");
+        print("added $id");
       });
     }
   }
@@ -300,7 +325,7 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (context, index) {
                       return InkWell(
                           onTap: () async {
-                            //categoryName: mainCategoryNames[index]
+                            mainCategories[index];
                             categoryId = mainCategoryIds[index];
                             print("categoryid = ${categoryId}");
                             await getSubCategories();
@@ -311,11 +336,12 @@ class _HomePageState extends State<HomePage> {
                                   .then((value) {
                                     timerFunction(value);
                                     //_jsonFunctions.count = 1;
-                                print(_jsonFunctions.count);
+                                print("AAAAAA $_jsonFunctions.count");
                                   });
                             });
-                            print("map = ${subCategoriesMap}");
-                            print("mapid = ${subCategoriesIds}");
+
+                            print("subCategoryMAP = ${subCategoriesMap}");
+                            print("subCategoryID = ${subCategoriesIds}");
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -366,7 +392,8 @@ class _HomePageState extends State<HomePage> {
                                         streamController.stream)),
                               );
                             },
-                            child: ArticleCard(_products[index], this));
+                            child: ArticleCard(_products[index], this)
+                        );
                       }),
                 )),)
           ],
