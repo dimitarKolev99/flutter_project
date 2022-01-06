@@ -76,8 +76,7 @@ class _SubcatButtonState extends State<SubcatButton> {
       json.getJson().then((List<dynamic> result) {
         List<dynamic> resultList = [];
         resultList = result;
-        subCategoriesMap =
-            json.getMapOfSubOrProductCategories(widget.categoryId, resultList);
+        subCategoriesMap = json.getMapOfSubOrProductCategories(widget.categoryId, resultList);
       });
     }
   }

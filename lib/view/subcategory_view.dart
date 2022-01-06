@@ -18,7 +18,6 @@ class SubcategoryView extends StatefulWidget {
   final dynamic callback;
   ScrollController _scrollController = ScrollController();
 
-
   SubcategoryView({
     required this.categoryId,
     required this.categoryName,

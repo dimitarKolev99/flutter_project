@@ -41,7 +41,7 @@ class _WelcomePageState extends State<WelcomePage> {
             Expanded(
               child: ListView(children: <Widget>[
                 SizedBox(height: 30),
-                Align(
+                const Align(
                   alignment: Alignment.topCenter,
                   child: Text(
                     "Choose your favorite categories!",
@@ -53,9 +53,9 @@ class _WelcomePageState extends State<WelcomePage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 45),
+                const SizedBox(height: 45),
                 Container(
-                    child: new Row(
+                    child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     ToggleButtons(
@@ -66,7 +66,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       selectedBorderColor: ThemeChanger.navBarColor,
                       selectedColor: Colors.white,
                       borderRadius: BorderRadius.circular(4),
-                      children: <Widget>[
+                      children: const <Widget>[
                         Icon(Icons.dry_cleaning, size: 35),
                         Icon(Icons.laptop, size: 35),
                         Icon(Icons.ad_units, size: 35),
