@@ -150,6 +150,14 @@ class _HomePageState extends State<HomePage> {
   var index = 0;
   var randomCategory = 0;
 
+  int _selectedItem = -1;
+
+  _onSelect(int index) {
+    setState(() {
+      _selectedItem = index;
+    });
+  }
+
   _onUpdateScroll() {
     if (this.mounted) {
       setState(() {
@@ -340,12 +348,16 @@ class _HomePageState extends State<HomePage> {
                                   });
                             });
 
+                            setState(() {
+                              _onSelect(index);
+                            });
+
                             print("subCategoryMAP = ${subCategoriesMap}");
                             print("subCategoryID = ${subCategoriesIds}");
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                              color: ThemeChanger.articlecardbackground,
+                              color: _selectedItem != null && _selectedItem == index ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground,
                               borderRadius: BorderRadius.circular(2),
                             ),
                             alignment: Alignment.centerRight,
