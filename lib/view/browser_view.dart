@@ -22,8 +22,6 @@ class BrowserPage extends StatefulWidget {
   late final StreamController updateStream;
   int _currentProductId;
 
-
-
   BrowserPage(this.stream, this.updateStream, this._currentProductId);
 
   @override
@@ -93,7 +91,7 @@ class _BrowserPageState extends State<BrowserPage> {
 
   // Whenever a productcategory gets selected this function should add all Products of the category to the Map
   Future<void> addProductsOfChosenCategory(int categoryId)async {
-    Iterable<Product> products = await ProductApi().fetchProduct(categoryId);
+    Iterable<Product> products = await ProductApi().getFilterProducts(categoryId, saving);
     bargainsOfChosenCats[categoryId] = products;
     numberOfProducts += products.length;
     print(numberOfProducts);
@@ -325,7 +323,7 @@ class _BrowserPageState extends State<BrowserPage> {
   void updateBrowserblabla(int catID){
     _products.clear();
     widget._currentProductId = catID;
-    getSaving(widget._currentProductId, saving);
+    getProducts(widget._currentProductId);
     setState(() {});
   }
 
