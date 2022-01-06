@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/services/product_controller.dart';
@@ -30,106 +28,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-  Map<String, int> mainCategories = {
-    "Elektroartikel": 30311,
-    "Drogerie & Gesundheit": 3932,
-    "Haus & Garten": 3686,
-    "Mode & Accessoires": 9908,
-    "Tierbedarf": 7032,
-    "Gaming & Spielen": 3326,
-    "Essen & Trinken": 12913,
-    "Baby & Kind": 4033,
-    "Auto & Motorrad": 2400,
-    "Haushaltselektronik": 1940,
-    "Sport & Outdoor": 3626,
-  };
-  List<String> mainCategoryNames = [
-    "Elektroartikel",
-    "Drogerie & Gesundheit",
-    "Haus & Garten",
-    "Mode & Accessoires",
-    "Tierbedarf",
-    "Gaming & Spielen",
-    "Essen & Trinken",
-    "Baby & Kind",
-    "Auto & Motorrad",
-    "Haushaltselektronik",
-    "Sport & Outdoor"
-  ];
-  List<int> mainCategoryIds = [
-    30311,
-    3932,
-    3686,
-    9908,
-    7032,
-    3326,
-    12913,
-    4033,
-    2400,
-    1940,
-    3626,
-  ];
-
-  JsonFunctions json = JsonFunctions();
-  Map<String, int> subCategoriesMap = Map();
-  // names and Ids have matching indexes for name and id of the category
-  List<String> subCategoriesNames = [];
-  List<int> subCategoriesIds = [];
-  late int categoryId;
-  late String categoryName;
-  List<int> productCategoryIDs = [];
- // bool check = false;
-
-  //when map is empty then json funtions is called
-  Future<void> getSubCategories() async{
-    if(subCategoriesMap.isEmpty) {
-      print("getSubCategories is empty");
-      json.getJson().then((List<dynamic> result) {
-        List<dynamic> resultList = [];
-        resultList = result;
-        subCategoriesMap = json.getMapOfSubOrProductCategories(categoryId, resultList);
-        print("subCategoriesMap in getSubCategories $subCategoriesMap");
-      });
-    }
-    if(subCategoriesMap.isNotEmpty) {
-      print("getSubCategories is not empty");
-      subCategoriesMap.clear();
-      json.getJson().then((List<dynamic> result) {
-        List<dynamic> resultList = [];
-        resultList = result;
-        subCategoriesMap = json.getMapOfSubOrProductCategories(categoryId, resultList);
-        print("subCategoriesMap in getSubCategories $subCategoriesMap");
-      });
-    }
-  }
-  //seperate the sub map into 2 lists 1 with names and 1 with ids
-  Future<void> mapToLists() async {
-    if(subCategoriesNames.isEmpty) {
-      print("mapToLists Is emtpy");
-      subCategoriesMap.forEach((name, id) {
-        subCategoriesNames.add(name);
-        subCategoriesIds.add(id);
-        print("added $name");
-      });
-    }
-    if (subCategoriesNames.isNotEmpty) {
-      print("mapToLists Its Not Empty");
-      subCategoriesNames.clear();
-      subCategoriesIds.clear();
-        subCategoriesMap.forEach((name, id) {
-        subCategoriesNames.add(name);
-        subCategoriesIds.add(id);
-        print("added $name");
-        print("added $id");
-      });
-    }
-  }
-
-
-
   StreamController<bool> streamController = StreamController<bool>.broadcast();
-
 
   late List<Product> _product;
   late final List _favoriteIds = [];
@@ -198,34 +97,14 @@ class _HomePageState extends State<HomePage> {
     ProductController.addProducts(_products);
   }
 
-  /*
   void initListOfIDs() {
     _jsonFunctions.getListOfProdCatIDs().then((value) => timerFunction(value));
-  }
-
-   */
-  
-
-
-  timerFunctionn(List<int> ids) {
-    // every 2 seconds get a random category id, call the api with it, load the product and animate it
-    _timer = Timer.periodic(const Duration(seconds: 2), (Timer timer) {
-      randomCategory = ids[0];
-      getProducts(randomCategory);
-      if (_scrollController.hasClients && !isScrolling) {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          curve: Curves.easeOut,
-          duration: const Duration(milliseconds: 300),
-        );
-      }
-    });
   }
 
   timerFunction(List<int> ids) {
     // every 2 seconds get a random category id, call the api with it, load the product and animate it
     _timer = Timer.periodic(const Duration(seconds: 2), (Timer timer) {
-      index = _jsonFunctions.getRandomInt(_jsonFunctions.count);
+      index = _jsonFunctions.getRandomInt();
       randomCategory = ids[index];
       getProducts(randomCategory);
       if (_scrollController.hasClients && !isScrolling) {
@@ -252,7 +131,7 @@ class _HomePageState extends State<HomePage> {
       }
     });
     firstAppStart();
-    //initListOfIDs();
+    initListOfIDs();
 
     tz.initializeTimeZones();
   }
@@ -314,6 +193,7 @@ class _HomePageState extends State<HomePage> {
     } else {
       return Scaffold(
         appBar: HomeBrowserAppBar(this),
+<<<<<<< HEAD
         body:
         //_isLoading ? Center(child: CircularProgressIndicator()) :
         Column(
@@ -379,6 +259,11 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             child:
             Align(
+=======
+        body: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : Align(
+>>>>>>> parent of 4eba8f8 (Merge pull request #176 from knoffhoff/SmallFixes)
                 alignment: Alignment.topCenter,
                 child: NotificationListener<ScrollNotification>(
                   onNotification: (scrollNotification) {
@@ -404,13 +289,9 @@ class _HomePageState extends State<HomePage> {
                                         streamController.stream)),
                               );
                             },
-                            child: ArticleCard(_products[index], this)
-                        );
+                            child: ArticleCard(_products[index], this));
                       }),
-                )),)
-          ],
-        )
-
+                )),
       );
     }
   }
