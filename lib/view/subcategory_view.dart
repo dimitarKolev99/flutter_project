@@ -242,17 +242,21 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                       //fontWeight: FontWeight.bold,
                                       fontSize: safeBlockHorizontal * 5,
                                     )),
-                                IconButton(
-                                  icon: Icon(_hide
-                                      ? Icons.arrow_drop_down
-                                      : Icons.arrow_drop_up),
-                                  tooltip: "Hide",
-                                  onPressed: () {
-                                    setState(() {
-                                      _hide = !_hide;
-                                    });
-                                  },
-                                ),
+
+                                    // Collapse-Unfold Icon
+                                    IconButton(
+                                      icon: Icon(_hide
+                                          ? Icons.arrow_drop_down
+                                          : Icons.arrow_drop_up,
+                                      ),
+                                      iconSize: blockSizeHorizontal * 10,
+                                      tooltip: "Einklappen/Ausklappen",
+                                      onPressed: () {
+                                        setState(() {
+                                          _hide = !_hide;
+                                        });
+                                      },
+                                    ),
                               ]),
 
                           // PriceSlider
@@ -361,7 +365,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                         List.generate(discounts.length, (index) {
                                           return Container(
                                             alignment: Alignment.center,
-                                            width: blockSizeHorizontal * 12,
+                                            width: blockSizeHorizontal * 13,
                                             decoration: BoxDecoration(
                                               shape: BoxShape.circle,
                                               // When a discount circle is clicked
@@ -385,7 +389,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                                 });
                                               },
                                               child: Text(
-                                                discounts[index][0].toString() + "%",
+                                                ">" + discounts[index][0].toString() + "%",
                                                 style: TextStyle(
                                                   color: ThemeChanger
                                                       .textColor,
