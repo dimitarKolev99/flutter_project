@@ -152,24 +152,6 @@ class _BrowserPageState extends State<BrowserPage> {
     getProducts(widget._currentProductId);
     print("CALLED FROM BROWSER VIEW");
   }
-  
-    Future<void> getSaving(int categoryID, int saving) async{
-    _product = await ProductApi().getFilterProducts(categoryID, saving);
-    List<Product> favorites = await _preferenceArticles.getAllFavorites();
-    for (var i in favorites) {
-      if (!_favoriteIds.contains(i.productId)) {
-        _favoriteIds.add(i.productId);
-      }
-    }
-
-    if (this.mounted) {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-    _products.addAll(_product);
-    ProductController.addProducts(_products);
-  }
 
   Future<void> getProducts(int categoryID) async {
     List<Product> favorites = await _preferenceArticles.getAllFavorites();
@@ -260,7 +242,7 @@ class _BrowserPageState extends State<BrowserPage> {
                                 Text(
                               chosenCategories.isEmpty? widget.mainCategoryNames[index] : chosenCategories[index],
                               style: TextStyle(
-                                color: chosenCategories.isEmpty? ThemeChanger.catTextColor : ThemeChanger.textColor,
+                                color: chosenCategories.isEmpty? ThemeChanger.navBarColor : ThemeChanger.articlecardbackground,
                                 //fontWeight:  !chosenCategories.isEmpty && index == chosenCategories.length-1?  FontWeight.w600 :FontWeight.normal,
                                 fontWeight:  FontWeight.w400,
                               ),
@@ -279,7 +261,7 @@ class _BrowserPageState extends State<BrowserPage> {
                                       updateBrowserblabla(currentCategory);
                                     }
                                   });},
-                                icon: Icon(Icons.clear, size: 18, color: ThemeChanger.textColor,) )
+                                icon: Icon(Icons.clear, size: 18, color: ThemeChanger.articlecardbackground,) )
                               ],
                             ),
 
@@ -291,6 +273,9 @@ class _BrowserPageState extends State<BrowserPage> {
                     }),
               ),
             ),
+
+
+
 
 
             // This Grid View is supposed to show the main categories on top of the screen in the browser view

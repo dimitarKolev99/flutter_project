@@ -388,6 +388,8 @@ class _SubcategoryViewState extends State<SubcategoryView> {
 
                                                   } else {
                                                     discounts[index][1] = false;
+                                                    saving = 0;
+                                                    widget.callback.setSaving(saving);
                                                   }
                                                 });
                                               },
