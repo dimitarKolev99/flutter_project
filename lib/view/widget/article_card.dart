@@ -23,7 +23,7 @@ class ArticleCard extends StatelessWidget {
     this.title = product.title;
     this.saving = product.saving;
     this.price = product.price;
-    this.image = product.image;
+    this.image = product.smallImage;
     this.description = product.description;
     this.category = product.categoryName;
     this.id = product.productId;

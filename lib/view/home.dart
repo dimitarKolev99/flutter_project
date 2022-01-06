@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/services/product_controller.dart';
@@ -28,7 +30,106 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  Map<String, int> mainCategories = {
+    "Elektroartikel": 30311,
+    "Drogerie & Gesundheit": 3932,
+    "Haus & Garten": 3686,
+    "Mode & Accessoires": 9908,
+    "Tierbedarf": 7032,
+    "Gaming & Spielen": 3326,
+    "Essen & Trinken": 12913,
+    "Baby & Kind": 4033,
+    "Auto & Motorrad": 2400,
+    "Haushaltselektronik": 1940,
+    "Sport & Outdoor": 3626,
+  };
+  List<String> mainCategoryNames = [
+    "Elektroartikel",
+    "Drogerie & Gesundheit",
+    "Haus & Garten",
+    "Mode & Accessoires",
+    "Tierbedarf",
+    "Gaming & Spielen",
+    "Essen & Trinken",
+    "Baby & Kind",
+    "Auto & Motorrad",
+    "Haushaltselektronik",
+    "Sport & Outdoor"
+  ];
+  List<int> mainCategoryIds = [
+    30311,
+    3932,
+    3686,
+    9908,
+    7032,
+    3326,
+    12913,
+    4033,
+    2400,
+    1940,
+    3626,
+  ];
+
+  JsonFunctions json = JsonFunctions();
+  Map<String, int> subCategoriesMap = Map();
+  // names and Ids have matching indexes for name and id of the category
+  List<String> subCategoriesNames = [];
+  List<int> subCategoriesIds = [];
+  late int categoryId;
+  late String categoryName;
+  List<int> productCategoryIDs = [];
+ // bool check = false;
+
+  //when map is empty then json funtions is called
+  Future<void> getSubCategories() async{
+    if(subCategoriesMap.isEmpty) {
+      print("getSubCategories is empty");
+      json.getJson().then((List<dynamic> result) {
+        List<dynamic> resultList = [];
+        resultList = result;
+        subCategoriesMap = json.getMapOfSubOrProductCategories(categoryId, resultList);
+        print("subCategoriesMap in getSubCategories $subCategoriesMap");
+      });
+    }
+    if(subCategoriesMap.isNotEmpty) {
+      print("getSubCategories is not empty");
+      subCategoriesMap.clear();
+      json.getJson().then((List<dynamic> result) {
+        List<dynamic> resultList = [];
+        resultList = result;
+        subCategoriesMap = json.getMapOfSubOrProductCategories(categoryId, resultList);
+        print("subCategoriesMap in getSubCategories $subCategoriesMap");
+      });
+    }
+  }
+  //seperate the sub map into 2 lists 1 with names and 1 with ids
+  Future<void> mapToLists() async {
+    if(subCategoriesNames.isEmpty) {
+      print("mapToLists Is emtpy");
+      subCategoriesMap.forEach((name, id) {
+        subCategoriesNames.add(name);
+        subCategoriesIds.add(id);
+        print("added $name");
+      });
+    }
+    if (subCategoriesNames.isNotEmpty) {
+      print("mapToLists Its Not Empty");
+      subCategoriesNames.clear();
+      subCategoriesIds.clear();
+        subCategoriesMap.forEach((name, id) {
+        subCategoriesNames.add(name);
+        subCategoriesIds.add(id);
+        print("added $name");
+        print("added $id");
+      });
+    }
+  }
+
+
+
   StreamController<bool> streamController = StreamController<bool>.broadcast();
+
 
   late List<Product> _product;
   late final List _favoriteIds = [];
@@ -48,6 +149,14 @@ class _HomePageState extends State<HomePage> {
   final _jsonFunctions = JsonFunctions();
   var index = 0;
   var randomCategory = 0;
+
+  int _selectedItem = -1;
+
+  _onSelect(int index) {
+    setState(() {
+      _selectedItem = index;
+    });
+  }
 
   _onUpdateScroll() {
     if (this.mounted) {
@@ -89,14 +198,34 @@ class _HomePageState extends State<HomePage> {
     ProductController.addProducts(_products);
   }
 
+  /*
   void initListOfIDs() {
     _jsonFunctions.getListOfProdCatIDs().then((value) => timerFunction(value));
+  }
+
+   */
+  
+
+
+  timerFunctionn(List<int> ids) {
+    // every 2 seconds get a random category id, call the api with it, load the product and animate it
+    _timer = Timer.periodic(const Duration(seconds: 2), (Timer timer) {
+      randomCategory = ids[0];
+      getProducts(randomCategory);
+      if (_scrollController.hasClients && !isScrolling) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          curve: Curves.easeOut,
+          duration: const Duration(milliseconds: 300),
+        );
+      }
+    });
   }
 
   timerFunction(List<int> ids) {
     // every 2 seconds get a random category id, call the api with it, load the product and animate it
     _timer = Timer.periodic(const Duration(seconds: 2), (Timer timer) {
-      index = _jsonFunctions.getRandomInt();
+      index = _jsonFunctions.getRandomInt(_jsonFunctions.count);
       randomCategory = ids[index];
       getProducts(randomCategory);
       if (_scrollController.hasClients && !isScrolling) {
@@ -123,7 +252,7 @@ class _HomePageState extends State<HomePage> {
       }
     });
     firstAppStart();
-    initListOfIDs();
+    //initListOfIDs();
 
     tz.initializeTimeZones();
   }
@@ -185,9 +314,71 @@ class _HomePageState extends State<HomePage> {
     } else {
       return Scaffold(
         appBar: HomeBrowserAppBar(this),
-        body: _isLoading
-            ? Center(child: CircularProgressIndicator())
-            : Align(
+        body:
+        //_isLoading ? Center(child: CircularProgressIndicator()) :
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                color: ThemeChanger.lightBlue,
+                height: 40,
+                width: displayWidth,
+                child: ListView.builder(
+                    physics: ScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemCount: mainCategories.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                          onTap: () async {
+                            mainCategories[index];
+                            categoryId = mainCategoryIds[index];
+                            print("categoryid = ${categoryId}");
+                            await getSubCategories();
+                            await mapToLists();
+
+                            setState(() {
+                              _jsonFunctions.getListOfProdCatIDs(mainCategoryIds.indexOf(categoryId))
+                                  .then((value) {
+                                    timerFunction(value);
+                                    //_jsonFunctions.count = 1;
+                                print("AAAAAA $_jsonFunctions.count");
+                                  });
+                            });
+
+                            setState(() {
+                              _onSelect(index);
+                            });
+
+                            print("subCategoryMAP = ${subCategoriesMap}");
+                            print("subCategoryID = ${subCategoriesIds}");
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: _selectedItem != null && _selectedItem == index ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground,
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                            alignment: Alignment.centerRight,
+                            margin: EdgeInsets.all(4),
+                            //padding: EdgeInsets.all(4),
+                            padding: EdgeInsets.symmetric(horizontal: 6),
+                            height: 40,
+                            child: Text(
+                              mainCategoryNames[index],
+                              style: TextStyle(
+                                color: ThemeChanger.reversetextColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ));
+                    }),
+              ),
+            ),
+          Expanded(
+            child:
+            Align(
                 alignment: Alignment.topCenter,
                 child: NotificationListener<ScrollNotification>(
                   onNotification: (scrollNotification) {
@@ -213,9 +404,13 @@ class _HomePageState extends State<HomePage> {
                                         streamController.stream)),
                               );
                             },
-                            child: ArticleCard(_products[index], this));
+                            child: ArticleCard(_products[index], this)
+                        );
                       }),
-                )),
+                )),)
+          ],
+        )
+
       );
     }
   }

@@ -18,7 +18,6 @@ class SubcategoryView extends StatefulWidget {
   final dynamic callback;
   ScrollController _scrollController = ScrollController();
 
-
   SubcategoryView({
     required this.categoryId,
     required this.categoryName,
@@ -182,7 +181,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                 physics: ScrollPhysics(),
                                 scrollDirection: Axis.horizontal,
                                 shrinkWrap: true,
-                                itemCount: 10,
+                                itemCount: 11,
                                 itemBuilder: (context, index) {
                                   return InkWell(
                                       onTap: () {
@@ -221,7 +220,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                               .callback.widget.mainCategoryNames[index],
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
-                                            color: ThemeChanger.navBarColor,
+                                            color: ThemeChanger.catTextColor,
                                           ),
                                         ),
                                       ));
