@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:core';
+import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
@@ -32,6 +33,9 @@ class SubcategoryView extends StatefulWidget {
 
 class _SubcategoryViewState extends State<SubcategoryView> {
   RangeValues _currentSliderValuesPrice = const RangeValues(20, 70);
+  //values for the left and right output of the slider
+  var startValue = 400;
+  var endValue = 4900;
 
   // Discount options combined with a boolean for when chosen
   var discounts = [
@@ -257,15 +261,18 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                               child: Column(
                                 children: [
                                   RangeSlider(
-                                    activeColor: ThemeChanger.navBarColor,
-                                    //inactiveColor: ProductApi.orange,
+                                    inactiveColor: ThemeChanger.lightBlue,
+                                    activeColor: ThemeChanger.catTextColor,
                                     values: _currentSliderValuesPrice,
                                     min: 0,
-                                    max: 1000,
+                                    max: 100,
                                     divisions: 100,
                                     onChanged: (RangeValues values) {
                                       setState(() {
                                         _currentSliderValuesPrice = values;
+                                        // values change exponentially and not linear.
+                                        startValue = pow(_currentSliderValuesPrice.start, 2).round();
+                                        endValue = pow(_currentSliderValuesPrice.end, 2).round();
                                       });
                                     },
                                   ),
@@ -290,8 +297,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                               blockSizeHorizontal * 3),
                                         ),
                                         child: Text(
-                                          _currentSliderValuesPrice.start
-                                              .round()
+                                          startValue
                                               .toString() +
                                               " €",
                                           style: TextStyle(
@@ -318,8 +324,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                               blockSizeHorizontal * 3),
                                         ),
                                         child: Text(
-                                          _currentSliderValuesPrice.end
-                                              .round()
+                                          endValue
                                               .toString() +
                                               " €",
                                           style: TextStyle(
@@ -413,7 +418,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                           Text(
                             "31754 Produkte",
                             style: TextStyle(
-                                color: ThemeChanger.navBarColor,
+                                color: ThemeChanger.catTextColor,
                                 //fontWeight: FontWeight.bold,
                                 fontSize: safeBlockHorizontal * 3),
                           ),
