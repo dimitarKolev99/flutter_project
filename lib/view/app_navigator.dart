@@ -140,7 +140,7 @@ class AppState extends State<AppNavigator> {
                       BottomNavigationBarItem(
                         icon: Padding(
                           padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
-                          child: Icon(Icons.bookmarks_outlined, size: isLargeDevice ? safeBlockHorizontal * 7 : safeBlockHorizontal * 6.5),
+                          child: Icon(Icons.favorite_outline, size: isLargeDevice ? safeBlockHorizontal * 7 : safeBlockHorizontal * 6.5),
                         ),
                         label: 'Merkzettel',
                       ),

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart' show rootBundle;
 
 class JsonFunctions{
   int id = 0;
+  int count = 1;
   List<int> productCategoryIDs = [];
   Map<String, int> ret = new Map();
   Map<String, int> mainCategories1 = {
@@ -100,12 +101,40 @@ class JsonFunctions{
     return ret;
   }
 
-  int getRandomInt() {
+  int getRandomInt(int count) {
     var random = Random();
-    return random.nextInt(2215);
+    return random.nextInt(count);
   }
 
   void translateTree(List<dynamic> resultList) {
+    for (var element in resultList) {
+      if (element.toString().substring(1, 14) == "subCategories") {
+
+        List<dynamic> resultList2 = element["subCategories"];
+        if (element["subCategories"] != null &&
+            element["productCategories"] != null) {
+          List<dynamic> productList = element["productCategories"];
+          for (var element in productList) {
+            id = element["id"];
+            productCategoryIDs.add(id);
+            count++;
+          }
+        }
+        translateTree(resultList2);
+      }
+      else if (element.toString().substring(1, 18) == "productCategories") {
+        List<dynamic> resultList2 = element["productCategories"];
+        for (var element in resultList2) {
+          id = element["id"];
+          productCategoryIDs.add(id);
+          count++;
+        }
+        translateTree(resultList2);
+      }
+    }
+  }
+
+  void translateTreeOneMain(List<dynamic> resultList) {
     for (var element in resultList) {
       if (element.toString().substring(1, 14) == "subCategories") {
 
@@ -139,10 +168,33 @@ class JsonFunctions{
     return resultList;
   }
 
-  Future<List<int>> getListOfProdCatIDs() async{
-    List<dynamic> resultList = await getJson();
+  Future<List<dynamic>> getJsonOneMain(int id) async {
+    List<dynamic> resultList = [];
+    final response = await rootBundle.loadString('lib/resources/cat_tree1.json');
+    Map<String, dynamic> myMap =
+    Map<String, dynamic>.from(json.decode(response));
+    List<dynamic> resultList0 = myMap["result"][id]["subCategories"]; //TODO: Anstatt index [0] ein Parameter übergeben
+    //TODO: Problem: Manchmal kommt derselbe Artikel nochmal,
+    //TODO: da die RandomInt Funcktion dieselbe ID generieren kann
+    //TODO: try catch the Unhandled Exception: NoSuchMethodError: The method '[]' was called on null. and make the app continue to run
+    if (myMap["result"][id]["productCategories"] != null) {
+      List<dynamic> resultList1 = myMap["result"][id]["subCategories"];
+      resultList = resultList0 + resultList1;
+      return resultList;
+    } else {
+      resultList = resultList0;
+      return resultList;
+    }
+  }
+
+
+  Future<List<int>> getListOfProdCatIDs(int id) async{
+    List<dynamic> resultList = await getJsonOneMain(id);
     translateTree(resultList);
+    print("In getListOfProdCatIDs $id");
     return productCategoryIDs;
   }
+
+
 
 }

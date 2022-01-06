@@ -9,7 +9,8 @@ class Product {
     required this.price,
     required this.saving,
     required this.description,
-    required this.image,
+    required this.smallImage,
+    required this.bigImage,
   });
 
   //int subCategoryId;
@@ -20,7 +21,8 @@ class Product {
   int saving;
   double price;
   String description;
-  String image;
+  String smallImage;
+  String bigImage;
 
   factory Product.fromJson(Map<String, dynamic> json) {
 
@@ -33,13 +35,14 @@ class Product {
       price: json["price"].toDouble(),
       saving: json["saving"],
       description:json["description"],
-      image: json["images"]["w120h100"][0],
+      smallImage: json["images"]["w120h100"][0],
+      bigImage: json["images"]["w600h600"][0],
     );
   }
 
    @override
   String toString(){
-    return 'Product {title: $title, image: $image, description: $description}';
+    return 'Product {title: $title, image: $smallImage, description: $description}';
   }
 
   bool equals(Product p) {
