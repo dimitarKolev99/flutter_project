@@ -80,6 +80,7 @@ class _BrowserPageState extends State<BrowserPage> {
   bool _isLoading = true;
   var count = 0;
   Timer? _timer;
+  int saving = 0;
 
   final _preferenceArticles = PreferencesArticles();
 
@@ -152,6 +153,24 @@ class _BrowserPageState extends State<BrowserPage> {
     });
     getProducts(widget._currentProductId);
     print("CALLED FROM BROWSER VIEW");
+  }
+  
+    Future<void> getSaving(int categoryID, int saving) async{
+    _product = await ProductApi().getFilterProducts(categoryID, saving);
+    List<Product> favorites = await _preferenceArticles.getAllFavorites();
+    for (var i in favorites) {
+      if (!_favoriteIds.contains(i.productId)) {
+        _favoriteIds.add(i.productId);
+      }
+    }
+
+    if (this.mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+    _products.addAll(_product);
+    ProductController.addProducts(_products);
   }
 
   Future<void> getProducts(int categoryID) async {
@@ -306,7 +325,11 @@ class _BrowserPageState extends State<BrowserPage> {
   void updateBrowserblabla(int catID){
     _products.clear();
     widget._currentProductId = catID;
-    getProducts(widget._currentProductId);
+    getSaving(widget._currentProductId, saving);
     setState(() {});
+  }
+
+  void setSaving(int saving){
+    this.saving = saving;
   }
 }

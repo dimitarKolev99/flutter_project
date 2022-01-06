@@ -36,6 +36,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
   //values for the left and right output of the slider
   var startValue = 400;
   var endValue = 4900;
+  int saving = 0;
 
   // Discount options combined with a boolean for when chosen
   var discounts = [
@@ -383,6 +384,9 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                                       discount[1] = false;
                                                     }
                                                     discounts[index][1] = true;
+                                                    saving = discounts[index][0] as int;
+                                                    widget.callback.setSaving(saving);
+
                                                   } else {
                                                     discounts[index][1] = false;
                                                   }
