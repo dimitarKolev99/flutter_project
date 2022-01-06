@@ -84,7 +84,7 @@ class _BrowserPageState extends State<BrowserPage> {
   final _preferenceArticles = PreferencesArticles();
 
   // This map is necessary because we need to know the id and the name of the chosen Cats
-  Map<int, String> mapOfChosenCategories = new Map();
+  Map<String, int> mapOfChosenCategories = new Map();
   List<String> chosenCategories = [];// Map has int with the id of the chosen category, and a Li
 //   st of bargains as value
   Map<int, List<dynamic>> bargainsOfChosenCats = new Map();
@@ -116,25 +116,25 @@ class _BrowserPageState extends State<BrowserPage> {
     return widget.mainCategoryIds[i];
   }
 
-  void addCategory(String s){
+  void addCategory(String s, int id){
     //chosenCategories.add(s);
     //TODO: change to propper working category List, this is juts to show only the last cat
+    mapOfChosenCategories[s] = id;
     chosenCategories.add(s);
+    //print(chosenCategories);
   }
 
   void removeOneCategory(String s){
     int index = chosenCategories.indexOf(s);
-    //print("removing : ! ${s}");
     chosenCategories.remove(chosenCategories[index]);
-  }
-
-  void deleteCategory(String s){
-    int index = chosenCategories.indexOf(s);
-    for(int i = chosenCategories.length-1; i >= index ; i--){
-      chosenCategories.remove(chosenCategories[i]);
+    int? id = mapOfChosenCategories[s];
+    if(id != null) {
+      //print("works");
+      deleteProductsOfChosenCategory(id);
     }
+    mapOfChosenCategories.remove(s);
+    //print(chosenCategories);
   }
-
 
   @override
   void initState() {

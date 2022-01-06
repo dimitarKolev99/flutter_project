@@ -105,7 +105,7 @@ class _SubcatButtonState extends State<SubcatButton> {
                   widget._isProdCat = true;
                   if(widget._isChosen == false){ //unselected
                     widget._isChosen = !widget._isChosen;
-                    widget.callback.addCategory(widget.categoryName);
+                    widget.callback.addCategory(widget.categoryName, widget.categoryId);
                     prodCatColor = ThemeChanger.highlightedColor;
                     textColor = ThemeChanger.textColor;
                     // function needed that leads to browser and shows results

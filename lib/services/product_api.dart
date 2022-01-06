@@ -55,8 +55,6 @@ class ProductApi {
   }
 
       Future<List<Product>> fetchProduct(int categoryID) async {
-        //print("call APi");
-
         final response = await rootBundle.loadString('lib/resources/cat_tree1.json');
         Map<String, dynamic> myMap = Map<String, dynamic>.from(json.decode(response));
 
