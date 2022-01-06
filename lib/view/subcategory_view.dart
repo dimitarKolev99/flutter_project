@@ -181,7 +181,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                 physics: ScrollPhysics(),
                                 scrollDirection: Axis.horizontal,
                                 shrinkWrap: true,
-                                itemCount: 10,
+                                itemCount: 11,
                                 itemBuilder: (context, index) {
                                   return InkWell(
                                       onTap: () {
