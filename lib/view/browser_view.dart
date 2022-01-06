@@ -22,8 +22,6 @@ class BrowserPage extends StatefulWidget {
   late final StreamController updateStream;
   int _currentProductId;
 
-
-
   BrowserPage(this.stream, this.updateStream, this._currentProductId);
 
   @override
@@ -80,6 +78,7 @@ class _BrowserPageState extends State<BrowserPage> {
   bool _isLoading = true;
   var count = 0;
   Timer? _timer;
+  int saving = 0;
 
   final _preferenceArticles = PreferencesArticles();
 
@@ -92,7 +91,7 @@ class _BrowserPageState extends State<BrowserPage> {
 
   // Whenever a productcategory gets selected this function should add all Products of the category to the Map
   Future<void> addProductsOfChosenCategory(int categoryId)async {
-    Iterable<Product> products = await ProductApi().fetchProduct(categoryId);
+    Iterable<Product> products = await ProductApi().getFilterProducts(categoryId, saving);
     bargainsOfChosenCats[categoryId] = products;
     numberOfProducts += products.length;
     print(numberOfProducts);
@@ -243,7 +242,7 @@ class _BrowserPageState extends State<BrowserPage> {
                                 Text(
                               chosenCategories.isEmpty? widget.mainCategoryNames[index] : chosenCategories[index],
                               style: TextStyle(
-                                color: chosenCategories.isEmpty? ThemeChanger.catTextColor : ThemeChanger.textColor,
+                                color: chosenCategories.isEmpty? ThemeChanger.navBarColor : ThemeChanger.articlecardbackground,
                                 //fontWeight:  !chosenCategories.isEmpty && index == chosenCategories.length-1?  FontWeight.w600 :FontWeight.normal,
                                 fontWeight:  FontWeight.w400,
                               ),
@@ -262,7 +261,7 @@ class _BrowserPageState extends State<BrowserPage> {
                                       updateBrowserblabla(currentCategory);
                                     }
                                   });},
-                                icon: Icon(Icons.clear, size: 18, color: ThemeChanger.textColor,) )
+                                icon: Icon(Icons.clear, size: 18, color: ThemeChanger.articlecardbackground,) )
                               ],
                             ),
 
@@ -274,6 +273,9 @@ class _BrowserPageState extends State<BrowserPage> {
                     }),
               ),
             ),
+
+
+
 
 
             // This Grid View is supposed to show the main categories on top of the screen in the browser view
@@ -305,5 +307,9 @@ class _BrowserPageState extends State<BrowserPage> {
     widget._currentProductId = catID;
     getProducts(widget._currentProductId);
     setState(() {});
+  }
+
+  void setSaving(int saving){
+    this.saving = saving;
   }
 }
