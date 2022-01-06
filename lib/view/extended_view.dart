@@ -28,7 +28,7 @@ class ExtendedView extends StatefulWidget {
     this.title = product.title;
     this.saving = product.saving;
     this.price = product.price;
-    this.image = product.image;
+    this.image = product.bigImage;
     this.description = product.description;
     this.category = product.categoryName;
   }

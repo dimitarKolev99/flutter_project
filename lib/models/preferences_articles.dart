@@ -58,7 +58,8 @@ class PreferencesArticles {
         'price': product.price,
         'saving': product.saving,
         'description': product.description,
-        'image': product.image,
+        'smallImage': product.smallImage,
+        'bigImage': product.bigImage,
       };
 
   Product fromJsonToProduct(String id, Map<String, dynamic> json) {
@@ -69,6 +70,8 @@ class PreferencesArticles {
       price: json["price"].toDouble(),
       saving: json["saving"],
       description:json["description"],
-      image: json["image"],);
+      smallImage: json["smallImage"],
+      bigImage: json["bigImage"],
+    );
   }
 }
