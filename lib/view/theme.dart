@@ -12,6 +12,10 @@ class ThemeChanger with ChangeNotifier{
   static Color reversetextColor = Color.fromRGBO(0, 0, 0, 1);
   static Color articlecardbackground = Color.fromRGBO(255, 255, 255, 1);
 
+  // Colors for subCategoryView
+  static Color catTextColor = Color.fromRGBO(10, 55, 97, 1);
+  static Color catWidgetColor = Color.fromRGBO(255, 255, 255, 1);
+
   ThemeData _themeData;
 
   ThemeChanger(this._themeData);
@@ -50,6 +54,9 @@ class ThemeChanger with ChangeNotifier{
     reversetextColor = Color.fromRGBO(0, 0, 0, 1);
     articlecardbackground = Color.fromRGBO(255, 255, 255, 1);
 
+    // Colors for subCategoryView
+    catTextColor = Color.fromRGBO(10, 55, 97, 1);
+    catWidgetColor = Color.fromRGBO(255, 255, 255, 1);
     StorageManager.saveData('themeMode', 'light');
     notifyListeners();
   }
@@ -63,6 +70,10 @@ class ThemeChanger with ChangeNotifier{
     textColor = Color.fromRGBO(255, 255, 255, 1);
     reversetextColor = Color.fromRGBO(255, 255, 255, 1);
     articlecardbackground = Color.fromRGBO(60, 60, 60, 1);
+
+    // Colors for subCategoryView
+    catTextColor = Color.fromRGBO(255, 255, 255, 1);
+    catWidgetColor = Color.fromRGBO(120, 120, 120, 1);
 
     StorageManager.saveData('themeMode', 'dark');
     notifyListeners();

@@ -232,7 +232,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                               children: [
                                 Text("Preisklasse",
                                     style: TextStyle(
-                                      color: ThemeChanger.navBarColor,
+                                      color: ThemeChanger.catTextColor,
                                       //fontWeight: FontWeight.bold,
                                       fontSize: safeBlockHorizontal * 5,
                                     )),
@@ -336,7 +336,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                     children: [
                                       Text("Rabatte",
                                           style: TextStyle(
-                                            color: ThemeChanger.navBarColor,
+                                            color: ThemeChanger.catTextColor,
                                             //fontWeight: FontWeight.bold,
                                             fontSize: safeBlockHorizontal * 5,
                                           )),
@@ -381,7 +381,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                                 discounts[index][0].toString() + "%",
                                                 style: TextStyle(
                                                   color: ThemeChanger
-                                                      .articlecardbackground,
+                                                      .textColor,
                                                   fontSize: safeBlockHorizontal * 3.9,
                                                 ),
                                               ),
@@ -404,7 +404,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                         children: [
                           Text("Kategorien",
                               style: TextStyle(
-                                color: ThemeChanger.navBarColor,
+                                color: ThemeChanger.catTextColor,
                                 //fontWeight: FontWeight.bold,
                                 fontSize: safeBlockHorizontal * 5,
                               )),

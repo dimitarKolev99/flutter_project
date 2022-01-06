@@ -58,8 +58,6 @@ class _FilterViewState extends State<FilterView> {
   bool _show = false;
   bool chosen = true;
 
-//"Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category", "Category",
-//     "Category", "Category", "Category", "Category", "Category", "Category"
 
   @override
   Widget build(BuildContext context) {
