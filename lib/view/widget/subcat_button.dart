@@ -7,6 +7,7 @@ import 'package:penny_pincher/services/json_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/tab_navigator.dart';
+import 'package:provider/provider.dart';
 
 import '../browser_view.dart';
 
@@ -87,9 +88,11 @@ class _SubcatButtonState extends State<SubcatButton> {
   }
   late Color subCatcolor = widget._isChosen ? ThemeChanger.lightBlue : ThemeChanger.articlecardbackground;
   late Color prodCatColor = widget._isChosen ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground;
-  late Color textColor = widget._isChosen ? ThemeChanger.articlecardbackground : ThemeChanger.navBarColor;
+  late Color textColor = widget._isChosen ? ThemeChanger.articlecardbackground : ThemeChanger.catTextColor;
   @override
   Widget build(BuildContext context) {
+
+    ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
 
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,13 +107,14 @@ class _SubcatButtonState extends State<SubcatButton> {
                   widget._isProdCat = true;
                   if(widget._isChosen == false){ //unselected
                     widget._isChosen = !widget._isChosen;
-                    widget.callback.addCategory(widget.categoryName);
+                    widget.callback.addCategory(widget.categoryName, widget.categoryId);
                     prodCatColor = ThemeChanger.highlightedColor;
-                    textColor = ThemeChanger.articlecardbackground;
+                    textColor = ThemeChanger.textColor;
                     // function needed that leads to browser and shows results
                     // TODO: Add CategoryIDs to a Collection ,
                     // TODO: Call Json Function to updayte the resultList and Update Button Text
                     widget.callback.currentCategory = widget.categoryId;
+                    widget.callback.addProductsOfChosenCategory(widget.categoryId);
 
                   }
                   else{
@@ -118,7 +122,8 @@ class _SubcatButtonState extends State<SubcatButton> {
                     //print("try to remove : ! ${widget.categoryName}");
                     widget.callback.removeOneCategory(widget.categoryName);
                     prodCatColor = ThemeChanger.articlecardbackground;
-                    textColor = ThemeChanger.navBarColor;
+                    textColor = ThemeChanger.catTextColor;
+                    widget.callback.deleteProductsOfChosenCategory(widget.categoryId);
                   }
                 }
                 // Subcategories
@@ -128,13 +133,13 @@ class _SubcatButtonState extends State<SubcatButton> {
                     widget._isChosen = !widget._isChosen;
                     widget.show = !widget.show;
                     subCatcolor = ThemeChanger.lightBlue;
-                    textColor = ThemeChanger.articlecardbackground;
+                    textColor = ThemeChanger.textColor;
                   }
                   else{  // selected
                     widget._isChosen = !widget._isChosen;
                     subCatcolor = ThemeChanger.articlecardbackground;
                     widget.show = !widget.show;
-                    textColor = ThemeChanger.navBarColor;
+                    textColor = ThemeChanger.catTextColor;
                    // widget.callback.removeOneCategory(widget.categoryName);
                   }
                 }
