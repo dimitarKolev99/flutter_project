@@ -56,7 +56,7 @@ class _FavoritePageState extends State<FavoritePage> {
       // displayName = prefs.getStringList('displayName');
     });
   }
-/* //TODO DO NOT DELETE TEMPLATE FOR FURTHER REAFCTORING
+/* //TODO DO NOT DELETE! TEMPLATE FOR FURTHER REAFCTORING
   Future <void> getProducts() async {
     favoriteProducts.clear();
     _product = await _preferenceArticles.getAllFavorites();

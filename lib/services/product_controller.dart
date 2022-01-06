@@ -27,19 +27,7 @@ class ProductController {
     callback.setState(() {});
     callback.streamController.add(true); // note: was not called for browser view before refactoring
   }
-/*
-  updateFavorites(bool update) {
-    if (this.mounted) {
-      setState(() {
-        getProducts();
-      });
-    }
-    if (_isClosed) {
-      _isClosed = false;
-      Navigator.maybePop(context);
-    }
-  }
-  */
+
   static void addProducts(List<Product> products) {
     for(Product p in products) {
       if(!_products.contains(p)) _products.add(p);
