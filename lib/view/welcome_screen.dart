@@ -24,7 +24,9 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-  List<bool> isSelected = [false, false, false, false];
+  List<bool> isSelected1 = [false, false, false, false];
+  List<bool> isSelected2 = [false, false, false, false];
+  List<bool> isSelected3 = [false, false, false];
   late bool _isButtonDisabled;
 
   @override
@@ -74,18 +76,18 @@ class _WelcomePageState extends State<WelcomePage> {
                       ],
                       onPressed: (int index) {
                         int count = 0;
-                        isSelected.forEach((bool val) {
+                        isSelected1.forEach((bool val) {
                           if (val) count++;
                         });
 
-                        if (isSelected[index] && count < 1) {
+                        if (isSelected1[index] && count < 1) {
                           _isButtonDisabled = true;
                           return;
                         }
 
                         setState(() {
-                          isSelected[index] = !isSelected[index];
-                          if (count <= 1 && !isSelected[index]) {
+                          isSelected1[index] = !isSelected1[index];
+                          if (count <= 1 && !isSelected1[index]) {
                             _isButtonDisabled = true;
                           } else {
                             _isButtonDisabled = false;
@@ -94,10 +96,103 @@ class _WelcomePageState extends State<WelcomePage> {
                       },
                       renderBorder: false,
                       constraints: BoxConstraints(minWidth: 70, minHeight: 70),
-                      isSelected: isSelected,
+                      isSelected: isSelected1,
                     ),
                   ],
                 )),
+
+                const SizedBox(height: 45),
+
+                Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        ToggleButtons(
+                          color: ThemeChanger.navBarColor,
+                          borderColor: ThemeChanger.navBarColor,
+                          fillColor: ThemeChanger.lightBlue,
+                          borderWidth: 2,
+                          selectedBorderColor: ThemeChanger.navBarColor,
+                          selectedColor: Colors.white,
+                          borderRadius: BorderRadius.circular(4),
+                          children: const <Widget>[
+                            Icon(Icons.dry_cleaning, size: 35),
+                            Icon(Icons.laptop, size: 35),
+                            Icon(Icons.ad_units, size: 35),
+                            Icon(Icons.book, size: 35),
+                          ],
+                          onPressed: (int index) {
+                            int count = 0;
+                            isSelected2.forEach((bool val) {
+                              if (val) count++;
+                            });
+
+                            if (isSelected2[index] && count < 1) {
+                              _isButtonDisabled = true;
+                              return;
+                            }
+
+                            setState(() {
+                              isSelected2[index] = !isSelected2[index];
+                              if (count <= 1 && !isSelected2[index]) {
+                                _isButtonDisabled = true;
+                              } else {
+                                _isButtonDisabled = false;
+                              }
+                            });
+                          },
+                          renderBorder: false,
+                          constraints: BoxConstraints(minWidth: 70, minHeight: 70),
+                          isSelected: isSelected2,
+                        ),
+                      ],
+                    )),
+
+                const SizedBox(height: 45),
+
+                Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        ToggleButtons(
+                          color: ThemeChanger.navBarColor,
+                          borderColor: ThemeChanger.navBarColor,
+                          fillColor: ThemeChanger.lightBlue,
+                          borderWidth: 2,
+                          selectedBorderColor: ThemeChanger.navBarColor,
+                          selectedColor: Colors.white,
+                          borderRadius: BorderRadius.circular(4),
+                          children: const <Widget>[
+                            Icon(Icons.dry_cleaning, size: 35),
+                            Icon(Icons.laptop, size: 35),
+                            Icon(Icons.ad_units, size: 35),
+                          ],
+                          onPressed: (int index) {
+                            int count = 0;
+                            isSelected3.forEach((bool val) {
+                              if (val) count++;
+                            });
+
+                            if (isSelected3[index] && count < 1) {
+                              _isButtonDisabled = true;
+                              return;
+                            }
+
+                            setState(() {
+                              isSelected3[index] = !isSelected3[index];
+                              if (count <= 1 && !isSelected3[index]) {
+                                _isButtonDisabled = true;
+                              } else {
+                                _isButtonDisabled = false;
+                              }
+                            });
+                          },
+                          renderBorder: false,
+                          constraints: BoxConstraints(minWidth: 70, minHeight: 70),
+                          isSelected: isSelected3,
+                        ),
+                      ],
+                    )),
               ]),
             ),
             Row(
