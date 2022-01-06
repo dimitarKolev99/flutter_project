@@ -305,7 +305,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                                               width: 2,
                                               style: BorderStyle.solid),
                                           borderRadius:
-                                          BorderRadius.circular(5)),
+                                          BorderRadius.circular(3)),
                                     )
 
                                 ),

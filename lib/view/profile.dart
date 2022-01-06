@@ -72,9 +72,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         foregroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 45, 45, 1)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(3),
-                              //side: BorderSide(color: Colors.black)
-                            )
+                                side: BorderSide(
+                                    color: ThemeChanger.navBarColor,
+                                    width: 2,
+                                    style: BorderStyle.solid),
+                                borderRadius:
+                                BorderRadius.circular(3)),
                         ),
                         textStyle: MaterialStateProperty.all(TextStyle(
                           fontSize: 21,
@@ -106,10 +109,13 @@ class _ProfilePageState extends State<ProfilePage> {
                         backgroundColor: MaterialStateProperty.all(ThemeChanger.lightBlue),
                         foregroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 45, 45, 1)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(3),
-                              //side: BorderSide(color: Colors.black)
-                            )
+                          RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color: ThemeChanger.navBarColor,
+                                  width: 2,
+                                  style: BorderStyle.solid),
+                              borderRadius:
+                              BorderRadius.circular(3)),
                         ),
                         textStyle: MaterialStateProperty.all(TextStyle(
                           fontSize: 21,
@@ -136,10 +142,13 @@ class _ProfilePageState extends State<ProfilePage> {
                         backgroundColor: MaterialStateProperty.all(ThemeChanger.lightBlue),
                         foregroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 45, 45, 1)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(3),
-                              //side: BorderSide(color: Colors.black)
-                            )
+                          RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color: ThemeChanger.navBarColor,
+                                  width: 2,
+                                  style: BorderStyle.solid),
+                              borderRadius:
+                              BorderRadius.circular(3)),
                         ),
                         textStyle: MaterialStateProperty.all(TextStyle(
                           fontSize: 21,
@@ -169,10 +178,13 @@ class _ProfilePageState extends State<ProfilePage> {
                         backgroundColor: MaterialStateProperty.all(ThemeChanger.lightBlue),
                         foregroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 45, 45, 1)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(3),
-                              //side: BorderSide(color: Colors.black)
-                            )
+                          RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color: ThemeChanger.navBarColor,
+                                  width: 2,
+                                  style: BorderStyle.solid),
+                              borderRadius:
+                              BorderRadius.circular(3)),
                         ),
                         textStyle: MaterialStateProperty.all(TextStyle(
                           fontSize: 21,
@@ -199,10 +211,13 @@ class _ProfilePageState extends State<ProfilePage> {
                         backgroundColor: MaterialStateProperty.all(ThemeChanger.lightBlue),
                         foregroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 45, 45, 1)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(3),
-                              //side: BorderSide(color: Colors.black)
-                            )
+                          RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color: ThemeChanger.navBarColor,
+                                  width: 2,
+                                  style: BorderStyle.solid),
+                              borderRadius:
+                              BorderRadius.circular(3)),
                         ),
                         textStyle: MaterialStateProperty.all(TextStyle(
                           fontSize: 21,
