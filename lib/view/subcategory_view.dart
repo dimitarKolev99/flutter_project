@@ -220,7 +220,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                               .callback.widget.mainCategoryNames[index],
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
-                                            color: ThemeChanger.navBarColor,
+                                            color: ThemeChanger.catTextColor,
                                           ),
                                         ),
                                       ));

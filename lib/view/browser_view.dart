@@ -243,7 +243,7 @@ class _BrowserPageState extends State<BrowserPage> {
                                 Text(
                               chosenCategories.isEmpty? widget.mainCategoryNames[index] : chosenCategories[index],
                               style: TextStyle(
-                                color: chosenCategories.isEmpty? ThemeChanger.navBarColor : ThemeChanger.articlecardbackground,
+                                color: chosenCategories.isEmpty? ThemeChanger.catTextColor : ThemeChanger.textColor,
                                 //fontWeight:  !chosenCategories.isEmpty && index == chosenCategories.length-1?  FontWeight.w600 :FontWeight.normal,
                                 fontWeight:  FontWeight.w400,
                               ),
@@ -262,7 +262,7 @@ class _BrowserPageState extends State<BrowserPage> {
                                       updateBrowserblabla(currentCategory);
                                     }
                                   });},
-                                icon: Icon(Icons.clear, size: 18, color: ThemeChanger.articlecardbackground,) )
+                                icon: Icon(Icons.clear, size: 18, color: ThemeChanger.textColor,) )
                               ],
                             ),
 

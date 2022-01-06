@@ -7,6 +7,7 @@ import 'package:penny_pincher/services/json_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/tab_navigator.dart';
+import 'package:provider/provider.dart';
 
 import '../browser_view.dart';
 
@@ -91,6 +92,8 @@ class _SubcatButtonState extends State<SubcatButton> {
   late Color textColor = widget._isChosen ? ThemeChanger.articlecardbackground : ThemeChanger.catTextColor;
   @override
   Widget build(BuildContext context) {
+
+    ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
 
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
