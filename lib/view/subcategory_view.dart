@@ -57,6 +57,8 @@ class _SubcategoryViewState extends State<SubcategoryView> {
 
   //List<SubcatButton> subCatButtons = [];
 
+
+
   Future<void> listToButtons() async {
     if (subCatButtons.isEmpty) {
       for (int i = 0; i < subCategoriesNames.length; i++) {
@@ -449,7 +451,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
 
                   },
                       style: TextButton.styleFrom(backgroundColor: ThemeChanger.lightBlue),
-                      child: Text("Zeige (10) Produkte",
+                      child: Text("Zeige ${widget.callback.numberOfProducts} Produkte",
                   style: TextStyle(color: Colors.white),)),
                 )
 

@@ -112,6 +112,7 @@ class _SubcatButtonState extends State<SubcatButton> {
                     // TODO: Add CategoryIDs to a Collection ,
                     // TODO: Call Json Function to updayte the resultList and Update Button Text
                     widget.callback.currentCategory = widget.categoryId;
+                    widget.callback.addProductsOfChosenCategory(widget.categoryId);
 
                   }
                   else{
@@ -120,6 +121,7 @@ class _SubcatButtonState extends State<SubcatButton> {
                     widget.callback.removeOneCategory(widget.categoryName);
                     prodCatColor = ThemeChanger.articlecardbackground;
                     textColor = ThemeChanger.catTextColor;
+                    widget.callback.deleteProductsOfChosenCategory(widget.categoryId);
                   }
                 }
                 // Subcategories

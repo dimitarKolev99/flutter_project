@@ -83,7 +83,30 @@ class _BrowserPageState extends State<BrowserPage> {
 
   final _preferenceArticles = PreferencesArticles();
 
-  List<String> chosenCategories = [];
+  // This map is necessary because we need to know the id and the name of the chosen Cats
+  Map<int, String> mapOfChosenCategories = new Map();
+  List<String> chosenCategories = [];// Map has int with the id of the chosen category, and a Li
+//   st of bargains as value
+  Map<int, List<dynamic>> bargainsOfChosenCats = new Map();
+  int numberOfProducts = 0;
+
+  // Whenever a productcategory gets selected this function should add all Products of the category to the Map
+  Future<void> addProductsOfChosenCategory(int categoryId)async {
+    List<dynamic> products = await ProductApi().fetchProduct(categoryId);
+    bargainsOfChosenCats[categoryId] = products;
+    numberOfProducts += products.length;
+    print(numberOfProducts);
+  }
+  // Whenever a productcategory gets unselcted this function should delete all Products of the category to the Map
+  //TODO: Does this wotk with the ?.clear() to delete the products
+  void deleteProductsOfChosenCategory(int categoryID){
+      List? products = bargainsOfChosenCats[categoryID];
+      if(products!=null){
+      numberOfProducts -= products.length;
+      bargainsOfChosenCats[categoryID]?.clear();
+      print(numberOfProducts);
+    }
+  }
 
   String getMainCategoryName(int i){
     return widget.mainCategoryNames[i];
@@ -99,7 +122,7 @@ class _BrowserPageState extends State<BrowserPage> {
     chosenCategories.add(s);
   }
 
-  void removeOneCategory(String s ){
+  void removeOneCategory(String s){
     int index = chosenCategories.indexOf(s);
     //print("removing : ! ${s}");
     chosenCategories.remove(chosenCategories[index]);
@@ -188,6 +211,8 @@ class _BrowserPageState extends State<BrowserPage> {
                       return InkWell(
                           onTap: () {
                             chosenCategories = [];
+                            // reset numberOfProducts
+                            numberOfProducts = 0;
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(

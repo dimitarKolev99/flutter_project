@@ -52,7 +52,7 @@ class ProductApi {
 
           }
         });
-      }
+  }
 
       Future<List<Product>> fetchProduct(int categoryID) async {
         //print("call APi");
