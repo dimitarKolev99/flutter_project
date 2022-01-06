@@ -5,6 +5,7 @@ import 'package:penny_pincher/services/product_controller.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'theme.dart';
@@ -54,6 +55,8 @@ class _ExtendedViewState extends State<ExtendedView> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
+
     double newprice = widget.price / 100;
     int x = 100 - widget.saving;
     double prevpreis = newprice / x * 100;
@@ -86,7 +89,6 @@ class _ExtendedViewState extends State<ExtendedView> {
           // this will make your body scrollable
 
             child: Container(
-
                 alignment: Alignment.topLeft,
                 margin: EdgeInsets.symmetric(horizontal: 2, vertical: 5),
                 width: displayWidth,
@@ -114,7 +116,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                       Container(
                         //color: Colors.yellow,
                         alignment: Alignment.centerLeft,
-                        margin: EdgeInsets.only(left: blockSizeHorizontal * 2),
+                        margin: EdgeInsets.only(left: blockSizeHorizontal * 3, top: blockSizeVertical * 1),
                         child: Text(
                             widget.title,
                             textAlign: TextAlign.left,
@@ -122,7 +124,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                               textStyle: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: safeBlockHorizontal * 6,
-                                color: Colors.black,
+                                color: ThemeChanger.reversetextColor,
                               ),
                             )
                         ),
@@ -140,7 +142,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                                 //color: ProductApi.darkBlue,
                                   borderRadius: BorderRadius.only(
                                       topRight: Radius.circular(5))),
-                              margin: EdgeInsets.only(left: blockSizeHorizontal * 2),
+                              margin: EdgeInsets.only(left: blockSizeHorizontal * 3),
                               child: Text(
                                 newprice.toStringAsFixed(2) + " €",
                                 style: TextStyle(
@@ -249,13 +251,14 @@ class _ExtendedViewState extends State<ExtendedView> {
                       Container(
                         //color: Colors.purple,
                         // description
+                        //alignment: Alignment.center,
                         margin:
-                        EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        EdgeInsets.symmetric(horizontal: blockSizeHorizontal * 2, vertical: blockSizeVertical* 2),
                         //width: displayWidth,
                         //height: displayHeight / 4,
                         child: Text(
                           widget.description,
-                          textAlign: TextAlign.left,
+                          textAlign: TextAlign.center,
                           style: GoogleFonts.roboto(
                           textStyle: TextStyle(
                           fontWeight: FontWeight.bold,
