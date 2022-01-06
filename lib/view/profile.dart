@@ -35,14 +35,14 @@ class _ProfilePageState extends State<ProfilePage> {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
 
     MediaQueryData _mediaQueryData = MediaQuery.of(context);
-    ;
+
     double displayWidth = _mediaQueryData.size.width;
     double displayHeight = _mediaQueryData.size.height;
     double blockSizeHorizontal = displayWidth / 100; // bildschirmbreite in 1%
     double blockSizeVertical = displayHeight / 100; // bildschirmhöhe in 1%
     return Scaffold(
       //ScreenUtil.init(context, height:896, width:414, allowFontScaling: true);
-      appBar: const ProfileAppBar(),
+      appBar: ProfileAppBar(),
       body: Column(
         children: <Widget>[
           SizedBox(height: blockSizeVertical * 5),
@@ -54,7 +54,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 50,
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(33),
+                    borderRadius: BorderRadius.circular(3),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.6),
@@ -83,7 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         foregroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 45, 45, 1)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(33),
+                              borderRadius: BorderRadius.circular(3),
                               //side: BorderSide(color: Colors.black)
                             )
                         ),
@@ -98,7 +98,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 50,
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(33),
+                    borderRadius: BorderRadius.circular(3),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.6),
@@ -126,7 +126,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         foregroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 45, 45, 1)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(33),
+                              borderRadius: BorderRadius.circular(3),
                               //side: BorderSide(color: Colors.black)
                             )
                         ),
@@ -141,7 +141,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 50,
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(33),
+                    borderRadius: BorderRadius.circular(3),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.6),
@@ -180,7 +180,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 50,
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(33),
+                    borderRadius: BorderRadius.circular(3),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.6),
@@ -207,7 +207,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         foregroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 45, 45, 1)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(33),
+                              borderRadius: BorderRadius.circular(3),
                               //side: BorderSide(color: Colors.black)
                             )
                         ),
@@ -222,7 +222,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 50,
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(33),
+                    borderRadius: BorderRadius.circular(3),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.6),
@@ -246,7 +246,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         foregroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 45, 45, 1)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(33),
+                              borderRadius: BorderRadius.circular(3),
                               //side: BorderSide(color: Colors.black)
                             )
                         ),
