@@ -87,12 +87,12 @@ class _BrowserPageState extends State<BrowserPage> {
   Map<String, int> mapOfChosenCategories = new Map();
   List<String> chosenCategories = [];// Map has int with the id of the chosen category, and a Li
 //   st of bargains as value
-  Map<int, List<dynamic>> bargainsOfChosenCats = new Map();
+  Map<int, Iterable<Product>> bargainsOfChosenCats = new Map();
   int numberOfProducts = 0;
 
   // Whenever a productcategory gets selected this function should add all Products of the category to the Map
   Future<void> addProductsOfChosenCategory(int categoryId)async {
-    List<dynamic> products = await ProductApi().fetchProduct(categoryId);
+    Iterable<Product> products = await ProductApi().fetchProduct(categoryId);
     bargainsOfChosenCats[categoryId] = products;
     numberOfProducts += products.length;
     print(numberOfProducts);
@@ -100,10 +100,10 @@ class _BrowserPageState extends State<BrowserPage> {
   // Whenever a productcategory gets unselcted this function should delete all Products of the category to the Map
   //TODO: Does this wotk with the ?.clear() to delete the products
   void deleteProductsOfChosenCategory(int categoryID){
-      List? products = bargainsOfChosenCats[categoryID];
+      Iterable<Product>? products = bargainsOfChosenCats[categoryID];
       if(products!=null){
       numberOfProducts -= products.length;
-      bargainsOfChosenCats[categoryID]?.clear();
+      bargainsOfChosenCats.remove(categoryID);
       print(numberOfProducts);
     }
   }
@@ -155,7 +155,6 @@ class _BrowserPageState extends State<BrowserPage> {
   }
 
   Future<void> getProducts(int categoryID) async {
-    _product = await ProductApi().fetchProduct(categoryID);
     List<Product> favorites = await _preferenceArticles.getAllFavorites();
     for (var i in favorites) {
       if (!_favoriteIds.contains(i.productId)) {
@@ -168,7 +167,10 @@ class _BrowserPageState extends State<BrowserPage> {
         _isLoading = false;
       });
     }
-    _products.addAll(_product);
+    // iterate map for each value of map add All
+    bargainsOfChosenCats.forEach((key, value) {
+      _products.addAll(value);
+    });
     ProductController.addProducts(_products);
   }
 
