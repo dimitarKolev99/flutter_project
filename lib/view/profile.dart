@@ -45,7 +45,7 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: ProfileAppBar(),
       body: Column(
         children: <Widget>[
-          SizedBox(height: blockSizeVertical * 5),
+          SizedBox(height: blockSizeVertical * 20),
           Expanded(
             child: ListView(
               //padding: EdgeInsets.only(top: 50),
@@ -55,17 +55,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(3),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.6),
-                        offset: Offset(
-                          0.0,
-                          10.0,
-                        ),
-                        blurRadius: 20.0,
-                        spreadRadius: -3.0,
-                      ),
-                    ],
                     color: ThemeChanger.textColor,
                   ),
                   child:
@@ -79,7 +68,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       }
                     },
                     style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(ThemeChanger.textColor),
+                        backgroundColor: MaterialStateProperty.all(ThemeChanger.lightBlue),
                         foregroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 45, 45, 1)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
@@ -91,7 +80,10 @@ class _ProfilePageState extends State<ProfilePage> {
                           fontSize: 21,
                           fontWeight: FontWeight.w500,
                         ))),
-                    child: Text("Dark/Light Mode"),
+                    child: Text("Dark/Light Mode",style: TextStyle(
+                      color: ThemeChanger.textColor,
+                    ),
+                    ),
                   ),
                 ),
                 Container(
@@ -99,17 +91,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(3),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.6),
-                        offset: Offset(
-                          0.0,
-                          10.0,
-                        ),
-                        blurRadius: 20.0,
-                        spreadRadius: -3.0,
-                      ),
-                    ],
                     color: ThemeChanger.textColor,
                   ),
                   child:
@@ -122,7 +103,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           5);
                     },
                     style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(ThemeChanger.textColor),
+                        backgroundColor: MaterialStateProperty.all(ThemeChanger.lightBlue),
                         foregroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 45, 45, 1)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
@@ -134,7 +115,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           fontSize: 21,
                           fontWeight: FontWeight.w500,
                         ))),
-                    child: Text("Notification"),
+                    child: Text("Notification",style: TextStyle(
+                      color: ThemeChanger.textColor,
+                    ),),
                   ),
                 ),
                 Container(
@@ -142,17 +125,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(3),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.6),
-                        offset: Offset(
-                          0.0,
-                          10.0,
-                        ),
-                        blurRadius: 20.0,
-                        spreadRadius: -3.0,
-                      ),
-                    ],
                     color: ThemeChanger.textColor,
                   ),
                   child:
@@ -161,11 +133,11 @@ class _ProfilePageState extends State<ProfilePage> {
 
                     },
                     style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(ThemeChanger.textColor),
+                        backgroundColor: MaterialStateProperty.all(ThemeChanger.lightBlue),
                         foregroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 45, 45, 1)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(33),
+                              borderRadius: BorderRadius.circular(3),
                               //side: BorderSide(color: Colors.black)
                             )
                         ),
@@ -173,7 +145,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           fontSize: 21,
                           fontWeight: FontWeight.w500,
                         ))),
-                    child: Text("Suchverlauf Löschen"),
+                    child: Text("Suchverlauf Löschen",style: TextStyle(
+                      color: ThemeChanger.textColor,
+                    ),),
                   ),
                 ),
                 Container(
@@ -181,17 +155,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(3),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.6),
-                        offset: Offset(
-                          0.0,
-                          10.0,
-                        ),
-                        blurRadius: 20.0,
-                        spreadRadius: -3.0,
-                      ),
-                    ],
                     color: ThemeChanger.textColor,
                   ),
                   child:
@@ -203,7 +166,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       );
                     },
                     style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(ThemeChanger.textColor),
+                        backgroundColor: MaterialStateProperty.all(ThemeChanger.lightBlue),
                         foregroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 45, 45, 1)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
@@ -215,7 +178,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           fontSize: 21,
                           fontWeight: FontWeight.w500,
                         ))),
-                    child: Text("About"),
+                    child: Text("About",style: TextStyle(
+                      color: ThemeChanger.textColor,
+                    ),),
                   ),
                 ),
                 Container(
@@ -223,17 +188,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(3),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.6),
-                        offset: Offset(
-                          0.0,
-                          10.0,
-                        ),
-                        blurRadius: 20.0,
-                        spreadRadius: -3.0,
-                      ),
-                    ],
                     color: ThemeChanger.textColor,
                   ),
                   child:
@@ -242,7 +196,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
                     },
                     style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(ThemeChanger.textColor),
+                        backgroundColor: MaterialStateProperty.all(ThemeChanger.lightBlue),
                         foregroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 45, 45, 1)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
@@ -254,7 +208,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           fontSize: 21,
                           fontWeight: FontWeight.w500,
                         ))),
-                    child: Text("Help"),
+                    child: Text("Help",style: TextStyle(
+                      color: ThemeChanger.textColor,
+                    ),),
                   ),
                 )
               ],
