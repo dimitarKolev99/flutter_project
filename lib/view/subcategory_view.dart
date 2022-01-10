@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:core';
+import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:penny_pincher/services/json_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/view/theme.dart';
+import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
 import 'package:penny_pincher/view/widget/subcat_button.dart';
 import 'package:provider/provider.dart';
 
@@ -31,6 +33,9 @@ class SubcategoryView extends StatefulWidget {
 
 class _SubcategoryViewState extends State<SubcategoryView> {
   RangeValues _currentSliderValuesPrice = const RangeValues(20, 70);
+  //values for the left and right output of the slider
+  var startValue = 400;
+  var endValue = 4900;
 
   // Discount options combined with a boolean for when chosen
   var discounts = [
@@ -55,6 +60,8 @@ class _SubcategoryViewState extends State<SubcategoryView> {
   ObservableList<SubcatButton> subCatButtons = new ObservableList();
 
   //List<SubcatButton> subCatButtons = [];
+
+
 
   Future<void> listToButtons() async {
     if (subCatButtons.isEmpty) {
@@ -129,35 +136,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
     ScrollController _scrollController = ScrollController();
     return Scaffold(
-        appBar: AppBar(
-            backgroundColor: ThemeChanger.navBarColor,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 3),
-                  child: Text(
-                    'Categories',
-                    style: TextStyle(
-                      // Shaddow is used to get Distance to the underline -> TextColor itself is transparent
-                      shadows: [
-                        Shadow(
-                            color: Color.fromRGBO(240, 240, 240, 1),
-                            offset: Offset(0, -6))
-                      ],
-                      //fontFamily: '....',
-                      fontSize: 21,
-                      letterSpacing: 3,
-                      color: Colors.transparent,
-                      fontWeight: FontWeight.w900,
-                      decoration: TextDecoration.underline,
-                      decorationColor: ThemeChanger.highlightedColor,
-                      decorationThickness: 4,
-                    ),
-                  ),
-                ),
-              ],
-            )),
+        appBar: CategorieViewAppBar(),
         body:
             Stack(
               children: [
@@ -174,11 +153,14 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                 physics: ScrollPhysics(),
                                 scrollDirection: Axis.horizontal,
                                 shrinkWrap: true,
-                                itemCount: 10,
+                                itemCount: 11,
                                 itemBuilder: (context, index) {
                                   return InkWell(
                                       onTap: () {
                                         setState(() {
+                                          widget.callback.numberOfProducts = 0;
+                                          Map<String, int> mapReplacement = new Map();
+                                          widget.callback.mapOfChosenCategories = mapReplacement;
                                           widget.categoryId = widget
                                               .callback.widget.mainCategoryIds[index];
                                           print(
@@ -213,7 +195,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                               .callback.widget.mainCategoryNames[index],
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
-                                            color: ThemeChanger.navBarColor,
+                                            color: ThemeChanger.catTextColor,
                                           ),
                                         ),
                                       ));
@@ -231,21 +213,25 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                               children: [
                                 Text("Preisklasse",
                                     style: TextStyle(
-                                      color: ThemeChanger.navBarColor,
+                                      color: ThemeChanger.catTextColor,
                                       //fontWeight: FontWeight.bold,
                                       fontSize: safeBlockHorizontal * 5,
                                     )),
-                                IconButton(
-                                  icon: Icon(_hide
-                                      ? Icons.arrow_drop_down
-                                      : Icons.arrow_drop_up),
-                                  tooltip: "Hide",
-                                  onPressed: () {
-                                    setState(() {
-                                      _hide = !_hide;
-                                    });
-                                  },
-                                ),
+
+                                    // Collapse-Unfold Icon
+                                    IconButton(
+                                      icon: Icon(_hide
+                                          ? Icons.arrow_drop_down
+                                          : Icons.arrow_drop_up,
+                                      ),
+                                      iconSize: blockSizeHorizontal * 10,
+                                      tooltip: "Einklappen/Ausklappen",
+                                      onPressed: () {
+                                        setState(() {
+                                          _hide = !_hide;
+                                        });
+                                      },
+                                    ),
                               ]),
 
                           // PriceSlider
@@ -254,15 +240,18 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                               child: Column(
                                 children: [
                                   RangeSlider(
-                                    activeColor: ThemeChanger.navBarColor,
-                                    //inactiveColor: ProductApi.orange,
+                                    inactiveColor: ThemeChanger.lightBlue,
+                                    activeColor: ThemeChanger.catTextColor,
                                     values: _currentSliderValuesPrice,
                                     min: 0,
-                                    max: 1000,
+                                    max: 100,
                                     divisions: 100,
                                     onChanged: (RangeValues values) {
                                       setState(() {
                                         _currentSliderValuesPrice = values;
+                                        // values change exponentially and not linear.
+                                        startValue = pow(_currentSliderValuesPrice.start, 2).round();
+                                        endValue = pow(_currentSliderValuesPrice.end, 2).round();
                                       });
                                     },
                                   ),
@@ -287,8 +276,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                               blockSizeHorizontal * 3),
                                         ),
                                         child: Text(
-                                          _currentSliderValuesPrice.start
-                                              .round()
+                                          startValue
                                               .toString() +
                                               " €",
                                           style: TextStyle(
@@ -315,8 +303,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                               blockSizeHorizontal * 3),
                                         ),
                                         child: Text(
-                                          _currentSliderValuesPrice.end
-                                              .round()
+                                          endValue
                                               .toString() +
                                               " €",
                                           style: TextStyle(
@@ -335,7 +322,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                     children: [
                                       Text("Rabatte",
                                           style: TextStyle(
-                                            color: ThemeChanger.navBarColor,
+                                            color: ThemeChanger.catTextColor,
                                             //fontWeight: FontWeight.bold,
                                             fontSize: safeBlockHorizontal * 5,
                                           )),
@@ -353,7 +340,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                         List.generate(discounts.length, (index) {
                                           return Container(
                                             alignment: Alignment.center,
-                                            width: blockSizeHorizontal * 12,
+                                            width: blockSizeHorizontal * 13,
                                             decoration: BoxDecoration(
                                               shape: BoxShape.circle,
                                               // When a discount circle is clicked
@@ -377,10 +364,10 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                                 });
                                               },
                                               child: Text(
-                                                discounts[index][0].toString() + "%",
+                                                ">" + discounts[index][0].toString() + "%",
                                                 style: TextStyle(
                                                   color: ThemeChanger
-                                                      .articlecardbackground,
+                                                      .textColor,
                                                   fontSize: safeBlockHorizontal * 3.9,
                                                 ),
                                               ),
@@ -403,14 +390,14 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                         children: [
                           Text("Kategorien",
                               style: TextStyle(
-                                color: ThemeChanger.navBarColor,
+                                color: ThemeChanger.catTextColor,
                                 //fontWeight: FontWeight.bold,
                                 fontSize: safeBlockHorizontal * 5,
                               )),
                           Text(
                             "31754 Produkte",
                             style: TextStyle(
-                                color: ThemeChanger.navBarColor,
+                                color: ThemeChanger.catTextColor,
                                 //fontWeight: FontWeight.bold,
                                 fontSize: safeBlockHorizontal * 3),
                           ),
@@ -448,7 +435,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
 
                   },
                       style: TextButton.styleFrom(backgroundColor: ThemeChanger.lightBlue),
-                      child: Text("Zeige (10) Produkte",
+                      child: Text("Zeige ${widget.callback.numberOfProducts} Produkte",
                   style: TextStyle(color: Colors.white),)),
                 )
 

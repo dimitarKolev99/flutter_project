@@ -83,7 +83,30 @@ class _BrowserPageState extends State<BrowserPage> {
 
   final _preferenceArticles = PreferencesArticles();
 
-  List<String> chosenCategories = [];
+  // This map is necessary because we need to know the id and the name of the chosen Cats
+  Map<String, int> mapOfChosenCategories = new Map();
+  List<String> chosenCategories = [];// Map has int with the id of the chosen category, and a Li
+//   st of bargains as value
+  Map<int, Iterable<Product>> bargainsOfChosenCats = new Map();
+  int numberOfProducts = 0;
+
+  // Whenever a productcategory gets selected this function should add all Products of the category to the Map
+  Future<void> addProductsOfChosenCategory(int categoryId)async {
+    Iterable<Product> products = await ProductApi().fetchProduct(categoryId);
+    bargainsOfChosenCats[categoryId] = products;
+    numberOfProducts += products.length;
+    print(numberOfProducts);
+  }
+  // Whenever a productcategory gets unselcted this function should delete all Products of the category to the Map
+  //TODO: Does this wotk with the ?.clear() to delete the products
+  void deleteProductsOfChosenCategory(int categoryID){
+      Iterable<Product>? products = bargainsOfChosenCats[categoryID];
+      if(products!=null){
+      numberOfProducts -= products.length;
+      bargainsOfChosenCats.remove(categoryID);
+      print(numberOfProducts);
+    }
+  }
 
   String getMainCategoryName(int i){
     return widget.mainCategoryNames[i];
@@ -93,25 +116,25 @@ class _BrowserPageState extends State<BrowserPage> {
     return widget.mainCategoryIds[i];
   }
 
-  void addCategory(String s){
+  void addCategory(String s, int id){
     //chosenCategories.add(s);
     //TODO: change to propper working category List, this is juts to show only the last cat
+    mapOfChosenCategories[s] = id;
     chosenCategories.add(s);
+    //print(chosenCategories);
   }
 
-  void removeOneCategory(String s ){
+  void removeOneCategory(String s){
     int index = chosenCategories.indexOf(s);
-    //print("removing : ! ${s}");
     chosenCategories.remove(chosenCategories[index]);
-  }
-
-  void deleteCategory(String s){
-    int index = chosenCategories.indexOf(s);
-    for(int i = chosenCategories.length-1; i >= index ; i--){
-      chosenCategories.remove(chosenCategories[i]);
+    int? id = mapOfChosenCategories[s];
+    if(id != null) {
+      //print("works");
+      deleteProductsOfChosenCategory(id);
     }
+    mapOfChosenCategories.remove(s);
+    //print(chosenCategories);
   }
-
 
   @override
   void initState() {
@@ -132,7 +155,6 @@ class _BrowserPageState extends State<BrowserPage> {
   }
 
   Future<void> getProducts(int categoryID) async {
-    _product = await ProductApi().fetchProduct(categoryID);
     List<Product> favorites = await _preferenceArticles.getAllFavorites();
     for (var i in favorites) {
       if (!_favoriteIds.contains(i.productId)) {
@@ -145,7 +167,10 @@ class _BrowserPageState extends State<BrowserPage> {
         _isLoading = false;
       });
     }
-    _products.addAll(_product);
+    // iterate map for each value of map add All
+    bargainsOfChosenCats.forEach((key, value) {
+      _products.addAll(value);
+    });
     ProductController.addProducts(_products);
   }
 
@@ -175,7 +200,7 @@ class _BrowserPageState extends State<BrowserPage> {
               alignment: Alignment.topCenter,
               child: Container(
                 color: ThemeChanger.lightBlue,
-                height: 35,
+                height: blockSizeVertical * 5.5,
                 width: displayWidth,
                 //TODO:ListView Bulider to show the route of the categories, works only for choosing 1 Prod. Cat.
 
@@ -187,20 +212,27 @@ class _BrowserPageState extends State<BrowserPage> {
                     itemBuilder: (context, index) {
                       return InkWell(
                           onTap: () {
-                            chosenCategories = [];
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SubcategoryView(
-                                    categoryName:
-                                        widget.mainCategoryNames[index],
-                                    categoryId: widget.mainCategoryIds[index],
-                                    stream: widget.stream,
-                                    updateStream: widget.updateStream,
-                                    callback: this,
-                                  ),
-                                ));
-                          },
+                            if(chosenCategories.isEmpty) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        SubcategoryView(
+                                          categoryName:
+                                          widget.mainCategoryNames[index],
+                                          categoryId: widget
+                                              .mainCategoryIds[index],
+                                          stream: widget.stream,
+                                          updateStream: widget.updateStream,
+                                          callback: this,
+                                        ),
+                                  ));
+                              //chosenCategories = []; // reset numberOfProducts
+                              numberOfProducts = 0;
+                            }
+
+
+                            },
                           child:
                               Container(
                               decoration: BoxDecoration(
@@ -216,8 +248,7 @@ class _BrowserPageState extends State<BrowserPage> {
                                 Text(
                               chosenCategories.isEmpty? widget.mainCategoryNames[index] : chosenCategories[index],
                               style: TextStyle(
-                                color: chosenCategories.isEmpty? ThemeChanger.navBarColor : ThemeChanger.articlecardbackground,
-                                //fontWeight:  !chosenCategories.isEmpty && index == chosenCategories.length-1?  FontWeight.w600 :FontWeight.normal,
+                                color: chosenCategories.isEmpty? ThemeChanger.catTextColor : ThemeChanger.textColor,
                                 fontWeight:  FontWeight.w400,
                               ),
                               ),
@@ -235,21 +266,15 @@ class _BrowserPageState extends State<BrowserPage> {
                                       updateBrowserblabla(currentCategory);
                                     }
                                   });},
-                                icon: Icon(Icons.clear, size: 18, color: ThemeChanger.articlecardbackground,) )
+                                icon: Icon(Icons.clear, size: 18, color: ThemeChanger.textColor,) )
                               ],
                             ),
-
-
-
-                          ));
+                           ));
 
 
                     }),
               ),
             ),
-
-
-
 
 
             // This Grid View is supposed to show the main categories on top of the screen in the browser view
@@ -262,12 +287,15 @@ class _BrowserPageState extends State<BrowserPage> {
                 children: List.generate(_products.length, (index) {
                   return InkWell(
                       onTap: () {
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => ExtendedView(_products[index], this, streamController.stream)),
                         );
                         streamController.add(true);
+
+
                       },
                       child: BrowserArticleCard(_products[index], this));
                 }),

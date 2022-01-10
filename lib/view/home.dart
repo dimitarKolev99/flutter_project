@@ -81,47 +81,44 @@ class _HomePageState extends State<HomePage> {
   List<int> productCategoryIDs = [];
  // bool check = false;
 
+
   //when map is empty then json funtions is called
   Future<void> getSubCategories() async{
     if(subCategoriesMap.isEmpty) {
-      print("getSubCategories is empty");
       json.getJson().then((List<dynamic> result) {
         List<dynamic> resultList = [];
         resultList = result;
         subCategoriesMap = json.getMapOfSubOrProductCategories(categoryId, resultList);
-        print("subCategoriesMap in getSubCategories $subCategoriesMap");
       });
     }
     if(subCategoriesMap.isNotEmpty) {
-      print("getSubCategories is not empty");
       subCategoriesMap.clear();
       json.getJson().then((List<dynamic> result) {
         List<dynamic> resultList = [];
         resultList = result;
         subCategoriesMap = json.getMapOfSubOrProductCategories(categoryId, resultList);
-        print("subCategoriesMap in getSubCategories $subCategoriesMap");
       });
     }
   }
   //seperate the sub map into 2 lists 1 with names and 1 with ids
   Future<void> mapToLists() async {
     if(subCategoriesNames.isEmpty) {
-      print("mapToLists Is emtpy");
+     // print("mapToLists Is emtpy");
       subCategoriesMap.forEach((name, id) {
         subCategoriesNames.add(name);
         subCategoriesIds.add(id);
-        print("added $name");
+      //  print("added $name");
       });
     }
     if (subCategoriesNames.isNotEmpty) {
-      print("mapToLists Its Not Empty");
+    //  print("mapToLists Its Not Empty");
       subCategoriesNames.clear();
       subCategoriesIds.clear();
         subCategoriesMap.forEach((name, id) {
         subCategoriesNames.add(name);
         subCategoriesIds.add(id);
-        print("added $name");
-        print("added $id");
+      //  print("added $name");
+     //   print("added $id");
       });
     }
   }
@@ -149,6 +146,8 @@ class _HomePageState extends State<HomePage> {
   final _jsonFunctions = JsonFunctions();
   var index = 0;
   var randomCategory = 0;
+
+  final List<int> _selectedItems = [];
 
   _onUpdateScroll() {
     if (this.mounted) {
@@ -190,29 +189,6 @@ class _HomePageState extends State<HomePage> {
     ProductController.addProducts(_products);
   }
 
-  /*
-  void initListOfIDs() {
-    _jsonFunctions.getListOfProdCatIDs().then((value) => timerFunction(value));
-  }
-
-   */
-  
-
-
-  timerFunctionn(List<int> ids) {
-    // every 2 seconds get a random category id, call the api with it, load the product and animate it
-    _timer = Timer.periodic(const Duration(seconds: 2), (Timer timer) {
-      randomCategory = ids[0];
-      getProducts(randomCategory);
-      if (_scrollController.hasClients && !isScrolling) {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          curve: Curves.easeOut,
-          duration: const Duration(milliseconds: 300),
-        );
-      }
-    });
-  }
 
   timerFunction(List<int> ids) {
     // every 2 seconds get a random category id, call the api with it, load the product and animate it
@@ -315,9 +291,11 @@ class _HomePageState extends State<HomePage> {
               alignment: Alignment.topCenter,
               child: Container(
                 color: ThemeChanger.lightBlue,
-                height: 40,
+                height: blockSizeVertical * 5.5,
                 width: displayWidth,
-                child: ListView.builder(
+
+                child:
+                ListView.builder(
                     physics: ScrollPhysics(),
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
@@ -327,7 +305,19 @@ class _HomePageState extends State<HomePage> {
                           onTap: () async {
                             mainCategories[index];
                             categoryId = mainCategoryIds[index];
-                            print("categoryid = ${categoryId}");
+                          //  print("categoryid = ${categoryId}");
+
+                            if(!_selectedItems.contains(mainCategoryIds[index])) {
+                              setState(() {
+                                _selectedItems.add(categoryId);
+                              });
+                            } else {
+                              setState(() {
+                                _selectedItems.removeWhere((element) => element == categoryId);
+                              });
+                            }
+
+
                             await getSubCategories();
                             await mapToLists();
 
@@ -336,28 +326,28 @@ class _HomePageState extends State<HomePage> {
                                   .then((value) {
                                     timerFunction(value);
                                     //_jsonFunctions.count = 1;
-                                print("AAAAAA $_jsonFunctions.count");
+                               // print("AAAAAA $_jsonFunctions.count");
                                   });
                             });
 
-                            print("subCategoryMAP = ${subCategoriesMap}");
-                            print("subCategoryID = ${subCategoriesIds}");
+                            //print("subCategoryMAP = ${subCategoriesMap}");
+                            //print("subCategoryID = ${subCategoriesIds}");
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                              color: ThemeChanger.articlecardbackground,
+                              color: (_selectedItems.contains(mainCategoryIds[index])) ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground,       //_selectedItem != null && _selectedItem == index ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground,
                               borderRadius: BorderRadius.circular(2),
                             ),
                             alignment: Alignment.centerRight,
                             margin: EdgeInsets.all(4),
                             //padding: EdgeInsets.all(4),
                             padding: EdgeInsets.symmetric(horizontal: 6),
-                            height: 40,
+                            //height: blockSizeVertical * 20,
                             child: Text(
                               mainCategoryNames[index],
                               style: TextStyle(
-                                color: ThemeChanger.reversetextColor,
-                                fontWeight: FontWeight.bold,
+                                color: ThemeChanger.catTextColor,
+                                fontWeight: FontWeight.w400,
                               ),
                             ),
                           ));

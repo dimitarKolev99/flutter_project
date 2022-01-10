@@ -171,6 +171,7 @@ class ArticleSearch extends SearchDelegate<String> {
                     MaterialPageRoute(
                         builder: (context) => ExtendedView(_products[index], callback, streamController.stream)),
                   );
+                  streamController.add(true);
                 },
                 child: ArticleCard(_products[index], callback));
           });
@@ -187,6 +188,7 @@ class ArticleSearch extends SearchDelegate<String> {
                     MaterialPageRoute(
                         builder: (context) => ExtendedView(_products[index], callback ,streamController.stream)),
                   );
+                  streamController.add(true);
                 },
                 child: BrowserArticleCard(_products[index], callback));
           }),
