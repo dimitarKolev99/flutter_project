@@ -36,6 +36,8 @@ class _SubcategoryViewState extends State<SubcategoryView> {
   var startValue = 400;
   var endValue = 4900;
   int saving = 0;
+  int minPrice = 0;
+  int maxPrice = 0;
 
   // Discount options combined with a boolean for when chosen
   var discounts = [
@@ -277,6 +279,8 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                         // values change exponentially and not linear.
                                         startValue = pow(_currentSliderValuesPrice.start, 2).round();
                                         endValue = pow(_currentSliderValuesPrice.end, 2).round();
+                                        print("$startValue, $endValue" );
+                                        widget.callback.setPriceRange(startValue, endValue);
                                       });
                                     },
                                   ),

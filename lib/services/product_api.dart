@@ -101,7 +101,7 @@ class ProductApi {
         }).toList();
       }
 
-      Future<List<Product>> getFilterProducts(int categoryID, int saving) async {
+      Future<List<Product>> getFilterProducts(int categoryID, int saving, int minPrice, int maxPrice) async {
        // print("call APi");
 
         final response = await rootBundle.loadString('lib/resources/cat_tree1.json');
@@ -128,8 +128,11 @@ class ProductApi {
         return bargains.map((data) => Product.fromJson(data)).where((bargains){
         final productPrice = bargains.price;
         final productSaving = bargains.saving;
-        
-        return productSaving >= saving;
+
+        print("Boy-------------------------$productPrice, $minPrice, $maxPrice, $saving");
+
+        return productSaving >= saving && productPrice >= minPrice && productPrice <= maxPrice;
+        //return productSaving >= saving;
         }).toList();
       }
 }

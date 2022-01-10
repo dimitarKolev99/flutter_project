@@ -79,6 +79,8 @@ class _BrowserPageState extends State<BrowserPage> {
   var count = 0;
   Timer? _timer;
   int saving = 0;
+  int maxPrice = 0;
+  int minPrice = 0;
 
   final _preferenceArticles = PreferencesArticles();
 
@@ -91,7 +93,7 @@ class _BrowserPageState extends State<BrowserPage> {
 
   // Whenever a productcategory gets selected this function should add all Products of the category to the Map
   Future<void> addProductsOfChosenCategory(int categoryId)async {
-    Iterable<Product> products = await ProductApi().getFilterProducts(categoryId, saving);
+    Iterable<Product> products = await ProductApi().getFilterProducts(categoryId, saving, minPrice, maxPrice);
     bargainsOfChosenCats[categoryId] = products;
     numberOfProducts += products.length;
     print(numberOfProducts);
@@ -311,5 +313,11 @@ class _BrowserPageState extends State<BrowserPage> {
 
   void setSaving(int saving){
     this.saving = saving;
+  }
+
+  void setPriceRange(int minPrice, int maxPrice){
+    print("hallo-------------------------------$minPrice, $maxPrice");
+    this.minPrice = minPrice;
+    this.maxPrice = maxPrice;
   }
 }
