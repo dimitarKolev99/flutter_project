@@ -303,35 +303,7 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (context, index) {
                       return InkWell(
                           onTap: () async {
-                            mainCategories[index];
-                            categoryId = mainCategoryIds[index];
-                          //  print("categoryid = ${categoryId}");
-
-                            if(!_selectedItems.contains(mainCategoryIds[index])) {
-                              setState(() {
-                                _selectedItems.add(categoryId);
-                              });
-                            } else {
-                              setState(() {
-                                _selectedItems.removeWhere((element) => element == categoryId);
-                              });
-                            }
-
-
-                            await getSubCategories();
-                            await mapToLists();
-
-                            setState(() {
-                              _jsonFunctions.getListOfProdCatIDs(mainCategoryIds.indexOf(categoryId))
-                                  .then((value) {
-                                    timerFunction(value);
-                                    //_jsonFunctions.count = 1;
-                               // print("AAAAAA $_jsonFunctions.count");
-                                  });
-                            });
-
-                            //print("subCategoryMAP = ${subCategoriesMap}");
-                            //print("subCategoryID = ${subCategoriesIds}");
+                            selectCategory(index);
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -391,6 +363,38 @@ class _HomePageState extends State<HomePage> {
 
       );
     }
+  }
+
+  Future<void> selectCategory(index) async {
+    mainCategories[index];
+    categoryId = mainCategoryIds[index];
+    //  print("categoryid = ${categoryId}");
+
+    if(!_selectedItems.contains(mainCategoryIds[index])) {
+      setState(() {
+        _selectedItems.add(categoryId);
+      });
+    } else {
+      setState(() {
+        _selectedItems.removeWhere((element) => element == categoryId);
+      });
+    }
+
+
+    await getSubCategories();
+    await mapToLists();
+
+    setState(() {
+      _jsonFunctions.getListOfProdCatIDs(mainCategoryIds.indexOf(categoryId))
+          .then((value) {
+        timerFunction(value);
+        //_jsonFunctions.count = 1;
+        // print("AAAAAA $_jsonFunctions.count");
+      });
+    });
+
+    //print("subCategoryMAP = ${subCategoriesMap}");
+    //print("subCategoryID = ${subCategoriesIds}");
   }
 
   void closeWelcomeScreen() {

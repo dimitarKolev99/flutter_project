@@ -44,6 +44,7 @@ dependencies:
   mobx: ^2.0.5
   timezone: ^0.8.0
   flutter_local_notifications: ^9.1.5
+  material_design_icons_flutter: ^5.0.6595
 
 
 dev_dependencies:
