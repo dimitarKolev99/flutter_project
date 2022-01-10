@@ -340,8 +340,8 @@ class _HomePageState extends State<HomePage> {
                             ),
                             alignment: Alignment.centerRight,
                             margin: EdgeInsets.all(4),
-                            //padding: EdgeInsets.all(4),
-                            padding: EdgeInsets.symmetric(horizontal: 6),
+                            padding: EdgeInsets.all(4),
+                            //padding: EdgeInsets.symmetric(horizontal: 6),
                             //height: blockSizeVertical * 20,
                             child: Text(
                               mainCategoryNames[index],
