@@ -97,6 +97,7 @@ class ArticleCard extends StatelessWidget {
                     //width: blockSizeHorizontal * 50,//displayWidth / 3 - 30,
                     //height: blockSizeHorizontal * 50,//displayWidth / 3 - 30,
                     fit: BoxFit.contain,
+                    width: blockSizeHorizontal * 30,
                   ),
                 ),
               ),
