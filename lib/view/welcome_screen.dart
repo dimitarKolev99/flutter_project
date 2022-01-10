@@ -223,6 +223,21 @@ class _WelcomePageState extends State<WelcomePage> {
                           onPressed: _isButtonDisabled
                               ? null
                               : () {
+                            for(var i = 0; i < isSelected1.length; i++) {
+                              if (isSelected1[i]) {
+                                widget.callback.selectCategory(i);
+                              }
+                            }
+                            for(var i = 0; i < isSelected2.length; i++) {
+                              if (isSelected2[i]) {
+                                widget.callback.selectCategory(4 + i);
+                              }
+                            }
+                            for(var i = 0; i < isSelected3.length; i++) {
+                              if (isSelected3[i]) {
+                                widget.callback.selectCategory(8 + i);
+                              }
+                            }
                                   widget.callback.closeWelcomeScreen();
                                 },
                           style: ButtonStyle(
