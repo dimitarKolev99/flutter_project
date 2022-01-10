@@ -325,7 +325,9 @@ class _HomePageState extends State<HomePage> {
                 color: ThemeChanger.lightBlue,
                 height: 40,
                 width: displayWidth,
-                child: ListView.builder(
+
+                child:
+                ListView.builder(
                     physics: ScrollPhysics(),
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
