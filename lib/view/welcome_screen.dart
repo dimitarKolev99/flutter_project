@@ -68,7 +68,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       selectedBorderColor: ThemeChanger.navBarColor,
                       selectedColor: Colors.white,
                       borderRadius: BorderRadius.circular(4),
-                      children: const <Widget>[
+                      children: <Widget>[
                         Icon(Icons.dry_cleaning, size: 35),
                         Icon(Icons.laptop, size: 35),
                         Icon(Icons.ad_units, size: 35),
