@@ -297,7 +297,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                                     style: TextButton.styleFrom(
                                       //fontWeight: FontWeight.bold,
                                       padding: EdgeInsets.symmetric(
-                                          horizontal: blockSizeHorizontal * 20, vertical: blockSizeVertical * 1),  //TODO: make it responsive
+                                          horizontal: blockSizeHorizontal * 20, vertical: blockSizeVertical * 1),
                                       backgroundColor: ThemeChanger.lightBlue,
                                       shape: RoundedRectangleBorder(
                                           side: BorderSide(
@@ -316,7 +316,6 @@ class _ExtendedViewState extends State<ExtendedView> {
                                 decoration: BoxDecoration(
                                   border: Border.all(color: ThemeChanger.navBarColor, width: 2, style: BorderStyle.solid),
                                   borderRadius: BorderRadius.circular(5),
-
                                   color: ThemeChanger.lightBlue,
                                 ),
                                 child: IconButton(
@@ -328,7 +327,8 @@ class _ExtendedViewState extends State<ExtendedView> {
                                       color: Colors.white)),
                                   onPressed: _changeFavoriteState,
                                 ),
-                              )
+                              ),
+                              SizedBox(height: blockSizeVertical * 0.5),
                             ],
                           ),
                         ),
