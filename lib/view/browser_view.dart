@@ -316,7 +316,7 @@ class _BrowserPageState extends State<BrowserPage> {
   }
 
   void setPriceRange(int minPrice, int maxPrice){
-    print("hallo-------------------------------$minPrice, $maxPrice");
+    //print("PRICESPRICERANGE-------------------------------$minPrice, $maxPrice");
     this.minPrice = minPrice;
     this.maxPrice = maxPrice;
   }

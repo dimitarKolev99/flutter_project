@@ -279,8 +279,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                         // values change exponentially and not linear.
                                         startValue = pow(_currentSliderValuesPrice.start, 2).round();
                                         endValue = pow(_currentSliderValuesPrice.end, 2).round();
-                                        print("$startValue, $endValue" );
-                                        widget.callback.setPriceRange(startValue, endValue);
+                                        //print("$startValue, $endValue" );
                                       });
                                     },
                                   ),
@@ -388,12 +387,9 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                                     }
                                                     discounts[index][1] = true;
                                                     saving = discounts[index][0] as int;
-                                                    widget.callback.setSaving(saving);
-
                                                   } else {
                                                     discounts[index][1] = false;
                                                     saving = 0;
-                                                    widget.callback.setSaving(saving);
                                                   }
                                                 });
                                               },
@@ -461,6 +457,8 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                       // TODO: widget.callback.currentCategory should be a collection of all chosen Categories
                       // TODO: show products of all categories
                       print(widget.callback.currentCategory);
+                      widget.callback.setPriceRange(startValue * 100, endValue * 100);
+                      widget.callback.setSaving(saving);
                       widget.callback.updateBrowserblabla(widget.callback.currentCategory);
                       Navigator.pop(
                           context

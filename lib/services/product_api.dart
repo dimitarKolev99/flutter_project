@@ -129,7 +129,7 @@ class ProductApi {
         final productPrice = bargains.price;
         final productSaving = bargains.saving;
 
-        print("Boy-------------------------$productPrice, $minPrice, $maxPrice, $saving");
+        //print("PRICERANGE-------------------------$productPrice, $minPrice, $maxPrice, $saving");
 
         return productSaving >= saving && productPrice >= minPrice && productPrice <= maxPrice;
         //return productSaving >= saving;
