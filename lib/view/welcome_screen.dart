@@ -47,7 +47,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 const Align(
                   alignment: Alignment.topCenter,
                   child: Text(
-                    "Choose your favorite categories!",
+                    "Choose your start categories!",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 21,
