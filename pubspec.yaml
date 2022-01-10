@@ -69,8 +69,7 @@ flutter:
   uses-material-design: true
   assets:
     - lib/resources/cat_tree1.json
-    - pictures/pp_logo1.png
-    - pictures/pp_logo2.png
+    - pictures/
 
 
   # To add assets to your application, add an assets section, like this:
