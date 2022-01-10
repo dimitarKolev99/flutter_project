@@ -70,10 +70,10 @@ class _WelcomePageState extends State<WelcomePage> {
                       selectedColor: Colors.white,
                       borderRadius: BorderRadius.circular(4),
                       children: <Widget>[
-                        Icon(MdiIcons.tennis, size: 35),
-                        Icon(Icons.laptop, size: 35),
                         Icon(Icons.ad_units, size: 35),
-                        Icon(Icons.book, size: 35),
+                        Icon(Icons.laptop, size: 35),
+                        Icon(MdiIcons.flowerTulip, size: 35),
+                        Icon(MdiIcons.tshirtCrew, size: 35),
                       ],
                       onPressed: (int index) {
                         int count = 0;
@@ -115,10 +115,10 @@ class _WelcomePageState extends State<WelcomePage> {
                       selectedColor: Colors.white,
                       borderRadius: BorderRadius.circular(4),
                       children: const <Widget>[
-                        Icon(Icons.dry_cleaning, size: 35),
-                        Icon(Icons.laptop, size: 35),
-                        Icon(Icons.ad_units, size: 35),
-                        Icon(Icons.book, size: 35),
+                        Icon(MdiIcons.paw, size: 35),
+                        Icon(MdiIcons.controllerClassic, size: 35),
+                        Icon(MdiIcons.food, size: 35),
+                        Icon(MdiIcons.babyCarriage, size: 35),
                       ],
                       onPressed: (int index) {
                         int count = 0;
@@ -160,9 +160,9 @@ class _WelcomePageState extends State<WelcomePage> {
                       selectedColor: Colors.white,
                       borderRadius: BorderRadius.circular(4),
                       children: const <Widget>[
-                        Icon(Icons.dry_cleaning, size: 35),
-                        Icon(Icons.laptop, size: 35),
-                        Icon(Icons.ad_units, size: 35),
+                        Icon(MdiIcons.car, size: 35),
+                        Icon(MdiIcons.vacuum, size: 35),
+                        Icon(MdiIcons.tennis, size: 35),
                       ],
                       onPressed: (int index) {
                         int count = 0;
