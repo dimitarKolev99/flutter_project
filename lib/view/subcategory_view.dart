@@ -33,7 +33,7 @@ class SubcategoryView extends StatefulWidget {
 class _SubcategoryViewState extends State<SubcategoryView> {
   RangeValues _currentSliderValuesPrice = const RangeValues(20, 70);
   //values for the left and right output of the slider
-  var startValue = 400;
+  var startValue = 0;
   var endValue = 4900;
   int saving = 0;
   int minPrice = 0;
@@ -74,6 +74,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
           stream: widget.stream,
           updateStream: widget.updateStream,
           callback: widget.callback,
+          cBackToView: this,
           controller: widget._scrollController,
         ));
       }
@@ -281,6 +282,9 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                         endValue = pow(_currentSliderValuesPrice.end, 2).round();
                                         //print("$startValue, $endValue" );
                                       });
+
+                                      widget.callback.setPriceRange(startValue * 100, endValue * 100);
+                                      widget.callback.changePrice();
                                     },
                                   ),
 
@@ -392,6 +396,11 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                                     saving = 0;
                                                   }
                                                 });
+                                                setState(() {
+
+                                                });
+                                                widget.callback.setSaving(saving);
+                                                widget.callback.changePrice();
                                               },
                                               child: Text(
                                                 ">" + discounts[index][0].toString() + "%",
@@ -457,8 +466,8 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                       // TODO: widget.callback.currentCategory should be a collection of all chosen Categories
                       // TODO: show products of all categories
                       print(widget.callback.currentCategory);
-                      widget.callback.setPriceRange(startValue * 100, endValue * 100);
-                      widget.callback.setSaving(saving);
+                      //widget.callback.setPriceRange(startValue * 100, endValue * 100);
+                      //widget.callback.setSaving(saving);
                       widget.callback.updateBrowserblabla(widget.callback.currentCategory);
                       Navigator.pop(
                           context

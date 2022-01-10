@@ -97,7 +97,25 @@ class _BrowserPageState extends State<BrowserPage> {
     bargainsOfChosenCats[categoryId] = products;
     numberOfProducts += products.length;
     print(numberOfProducts);
+
   }
+
+  Future<void> changePrice() async{
+    numberOfProducts = 0;
+    bargainsOfChosenCats.forEach((key, value) async {
+      /*value.forEach((element) {
+        if(element.price<minPrice || element.price>maxPrice || element.saving<saving) {
+          value.toList().remove(element);
+        }
+      });
+      numberOfProducts += value.length;*/
+      Iterable<Product> products = await ProductApi().getFilterProducts(key, saving, minPrice, maxPrice);
+      bargainsOfChosenCats[key] = products;
+      numberOfProducts += products.length;
+    });
+    print(numberOfProducts);
+  }
+
   // Whenever a productcategory gets unselcted this function should delete all Products of the category to the Map
   //TODO: Does this wotk with the ?.clear() to delete the products
   void deleteProductsOfChosenCategory(int categoryID){
