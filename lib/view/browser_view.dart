@@ -91,7 +91,7 @@ class _BrowserPageState extends State<BrowserPage> {
 
   // Whenever a productcategory gets selected this function should add all Products of the category to the Map
   Future<void> addProductsOfChosenCategory(int categoryId)async {
-    Iterable<Product> products = await ProductApi().getFilterProducts(categoryId, saving);
+    Iterable<Product> products = await ProductApi().fetchProduct(categoryId);
     bargainsOfChosenCats[categoryId] = products;
     numberOfProducts += products.length;
     print(numberOfProducts);
