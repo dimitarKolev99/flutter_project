@@ -98,7 +98,8 @@ class _BrowserPageState extends State<BrowserPage> {
     Iterable<Product> products = await ProductApi().getFilterProducts(categoryId, saving, minPrice, maxPrice);
     bargainsOfChosenCats[categoryId] = products;
     numberOfProducts += products.length;
-    print('${categoryId} + ${saving}  ${minPrice}  ${maxPrice}');
+    view.state.setState(() { });
+    print(numberOfProducts);
   }
 
   Future<void> changePrice() async{
@@ -109,7 +110,7 @@ class _BrowserPageState extends State<BrowserPage> {
       bargainsOfChosenCats[key] = products;
       numberOfProducts += products.length;
       view.updateStream.add(true);
-      print(numberOfProducts);
+      view.state.setState(() { });
     });
   }
 
@@ -120,6 +121,7 @@ class _BrowserPageState extends State<BrowserPage> {
       if(products!=null){
       numberOfProducts -= products.length;
       bargainsOfChosenCats.remove(categoryID);
+      view.state.setState(() { });
     }
   }
 
@@ -137,6 +139,7 @@ class _BrowserPageState extends State<BrowserPage> {
     mapOfChosenCategories[s] = id;
     chosenCategories.add(s);
     //print(chosenCategories);
+
   }
 
   void removeOneCategory(String s){
@@ -275,6 +278,8 @@ class _BrowserPageState extends State<BrowserPage> {
                                   setState((){
                                     if(!chosenCategories.isEmpty) {
                                       //TODO: Reload Products
+                                      view.removeFromBrowser(chosenCategories[index]);
+                                      print(chosenCategories[index]);
                                       removeOneCategory(chosenCategories[index]);
                                       updateBrowserblabla(currentCategory);
                                     }

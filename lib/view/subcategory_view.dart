@@ -18,7 +18,7 @@ class SubcategoryView extends StatefulWidget {
   late final StreamController updateStream;
   final dynamic callback;
   ScrollController _scrollController = ScrollController();
-
+  late var state;
   var startValue = 0;
   var endValue = 4900;
   int saving = 0;
@@ -41,6 +41,17 @@ class SubcategoryView extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => _SubcategoryViewState();
+
+
+  removeFromBrowser(String name) {
+    for (var element in subCatButtons) {
+      if(element.categoryName == name) {
+        element.isChosen = false;
+        return;
+      }
+      element.removeFromBrowser(name);
+    }
+  }
 }
 
 class _SubcategoryViewState extends State<SubcategoryView> {
@@ -61,16 +72,12 @@ class _SubcategoryViewState extends State<SubcategoryView> {
 
   JsonFunctions json = JsonFunctions();
 
-
-_SubcategoryViewState() {
-  print("neu");
-}
-
   //List<SubcatButton> subCatButtons = [];
 
   void initState() {
-      setState(() {});
-    }
+    setState(() {});
+    widget.state = this;
+  }
 
   Future<void> listToButtons() async {
     if (widget.subCatButtons.isEmpty) {
@@ -81,7 +88,7 @@ _SubcategoryViewState() {
           stream: widget.stream,
           updateStream: widget.updateStream,
           callback: widget.callback,
-          cBackToView: this,
+          cBackToView: widget,
           controller: widget._scrollController,
         ));
       }
