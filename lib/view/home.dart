@@ -401,6 +401,7 @@ class _HomePageState extends State<HomePage> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                           newProducts.add(productFromJson(snapshot.data.toString()));
+                          print("NEW PRODUCTS === > ${newProducts}");
                           return ListView.builder(
                               reverse: true,
                               shrinkWrap: true,
@@ -414,7 +415,7 @@ class _HomePageState extends State<HomePage> {
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 ExtendedView(
-                                                    newProducts[index],
+                                                    _products[index],
                                                     this,
                                                     streamController.stream)),
                                       );
