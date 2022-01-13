@@ -23,6 +23,8 @@ class ProductWS {
     required this.categoryId,
   });
 
+
+
   int productId;
   int siteId;
   DateTime date;
@@ -58,7 +60,7 @@ class ProductWS {
     "dropPercentage": dropPercentage,
     "dropAbsolute": dropAbsolute,
     "productName": productName,
-    "productImageUrl": productImageUrl,
+    //"productImageUrl": productImageUrl,
     "productPageUrl": productPageUrl,
     "categoryId": categoryId,
   };
@@ -67,5 +69,7 @@ class ProductWS {
   bool equals(ProductWS p) {
     return this.productId == p.productId;
   }
+  
+
 
 }

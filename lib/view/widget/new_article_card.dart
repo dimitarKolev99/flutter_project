@@ -13,7 +13,7 @@ class NewArticleCard extends StatelessWidget {
   late final int productId;
   late final int siteId;
   late final DateTime date;
-  late final double currentPrice;
+  late final String currentPrice;
   late final String previousPrice;
   late final String dropPercentage;
   late final String productName;
@@ -23,21 +23,26 @@ class NewArticleCard extends StatelessWidget {
   late dynamic callback;
   ProductWS productWS;
 
+
+
   NewArticleCard(this.productWS, {this.callback}){
     this.productName = productWS.productName;
     this.dropPercentage = productWS.dropPercentage;
-    this.currentPrice = productWS.currentPrice as double;
+    this.currentPrice = productWS.currentPrice;
     this.productImageUrl = productWS.productImageUrl;
     //this.description = productWS.description;
+    this.previousPrice = productWS.previousPrice;
     this.categoryId = productWS.categoryId;
     this.productId = productWS.productId;
   }
 
+
+
   @override
   Widget build(BuildContext context) {
-    double newprice = currentPrice/100;
-    int x = 100 - currentPrice as int;
-    double prevpreis = newprice/x * 100;
+    //double newprice = currentPrice/100;
+    //int x = 100 - currentPrice as int;
+    //double prevpreis = newprice/x * 100;
 
     MediaQueryData _mediaQueryData;
     double displayWidth;
@@ -114,7 +119,7 @@ class NewArticleCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(0),
                     ),
                     child:
-                    Text("-" + dropPercentage.toString() + "%",
+                    Text("-" + dropPercentage.toString(),
                       style: TextStyle(
                         color: ThemeChanger.textColor,
                         fontWeight: FontWeight.bold,
@@ -173,7 +178,7 @@ class NewArticleCard extends StatelessWidget {
                               margin: EdgeInsets.only(left:  blockSizeHorizontal * 2),
                               width: blockSizeHorizontal * 45,
                               child: Text(
-                                prevpreis.toStringAsFixed(2) + "€",
+                                previousPrice,
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                     decoration: TextDecoration.lineThrough,
@@ -189,7 +194,7 @@ class NewArticleCard extends StatelessWidget {
                               width: blockSizeHorizontal * 45,
                               child:
                               Text(
-                                newprice.toStringAsFixed(2) + "€",
+                                currentPrice,
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                   fontSize: safeBlockHorizontal * 6.0,//16,

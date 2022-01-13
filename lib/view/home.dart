@@ -313,6 +313,8 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  var data;
+
   @override
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
@@ -440,9 +442,17 @@ class _HomePageState extends State<HomePage> {
                   child: StreamBuilder(
                     stream: ProductApi().fetchProductWebSocket().stream,
                     builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        //print(snapshot.data);
-                        return NewArticleCard(productFromJson(snapshot.data.toString()));
+                      if(snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      } else if (snapshot.connectionState == ConnectionState.active
+                          || snapshot.connectionState == ConnectionState.done){
+                       if (snapshot.hasError) {
+                         return const Text('ERROR !!!');
+                       } else if (snapshot.hasData) {
+                         print("CCCCCCC: ${snapshot.data}");
+                         print("NewArticleCard NewArticleCard: ${NewArticleCard(productFromJson(snapshot.data.toString()))}");
+                         return NewArticleCard(productFromJson(snapshot.data.toString()));
+                       }
                       }
                       return const Text('');
                       /*
