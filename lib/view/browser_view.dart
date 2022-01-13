@@ -82,6 +82,8 @@ class _BrowserPageState extends State<BrowserPage> {
   int maxPrice = 10000;
   int minPrice = 0;
 
+  late SubcategoryView view;
+
   final _preferenceArticles = PreferencesArticles();
 
   // This map is necessary because we need to know the id and the name of the chosen Cats
@@ -102,18 +104,13 @@ class _BrowserPageState extends State<BrowserPage> {
   Future<void> changePrice() async{
     bargainsOfChosenCats.forEach((key, value) async {
       numberOfProducts = 0;
-      /*value.forEach((element) {
-        if(element.price<minPrice || element.price>maxPrice || element.saving<saving) {
-          value.toList().remove(element);
-        }
-      });*/
+
       Iterable<Product> products = await ProductApi().getFilterProducts(key, saving, minPrice, maxPrice);
       bargainsOfChosenCats[key] = products;
       numberOfProducts += products.length;
-      print("test");
+      view.updateStream.add(true);
       print(numberOfProducts);
     });
-    print("ende");
   }
 
   // Whenever a productcategory gets unselcted this function should delete all Products of the category to the Map
@@ -230,26 +227,23 @@ class _BrowserPageState extends State<BrowserPage> {
                     itemBuilder: (context, index) {
                       return InkWell(
                           onTap: () {
-                            if(chosenCategories.isEmpty) {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        SubcategoryView(
-                                          categoryName:
+                                    builder: (context) {
+                                      if(chosenCategories.isEmpty) {
+                                        view = SubcategoryView(
+                                          widget.mainCategoryIds[index],
                                           widget.mainCategoryNames[index],
-                                          categoryId: widget
-                                              .mainCategoryIds[index],
-                                          stream: widget.stream,
-                                          updateStream: widget.updateStream,
-                                          callback: this,
-                                        ),
+                                          widget.stream,
+                                          widget.updateStream,
+                                          this,
+                                          );
+                                        numberOfProducts = 0;
+                                      }
+                                      return view;
+                                      },
                                   ));
-                              //chosenCategories = []; // reset numberOfProducts
-                              numberOfProducts = 0;
-                            }
-
-
                             },
                           child:
                               Container(
@@ -264,12 +258,13 @@ class _BrowserPageState extends State<BrowserPage> {
                               mainAxisAlignment : MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                              chosenCategories.isEmpty? widget.mainCategoryNames[index] : chosenCategories[index],
-                              style: TextStyle(
-                                color: chosenCategories.isEmpty? ThemeChanger.catTextColor : ThemeChanger.textColor,
-                                fontWeight:  FontWeight.w400,
-                              ),
-                              ),
+                                    chosenCategories.isEmpty? widget.mainCategoryNames[index] : chosenCategories[index],
+                                    style: TextStyle(
+                                      color: chosenCategories.isEmpty? ThemeChanger.catTextColor : ThemeChanger.textColor,
+                                      fontWeight:  FontWeight.w400,
+                                    ),
+                                  ),
+
                                 chosenCategories.isEmpty?
                                 SizedBox(width: 0,):
                                 IconButton(

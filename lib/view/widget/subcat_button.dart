@@ -118,7 +118,6 @@ class _SubcatButtonState extends State<SubcatButton> {
                     // TODO: Call Json Function to updayte the resultList and Update Button Text
                     widget.callback.currentCategory = widget.categoryId;
                     widget.callback.addProductsOfChosenCategory(widget.categoryId);
-                    widget.cBackToView.setState(() {});
 
                   }
                   else{
