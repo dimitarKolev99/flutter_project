@@ -378,7 +378,7 @@ class _HomePageState extends State<HomePage> {
                 height: 40,
                 width: displayWidth,
                 child: ListView.builder(
-                    physics: ScrollPhysics(),
+                    physics: const ScrollPhysics(),
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
                     itemCount: mainCategories.length,
@@ -413,9 +413,9 @@ class _HomePageState extends State<HomePage> {
                               borderRadius: BorderRadius.circular(2),
                             ),
                             alignment: Alignment.centerRight,
-                            margin: EdgeInsets.all(4),
+                            margin: const EdgeInsets.all(4),
                             //padding: EdgeInsets.all(4),
-                            padding: EdgeInsets.symmetric(horizontal: 6),
+                            padding: const EdgeInsets.symmetric(horizontal: 6),
                             height: 40,
                             child: Text(
                               mainCategoryNames[index],
@@ -442,42 +442,40 @@ class _HomePageState extends State<HomePage> {
                   child: StreamBuilder(
                     stream: ProductApi().fetchProductWebSocket().stream,
                     builder: (context, snapshot) {
+
                       if(snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
+                        return const CircularProgressIndicator();
                       } else if (snapshot.connectionState == ConnectionState.active
-                          || snapshot.connectionState == ConnectionState.done){
-                       if (snapshot.hasError) {
-                         return const Text('ERROR !!!');
-                       } else if (snapshot.hasData) {
-                         print("CCCCCCC: ${snapshot.data}");
-                         print("NewArticleCard NewArticleCard: ${NewArticleCard(productFromJson(snapshot.data.toString()))}");
-                         return NewArticleCard(productFromJson(snapshot.data.toString()));
-                       }
+                          || snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.hasError) {
+                          return const Text('ERROR !!!');
+                        } else if (snapshot.hasData) {
+                          newProducts.add(productFromJson(snapshot.data.toString()));
+                          return ListView.builder(
+                              reverse: true,
+                              shrinkWrap: true,
+                              controller: _scrollController,
+                              itemCount: newProducts.length,
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ExtendedView(
+                                                    _products[index],
+                                                    this,
+                                                    streamController.stream)),
+                                      );
+                                    },
+                                    child: NewArticleCard(newProducts[index])
+                                );
+                              }
+                          );
+                        }
                       }
-                      return const Text('');
-                      /*
-                      return ListView.builder(
-                      reverse: true,
-                      shrinkWrap: true,
-                      controller: _scrollController,
-                      itemCount: _products.length,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ExtendedView(
-                                        _products[index],
-                                        this,
-                                        streamController.stream)),
-                              );
-                            },
-                            child: NewArticleCard(newProducts[index], this)
-                        );
-                      }
-                      );
-                      */
+                      return const Text("no data");
                       },
                   ),
                 )
