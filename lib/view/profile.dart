@@ -2,6 +2,7 @@ import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/services/notification_service.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
+import 'package:penny_pincher/view/help.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
@@ -50,6 +51,8 @@ class _ProfilePageState extends State<ProfilePage> {
             child: ListView(
               //padding: EdgeInsets.only(top: 50),
               children: <Widget>[
+
+                //Theme Changer Button
                 Container(
                   height: 50,
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
@@ -89,6 +92,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
+
+                //Notification Button
                 Container(
                   height: 50,
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
@@ -126,6 +131,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),),
                   ),
                 ),
+
+                // Delete search history button
                 Container(
                   height: 50,
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
@@ -159,6 +166,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),),
                   ),
                 ),
+
+                //About button
                 Container(
                   height: 50,
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
@@ -195,6 +204,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),),
                   ),
                 ),
+
+                //Help Button
                 Container(
                   height: 50,
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
@@ -205,7 +216,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   child:
                   TextButton(
                     onPressed: () {
-
+                      Navigator.push (
+                        context,
+                        MaterialPageRoute(builder: (context) => Help()),
+                      );
                     },
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(ThemeChanger.lightBlue),
