@@ -93,9 +93,8 @@ class NewArticleCard extends StatelessWidget {
                 children:[
                   // Product Image
                   Container(
-                    //color: Colors.purple,
-                    //width: blockSizeHorizontal * 30,//displayWidth/3 - 20,
-                    //height: blockSizeVertical * 15,
+                    width: blockSizeHorizontal * 30,//displayWidth/3 - 20,
+                    height: blockSizeVertical * 15,
                     margin: EdgeInsets.only(left: blockSizeHorizontal * 3),//(left: 10),
                     child:
                     ClipRRect(

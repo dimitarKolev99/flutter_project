@@ -249,6 +249,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  /*
   String string = "1.049,09��";
 
   String parseString(String string) {
@@ -260,6 +261,8 @@ class _HomePageState extends State<HomePage> {
     }
     return newString;
   }
+
+   */
 
 
   @override
@@ -278,7 +281,7 @@ class _HomePageState extends State<HomePage> {
     firstAppStart();
     //initListOfIDs();
     //ProductApi().fetchProductWebSocket();
-    print("AAAAAAAAAAA" + "sa" +parseString("1.049,09��"));
+    //print("AAAAAAAAAAA" + "sa" +parseString("1.049,09��"));
 
     tz.initializeTimeZones();
   }
@@ -396,14 +399,7 @@ class _HomePageState extends State<HomePage> {
                   child: StreamBuilder(
                     stream: ProductApi().fetchProductWebSocket().stream,
                     builder: (context, snapshot) {
-
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      } else if (snapshot.connectionState == ConnectionState.active
-                          || snapshot.connectionState == ConnectionState.done) {
-                        if (snapshot.hasError) {
-                          return const Text('ERROR !!!');
-                        } else if (snapshot.hasData) {
+                      if (snapshot.hasData) {
                           newProducts.add(productFromJson(snapshot.data.toString()));
                           return ListView.builder(
                               reverse: true,
@@ -418,7 +414,7 @@ class _HomePageState extends State<HomePage> {
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 ExtendedView(
-                                                    _products[index],
+                                                    newProducts[index],
                                                     this,
                                                     streamController.stream)),
                                       );
@@ -428,8 +424,7 @@ class _HomePageState extends State<HomePage> {
                               }
                           );
                         }
-                      }
-                      return const Text("no data");
+                     else { return const Text("no data");}
                       },
                   ),
                 )
