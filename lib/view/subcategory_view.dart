@@ -32,10 +32,13 @@ class SubcategoryView extends StatefulWidget {
 }
 
 class _SubcategoryViewState extends State<SubcategoryView> {
-  RangeValues _currentSliderValuesPrice = const RangeValues(20, 70);
+  RangeValues _currentSliderValuesPrice = const RangeValues(00, 70);
   //values for the left and right output of the slider
-  var startValue = 400;
+  var startValue = 0;
   var endValue = 4900;
+  int saving = 0;
+  int minPrice = 0;
+  int maxPrice = 0;
 
   // Discount options combined with a boolean for when chosen
   var discounts = [
@@ -61,7 +64,9 @@ class _SubcategoryViewState extends State<SubcategoryView> {
 
   //List<SubcatButton> subCatButtons = [];
 
-
+  void initState() {
+      setState(() {});
+    }
 
   Future<void> listToButtons() async {
     if (subCatButtons.isEmpty) {
@@ -72,6 +77,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
           stream: widget.stream,
           updateStream: widget.updateStream,
           callback: widget.callback,
+          cBackToView: this,
           controller: widget._scrollController,
         ));
       }
@@ -248,10 +254,17 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                     divisions: 100,
                                     onChanged: (RangeValues values) {
                                       setState(() {
-                                        _currentSliderValuesPrice = values;
-                                        // values change exponentially and not linear.
-                                        startValue = pow(_currentSliderValuesPrice.start, 2).round();
-                                        endValue = pow(_currentSliderValuesPrice.end, 2).round();
+                                      _currentSliderValuesPrice = values;
+                                      // values change exponentially and not linear.
+                                      startValue = pow(_currentSliderValuesPrice.start, 2).round();
+                                      endValue = pow(_currentSliderValuesPrice.end, 2).round();
+                                      //print("$startValue, $endValue" );
+                                    });},
+                                    onChangeEnd: (RangeValues values) {
+
+                                      setState(() {
+                                        widget.callback.setPriceRange(startValue * 100, endValue * 100);
+                                        widget.callback.changePrice();
                                       });
                                     },
                                   ),
@@ -358,9 +371,17 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                                       discount[1] = false;
                                                     }
                                                     discounts[index][1] = true;
+                                                    saving = discounts[index][0] as int;
                                                   } else {
                                                     discounts[index][1] = false;
+                                                    saving = 0;
                                                   }
+                                                });
+
+
+                                                setState(() {
+                                                  widget.callback.setSaving(saving);
+                                                  widget.callback.changePrice();
                                                 });
                                               },
                                               child: Text(
@@ -427,6 +448,8 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                       // TODO: widget.callback.currentCategory should be a collection of all chosen Categories
                       // TODO: show products of all categories
                       print(widget.callback.currentCategory);
+                      //widget.callback.setPriceRange(startValue * 100, endValue * 100);
+                      //widget.callback.setSaving(saving);
                       widget.callback.updateBrowserblabla(widget.callback.currentCategory);
                       Navigator.pop(
                           context
