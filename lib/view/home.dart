@@ -19,6 +19,7 @@ import 'package:penny_pincher/view/widget/new_article_card.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class HomePage extends StatefulWidget {
   late final Stream<bool> stream;
@@ -139,7 +140,6 @@ class _HomePageState extends State<HomePage> {
   late final List<ProductWS> newProducts = [];
   bool _isLoading = true;
   var count = 0;
-  Timer? _timer;
   bool isScrolling = false;
   ScrollController _scrollController = ScrollController();
   var x = 0.0;
@@ -154,6 +154,10 @@ class _HomePageState extends State<HomePage> {
   var randomCategory = 0;
 
   final List<int> _selectedItems = [];
+
+  final channel = WebSocketChannel.connect(
+    Uri.parse('wss://ika3taif23.execute-api.eu-central-1.amazonaws.com/prod'),
+  );
 
   _onUpdateScroll() {
     if (this.mounted) {
@@ -195,75 +199,6 @@ class _HomePageState extends State<HomePage> {
     ProductController.addProducts(_products);
   }
 
-  Future<void> getProductsWS() async {
-    newProduct = await ProductApi().fetchProductWebSocket();
-
-    /*List<Product> favorites = await _preferenceArticles.getAllFavorites();
-    for (var i in favorites) {
-      if (!_favoriteIds.contains(i.productId)) {
-        _favoriteIds.add(i.productId);
-      }
-    }
-
-    if (this.mounted) {
-      setState(() {
-        if (status == WelcomeStatus.noFirstTime) {
-          _isLoading = false;
-        }
-      });
-    }
-    if (status == WelcomeStatus.noFirstTime) {
-      widget.callback.loadingFinished();
-    }*/
-
-
-
-      newProducts.insert(count, newProduct[count]);
-      count++;
-
-    //ProductController.addProducts(_products);
-  }
-
-  /*
-  void initListOfIDs() {
-    _jsonFunctions.getListOfProdCatIDs().then((value) => timerFunction(value));
-  }
-
-   */
-
-
-
-  timerFunction(List<int> ids) {
-    // every 2 seconds get a random category id, call the api with it, load the product and animate it
-    _timer = Timer.periodic(const Duration(seconds: 2), (Timer timer) {
-      index = _jsonFunctions.getRandomInt(_jsonFunctions.count);
-      randomCategory = ids[index];
-      getProducts(randomCategory);
-      if (_scrollController.hasClients && !isScrolling) {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          curve: Curves.easeOut,
-          duration: const Duration(milliseconds: 300),
-        );
-      }
-    });
-  }
-
-  /*
-  String string = "1.049,09��";
-
-  String parseString(String string) {
-    String newString = "";
-    for (int i = 0; i < string.length; i++) {
-      if (string[i] ==  ",") {
-       newString = string.substring(0, i + 2);
-      }
-    }
-    return newString;
-  }
-
-   */
-
 
   @override
   void initState() {
@@ -288,7 +223,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    _timer!.cancel();
     super.dispose();
   }
 
@@ -397,12 +331,11 @@ class _HomePageState extends State<HomePage> {
                     return true;
                   },
                   child: StreamBuilder(
-                    stream: ProductApi().fetchProductWebSocket().stream,
+                    stream: channel.stream,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                          newProducts.add(productFromJson(snapshot.data.toString()));
-                          print("NEW PRODUCTS === > ${newProducts}");
-                          return ListView.builder(
+                        newProducts.add(productFromJson(snapshot.data.toString()));
+                        return ListView.builder(
                               reverse: true,
                               shrinkWrap: true,
                               controller: _scrollController,
@@ -460,7 +393,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _jsonFunctions.getListOfProdCatIDs(mainCategoryIds.indexOf(categoryId))
           .then((value) {
-        timerFunction(value);
+        //timerFunction(value);
         //_jsonFunctions.count = 1;
         // print("AAAAAA $_jsonFunctions.count");
       });
