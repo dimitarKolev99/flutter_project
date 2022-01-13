@@ -251,7 +251,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: const Text("Ja"),
       onPressed: () async {
         Navigator.of(context, rootNavigator: true).pop('dialog');
-
+        ArticleSearch.deleteAllRecent();
       },
     );
 

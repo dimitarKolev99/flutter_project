@@ -196,6 +196,11 @@ class ArticleSearch extends SearchDelegate<String> {
       }
   }
 
+  void deleteAllRecent() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    updateRecent();
+  }
 
 }
 
