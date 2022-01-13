@@ -73,12 +73,13 @@ class ProductApi {
         */
     channel.stream.listen(
         (data) {
-          products.add(productFromJson(data));
+          //products.add(productFromJson(data));
+          print(data);
         },
       onError: (error) => print(error),
     );
 
-    return products;
+    return 0;
   }
 
       Future<List<Product>> fetchProduct(int categoryID) async {
