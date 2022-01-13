@@ -25,9 +25,10 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-  List<bool> isSelected1 = [false, false, false, false];
-  List<bool> isSelected2 = [false, false, false, false];
+  List<bool> isSelected1 = [false, false, false];
+  List<bool> isSelected2 = [false, false, false];
   List<bool> isSelected3 = [false, false, false];
+  List<bool> isSelected4 = [false, false];
   late bool _isButtonDisabled;
 
   @override
@@ -71,9 +72,8 @@ class _WelcomePageState extends State<WelcomePage> {
                       borderRadius: BorderRadius.circular(4),
                       children: <Widget>[
                         Icon(Icons.ad_units, size: 35),
-                        Icon(MdiIcons.pill, size: 35),
+                        Icon(Icons.laptop, size: 35),
                         Icon(MdiIcons.flowerTulip, size: 35),
-                        Icon(MdiIcons.tshirtCrew, size: 35),
                       ],
                       onPressed: (int index) {
                         int count = 0;
@@ -115,10 +115,9 @@ class _WelcomePageState extends State<WelcomePage> {
                       selectedColor: Colors.white,
                       borderRadius: BorderRadius.circular(4),
                       children: const <Widget>[
+                        Icon(MdiIcons.tshirtCrew, size: 35),
                         Icon(MdiIcons.paw, size: 35),
                         Icon(MdiIcons.controllerClassic, size: 35),
-                        Icon(MdiIcons.food, size: 35),
-                        Icon(MdiIcons.babyCarriage, size: 35),
                       ],
                       onPressed: (int index) {
                         int count = 0;
@@ -160,9 +159,9 @@ class _WelcomePageState extends State<WelcomePage> {
                       selectedColor: Colors.white,
                       borderRadius: BorderRadius.circular(4),
                       children: const <Widget>[
+                        Icon(MdiIcons.food, size: 35),
+                        Icon(MdiIcons.babyCarriage, size: 35),
                         Icon(MdiIcons.car, size: 35),
-                        Icon(MdiIcons.vacuum, size: 35),
-                        Icon(MdiIcons.tennis, size: 35),
                       ],
                       onPressed: (int index) {
                         int count = 0;
@@ -187,6 +186,49 @@ class _WelcomePageState extends State<WelcomePage> {
                       renderBorder: false,
                       constraints: BoxConstraints(minWidth: 70, minHeight: 70),
                       isSelected: isSelected3,
+                    ),
+                  ],
+                )),
+                const SizedBox(height: 45),
+                Container(
+                    child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    ToggleButtons(
+                      color: ThemeChanger.navBarColor,
+                      borderColor: ThemeChanger.navBarColor,
+                      fillColor: ThemeChanger.lightBlue,
+                      borderWidth: 2,
+                      selectedBorderColor: ThemeChanger.navBarColor,
+                      selectedColor: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                      children: <Widget>[
+                        Icon(MdiIcons.vacuum, size: 35),
+                        Icon(MdiIcons.tennis, size: 35),
+                      ],
+                      onPressed: (int index) {
+                        int count = 0;
+                        isSelected4.forEach((bool val) {
+                          if (val) count++;
+                        });
+
+                        if (isSelected4[index] && count < 1) {
+                          _isButtonDisabled = true;
+                          return;
+                        }
+
+                        setState(() {
+                          isSelected4[index] = !isSelected4[index];
+                          if (count <= 1 && !isSelected4[index]) {
+                            _isButtonDisabled = true;
+                          } else {
+                            _isButtonDisabled = false;
+                          }
+                        });
+                      },
+                      renderBorder: false,
+                      constraints: BoxConstraints(minWidth: 70, minHeight: 70),
+                      isSelected: isSelected4,
                     ),
                   ],
                 )),
@@ -223,21 +265,26 @@ class _WelcomePageState extends State<WelcomePage> {
                           onPressed: _isButtonDisabled
                               ? null
                               : () {
-                            for(var i = 0; i < isSelected1.length; i++) {
-                              if (isSelected1[i]) {
-                                widget.callback.selectCategory(i);
-                              }
-                            }
-                            for(var i = 0; i < isSelected2.length; i++) {
-                              if (isSelected2[i]) {
-                                widget.callback.selectCategory(4 + i);
-                              }
-                            }
-                            for(var i = 0; i < isSelected3.length; i++) {
-                              if (isSelected3[i]) {
-                                widget.callback.selectCategory(8 + i);
-                              }
-                            }
+                                  for (var i = 0; i < isSelected1.length; i++) {
+                                    if (isSelected1[i]) {
+                                      widget.callback.selectCategory(i);
+                                    }
+                                  }
+                                  for (var i = 0; i < isSelected2.length; i++) {
+                                    if (isSelected2[i]) {
+                                      widget.callback.selectCategory(3 + i);
+                                    }
+                                  }
+                                  for (var i = 0; i < isSelected3.length; i++) {
+                                    if (isSelected3[i]) {
+                                      widget.callback.selectCategory(6 + i);
+                                    }
+                                  }
+                                  for (var i = 0; i < isSelected4.length; i++) {
+                                    if (isSelected4[i]) {
+                                      widget.callback.selectCategory(9 + i);
+                                    }
+                                  }
                                   widget.callback.closeWelcomeScreen();
                                 },
                           style: ButtonStyle(
@@ -256,6 +303,57 @@ class _WelcomePageState extends State<WelcomePage> {
                                 fontWeight: FontWeight.w500,
                               ))),
                           child: Text("Fortfahren"),
+                        ),
+                      ),
+                      SizedBox(height: 30),
+                    ],
+                  ),
+                )),
+                Expanded(
+                    child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Container(
+                        height: 50,
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(33),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.6),
+                              offset: Offset(
+                                0.0,
+                                10.0,
+                              ),
+                              blurRadius: 20.0,
+                              spreadRadius: -3.0,
+                            ),
+                          ],
+                          color: ThemeChanger.textColor,
+                        ),
+                        child: TextButton(
+                          onPressed: () {
+                            widget.callback.closeWelcomeScreen();
+                          },
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  ThemeChanger.textColor),
+                              foregroundColor: MaterialStateProperty.all(
+                                  Color.fromRGBO(45, 45, 45, 1)),
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(33),
+                                //side: BorderSide(color: Colors.black)
+                              )),
+                              textStyle: MaterialStateProperty.all(TextStyle(
+                                fontSize: 21,
+                                fontWeight: FontWeight.w500,
+                              ))),
+                          child: Text("Überspringen"),
                         ),
                       ),
                       SizedBox(height: 30),
