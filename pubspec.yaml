@@ -45,6 +45,8 @@ dependencies:
   timezone: ^0.8.0
   flutter_local_notifications: ^9.1.5
   web_socket_channel: ^2.1.0
+  material_design_icons_flutter: ^5.0.6595
+
 
 
 dev_dependencies:
@@ -70,6 +72,7 @@ flutter:
   uses-material-design: true
   assets:
     - lib/resources/cat_tree1.json
+    - pictures/
 
 
   # To add assets to your application, add an assets section, like this:
