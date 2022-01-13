@@ -193,7 +193,7 @@ class _HomePageState extends State<HomePage> {
 
   timerFunction(List<int> ids) {
     // every 2 seconds get a random category id, call the api with it, load the product and animate it
-    _timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
       index = _jsonFunctions.getRandomInt(_jsonFunctions.count);
       randomCategory = ids[index];
       getProducts(randomCategory);
@@ -201,7 +201,7 @@ class _HomePageState extends State<HomePage> {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
           curve: Curves.easeOut,
-          duration: const Duration(milliseconds: 1000),
+          duration: const Duration(milliseconds: 200),
         );
       }
     });
