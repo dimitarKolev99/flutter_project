@@ -22,8 +22,6 @@ class BrowserPage extends StatefulWidget {
   late final StreamController updateStream;
   int _currentProductId;
 
-
-
   BrowserPage(this.stream, this.updateStream, this._currentProductId);
 
   @override
@@ -80,6 +78,9 @@ class _BrowserPageState extends State<BrowserPage> {
   bool _isLoading = true;
   var count = 0;
   Timer? _timer;
+  int saving = 0;
+  int maxPrice = 10000;
+  int minPrice = 0;
 
   final _preferenceArticles = PreferencesArticles();
 
@@ -92,11 +93,29 @@ class _BrowserPageState extends State<BrowserPage> {
 
   // Whenever a productcategory gets selected this function should add all Products of the category to the Map
   Future<void> addProductsOfChosenCategory(int categoryId)async {
-    Iterable<Product> products = await ProductApi().fetchProduct(categoryId);
+    Iterable<Product> products = await ProductApi().getFilterProducts(categoryId, saving, minPrice, maxPrice);
     bargainsOfChosenCats[categoryId] = products;
     numberOfProducts += products.length;
-    print(numberOfProducts);
+    print('${categoryId} + ${saving}  ${minPrice}  ${maxPrice}');
   }
+
+  Future<void> changePrice() async{
+    bargainsOfChosenCats.forEach((key, value) async {
+      numberOfProducts = 0;
+      /*value.forEach((element) {
+        if(element.price<minPrice || element.price>maxPrice || element.saving<saving) {
+          value.toList().remove(element);
+        }
+      });*/
+      Iterable<Product> products = await ProductApi().getFilterProducts(key, saving, minPrice, maxPrice);
+      bargainsOfChosenCats[key] = products;
+      numberOfProducts += products.length;
+      print("test");
+      print(numberOfProducts);
+    });
+    print("ende");
+  }
+
   // Whenever a productcategory gets unselcted this function should delete all Products of the category to the Map
   //TODO: Does this wotk with the ?.clear() to delete the products
   void deleteProductsOfChosenCategory(int categoryID){
@@ -104,7 +123,6 @@ class _BrowserPageState extends State<BrowserPage> {
       if(products!=null){
       numberOfProducts -= products.length;
       bargainsOfChosenCats.remove(categoryID);
-      print(numberOfProducts);
     }
   }
 
@@ -266,7 +284,7 @@ class _BrowserPageState extends State<BrowserPage> {
                                       updateBrowserblabla(currentCategory);
                                     }
                                   });},
-                                icon: Icon(Icons.clear, size: 18, color: ThemeChanger.textColor,) )
+                                icon: Icon(Icons.clear, size: 18, color: ThemeChanger.articlecardbackground,) )
                               ],
                             ),
                            ));
@@ -275,6 +293,9 @@ class _BrowserPageState extends State<BrowserPage> {
                     }),
               ),
             ),
+
+
+
 
 
             // This Grid View is supposed to show the main categories on top of the screen in the browser view
@@ -309,5 +330,15 @@ class _BrowserPageState extends State<BrowserPage> {
     widget._currentProductId = catID;
     getProducts(widget._currentProductId);
     setState(() {});
+  }
+
+  void setSaving(int saving){
+    this.saving = saving;
+  }
+
+  void setPriceRange(int minPrice, int maxPrice){
+    //print("PRICESPRICERANGE-------------------------------$minPrice, $maxPrice");
+    this.minPrice = minPrice;
+    this.maxPrice = maxPrice;
   }
 }

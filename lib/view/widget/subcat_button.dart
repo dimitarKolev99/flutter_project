@@ -20,6 +20,7 @@ class SubcatButton extends StatefulWidget {
   late final Stream<bool> stream;
   late final StreamController updateStream;
   final dynamic callback;
+  final dynamic cBackToView;
   final ScrollController controller;
 
 
@@ -29,6 +30,7 @@ class SubcatButton extends StatefulWidget {
     required this.stream,
     required this.updateStream,
     required this.callback,
+    required this.cBackToView,
     required this.controller,
     //required this.isProdCat,
   });
@@ -56,6 +58,7 @@ class _SubcatButtonState extends State<SubcatButton> {
               stream: widget.stream,
               updateStream: widget.updateStream,
             callback: widget.callback,
+            cBackToView: widget.cBackToView,
             controller: widget.controller));
       }
     }
@@ -115,6 +118,7 @@ class _SubcatButtonState extends State<SubcatButton> {
                     // TODO: Call Json Function to updayte the resultList and Update Button Text
                     widget.callback.currentCategory = widget.categoryId;
                     widget.callback.addProductsOfChosenCategory(widget.categoryId);
+                    widget.cBackToView.setState(() {});
 
                   }
                   else{
