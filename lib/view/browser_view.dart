@@ -218,7 +218,7 @@ class _BrowserPageState extends State<BrowserPage> {
               alignment: Alignment.topCenter,
               child: Container(
                 color: ThemeChanger.lightBlue,
-                height: 35,
+                height: blockSizeVertical * 5.5,
                 width: displayWidth,
                 //TODO:ListView Bulider to show the route of the categories, works only for choosing 1 Prod. Cat.
 
@@ -230,22 +230,27 @@ class _BrowserPageState extends State<BrowserPage> {
                     itemBuilder: (context, index) {
                       return InkWell(
                           onTap: () {
-                            chosenCategories = [];
-                            // reset numberOfProducts
-                            numberOfProducts = 0;
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SubcategoryView(
-                                    categoryName:
-                                        widget.mainCategoryNames[index],
-                                    categoryId: widget.mainCategoryIds[index],
-                                    stream: widget.stream,
-                                    updateStream: widget.updateStream,
-                                    callback: this,
-                                  ),
-                                ));
-                          },
+                            if(chosenCategories.isEmpty) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        SubcategoryView(
+                                          categoryName:
+                                          widget.mainCategoryNames[index],
+                                          categoryId: widget
+                                              .mainCategoryIds[index],
+                                          stream: widget.stream,
+                                          updateStream: widget.updateStream,
+                                          callback: this,
+                                        ),
+                                  ));
+                              //chosenCategories = []; // reset numberOfProducts
+                              numberOfProducts = 0;
+                            }
+
+
+                            },
                           child:
                               Container(
                               decoration: BoxDecoration(
@@ -261,8 +266,7 @@ class _BrowserPageState extends State<BrowserPage> {
                                 Text(
                               chosenCategories.isEmpty? widget.mainCategoryNames[index] : chosenCategories[index],
                               style: TextStyle(
-                                color: chosenCategories.isEmpty? ThemeChanger.navBarColor : ThemeChanger.articlecardbackground,
-                                //fontWeight:  !chosenCategories.isEmpty && index == chosenCategories.length-1?  FontWeight.w600 :FontWeight.normal,
+                                color: chosenCategories.isEmpty? ThemeChanger.catTextColor : ThemeChanger.textColor,
                                 fontWeight:  FontWeight.w400,
                               ),
                               ),
@@ -283,10 +287,7 @@ class _BrowserPageState extends State<BrowserPage> {
                                 icon: Icon(Icons.clear, size: 18, color: ThemeChanger.articlecardbackground,) )
                               ],
                             ),
-
-
-
-                          ));
+                           ));
 
 
                     }),
@@ -307,12 +308,15 @@ class _BrowserPageState extends State<BrowserPage> {
                 children: List.generate(_products.length, (index) {
                   return InkWell(
                       onTap: () {
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => ExtendedView(_products[index], this, streamController.stream)),
                         );
                         streamController.add(true);
+
+
                       },
                       child: BrowserArticleCard(_products[index], this));
                 }),

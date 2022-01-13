@@ -7,6 +7,7 @@ import 'package:mobx/mobx.dart';
 import 'package:penny_pincher/services/json_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/view/theme.dart';
+import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
 import 'package:penny_pincher/view/widget/subcat_button.dart';
 import 'package:provider/provider.dart';
 
@@ -141,35 +142,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
     ScrollController _scrollController = ScrollController();
     return Scaffold(
-        appBar: AppBar(
-            backgroundColor: ThemeChanger.navBarColor,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 3),
-                  child: Text(
-                    'Categories',
-                    style: TextStyle(
-                      // Shaddow is used to get Distance to the underline -> TextColor itself is transparent
-                      shadows: [
-                        Shadow(
-                            color: Color.fromRGBO(240, 240, 240, 1),
-                            offset: Offset(0, -6))
-                      ],
-                      //fontFamily: '....',
-                      fontSize: 21,
-                      letterSpacing: 3,
-                      color: Colors.transparent,
-                      fontWeight: FontWeight.w900,
-                      decoration: TextDecoration.underline,
-                      decorationColor: ThemeChanger.highlightedColor,
-                      decorationThickness: 4,
-                    ),
-                  ),
-                ),
-              ],
-            )),
+        appBar: CategorieViewAppBar(),
         body:
             Stack(
               children: [
@@ -191,6 +164,9 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                   return InkWell(
                                       onTap: () {
                                         setState(() {
+                                          widget.callback.numberOfProducts = 0;
+                                          Map<String, int> mapReplacement = new Map();
+                                          widget.callback.mapOfChosenCategories = mapReplacement;
                                           widget.categoryId = widget
                                               .callback.widget.mainCategoryIds[index];
                                           print(
