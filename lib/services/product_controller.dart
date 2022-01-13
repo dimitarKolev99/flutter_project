@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
-import 'package:penny_pincher/view/widget/new_article_card.dart';
 
 class ProductController {
 
@@ -42,16 +41,16 @@ class ProductController {
     return false;
   }
 
-  static Future changeFavoriteState(NewArticleCard card, dynamic callback) async {
+  static Future changeFavoriteState(ArticleCard card, dynamic callback) async {
 
-    if (isFavorite(card.productId)) {
-      showAlertDialog(callback.context, card.productId, callback);
+    if (isFavorite(card.id)) {
+      showAlertDialog(callback.context, card.id, callback);
     } else {
       await addFavorite(card, callback);
     }
   }
 
-  static Future addFavorite(NewArticleCard card, callback) async {
+  static Future addFavorite(ArticleCard card, callback) async {
     final product = _products.where((p) => p.productId == card.id).toList()[0];
 
     await _preferenceArticles.addFavorite(product);

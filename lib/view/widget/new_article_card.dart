@@ -224,7 +224,8 @@ class NewArticleCard extends StatelessWidget {
                       icon: (ProductController.isFavorite(productId) ?
                       Icon(Icons.favorite, color: Colors.red) :
                       Icon(Icons.favorite_border, color: ThemeChanger.reversetextColor)),
-                      onPressed: _changeFavoriteState,
+                      onPressed: () {}//_changeFavoriteState,
+
                     ),
                     alignment: Alignment.centerRight,
                   ),
@@ -236,10 +237,10 @@ class NewArticleCard extends StatelessWidget {
     );
   }
 
-  Future _changeFavoriteState() async {
+  /*Future _changeFavoriteState() async {
     //await callback.changeFavoriteState(this);
     ProductController.changeFavoriteState(this, callback);
-  }
+  }*/
 }
 
 

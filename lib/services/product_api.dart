@@ -71,15 +71,15 @@ class ProductApi {
         findBargains(fromUri);
 
         */
-    channel.stream.listen(
+    /*channel.stream.listen(
         (data) {
-          //products.add(productFromJson(data));
+          products.add(productFromJson(data));
           print(data);
         },
       onError: (error) => print(error),
-    );
+    );*/
 
-    return 0;
+    return channel;
   }
 
       Future<List<Product>> fetchProduct(int categoryID) async {

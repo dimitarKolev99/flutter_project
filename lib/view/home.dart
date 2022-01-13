@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:penny_pincher/models/preferences_articles.dart';
+import 'package:penny_pincher/models/ws_product.dart';
 import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/json_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
@@ -14,6 +15,7 @@ import 'package:penny_pincher/view/widget/article_search.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:penny_pincher/view/extended_view.dart';
+import 'package:penny_pincher/view/widget/new_article_card.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -132,8 +134,12 @@ class _HomePageState extends State<HomePage> {
 
 
   late List<Product> _product;
+
+  late List<ProductWS> newProduct;
+
   late final List _favoriteIds = [];
   late final List<Product> _products = [];
+  late final List<ProductWS> newProducts = [];
   bool _isLoading = true;
   var count = 0;
   Timer? _timer;
@@ -196,6 +202,35 @@ class _HomePageState extends State<HomePage> {
       count++;
     }
     ProductController.addProducts(_products);
+  }
+
+  Future<void> getProductsWS() async {
+    newProduct = await ProductApi().fetchProductWebSocket();
+
+    /*List<Product> favorites = await _preferenceArticles.getAllFavorites();
+    for (var i in favorites) {
+      if (!_favoriteIds.contains(i.productId)) {
+        _favoriteIds.add(i.productId);
+      }
+    }
+
+    if (this.mounted) {
+      setState(() {
+        if (status == WelcomeStatus.noFirstTime) {
+          _isLoading = false;
+        }
+      });
+    }
+    if (status == WelcomeStatus.noFirstTime) {
+      widget.callback.loadingFinished();
+    }*/
+
+
+
+      newProducts.insert(count, newProduct[count]);
+      count++;
+
+    //ProductController.addProducts(_products);
   }
 
   /*
@@ -389,9 +424,13 @@ class _HomePageState extends State<HomePage> {
                     return true;
                   },
                   child: StreamBuilder(
-                    stream: ProductApi().fetchProductWebSocket(),
+                    stream: ProductApi().fetchProductWebSocket().stream,
                     builder: (context, snapshot) {
-                      return Text(snapshot.hasData ? '${snapshot.data}' : '');
+                      if (snapshot.hasData) {
+                        print(snapshot.data);
+                        return Text('${snapshot.data}');
+                      }
+                      return const Text('');
                       /*
                       return ListView.builder(
                       reverse: true,
@@ -399,7 +438,6 @@ class _HomePageState extends State<HomePage> {
                       controller: _scrollController,
                       itemCount: _products.length,
                       itemBuilder: (context, index) {
-
                         return InkWell(
                             onTap: () {
                               Navigator.push(
@@ -411,7 +449,7 @@ class _HomePageState extends State<HomePage> {
                                         streamController.stream)),
                               );
                             },
-                            child: ArticleCard(_products[index], this)
+                            child: NewArticleCard(newProducts[index], this)
                         );
                       }
                       );
