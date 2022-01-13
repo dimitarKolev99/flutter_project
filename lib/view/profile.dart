@@ -143,7 +143,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   child:
                   TextButton(
                     onPressed: () {
-
+                      showAlertDialog(context);
                     },
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(ThemeChanger.lightBlue),
@@ -249,4 +249,46 @@ class _ProfilePageState extends State<ProfilePage> {
       )
     );
   }
+
+  static showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: const Text("Nein"),
+      onPressed: () {
+        Navigator.of(context, rootNavigator: true).pop('dialog');
+      },
+    );
+    Widget continueButton = TextButton(
+      style: TextButton.styleFrom(
+        primary: Colors.red,
+      ),
+      child: const Text("Ja"),
+      onPressed: () async {
+        Navigator.of(context, rootNavigator: true).pop('dialog');
+        ArticleSearch.deleteAllRecent();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: const Text("Suchverlauf löschen?"),
+      content: const Text(
+          "Willst du wirklich deinen kompletten Textsuchverlauf löschen?"),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
 }
