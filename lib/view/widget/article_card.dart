@@ -19,7 +19,7 @@ class ArticleCard extends StatelessWidget {
   late dynamic callback;
   Product product;
 
-  ArticleCard(this.product , this.callback){
+  ArticleCard(this.product, this.callback){
     this.title = product.title;
     this.saving = product.saving;
     this.price = product.price;

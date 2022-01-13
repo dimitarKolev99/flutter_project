@@ -5,7 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:penny_pincher/models/ws_product.dart';
 import 'package:penny_pincher/services/json_functions.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ProductApi {
 
@@ -31,6 +33,8 @@ class ProductApi {
   int resultID = 0;
   bool stop = true;
 
+  List<ProductWS> products = [];
+
   findBargains(List<dynamic> fromUri) {
         String name = "";
         int id = 0;
@@ -52,6 +56,29 @@ class ProductApi {
 
           }
         });
+  }
+
+  fetchProductWebSocket()  {
+    print("API called");
+
+    final channel = WebSocketChannel.connect(
+      Uri.parse('wss://ika3taif23.execute-api.eu-central-1.amazonaws.com/prod'),
+    );
+
+    /*
+        Map<String, dynamic> map = Map<String, dynamic>.from(json.decode(response2.body));
+        List<dynamic> fromUri = map["result"]; //TODO: InternalLinkedHashMap Error from here
+        findBargains(fromUri);
+
+        */
+    channel.stream.listen(
+        (data) {
+          products.add(productFromJson(data));
+        },
+      onError: (error) => print(error),
+    );
+
+    return products;
   }
 
       Future<List<Product>> fetchProduct(int categoryID) async {

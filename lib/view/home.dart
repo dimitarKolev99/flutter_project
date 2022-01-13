@@ -253,6 +253,7 @@ class _HomePageState extends State<HomePage> {
     });
     firstAppStart();
     //initListOfIDs();
+    ProductApi().fetchProductWebSocket();
 
     tz.initializeTimeZones();
   }
@@ -387,12 +388,18 @@ class _HomePageState extends State<HomePage> {
                     }
                     return true;
                   },
-                  child: ListView.builder(
+                  child: StreamBuilder(
+                    stream: ProductApi().fetchProductWebSocket(),
+                    builder: (context, snapshot) {
+                      return Text(snapshot.hasData ? '${snapshot.data}' : '');
+                      /*
+                      return ListView.builder(
                       reverse: true,
                       shrinkWrap: true,
                       controller: _scrollController,
                       itemCount: _products.length,
                       itemBuilder: (context, index) {
+
                         return InkWell(
                             onTap: () {
                               Navigator.push(
@@ -406,8 +413,14 @@ class _HomePageState extends State<HomePage> {
                             },
                             child: ArticleCard(_products[index], this)
                         );
-                      }),
-                )),)
+                      }
+                      );
+                      */
+                      },
+                  ),
+                )
+            ),
+          )
           ],
         )
 
