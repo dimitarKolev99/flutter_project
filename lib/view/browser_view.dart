@@ -79,7 +79,7 @@ class _BrowserPageState extends State<BrowserPage> {
   var count = 0;
   Timer? _timer;
   int saving = 0;
-  int maxPrice = 0;
+  int maxPrice = 10000;
   int minPrice = 0;
 
   final _preferenceArticles = PreferencesArticles();
@@ -96,24 +96,24 @@ class _BrowserPageState extends State<BrowserPage> {
     Iterable<Product> products = await ProductApi().getFilterProducts(categoryId, saving, minPrice, maxPrice);
     bargainsOfChosenCats[categoryId] = products;
     numberOfProducts += products.length;
-    print(numberOfProducts);
-
+    print('${categoryId} + ${saving}  ${minPrice}  ${maxPrice}');
   }
 
   Future<void> changePrice() async{
-    numberOfProducts = 0;
     bargainsOfChosenCats.forEach((key, value) async {
+      numberOfProducts = 0;
       /*value.forEach((element) {
         if(element.price<minPrice || element.price>maxPrice || element.saving<saving) {
           value.toList().remove(element);
         }
-      });
-      numberOfProducts += value.length;*/
+      });*/
       Iterable<Product> products = await ProductApi().getFilterProducts(key, saving, minPrice, maxPrice);
       bargainsOfChosenCats[key] = products;
       numberOfProducts += products.length;
+      print("test");
+      print(numberOfProducts);
     });
-    print(numberOfProducts);
+    print("ende");
   }
 
   // Whenever a productcategory gets unselcted this function should delete all Products of the category to the Map
@@ -123,7 +123,6 @@ class _BrowserPageState extends State<BrowserPage> {
       if(products!=null){
       numberOfProducts -= products.length;
       bargainsOfChosenCats.remove(categoryID);
-      print(numberOfProducts);
     }
   }
 

@@ -31,7 +31,7 @@ class SubcategoryView extends StatefulWidget {
 }
 
 class _SubcategoryViewState extends State<SubcategoryView> {
-  RangeValues _currentSliderValuesPrice = const RangeValues(20, 70);
+  RangeValues _currentSliderValuesPrice = const RangeValues(00, 70);
   //values for the left and right output of the slider
   var startValue = 0;
   var endValue = 4900;
@@ -63,7 +63,9 @@ class _SubcategoryViewState extends State<SubcategoryView> {
 
   //List<SubcatButton> subCatButtons = [];
 
-
+  void initState() {
+      setState(() {});
+    }
 
   Future<void> listToButtons() async {
     if (subCatButtons.isEmpty) {
@@ -276,15 +278,18 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                     divisions: 100,
                                     onChanged: (RangeValues values) {
                                       setState(() {
-                                        _currentSliderValuesPrice = values;
-                                        // values change exponentially and not linear.
-                                        startValue = pow(_currentSliderValuesPrice.start, 2).round();
-                                        endValue = pow(_currentSliderValuesPrice.end, 2).round();
-                                        //print("$startValue, $endValue" );
-                                      });
+                                      _currentSliderValuesPrice = values;
+                                      // values change exponentially and not linear.
+                                      startValue = pow(_currentSliderValuesPrice.start, 2).round();
+                                      endValue = pow(_currentSliderValuesPrice.end, 2).round();
+                                      //print("$startValue, $endValue" );
+                                    });},
+                                    onChangeEnd: (RangeValues values) {
 
-                                      widget.callback.setPriceRange(startValue * 100, endValue * 100);
-                                      widget.callback.changePrice();
+                                      setState(() {
+                                        widget.callback.setPriceRange(startValue * 100, endValue * 100);
+                                        widget.callback.changePrice();
+                                      });
                                     },
                                   ),
 
@@ -396,11 +401,12 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                                     saving = 0;
                                                   }
                                                 });
-                                                setState(() {
 
+
+                                                setState(() {
+                                                  widget.callback.setSaving(saving);
+                                                  widget.callback.changePrice();
                                                 });
-                                                widget.callback.setSaving(saving);
-                                                widget.callback.changePrice();
                                               },
                                               child: Text(
                                                 ">" + discounts[index][0].toString() + "%",
