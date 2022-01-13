@@ -181,6 +181,7 @@ class _HomePageState extends State<HomePage> {
     }
     if (status == WelcomeStatus.noFirstTime) {
       widget.callback.loadingFinished();
+      status = WelcomeStatus.finished;
     }
     if (count < _product.length) {
       _products.insert(count, _product[count]);
@@ -192,7 +193,7 @@ class _HomePageState extends State<HomePage> {
 
   timerFunction(List<int> ids) {
     // every 2 seconds get a random category id, call the api with it, load the product and animate it
-    _timer = Timer.periodic(const Duration(seconds: 2), (Timer timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
       index = _jsonFunctions.getRandomInt(_jsonFunctions.count);
       randomCategory = ids[index];
       getProducts(randomCategory);
@@ -200,7 +201,7 @@ class _HomePageState extends State<HomePage> {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
           curve: Curves.easeOut,
-          duration: const Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 200),
         );
       }
     });
@@ -431,4 +432,4 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-enum WelcomeStatus { loading, firstTime, noFirstTime }
+enum WelcomeStatus { loading, firstTime, noFirstTime, finished }

@@ -41,7 +41,6 @@ class AppState extends State<AppNavigator> {
 
 
 
-
   @override
   Widget build(context) {
     MediaQueryData _mediaQueryData;
