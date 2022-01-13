@@ -443,7 +443,7 @@ class _HomePageState extends State<HomePage> {
                     stream: ProductApi().fetchProductWebSocket().stream,
                     builder: (context, snapshot) {
 
-                      if(snapshot.connectionState == ConnectionState.waiting) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
                       } else if (snapshot.connectionState == ConnectionState.active
                           || snapshot.connectionState == ConnectionState.done) {
