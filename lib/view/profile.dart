@@ -2,6 +2,7 @@ import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/services/notification_service.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
+import 'package:penny_pincher/view/help.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
@@ -50,6 +51,8 @@ class _ProfilePageState extends State<ProfilePage> {
             child: ListView(
               //padding: EdgeInsets.only(top: 50),
               children: <Widget>[
+
+                //Theme Changer Button
                 Container(
                   height: 50,
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
@@ -89,6 +92,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
+
+                //Notification Button
                 Container(
                   height: 50,
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
@@ -126,6 +131,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),),
                   ),
                 ),
+
+                // Delete search history button
                 Container(
                   height: 50,
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
@@ -136,7 +143,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   child:
                   TextButton(
                     onPressed: () {
-
+                      showAlertDialog(context);
                     },
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(ThemeChanger.lightBlue),
@@ -159,6 +166,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),),
                   ),
                 ),
+
+                //About button
                 Container(
                   height: 50,
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
@@ -195,6 +204,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),),
                   ),
                 ),
+
+                //Help Button
                 Container(
                   height: 50,
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
@@ -205,7 +216,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   child:
                   TextButton(
                     onPressed: () {
-
+                      Navigator.push (
+                        context,
+                        MaterialPageRoute(builder: (context) => Help()),
+                      );
                     },
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(ThemeChanger.lightBlue),
@@ -235,4 +249,46 @@ class _ProfilePageState extends State<ProfilePage> {
       )
     );
   }
+
+  static showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: const Text("Nein"),
+      onPressed: () {
+        Navigator.of(context, rootNavigator: true).pop('dialog');
+      },
+    );
+    Widget continueButton = TextButton(
+      style: TextButton.styleFrom(
+        primary: Colors.red,
+      ),
+      child: const Text("Ja"),
+      onPressed: () async {
+        Navigator.of(context, rootNavigator: true).pop('dialog');
+        ArticleSearch.deleteAllRecent();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: const Text("Suchverlauf löschen?"),
+      content: const Text(
+          "Willst du wirklich deinen kompletten Textsuchverlauf löschen?"),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
 }
