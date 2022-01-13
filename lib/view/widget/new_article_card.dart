@@ -23,7 +23,7 @@ class NewArticleCard extends StatelessWidget {
   late dynamic callback;
   ProductWS productWS;
 
-  NewArticleCard(this.productWS, this.callback){
+  NewArticleCard(this.productWS, {this.callback}){
     this.productName = productWS.productName;
     this.dropPercentage = productWS.dropPercentage;
     this.currentPrice = productWS.currentPrice as double;

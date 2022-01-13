@@ -273,6 +273,19 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  String string = "1.049,09��";
+
+  String parseString(String string) {
+    String newString = "";
+    for (int i = 0; i < string.length; i++) {
+      if (string[i] ==  ",") {
+       newString = string.substring(0, i + 2);
+      }
+    }
+    return newString;
+  }
+
+
   @override
   void initState() {
     if (mounted) {
@@ -288,7 +301,8 @@ class _HomePageState extends State<HomePage> {
     });
     firstAppStart();
     //initListOfIDs();
-    ProductApi().fetchProductWebSocket();
+    //ProductApi().fetchProductWebSocket();
+    print("AAAAAAAAAAA" + "sa" +parseString("1.049,09��"));
 
     tz.initializeTimeZones();
   }
@@ -427,8 +441,8 @@ class _HomePageState extends State<HomePage> {
                     stream: ProductApi().fetchProductWebSocket().stream,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        print(snapshot.data);
-                        return Text('${snapshot.data}');
+                        //print(snapshot.data);
+                        return NewArticleCard(productFromJson(snapshot.data.toString()));
                       }
                       return const Text('');
                       /*
