@@ -175,11 +175,13 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                   return InkWell(
                                       onTap: () {
                                         setState(() {
+                                          //TODO: if Main category changed Producs of old selection still there
                                           widget.callback.numberOfProducts = 0;
                                           Map<String, int> mapReplacement = new Map();
                                           widget.callback.mapOfChosenCategories = mapReplacement;
                                           widget.categoryId = widget
                                               .callback.widget.mainCategoryIds[index];
+                                          widget.callback.bargainsOfChosenCats.clear();
                                           print(
                                               "lasdköjflöaksjf ${widget.callback.widget.mainCategoryIds[index]}");
                                           widget.callback.chosenCategories.clear();
