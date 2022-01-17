@@ -7,6 +7,7 @@ import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/json_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
+import 'package:penny_pincher/view/extended_view_web_socket.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/welcome_screen.dart';
 import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
@@ -214,10 +215,6 @@ class _HomePageState extends State<HomePage> {
       }
     });
     firstAppStart();
-    //initListOfIDs();
-    //ProductApi().fetchProductWebSocket();
-    //print("AAAAAAAAAAA" + "sa" +parseString("1.049,09��"));
-
     tz.initializeTimeZones();
   }
 
@@ -225,8 +222,6 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     super.dispose();
   }
-
-  var data;
 
   @override
   Widget build(BuildContext context) {
@@ -347,10 +342,11 @@ class _HomePageState extends State<HomePage> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                ExtendedView(
-                                                    _products[index],
-                                                    this,
-                                                    streamController.stream)),
+                                                ExtendenViewWebSocket(
+                                                    newProducts[index],
+                                                    //this,
+                                                    streamController.stream
+                                                )),
                                       );
                                     },
                                     child: NewArticleCard(newProducts[index])
