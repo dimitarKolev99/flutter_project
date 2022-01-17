@@ -186,13 +186,17 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                           Navigator.pushReplacement(
                                               context,
                                               MaterialPageRoute(
-                                                builder: (context) => SubcategoryView(
-                                                  widget.callback.widget.mainCategoryNames[index],
-                                                  widget.callback.widget.mainCategoryIds[index],
-                                                  widget.stream,
-                                                  widget.updateStream,
-                                                  widget.callback,
-                                                ),
+                                                builder: (context) {
+                                                    widget.callback.view = SubcategoryView(
+                                                      widget.callback.widget.mainCategoryIds[index],
+                                                      widget.callback.widget.mainCategoryNames[index],
+                                                      widget.stream,
+                                                      widget.updateStream,
+                                                      widget.callback,
+                                                    );
+                                                    widget.callback.numberOfProducts = 0;
+                                                  return widget.callback.view;
+                                                },
                                               ));
                                         });
                                       },
