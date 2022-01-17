@@ -192,6 +192,7 @@ class _HomePageState extends State<HomePage> {
     }
     if (status == WelcomeStatus.noFirstTime) {
       widget.callback.loadingFinished();
+      status = WelcomeStatus.finished;
     }
     if (count < _product.length) {
       _products.insert(count, _product[count]);
@@ -199,7 +200,6 @@ class _HomePageState extends State<HomePage> {
     }
     ProductController.addProducts(_products);
   }
-
 
   @override
   void initState() {
@@ -433,4 +433,4 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-enum WelcomeStatus { loading, firstTime, noFirstTime }
+enum WelcomeStatus { loading, firstTime, noFirstTime, finished }

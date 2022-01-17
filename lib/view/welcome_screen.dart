@@ -70,10 +70,50 @@ class _WelcomePageState extends State<WelcomePage> {
                       selectedColor: Colors.white,
                       borderRadius: BorderRadius.circular(4),
                       children: <Widget>[
-                        Icon(Icons.ad_units, size: 35),
-                        Icon(MdiIcons.pill, size: 35),
-                        Icon(MdiIcons.flowerTulip, size: 35),
-                        Icon(MdiIcons.tshirtCrew, size: 35),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.ad_units, size: 40),
+                            SizedBox(height: 10),
+                            Text(
+                              "Elektroartikel",
+                              style: TextStyle(fontSize: 15),
+                            )
+                          ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(MdiIcons.pill, size: 40),
+                            SizedBox(height: 10),
+                            Text(
+                              "Drogerie",
+                              style: TextStyle(fontSize: 15),
+                            )
+                          ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(MdiIcons.flowerTulip, size: 40),
+                            SizedBox(height: 10),
+                            Text(
+                              "Garten",
+                              style: TextStyle(fontSize: 15),
+                            )
+                          ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(MdiIcons.tshirtCrew, size: 40),
+                            SizedBox(height: 10),
+                            Text(
+                              "Mode",
+                              style: TextStyle(fontSize: 15),
+                            )
+                          ],
+                        )
                       ],
                       onPressed: (int index) {
                         int count = 0;
@@ -96,12 +136,12 @@ class _WelcomePageState extends State<WelcomePage> {
                         });
                       },
                       renderBorder: false,
-                      constraints: BoxConstraints(minWidth: 70, minHeight: 70),
+                      constraints: BoxConstraints(minWidth: 90, minHeight: 90),
                       isSelected: isSelected1,
                     ),
                   ],
                 )),
-                const SizedBox(height: 45),
+                const SizedBox(height: 40),
                 Container(
                     child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -114,11 +154,51 @@ class _WelcomePageState extends State<WelcomePage> {
                       selectedBorderColor: ThemeChanger.navBarColor,
                       selectedColor: Colors.white,
                       borderRadius: BorderRadius.circular(4),
-                      children: const <Widget>[
-                        Icon(MdiIcons.paw, size: 35),
-                        Icon(MdiIcons.controllerClassic, size: 35),
-                        Icon(MdiIcons.food, size: 35),
-                        Icon(MdiIcons.babyCarriage, size: 35),
+                      children: <Widget>[
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(MdiIcons.paw, size: 40),
+                            SizedBox(height: 10),
+                            Text(
+                              "Tierbedarf",
+                              style: TextStyle(fontSize: 15),
+                            )
+                          ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(MdiIcons.controllerClassic, size: 40),
+                            SizedBox(height: 10),
+                            Text(
+                              "Gaming",
+                              style: TextStyle(fontSize: 15),
+                            )
+                          ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(MdiIcons.food, size: 40),
+                            SizedBox(height: 10),
+                            Text(
+                              "Essen",
+                              style: TextStyle(fontSize: 15),
+                            )
+                          ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(MdiIcons.babyCarriage, size: 40),
+                            SizedBox(height: 10),
+                            Text(
+                              "Baby",
+                              style: TextStyle(fontSize: 15),
+                            )
+                          ],
+                        ),
                       ],
                       onPressed: (int index) {
                         int count = 0;
@@ -141,7 +221,7 @@ class _WelcomePageState extends State<WelcomePage> {
                         });
                       },
                       renderBorder: false,
-                      constraints: BoxConstraints(minWidth: 70, minHeight: 70),
+                      constraints: BoxConstraints(minWidth: 90, minHeight: 90),
                       isSelected: isSelected2,
                     ),
                   ],
@@ -159,10 +239,40 @@ class _WelcomePageState extends State<WelcomePage> {
                       selectedBorderColor: ThemeChanger.navBarColor,
                       selectedColor: Colors.white,
                       borderRadius: BorderRadius.circular(4),
-                      children: const <Widget>[
-                        Icon(MdiIcons.car, size: 35),
-                        Icon(MdiIcons.vacuum, size: 35),
-                        Icon(MdiIcons.tennis, size: 35),
+                      children: <Widget>[
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(MdiIcons.car, size: 40),
+                            SizedBox(height: 10),
+                            Text(
+                              "Auto",
+                              style: TextStyle(fontSize: 15),
+                            )
+                          ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(MdiIcons.vacuum, size: 40),
+                            SizedBox(height: 10),
+                            Text(
+                              "Haushaltselektronik",
+                              style: TextStyle(fontSize: 15),
+                            )
+                          ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(MdiIcons.tennis, size: 40),
+                            SizedBox(height: 10),
+                            Text(
+                              "Sport",
+                              style: TextStyle(fontSize: 15),
+                            )
+                          ],
+                        ),
                       ],
                       onPressed: (int index) {
                         int count = 0;
@@ -185,7 +295,7 @@ class _WelcomePageState extends State<WelcomePage> {
                         });
                       },
                       renderBorder: false,
-                      constraints: BoxConstraints(minWidth: 70, minHeight: 70),
+                      constraints: BoxConstraints(minWidth: 90, minHeight: 90),
                       isSelected: isSelected3,
                     ),
                   ],
@@ -223,39 +333,47 @@ class _WelcomePageState extends State<WelcomePage> {
                           onPressed: _isButtonDisabled
                               ? null
                               : () {
-                            for(var i = 0; i < isSelected1.length; i++) {
-                              if (isSelected1[i]) {
-                                widget.callback.selectCategory(i);
-                              }
-                            }
-                            for(var i = 0; i < isSelected2.length; i++) {
-                              if (isSelected2[i]) {
-                                widget.callback.selectCategory(4 + i);
-                              }
-                            }
-                            for(var i = 0; i < isSelected3.length; i++) {
-                              if (isSelected3[i]) {
-                                widget.callback.selectCategory(8 + i);
-                              }
-                            }
+                                  for (var i = 0; i < isSelected1.length; i++) {
+                                    if (isSelected1[i]) {
+                                      widget.callback.selectCategory(i);
+                                    }
+                                  }
+                                  for (var i = 0; i < isSelected2.length; i++) {
+                                    if (isSelected2[i]) {
+                                      widget.callback.selectCategory(4 + i);
+                                    }
+                                  }
+                                  for (var i = 0; i < isSelected3.length; i++) {
+                                    if (isSelected3[i]) {
+                                      widget.callback.selectCategory(8 + i);
+                                    }
+                                  }
                                   widget.callback.closeWelcomeScreen();
                                 },
                           style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(
-                                  ThemeChanger.textColor),
+                                  ThemeChanger.lightBlue),
                               foregroundColor: MaterialStateProperty.all(
                                   Color.fromRGBO(45, 45, 45, 1)),
                               shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(33),
-                                //side: BorderSide(color: Colors.black)
-                              )),
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    side: BorderSide(
+                                        color: ThemeChanger.navBarColor,
+                                        width: 2,
+                                        style: BorderStyle.solid),
+                                    borderRadius: BorderRadius.circular(3)),
+                              ),
                               textStyle: MaterialStateProperty.all(TextStyle(
                                 fontSize: 21,
                                 fontWeight: FontWeight.w500,
                               ))),
-                          child: Text("Fortfahren"),
+                          child: Text(
+                            "Fortfahren",
+                            style: TextStyle(
+                              color: ThemeChanger.textColor,
+                            ),
+                          ),
                         ),
                       ),
                       SizedBox(height: 30),

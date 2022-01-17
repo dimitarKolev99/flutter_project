@@ -16,13 +16,17 @@ class SubcatButton extends StatefulWidget {
   final int categoryId;
   bool show = false;
   bool _isProdCat = false;
-  bool _isChosen = false;
+  bool isChosen = false;
   late final Stream<bool> stream;
   late final StreamController updateStream;
   final dynamic callback;
   final dynamic cBackToView;
   final ScrollController controller;
+  List<String> subCategoriesNames = [];
+  List<int> subCategoriesIds = [];
 
+  @observable
+  ObservableList<SubcatButton> subCatButtons = new ObservableList();
 
   SubcatButton({
     required this.categoryName,
@@ -38,23 +42,31 @@ class SubcatButton extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _SubcatButtonState();
 
+  removeFromBrowser(String name) {
+    for (var element in subCatButtons) {
+      if(element.categoryName == name) {
+        element.isChosen = false;
+        return;
+      }
+      element.removeFromBrowser(name);
+    }
+  }
+
 }
 
 class _SubcatButtonState extends State<SubcatButton> {
   Map<String, int> subCategoriesMap = new Map();
   // names and Ids have matching indexes for name and id of the category
-  List<String> subCategoriesNames = [];
-  List<int> subCategoriesIds = [];
+
   JsonFunctions json = JsonFunctions();
-  @observable
-  ObservableList<SubcatButton> subCatButtons = new ObservableList();
+
 
   Future<void> listToButtons() async{
-    if(subCatButtons.isEmpty) {
-      for (int i = 0; i < subCategoriesNames.length; i++) {
-        subCatButtons.add(
-            SubcatButton(categoryName: subCategoriesNames[i],
-              categoryId: subCategoriesIds[i],
+    if(widget.subCatButtons.isEmpty) {
+      for (int i = 0; i < widget.subCategoriesNames.length; i++) {
+        widget.subCatButtons.add(
+            SubcatButton(categoryName: widget.subCategoriesNames[i],
+              categoryId: widget.subCategoriesIds[i],
               stream: widget.stream,
               updateStream: widget.updateStream,
             callback: widget.callback,
@@ -65,10 +77,10 @@ class _SubcatButtonState extends State<SubcatButton> {
   }
 
   Future<void> mapToLists() async {
-    if(subCategoriesNames.isEmpty) {
+    if(widget.subCategoriesNames.isEmpty) {
       subCategoriesMap.forEach((name, id) {
-        subCategoriesNames.add(name);
-        subCategoriesIds.add(id);
+        widget.subCategoriesNames.add(name);
+        widget.subCategoriesIds.add(id);
        // print("added $name");
       });
     }
@@ -89,9 +101,9 @@ class _SubcatButtonState extends State<SubcatButton> {
     mapToLists();
     listToButtons();
   }
-  late Color subCatcolor = widget._isChosen ? ThemeChanger.lightBlue : ThemeChanger.articlecardbackground;
-  late Color prodCatColor = widget._isChosen ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground;
-  late Color textColor = widget._isChosen ? ThemeChanger.articlecardbackground : ThemeChanger.catTextColor;
+  late Color subCatcolor = widget.isChosen ? ThemeChanger.lightBlue : ThemeChanger.articlecardbackground;
+  late Color prodCatColor = widget.isChosen ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground;
+  late Color textColor = widget.isChosen ? ThemeChanger.articlecardbackground : ThemeChanger.catTextColor;
   @override
   Widget build(BuildContext context) {
 
@@ -106,10 +118,10 @@ class _SubcatButtonState extends State<SubcatButton> {
             setState(() {
                getCats();
                 // if empty chosen category = Productcategory
-                if(subCatButtons.isEmpty){
+                if(widget.subCatButtons.isEmpty){
                   widget._isProdCat = true;
-                  if(widget._isChosen == false){ //unselected
-                    widget._isChosen = !widget._isChosen;
+                  if(widget.isChosen == false){ //unselected
+                    widget.isChosen = !widget.isChosen;
                     widget.callback.addCategory(widget.categoryName, widget.categoryId);
                     prodCatColor = ThemeChanger.highlightedColor;
                     textColor = ThemeChanger.textColor;
@@ -118,35 +130,37 @@ class _SubcatButtonState extends State<SubcatButton> {
                     // TODO: Call Json Function to updayte the resultList and Update Button Text
                     widget.callback.currentCategory = widget.categoryId;
                     widget.callback.addProductsOfChosenCategory(widget.categoryId);
-                    widget.cBackToView.setState(() {});
 
                   }
                   else{
-                    widget._isChosen = !widget._isChosen;
+                    widget.isChosen = !widget.isChosen;
                     //print("try to remove : ! ${widget.categoryName}");
                     widget.callback.removeOneCategory(widget.categoryName);
                     prodCatColor = ThemeChanger.articlecardbackground;
                     textColor = ThemeChanger.catTextColor;
                     widget.callback.deleteProductsOfChosenCategory(widget.categoryId);
                   }
+
+
                 }
                 // Subcategories
                 else {
-                  if(widget._isChosen == false){ // unselected
+                  if(widget.isChosen == false){ // unselected
                     //widget.callback.addCategory(widget.categoryName);
-                    widget._isChosen = !widget._isChosen;
+                    widget.isChosen = !widget.isChosen;
                     widget.show = !widget.show;
                     subCatcolor = ThemeChanger.lightBlue;
                     textColor = ThemeChanger.textColor;
                   }
                   else{  // selected
-                    widget._isChosen = !widget._isChosen;
+                    widget.isChosen = !widget.isChosen;
                     subCatcolor = ThemeChanger.articlecardbackground;
                     widget.show = !widget.show;
                     textColor = ThemeChanger.catTextColor;
                    // widget.callback.removeOneCategory(widget.categoryName);
                   }
                 }
+               widget.cBackToView.state.setState(() { });
             }
             );
           },
@@ -197,9 +211,9 @@ class _SubcatButtonState extends State<SubcatButton> {
     return
     ListView.builder(
       controller: widget.controller,
-      itemCount: subCatButtons.length,
+      itemCount: widget.subCatButtons.length,
       itemBuilder: (context, index) {
-      return subCatButtons[index];
+      return widget.subCatButtons[index];
     },
     );}
     )))]);

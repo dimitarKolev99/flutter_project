@@ -18,27 +18,45 @@ class SubcategoryView extends StatefulWidget {
   late final StreamController updateStream;
   final dynamic callback;
   ScrollController _scrollController = ScrollController();
-
-  SubcategoryView({
-    required this.categoryId,
-    required this.categoryName,
-    required this.stream,
-    required this.updateStream,
-    required this.callback,
-  });
-
-  @override
-  State<StatefulWidget> createState() => _SubcategoryViewState();
-}
-
-class _SubcategoryViewState extends State<SubcategoryView> {
-  RangeValues _currentSliderValuesPrice = const RangeValues(00, 70);
-  //values for the left and right output of the slider
+  late var state;
   var startValue = 0;
   var endValue = 4900;
   int saving = 0;
   int minPrice = 0;
   int maxPrice = 0;
+  bool _hide = true;
+  Map<String, int> subCategoriesMap = new Map();
+
+
+  // names and Ids have matching indexes for name and id of the category
+  List<String> subCategoriesNames = [];
+  List<int> subCategoriesIds = [];
+  @observable
+  ObservableList<SubcatButton> subCatButtons = new ObservableList();
+
+  RangeValues _currentSliderValuesPrice = const RangeValues(00, 70);
+
+  SubcategoryView(this.categoryId, this.categoryName, this.stream, this.updateStream, this.callback);
+
+
+  @override
+  State<StatefulWidget> createState() => _SubcategoryViewState();
+
+
+  removeFromBrowser(String name) {
+    for (var element in subCatButtons) {
+      if(element.categoryName == name) {
+        element.isChosen = false;
+        return;
+      }
+      element.removeFromBrowser(name);
+    }
+  }
+}
+
+class _SubcategoryViewState extends State<SubcategoryView> {
+  //values for the left and right output of the slider
+
 
   // Discount options combined with a boolean for when chosen
   var discounts = [
@@ -50,34 +68,27 @@ class _SubcategoryViewState extends State<SubcategoryView> {
   ];
 
   // boolean Variable used to hide the Price Slider and Discounts
-  bool _hide = true;
+
 
   JsonFunctions json = JsonFunctions();
-
-  Map<String, int> subCategoriesMap = new Map();
-
-  // names and Ids have matching indexes for name and id of the category
-  List<String> subCategoriesNames = [];
-  List<int> subCategoriesIds = [];
-  @observable
-  ObservableList<SubcatButton> subCatButtons = new ObservableList();
 
   //List<SubcatButton> subCatButtons = [];
 
   void initState() {
-      setState(() {});
-    }
+    setState(() {});
+    widget.state = this;
+  }
 
   Future<void> listToButtons() async {
-    if (subCatButtons.isEmpty) {
-      for (int i = 0; i < subCategoriesNames.length; i++) {
-        subCatButtons.add(SubcatButton(
-          categoryName: subCategoriesNames[i],
-          categoryId: subCategoriesIds[i],
+    if (widget.subCatButtons.isEmpty) {
+      for (int i = 0; i < widget.subCategoriesNames.length; i++) {
+          widget.subCatButtons.add(SubcatButton(
+          categoryName: widget.subCategoriesNames[i],
+          categoryId: widget.subCategoriesIds[i],
           stream: widget.stream,
           updateStream: widget.updateStream,
           callback: widget.callback,
-          cBackToView: this,
+          cBackToView: widget,
           controller: widget._scrollController,
         ));
       }
@@ -85,10 +96,10 @@ class _SubcategoryViewState extends State<SubcategoryView> {
   }
 
   Future<void> mapToLists() async {
-    if (subCategoriesNames.isEmpty) {
-      subCategoriesMap.forEach((name, id) {
-        subCategoriesNames.add(name);
-        subCategoriesIds.add(id);
+    if (widget.subCategoriesNames.isEmpty) {
+      widget.subCategoriesMap.forEach((name, id) {
+        widget.subCategoriesNames.add(name);
+        widget.subCategoriesIds.add(id);
         // print("added $name addedID $id");
       });
     }
@@ -96,11 +107,11 @@ class _SubcategoryViewState extends State<SubcategoryView> {
 
   Future<void> getSubCategories() async {
     //print("category ID view!!! :_______   ${widget.categoryId}");
-    if (subCategoriesMap.isEmpty) {
+    if (widget.subCategoriesMap.isEmpty) {
       json.getJson().then((List<dynamic> result) {
         List<dynamic> resultList = [];
         resultList = result;
-        subCategoriesMap =
+        widget.subCategoriesMap =
             json.getMapOfSubOrProductCategories(widget.categoryId, resultList);
       });
       // print("subCategoriesMap.lengthsubCategoriesMap.length ${subCategoriesMap.length}");
@@ -176,13 +187,11 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) => SubcategoryView(
-                                                  categoryName: widget.callback.widget
-                                                      .mainCategoryNames[index],
-                                                  categoryId: widget.callback.widget
-                                                      .mainCategoryIds[index],
-                                                  stream: widget.stream,
-                                                  updateStream: widget.updateStream,
-                                                  callback: widget.callback,
+                                                  widget.callback.widget.mainCategoryNames[index],
+                                                  widget.callback.widget.mainCategoryIds[index],
+                                                  widget.stream,
+                                                  widget.updateStream,
+                                                  widget.callback,
                                                 ),
                                               ));
                                         });
@@ -226,7 +235,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
 
                                     // Collapse-Unfold Icon
                                     IconButton(
-                                      icon: Icon(_hide
+                                      icon: Icon(widget._hide
                                           ? Icons.arrow_drop_down
                                           : Icons.arrow_drop_up,
                                       ),
@@ -234,7 +243,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                       tooltip: "Einklappen/Ausklappen",
                                       onPressed: () {
                                         setState(() {
-                                          _hide = !_hide;
+                                          widget._hide = !widget._hide;
                                         });
                                       },
                                     ),
@@ -242,28 +251,28 @@ class _SubcategoryViewState extends State<SubcategoryView> {
 
                           // PriceSlider
                           Visibility(
-                              visible: !_hide,
+                              visible: !widget._hide,
                               child: Column(
                                 children: [
                                   RangeSlider(
                                     inactiveColor: ThemeChanger.lightBlue,
                                     activeColor: ThemeChanger.catTextColor,
-                                    values: _currentSliderValuesPrice,
+                                    values: widget._currentSliderValuesPrice,
                                     min: 0,
                                     max: 100,
                                     divisions: 100,
                                     onChanged: (RangeValues values) {
                                       setState(() {
-                                      _currentSliderValuesPrice = values;
+                                        widget._currentSliderValuesPrice = values;
                                       // values change exponentially and not linear.
-                                      startValue = pow(_currentSliderValuesPrice.start, 2).round();
-                                      endValue = pow(_currentSliderValuesPrice.end, 2).round();
+                                      widget.startValue = pow(widget._currentSliderValuesPrice.start, 2).round();
+                                      widget.endValue = pow(widget._currentSliderValuesPrice.end, 2).round();
                                       //print("$startValue, $endValue" );
                                     });},
                                     onChangeEnd: (RangeValues values) {
 
                                       setState(() {
-                                        widget.callback.setPriceRange(startValue * 100, endValue * 100);
+                                        widget.callback.setPriceRange(widget.startValue * 100, widget.endValue * 100);
                                         widget.callback.changePrice();
                                       });
                                     },
@@ -289,7 +298,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                               blockSizeHorizontal * 3),
                                         ),
                                         child: Text(
-                                          startValue
+                                          widget.startValue
                                               .toString() +
                                               " €",
                                           style: TextStyle(
@@ -316,7 +325,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                               blockSizeHorizontal * 3),
                                         ),
                                         child: Text(
-                                          endValue
+                                          widget.endValue
                                               .toString() +
                                               " €",
                                           style: TextStyle(
@@ -371,16 +380,16 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                                       discount[1] = false;
                                                     }
                                                     discounts[index][1] = true;
-                                                    saving = discounts[index][0] as int;
+                                                    widget.saving = discounts[index][0] as int;
                                                   } else {
                                                     discounts[index][1] = false;
-                                                    saving = 0;
+                                                    widget.saving = 0;
                                                   }
                                                 });
 
 
                                                 setState(() {
-                                                  widget.callback.setSaving(saving);
+                                                  widget.callback.setSaving(widget.saving);
                                                   widget.callback.changePrice();
                                                 });
                                               },
@@ -433,10 +442,10 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                             builder: (context, snapshot) {
                               return ListView.builder(
                                   controller: _scrollController,
-                                  itemCount: subCatButtons.length,
+                                  itemCount: widget.subCatButtons.length,
                                   itemBuilder: (context, index) {
                                     // print("length of categories : ${subCatButtons.length}");
-                                    return subCatButtons[index];
+                                    return widget.subCatButtons[index];
                                   });
                             })),
                   ],
