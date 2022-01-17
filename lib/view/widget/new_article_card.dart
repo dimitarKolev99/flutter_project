@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:penny_pincher/models/product.dart';
+import 'package:penny_pincher/models/ws_product.dart';
 import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/product_api.dart';
 
@@ -8,32 +9,40 @@ import '../theme.dart';
 
 
 
-class ArticleCard extends StatelessWidget {
-  late final int id;
-  late final String title;
-  late final int saving;
-  late final double price;
-  late final String image;
-  late final String description;
-  late final String category;
+class NewArticleCard extends StatelessWidget {
+  late final int productId;
+  late final int siteId;
+  late final DateTime date;
+  late final String currentPrice;
+  late final String previousPrice;
+  late final String dropPercentage;
+  late final String productName;
+  late final String productImageUrl;
+  late final String productPageUrl;
+  late final int categoryId;
   late dynamic callback;
-  Product product;
+  ProductWS productWS;
 
-  ArticleCard(this.product, this.callback){
-    this.title = product.title;
-    this.saving = product.saving;
-    this.price = product.price;
-    this.image = product.smallImage;
-    this.description = product.description;
-    this.category = product.categoryName;
-    this.id = product.productId;
+
+
+  NewArticleCard(this.productWS, {this.callback}){
+    this.productName = productWS.productName;
+    this.dropPercentage = productWS.dropPercentage;
+    this.currentPrice = productWS.currentPrice;
+    this.productImageUrl = productWS.productImageUrl;
+    //this.description = productWS.description;
+    this.previousPrice = productWS.previousPrice;
+    this.categoryId = productWS.categoryId;
+    this.productId = productWS.productId;
   }
+
+
 
   @override
   Widget build(BuildContext context) {
-    double newprice = price/100;
-    int x = 100 - saving;
-    double prevpreis = newprice/x * 100;
+    //double newprice = currentPrice/100;
+    //int x = 100 - currentPrice as int;
+    //double prevpreis = newprice/x * 100;
 
     MediaQueryData _mediaQueryData;
     double displayWidth;
@@ -81,45 +90,43 @@ class ArticleCard extends StatelessWidget {
           children: [
             // Picture + Discount%
             Stack(
-              children:[
-              // Product Image
-              Container(
-                //color: Colors.purple,
-                //width: blockSizeHorizontal * 30,//displayWidth/3 - 20,
-                //height: blockSizeVertical * 15,
-                margin: EdgeInsets.only(left: blockSizeHorizontal * 3),//(left: 10),
-                child:
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(4.0),
-                  child:
-                  Image.network(
-                    image,
-                    //width: blockSizeHorizontal * 50,//displayWidth / 3 - 30,
-                    //height: blockSizeHorizontal * 50,//displayWidth / 3 - 30,
-                    fit: BoxFit.contain,
-                    width: blockSizeHorizontal*30,
-                  ),
-                ),
-              ),
-                // % Badge
-                Container(
-                  margin: EdgeInsets.only(top: blockSizeVertical*0.5),
-                  //padding: EdgeInsets.only(top: 3, bottom: 3, left: 7, right: 5),
-                  padding: EdgeInsets.only(top: blockSizeVertical * 0.5, bottom: blockSizeVertical * 0.5, left: blockSizeHorizontal *1, right: blockSizeHorizontal * 1),//(top: 3, bottom: 3, left: 10, right: 17),
-                  decoration: BoxDecoration(
-                    color: ThemeChanger.highlightedColor,  // const Color.fromRGBO(23, 41, 111, 0.8),
-                    borderRadius: BorderRadius.circular(0),
-                  ),
-                  child:
-                  Text("-" + saving.toString() + "%",
-                    style: TextStyle(
-                      color: ThemeChanger.textColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: safeBlockHorizontal * 4,
+                children:[
+                  // Product Image
+                  Container(
+                    width: blockSizeHorizontal * 30,//displayWidth/3 - 20,
+                    height: blockSizeVertical * 15,
+                    margin: EdgeInsets.only(left: blockSizeHorizontal * 3),//(left: 10),
+                    child:
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(4.0),
+                      child:
+                      Image.network(
+                        productImageUrl,
+                        //width: blockSizeHorizontal * 50,//displayWidth / 3 - 30,
+                        //height: blockSizeHorizontal * 50,//displayWidth / 3 - 30,
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
-                ),
-              ]
+                  // % Badge
+                  Container(
+                    margin: EdgeInsets.only(top: blockSizeVertical*0.5),
+                    //padding: EdgeInsets.only(top: 3, bottom: 3, left: 7, right: 5),
+                    padding: EdgeInsets.only(top: blockSizeVertical * 0.5, bottom: blockSizeVertical * 0.5, left: blockSizeHorizontal *1, right: blockSizeHorizontal * 1),//(top: 3, bottom: 3, left: 10, right: 17),
+                    decoration: BoxDecoration(
+                      color: ThemeChanger.highlightedColor,  // const Color.fromRGBO(23, 41, 111, 0.8),
+                      borderRadius: BorderRadius.circular(0),
+                    ),
+                    child:
+                    Text("-" + dropPercentage.toString(),
+                      style: TextStyle(
+                        color: ThemeChanger.textColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: safeBlockHorizontal * 4,
+                      ),
+                    ),
+                  ),
+                ]
             ),
             Stack(
               children: [
@@ -136,7 +143,7 @@ class ArticleCard extends StatelessWidget {
                             width: blockSizeHorizontal * 45,//displayWidth/3 ,
                             //height: blockSizeVertical * 10,
                             child: Text(
-                              title,
+                              productName,
                               style: TextStyle(
                                 fontSize: safeBlockHorizontal * 4.5,//16,
                                 color: ThemeChanger.reversetextColor,
@@ -152,7 +159,7 @@ class ArticleCard extends StatelessWidget {
                             margin: EdgeInsets.only(left:  blockSizeHorizontal * 2,top: blockSizeVertical * 0.5),
                             width: blockSizeHorizontal * 45,//displayWidth/3 ,
                             child: Text(
-                              description,
+                              "DESCRIPTION",
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                 fontSize: safeBlockHorizontal * 3.25,
@@ -170,7 +177,7 @@ class ArticleCard extends StatelessWidget {
                               margin: EdgeInsets.only(left:  blockSizeHorizontal * 2),
                               width: blockSizeHorizontal * 45,
                               child: Text(
-                                prevpreis.toStringAsFixed(2) + "€",
+                                previousPrice,
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                     decoration: TextDecoration.lineThrough,
@@ -186,7 +193,7 @@ class ArticleCard extends StatelessWidget {
                               width: blockSizeHorizontal * 45,
                               child:
                               Text(
-                                newprice.toStringAsFixed(2) + "€",
+                                currentPrice,
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                   fontSize: safeBlockHorizontal * 6.0,//16,
@@ -218,10 +225,11 @@ class ArticleCard extends StatelessWidget {
                     child:
                     IconButton(
                       iconSize: 30.0,
-                      icon: (ProductController.isFavorite(id) ?
+                      icon: (ProductController.isFavorite(productId) ?
                       Icon(Icons.favorite, color: Colors.red) :
                       Icon(Icons.favorite_border, color: ThemeChanger.reversetextColor)),
-                      onPressed: _changeFavoriteState,
+                      onPressed: () {}//_changeFavoriteState,
+
                     ),
                     alignment: Alignment.centerRight,
                   ),
@@ -233,10 +241,10 @@ class ArticleCard extends StatelessWidget {
     );
   }
 
-  Future _changeFavoriteState() async {
+  /*Future _changeFavoriteState() async {
     //await callback.changeFavoriteState(this);
     ProductController.changeFavoriteState(this, callback);
-  }
+  }*/
 }
 
 

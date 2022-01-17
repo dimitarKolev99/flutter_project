@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:penny_pincher/models/preferences_articles.dart';
+import 'package:penny_pincher/models/ws_product.dart';
 import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/json_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
+import 'package:penny_pincher/view/extended_view_web_socket.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/welcome_screen.dart';
 import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
@@ -14,9 +16,11 @@ import 'package:penny_pincher/view/widget/article_search.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:penny_pincher/view/extended_view.dart';
+import 'package:penny_pincher/view/widget/new_article_card.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class HomePage extends StatefulWidget {
   late final Stream<bool> stream;
@@ -129,11 +133,14 @@ class _HomePageState extends State<HomePage> {
 
 
   late List<Product> _product;
+
+  late List<ProductWS> newProduct;
+
   late final List _favoriteIds = [];
   late final List<Product> _products = [];
+  late final List<ProductWS> newProducts = [];
   bool _isLoading = true;
   var count = 0;
-  Timer? _timer;
   bool isScrolling = false;
   ScrollController _scrollController = ScrollController();
   var x = 0.0;
@@ -148,6 +155,10 @@ class _HomePageState extends State<HomePage> {
   var randomCategory = 0;
 
   final List<int> _selectedItems = [];
+
+  final channel = WebSocketChannel.connect(
+    Uri.parse('wss://ika3taif23.execute-api.eu-central-1.amazonaws.com/prod'),
+  );
 
   _onUpdateScroll() {
     if (this.mounted) {
@@ -190,23 +201,6 @@ class _HomePageState extends State<HomePage> {
     ProductController.addProducts(_products);
   }
 
-
-  timerFunction(List<int> ids) {
-    // every 2 seconds get a random category id, call the api with it, load the product and animate it
-    _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-      index = _jsonFunctions.getRandomInt(_jsonFunctions.count);
-      randomCategory = ids[index];
-      getProducts(randomCategory);
-      if (_scrollController.hasClients && !isScrolling) {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          curve: Curves.easeOut,
-          duration: const Duration(milliseconds: 200),
-        );
-      }
-    });
-  }
-
   @override
   void initState() {
     if (mounted) {
@@ -221,14 +215,11 @@ class _HomePageState extends State<HomePage> {
       }
     });
     firstAppStart();
-    //initListOfIDs();
-
     tz.initializeTimeZones();
   }
 
   @override
   void dispose() {
-    _timer!.cancel();
     super.dispose();
   }
 
@@ -294,9 +285,7 @@ class _HomePageState extends State<HomePage> {
                 color: ThemeChanger.lightBlue,
                 height: blockSizeVertical * 5.5,
                 width: displayWidth,
-
-                child:
-                ListView.builder(
+                child: ListView.builder(
                     physics: ScrollPhysics(),
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
@@ -314,8 +303,6 @@ class _HomePageState extends State<HomePage> {
                             alignment: Alignment.centerRight,
                             margin: EdgeInsets.all(4),
                             padding: EdgeInsets.all(4),
-                            //padding: EdgeInsets.symmetric(horizontal: 6),
-                            //height: blockSizeVertical * 20,
                             child: Text(
                               mainCategoryNames[index],
                               style: TextStyle(
@@ -338,27 +325,41 @@ class _HomePageState extends State<HomePage> {
                     }
                     return true;
                   },
-                  child: ListView.builder(
-                      reverse: true,
-                      shrinkWrap: true,
-                      controller: _scrollController,
-                      itemCount: _products.length,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ExtendedView(
-                                        _products[index],
-                                        this,
-                                        streamController.stream)),
-                              );
-                            },
-                            child: ArticleCard(_products[index], this)
-                        );
-                      }),
-                )),)
+                  child: StreamBuilder(
+                    stream: channel.stream,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        newProducts.add(productFromJson(snapshot.data.toString()));
+                        return ListView.builder(
+                              reverse: true,
+                              shrinkWrap: true,
+                              controller: _scrollController,
+                              itemCount: newProducts.length,
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ExtendenViewWebSocket(
+                                                    newProducts[index],
+                                                    //this,
+                                                    streamController.stream
+                                                )),
+                                      );
+                                    },
+                                    child: NewArticleCard(newProducts[index])
+                                );
+                              }
+                          );
+                        }
+                     else { return const Text("no data");}
+                      },
+                  ),
+                )
+            ),
+          )
           ],
         )
 
@@ -388,7 +389,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _jsonFunctions.getListOfProdCatIDs(mainCategoryIds.indexOf(categoryId))
           .then((value) {
-        timerFunction(value);
+        //timerFunction(value);
         //_jsonFunctions.count = 1;
         // print("AAAAAA $_jsonFunctions.count");
       });
