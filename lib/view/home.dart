@@ -85,6 +85,11 @@ class _HomePageState extends State<HomePage> {
   List<int> productCategoryIDs = [];
  // bool check = false;
 
+  ///NEW WEBSOCKET
+  List<ProductWS> filteredProducts = [];
+  late int categoryIdWebSocket = 0;
+  List<ProductWS> result = [];
+
 
   //when map is empty then json funtions is called
   Future<void> getSubCategories() async{
@@ -104,6 +109,8 @@ class _HomePageState extends State<HomePage> {
       });
     }
   }
+
+
   //seperate the sub map into 2 lists 1 with names and 1 with ids
   Future<void> mapToLists() async {
     if(subCategoriesNames.isEmpty) {
@@ -223,6 +230,8 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  late int indexItemBuilder;
+
   @override
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
@@ -293,7 +302,9 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (context, index) {
                       return InkWell(
                           onTap: () async {
-                            selectCategory(index);
+                          //  selectCategory(indexItemBuilder);
+                            indexItemBuilder = index;
+                            currentCatId(indexItemBuilder);
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -330,11 +341,13 @@ class _HomePageState extends State<HomePage> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         newProducts.add(productFromJson(snapshot.data.toString()));
+                        //print("NEW PRODUCTS ===> ${newProducts}");
+                        filterProducts(newProducts);
                         return ListView.builder(
                               reverse: true,
                               shrinkWrap: true,
                               controller: _scrollController,
-                              itemCount: newProducts.length,
+                              itemCount: filteredProducts.length,
                               itemBuilder: (context, index) {
                                 return InkWell(
                                     onTap: () {
@@ -343,13 +356,14 @@ class _HomePageState extends State<HomePage> {
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 ExtendenViewWebSocket(
-                                                    newProducts[index],
+                                                    filteredProducts[index],
                                                     //this,
                                                     streamController.stream
-                                                )),
+                                                )
+                                        ),
                                       );
                                     },
-                                    child: NewArticleCard(newProducts[index])
+                                    child: NewArticleCard(filteredProducts[index])
                                 );
                               }
                           );
@@ -430,6 +444,32 @@ class _HomePageState extends State<HomePage> {
 
   void setLoading(bool b) {
     _isLoading = b;
+  }
+
+  void currentCatId(indexItemBuilder) {
+    categoryIdWebSocket = mainCategoryIds[indexItemBuilder];
+    print("categoryIdWebSocket ===> $categoryIdWebSocket");
+  }
+
+  Future<void> filterProducts(List<ProductWS> newProducts) async {
+    List<ProductWS> ret = [];
+    //result.clear();
+    int catId = categoryIdWebSocket;
+    print("CatId ==== >>>>> $catId");
+    print("newProducts ======> {$newProducts}");
+    print("ret ===> ${ret}");
+     if(ret.isEmpty) {
+       print("IS EMPTY");
+       ret = newProducts;
+       for (var p in ret) {
+         if (catId == p.categoryId) {
+           print("p ===> $p");
+           filteredProducts.add(p);
+         }
+       }
+     }
+     //filteredProducts = result;
+    print("FILTERED PRODUCTS ===> ${filteredProducts}");
   }
 }
 
