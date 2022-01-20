@@ -406,12 +406,12 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _selectedItems.add(categoryId);
       });
-      await preferences.setBool("nofirstTime", true);
     } else {
       setState(() {
         _selectedItems.removeWhere((element) => element == categoryId);
       });
     }
+    await preferences.setStringList("categories", _selectedItems);
 
 
     await getSubCategories();
@@ -444,8 +444,15 @@ class _HomePageState extends State<HomePage> {
     // await preferences.setBool("nofirstTime", false); // run welcome screen everytime
 
     var nofirstTime = preferences.getBool('nofirstTime');
+    if (nofirstTime == null) {
+      nofirstTime = false;
+    }
+
     if (!nofirstTime) {
       await preferences.setBool("nofirstTime", true);
+    } else {
+      var categories = preferences.getStringList("categories");
+      print(categories);
     }
     setState(() {
       if (nofirstTime) {
