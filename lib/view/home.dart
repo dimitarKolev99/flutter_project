@@ -469,9 +469,11 @@ class _HomePageState extends State<HomePage> {
 
   void search(List<int> list, ProductWS product) {
     print("LIST: ${list}");
+    List<int> productIdList = [];
     for (int i = 0; i < list.length; i++) {
-        if (list[i] == product.categoryId) {
+        if (!productIdList.contains(product.productId) && list[i] == product.categoryId) {
           newProducts.add(product);
+          productIdList.add(product.productId);
         }
     }
   }
