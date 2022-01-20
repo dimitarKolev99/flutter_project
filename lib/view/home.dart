@@ -324,7 +324,8 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Expanded(
-                child: Stack(children: [
+                child:
+                Stack(children: [
                   Align(
                       alignment: Alignment.topCenter,
                       child: NotificationListener<ScrollNotification>(
@@ -367,12 +368,8 @@ class _HomePageState extends State<HomePage> {
                             }
                           },
                         ),
-                      )),
-                  Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.add, color: Colors.black))),
+                      )
+                  ),
                 ]),
               )
             ],
