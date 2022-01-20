@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 
 import 'package:penny_pincher/view/widget/browser_article_card.dart';
 import 'package:penny_pincher/view/extended_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'about.dart';
 
@@ -31,6 +32,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
   @override
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
@@ -62,11 +64,14 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   child:
                   TextButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      var preferences = await SharedPreferences.getInstance();
                       if(_themeChanger.getTheme() == ThemeData.light()){
+                        await preferences.setBool("isLight", false);
                         return _themeChanger.setdarkTheme(ThemeData.dark());
                       }
                       if(_themeChanger.getTheme() == ThemeData.dark()){
+                        await preferences.setBool("isLight", true);
                         return _themeChanger.setlightTheme(ThemeData.light());
                       }
                     },
