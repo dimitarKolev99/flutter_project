@@ -229,7 +229,7 @@ class _BrowserPageState extends State<BrowserPage> {
               alignment: Alignment.topCenter,
               child: Container(
                 color: ThemeChanger.lightBlue,
-                height: blockSizeVertical * 5.5,
+                height: 40,
                 width: displayWidth,
                 //TODO:ListView Bulider to show the route of the categories, works only for choosing 1 Prod. Cat.
 

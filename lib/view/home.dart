@@ -283,7 +283,7 @@ class _HomePageState extends State<HomePage> {
               alignment: Alignment.topCenter,
               child: Container(
                 color: ThemeChanger.lightBlue,
-                height: blockSizeVertical * 5.5,
+                height: 40,
                 width: displayWidth,
                 child: ListView.builder(
                     physics: ScrollPhysics(),
