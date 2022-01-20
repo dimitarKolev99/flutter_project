@@ -90,6 +90,7 @@ class _HomePageState extends State<HomePage> {
   late int categoryIdWebSocket = 0;
   List<ProductWS> result = [];
   late int indexItemBuilder;
+  List<int> productIdList = [];
 
 
   //when map is empty then json funtions is called
@@ -232,8 +233,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<int> listOfProdCat = [];
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -469,7 +468,6 @@ class _HomePageState extends State<HomePage> {
 
   void search(List<int> list, ProductWS product) {
     print("LIST: ${list}");
-    List<int> productIdList = [];
     for (int i = 0; i < list.length; i++) {
         if (!productIdList.contains(product.productId) && list[i] == product.categoryId) {
           newProducts.add(product);
