@@ -54,6 +54,7 @@ class BrowserPage extends StatefulWidget {
     "Haushaltselektronik",
     "Sport & Outdoor"
   ];
+
   List<int> mainCategoryIds = [
     30311, //
     3932,
@@ -229,7 +230,7 @@ class _BrowserPageState extends State<BrowserPage> {
               alignment: Alignment.topCenter,
               child: Container(
                 color: ThemeChanger.lightBlue,
-                height: blockSizeVertical * 5.5,
+                height: 40,
                 width: displayWidth,
                 //TODO:ListView Bulider to show the route of the categories, works only for choosing 1 Prod. Cat.
 
@@ -298,7 +299,7 @@ class _BrowserPageState extends State<BrowserPage> {
                                         }
                                       );}
                                   },
-                                icon: Icon(Icons.clear, size: 18, color: ThemeChanger.articlecardbackground,) )
+                                icon: Icon(Icons.clear, size: 18, color: ThemeChanger.textColor,) )
 
                               ],
                             ),
@@ -310,9 +311,27 @@ class _BrowserPageState extends State<BrowserPage> {
             ),
 
 
+            // If no Products are in the chosen categories or no category is chosen
+            //TODO: Better Layout Design!
+            _products.isEmpty?
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 50),
+                    Center(
+                      child:
+                      Text("Für deine ausgewählten Kategorien gibt es keine aktuell keine Schnäppchen. "
+                          "Bitte wähle eine oder mehrere der zur Verfügung stehenden Kategorien",
+                        style: TextStyle(fontStyle: FontStyle.italic, fontSize: 16 ),
+                          textAlign: TextAlign.center)
+
+                    )
+                  ],
+                )
 
 
-
+            :
             // This Grid View is supposed to show the main categories on top of the screen in the browser view
             Expanded(
               child: GridView.count(
@@ -340,6 +359,7 @@ class _BrowserPageState extends State<BrowserPage> {
           ],
         ));
   }
+
   void updateBrowserblabla(int catID){
     _products.clear();
     widget._currentProductId = catID;

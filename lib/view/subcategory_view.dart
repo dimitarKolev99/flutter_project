@@ -165,7 +165,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                         alignment: Alignment.topCenter,
                         child: Container(
                             color: ThemeChanger.lightBlue,
-                            height: 35,
+                            height: 40,
                             child: ListView.builder(
                                 physics: ScrollPhysics(),
                                 scrollDirection: Axis.horizontal,
