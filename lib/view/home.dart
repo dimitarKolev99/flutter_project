@@ -331,6 +331,35 @@ class _HomePageState extends State<HomePage> {
                                   color: ThemeChanger.catTextColor,
                                   fontWeight: FontWeight.w400,
                                 ),
+            Align(
+              alignment: Alignment.topCenter,
+              child: Container(
+                color: ThemeChanger.lightBlue,
+                height: 40,
+                width: displayWidth,
+                child: ListView.builder(
+                    physics: ScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemCount: mainCategories.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                          onTap: () async {
+                            selectCategory(index);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: (_selectedItems.contains(mainCategoryIds[index])) ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground,       //_selectedItem != null && _selectedItem == index ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground,
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                            alignment: Alignment.centerRight,
+                            margin: EdgeInsets.all(4),
+                            padding: EdgeInsets.all(4),
+                            child: Text(
+                              mainCategoryNames[index],
+                              style: TextStyle(
+                                color: ThemeChanger.catTextColor,
+                                fontWeight: FontWeight.w400,
                               ),
                             ));
                       }),

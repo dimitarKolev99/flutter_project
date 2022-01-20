@@ -54,6 +54,7 @@ class BrowserPage extends StatefulWidget {
     "Haushaltselektronik",
     "Sport & Outdoor"
   ];
+
   List<int> mainCategoryIds = [
     30311, //
     3932,
@@ -117,8 +118,19 @@ class _BrowserPageState extends State<BrowserPage> {
   // Whenever a productcategory gets unselcted this function should delete all Products of the category to the Map
   //TODO: Does this wotk with the ?.clear() to delete the products
   void deleteProductsOfChosenCategory(int categoryID){
+    // call this if in browserView -> sets state of browserView instead of SubcatView
       Iterable<Product>? products = bargainsOfChosenCats[categoryID];
       if(products!=null){
+      numberOfProducts -= products.length;
+      bargainsOfChosenCats.remove(categoryID);
+      setState(() { });
+    }
+  }
+
+  void deleteProductsOfChosenCategoryFromView(int categoryID){
+    // call this if in subcatView -> sets state of subcatView instead of browserView
+    Iterable<Product>? products = bargainsOfChosenCats[categoryID];
+    if(products!=null){
       numberOfProducts -= products.length;
       bargainsOfChosenCats.remove(categoryID);
       view.state.setState(() { });
@@ -218,7 +230,7 @@ class _BrowserPageState extends State<BrowserPage> {
               alignment: Alignment.topCenter,
               child: Container(
                 color: ThemeChanger.lightBlue,
-                height: blockSizeVertical * 5.5,
+                height: 40,
                 width: displayWidth,
                 //TODO:ListView Bulider to show the route of the categories, works only for choosing 1 Prod. Cat.
 
@@ -268,23 +280,27 @@ class _BrowserPageState extends State<BrowserPage> {
                                     ),
                                   ),
 
-                                chosenCategories.isEmpty?
-                                SizedBox(width: 0,):
+                                chosenCategories.isEmpty? SizedBox(width: 0,):
                                 IconButton(
                                   alignment: Alignment.centerRight,
                                     constraints: const BoxConstraints(),
                                     padding : const EdgeInsets.only(top: 1.3),
                                     onPressed: (){
-                                  setState((){
-                                    if(!chosenCategories.isEmpty) {
-                                      //TODO: Reload Products
-                                      view.removeFromBrowser(chosenCategories[index]);
-                                      print(chosenCategories[index]);
-                                      removeOneCategory(chosenCategories[index]);
-                                      updateBrowserblabla(currentCategory);
-                                    }
-                                  });},
-                                icon: Icon(Icons.clear, size: 18, color: ThemeChanger.articlecardbackground,) )
+                                      print("x clicked");
+                                      print(chosenCategories.isNotEmpty);
+                                      if(chosenCategories.isNotEmpty) {
+                                      setState((){
+                                          //TODO: Reload Products
+                                          print(chosenCategories[index]);
+                                          view.removeFromBrowser(chosenCategories[index]);
+                                          removeOneCategory(chosenCategories[index]);
+                                          updateBrowserblabla(currentCategory);
+
+                                        }
+                                      );}
+                                  },
+                                icon: Icon(Icons.clear, size: 18, color: ThemeChanger.textColor,) )
+
                               ],
                             ),
                            ));
@@ -295,9 +311,27 @@ class _BrowserPageState extends State<BrowserPage> {
             ),
 
 
+            // If no Products are in the chosen categories or no category is chosen
+            //TODO: Better Layout Design!
+            _products.isEmpty?
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 50),
+                    Center(
+                      child:
+                      Text("Für deine ausgewählten Kategorien gibt es keine aktuell keine Schnäppchen. "
+                          "Bitte wähle eine oder mehrere der zur Verfügung stehenden Kategorien",
+                        style: TextStyle(fontStyle: FontStyle.italic, fontSize: 16 ),
+                          textAlign: TextAlign.center)
+
+                    )
+                  ],
+                )
 
 
-
+            :
             // This Grid View is supposed to show the main categories on top of the screen in the browser view
             Expanded(
               child: GridView.count(
@@ -325,6 +359,7 @@ class _BrowserPageState extends State<BrowserPage> {
           ],
         ));
   }
+
   void updateBrowserblabla(int catID){
     _products.clear();
     widget._currentProductId = catID;
