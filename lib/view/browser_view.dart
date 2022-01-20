@@ -3,6 +3,7 @@ import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
+import 'package:penny_pincher/view/search_view.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
@@ -81,6 +82,8 @@ class _BrowserPageState extends State<BrowserPage> {
   int saving = 0;
   int maxPrice = 10000;
   int minPrice = 0;
+
+  bool showSearches = false;
 
   late SubcategoryView view;
 
@@ -218,9 +221,14 @@ class _BrowserPageState extends State<BrowserPage> {
     double displayHeight = _mediaQueryData.size.height;
     double blockSizeHorizontal = displayWidth / 100; // screen width in 1%
     double blockSizeVertical = displayHeight / 100; // screen height in 1%
+
     return Scaffold(
         appBar: HomeBrowserAppBar(this),
-        body: Column(
+
+        body:
+        showSearches ? SearchView(this)
+            :
+        Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             //MainCategories to click to get to edit the filter categories / search

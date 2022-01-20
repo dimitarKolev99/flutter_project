@@ -4,29 +4,25 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
+import 'package:penny_pincher/models/preferences_searches.dart';
 import 'package:penny_pincher/services/json_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
 import 'package:penny_pincher/view/widget/subcat_button.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SubcategoryView extends StatefulWidget {
+
+  // Specific fields
   int categoryId;
   String categoryName;
-  late final Stream<bool> stream;
-  late final StreamController updateStream;
-  final dynamic callback;
-  ScrollController _scrollController = ScrollController();
-  late var state;
   var startValue = 0;
   var endValue = 4900;
   int saving = 0;
   int minPrice = 0;
   int maxPrice = 0;
-  // boolean Variable used to hide the Price Slider and Discounts
-  bool _hide = true;
-  Map<String, int> subCategoriesMap = new Map();
 
   // Discount options combined with a boolean for when chosen
   var discounts = [
@@ -37,6 +33,12 @@ class SubcategoryView extends StatefulWidget {
     [50, false],
   ];
 
+
+  //values for the left and right output of the slider
+  late RangeValues currentSliderValuesPrice;
+
+
+
   // names and Ids have matching indexes for name and id of the category
   List<String> subCategoriesNames = [];
   List<int> subCategoriesIds = [];
@@ -44,10 +46,41 @@ class SubcategoryView extends StatefulWidget {
   @observable
   ObservableList<SubcatButton> subCatButtons = new ObservableList();
 
-  //values for the left and right output of the slider
-  RangeValues _currentSliderValuesPrice = const RangeValues(00, 70);
 
-  SubcategoryView(this.categoryId, this.categoryName, this.stream, this.updateStream, this.callback);
+  // boolean Variable used to hide the Price Slider and Discounts
+  bool _hide = true;
+
+  Map<String, int> subCategoriesMap = new Map();
+  late final Stream<bool> stream;
+  late final StreamController updateStream;
+  final dynamic callback;
+  ScrollController _scrollController = ScrollController();
+  late var state;
+
+
+  SubcategoryView.fromSave(
+      this.categoryId,
+      this.categoryName,
+      this.startValue,
+      this.endValue,
+      this.saving,
+      this.minPrice,
+      this.maxPrice,
+      int dscnt,
+      double rangeMin,
+      double rangeMax,
+      this.stream,
+      this.updateStream,
+      this.callback)
+  {
+    if(dscnt!=0) this.discounts[dscnt][1] = true;
+    currentSliderValuesPrice = RangeValues(rangeMin, rangeMax);
+  }
+
+
+  SubcategoryView(this.categoryId, this.categoryName, this.stream, this.updateStream, this.callback) {
+    currentSliderValuesPrice = RangeValues(00, 70);
+  }
 
 
   @override
@@ -260,16 +293,16 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                   RangeSlider(
                                     inactiveColor: ThemeChanger.lightBlue,
                                     activeColor: ThemeChanger.catTextColor,
-                                    values: widget._currentSliderValuesPrice,
+                                    values: widget.currentSliderValuesPrice,
                                     min: 0,
                                     max: 100,
                                     divisions: 100,
                                     onChanged: (RangeValues values) {
                                       setState(() {
-                                        widget._currentSliderValuesPrice = values;
+                                        widget.currentSliderValuesPrice = values;
                                       // values change exponentially and not linear.
-                                      widget.startValue = pow(widget._currentSliderValuesPrice.start, 2).round();
-                                      widget.endValue = pow(widget._currentSliderValuesPrice.end, 2).round();
+                                      widget.startValue = pow(widget.currentSliderValuesPrice.start, 2).round();
+                                      widget.endValue = pow(widget.currentSliderValuesPrice.end, 2).round();
                                       //print("$startValue, $endValue" );
                                     });},
                                     onChangeEnd: (RangeValues values) {
@@ -455,7 +488,6 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                     setState(() {
                       // TODO: widget.callback.currentCategory should be a collection of all chosen Categories
                       // TODO: show products of all categories
-                      print(widget.callback.currentCategory);
                       //widget.callback.setPriceRange(startValue * 100, endValue * 100);
                       //widget.callback.setSaving(saving);
                       widget.callback.updateBrowserblabla(widget.callback.currentCategory);
@@ -468,6 +500,46 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                       style: TextButton.styleFrom(backgroundColor: ThemeChanger.lightBlue),
                       child: Text("Zeige ${widget.callback.numberOfProducts} Produkte",
                   style: TextStyle(color: Colors.white),)),
+                ),
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: TextButton(onPressed: () async {
+                    TextEditingController _textFieldController = TextEditingController();
+
+                    return showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text('Suche Speichern'),
+                          content: TextField(
+                            controller: _textFieldController,
+                            decoration: InputDecoration(hintText: "Gib einen Namen für deine Suche ein"),
+                          ),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text('Abbrechen'),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                            FlatButton(
+                              child: Text('OK'),
+                              onPressed: () {
+
+                                PreferencesSearch prefs = new PreferencesSearch();
+                                prefs.addSearch(widget, _textFieldController.text);
+
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                      style: TextButton.styleFrom(backgroundColor: ThemeChanger.lightBlue),
+                      child: Text("Suche Speichern",
+                        style: TextStyle(color: Colors.white),)),
                 )
 
               ],
