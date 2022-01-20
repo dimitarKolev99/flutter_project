@@ -117,8 +117,19 @@ class _BrowserPageState extends State<BrowserPage> {
   // Whenever a productcategory gets unselcted this function should delete all Products of the category to the Map
   //TODO: Does this wotk with the ?.clear() to delete the products
   void deleteProductsOfChosenCategory(int categoryID){
+    // call this if in browserView -> sets state of browserView instead of SubcatView
       Iterable<Product>? products = bargainsOfChosenCats[categoryID];
       if(products!=null){
+      numberOfProducts -= products.length;
+      bargainsOfChosenCats.remove(categoryID);
+      setState(() { });
+    }
+  }
+
+  void deleteProductsOfChosenCategoryFromView(int categoryID){
+    // call this if in subcatView -> sets state of subcatView instead of browserView
+    Iterable<Product>? products = bargainsOfChosenCats[categoryID];
+    if(products!=null){
       numberOfProducts -= products.length;
       bargainsOfChosenCats.remove(categoryID);
       view.state.setState(() { });
@@ -268,23 +279,27 @@ class _BrowserPageState extends State<BrowserPage> {
                                     ),
                                   ),
 
-                                chosenCategories.isEmpty?
-                                SizedBox(width: 0,):
+                                chosenCategories.isEmpty? SizedBox(width: 0,):
                                 IconButton(
                                   alignment: Alignment.centerRight,
                                     constraints: const BoxConstraints(),
                                     padding : const EdgeInsets.only(top: 1.3),
                                     onPressed: (){
-                                  setState((){
-                                    if(!chosenCategories.isEmpty) {
-                                      //TODO: Reload Products
-                                      view.removeFromBrowser(chosenCategories[index]);
-                                      print(chosenCategories[index]);
-                                      removeOneCategory(chosenCategories[index]);
-                                      updateBrowserblabla(currentCategory);
-                                    }
-                                  });},
+                                      print("x clicked");
+                                      print(chosenCategories.isNotEmpty);
+                                      if(chosenCategories.isNotEmpty) {
+                                      setState((){
+                                          //TODO: Reload Products
+                                          print(chosenCategories[index]);
+                                          view.removeFromBrowser(chosenCategories[index]);
+                                          removeOneCategory(chosenCategories[index]);
+                                          updateBrowserblabla(currentCategory);
+
+                                        }
+                                      );}
+                                  },
                                 icon: Icon(Icons.clear, size: 18, color: ThemeChanger.articlecardbackground,) )
+
                               ],
                             ),
                            ));
