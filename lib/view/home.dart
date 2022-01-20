@@ -83,6 +83,7 @@ class _HomePageState extends State<HomePage> {
   late int categoryId;
   late String categoryName;
   List<int> productCategoryIDs = [];
+  List<int> productIdList = [];
  // bool check = false;
 
   ///NEW WEBSOCKET
@@ -161,6 +162,7 @@ class _HomePageState extends State<HomePage> {
   final _jsonFunctions = JsonFunctions();
   var index = 0;
   var randomCategory = 0;
+  bool loadingProducts = false;
 
   final List<int> _selectedItems = [];
 
@@ -181,16 +183,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> getProducts(int categoryID) async {
-    _product = await ProductApi().fetchProduct(categoryID);
-
-    List<Product> favorites = await _preferenceArticles.getAllFavorites();
-    for (var i in favorites) {
-      if (!_favoriteIds.contains(i.productId)) {
-        _favoriteIds.add(i.productId);
-      }
-    }
-
+  void getProducts() {
     if (this.mounted) {
       setState(() {
         if (status == WelcomeStatus.noFirstTime) {
@@ -202,11 +195,6 @@ class _HomePageState extends State<HomePage> {
       widget.callback.loadingFinished();
       status = WelcomeStatus.finished;
     }
-    if (count < _product.length) {
-      _products.insert(count, _product[count]);
-      count++;
-    }
-    ProductController.addProducts(_products);
   }
 
   @override
@@ -224,6 +212,14 @@ class _HomePageState extends State<HomePage> {
     });
     firstAppStart();
     tz.initializeTimeZones();
+
+    disableSplashScreen();
+
+  }
+
+  Future<void> disableSplashScreen() async {
+    await Future.delayed(const Duration(seconds: 2), (){});
+    getProducts();
   }
 
   @override
@@ -405,6 +401,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _selectedItems.add(categoryId);
       });
+      await preferences.setBool("nofirstTime", true);
     } else {
       setState(() {
         _selectedItems.removeWhere((element) => element == categoryId);
@@ -439,7 +436,7 @@ class _HomePageState extends State<HomePage> {
 
   firstAppStart() async {
     preferences = await SharedPreferences.getInstance();
-    await preferences.setBool("nofirstTime", false); // run welcome screen everytime
+    // await preferences.setBool("nofirstTime", false); // run welcome screen everytime
 
     var nofirstTime = preferences.getBool('nofirstTime');
     if (!nofirstTime) {
@@ -469,7 +466,6 @@ class _HomePageState extends State<HomePage> {
 
   void search(List<int> list, ProductWS product) {
     print("LIST: ${list}");
-    List<int> productIdList = [];
     for (int i = 0; i < list.length; i++) {
         if (!productIdList.contains(product.productId) && list[i] == product.categoryId) {
           newProducts.add(product);
