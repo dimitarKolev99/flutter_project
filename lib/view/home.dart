@@ -89,6 +89,7 @@ class _HomePageState extends State<HomePage> {
   List<ProductWS> filteredProducts = [];
   late int categoryIdWebSocket = 0;
   List<ProductWS> result = [];
+  late int indexItemBuilder;
 
 
   //when map is empty then json funtions is called
@@ -230,7 +231,9 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  late int indexItemBuilder;
+  List<int> listOfProdCat = [];
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -302,9 +305,23 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (context, index) {
                       return InkWell(
                           onTap: () async {
-                          //  selectCategory(indexItemBuilder);
-                            indexItemBuilder = index;
-                            currentCatId(indexItemBuilder);
+
+                            selectCategory(index);
+                            mainCategories[index];
+                            categoryId = mainCategoryIds[index];
+
+                            /*
+                            setState(() {
+                              _jsonFunctions.getListOfProdCatIDs(mainCategoryIds.indexOf(categoryId))
+                                  .then((value) {
+                                //timerFunction(value);
+                                //_jsonFunctions.count = 1;
+                                // print("AAAAAA $_jsonFunctions.count");
+                                listOfProdCat = value;
+                              });
+                            });
+
+                             */
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -340,14 +357,12 @@ class _HomePageState extends State<HomePage> {
                     stream: channel.stream,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        newProducts.add(productFromJson(snapshot.data.toString()));
-                        //print("NEW PRODUCTS ===> ${newProducts}");
-                        filterProducts(newProducts);
+                        search(listOfProdCat, productFromJson(snapshot.data.toString()));
                         return ListView.builder(
                               reverse: true,
                               shrinkWrap: true,
                               controller: _scrollController,
-                              itemCount: filteredProducts.length,
+                              itemCount: newProducts.length,
                               itemBuilder: (context, index) {
                                 return InkWell(
                                     onTap: () {
@@ -356,14 +371,14 @@ class _HomePageState extends State<HomePage> {
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 ExtendenViewWebSocket(
-                                                    filteredProducts[index],
+                                                    newProducts[index],
                                                     //this,
                                                     streamController.stream
                                                 )
                                         ),
                                       );
                                     },
-                                    child: NewArticleCard(filteredProducts[index])
+                                    child: NewArticleCard(newProducts[index])
                                 );
                               }
                           );
@@ -406,6 +421,7 @@ class _HomePageState extends State<HomePage> {
         //timerFunction(value);
         //_jsonFunctions.count = 1;
         // print("AAAAAA $_jsonFunctions.count");
+        listOfProdCat = value;
       });
     });
 
@@ -448,22 +464,51 @@ class _HomePageState extends State<HomePage> {
 
   void currentCatId(indexItemBuilder) {
     categoryIdWebSocket = mainCategoryIds[indexItemBuilder];
-    print("categoryIdWebSocket ===> $categoryIdWebSocket");
+   // print("categoryIdWebSocket ===> $categoryIdWebSocket");
   }
 
+  void search(List<int> list, ProductWS product) {
+    print("LIST: ${list}");
+    for (int i = 0; i < list.length; i++) {
+        if (list[i] == product.categoryId) {
+          newProducts.add(product);
+        }
+    }
+  }
+
+  /*
   Future<void> filterProducts(List<ProductWS> newProducts) async {
     List<ProductWS> ret = [];
     //result.clear();
     int catId = categoryIdWebSocket;
+
+
+    await getSubCategories();
+    await mapToLists();
+
+
+
     print("CatId ==== >>>>> $catId");
     print("newProducts ======> {$newProducts}");
     print("ret ===> ${ret}");
      if(ret.isEmpty) {
        print("IS EMPTY");
+       for (var i in listOfProdCat) {
+         for (var j in newProducts) {
+           if(listOfProdCat[i] == newProducts[j].categoryId) {
+
+           }
+         }
+
+       }
        ret = newProducts;
+       print("RET ====> $ret");
        for (var p in ret) {
+        // print("p ===> $p");
          if (catId == p.categoryId) {
-           print("p ===> $p");
+           print("CATID -----> $catId");
+           print("p.CatID ====> -----> ${p.categoryId}");
+
            filteredProducts.add(p);
          }
        }
@@ -471,6 +516,8 @@ class _HomePageState extends State<HomePage> {
      //filteredProducts = result;
     print("FILTERED PRODUCTS ===> ${filteredProducts}");
   }
+
+   */
 }
 
 enum WelcomeStatus { loading, firstTime, noFirstTime, finished }
