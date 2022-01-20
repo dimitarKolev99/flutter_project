@@ -298,7 +298,7 @@ class _BrowserPageState extends State<BrowserPage> {
                                         }
                                       );}
                                   },
-                                icon: Icon(Icons.clear, size: 18, color: ThemeChanger.articlecardbackground,) )
+                                icon: Icon(Icons.clear, size: 18, color: ThemeChanger.textColor,) )
 
                               ],
                             ),

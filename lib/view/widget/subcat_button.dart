@@ -25,6 +25,10 @@ class SubcatButton extends StatefulWidget {
   List<String> subCategoriesNames = [];
   List<int> subCategoriesIds = [];
 
+  late Color subCatcolor = isChosen ? ThemeChanger.lightBlue : ThemeChanger.articlecardbackground;
+  late Color prodCatColor = isChosen ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground;
+  late Color textColor = isChosen ? ThemeChanger.articlecardbackground : ThemeChanger.catTextColor;
+
   @observable
   ObservableList<SubcatButton> subCatButtons = new ObservableList();
 
@@ -50,6 +54,19 @@ class SubcatButton extends StatefulWidget {
       }
       element.removeFromBrowser(name);
     }
+  }
+
+  Color giveColor() {
+
+    for (var element in subCatButtons) {
+      if (element.isChosen && element._isProdCat) {
+        return ThemeChanger.subCatChosen;
+      } else {
+        return element.giveColor();
+      }
+    }
+
+    return ThemeChanger.articlecardbackground;
   }
 
 }
@@ -101,9 +118,9 @@ class _SubcatButtonState extends State<SubcatButton> {
     mapToLists();
     listToButtons();
   }
-  late Color subCatcolor = widget.isChosen ? ThemeChanger.lightBlue : ThemeChanger.articlecardbackground;
-  late Color prodCatColor = widget.isChosen ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground;
-  late Color textColor = widget.isChosen ? ThemeChanger.articlecardbackground : ThemeChanger.catTextColor;
+
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -123,8 +140,8 @@ class _SubcatButtonState extends State<SubcatButton> {
                   if(widget.isChosen == false){ //unselected
                     widget.isChosen = !widget.isChosen;
                     widget.callback.addCategory(widget.categoryName, widget.categoryId);
-                    prodCatColor = ThemeChanger.highlightedColor;
-                    textColor = ThemeChanger.textColor;
+                    widget.prodCatColor = ThemeChanger.highlightedColor;
+                    widget.textColor = ThemeChanger.textColor;
                     // function needed that leads to browser and shows results
                     // TODO: Add CategoryIDs to a Collection ,
                     // TODO: Call Json Function to updayte the resultList and Update Button Text
@@ -136,8 +153,8 @@ class _SubcatButtonState extends State<SubcatButton> {
                     widget.isChosen = !widget.isChosen;
                     //print("try to remove : ! ${widget.categoryName}");
                     widget.callback.removeOneCategory(widget.categoryName);
-                    prodCatColor = ThemeChanger.articlecardbackground;
-                    textColor = ThemeChanger.catTextColor;
+                    widget.prodCatColor = ThemeChanger.articlecardbackground;
+                    widget.textColor = ThemeChanger.catTextColor;
                     widget.callback.deleteProductsOfChosenCategoryFromView(widget.categoryId);
                   }
 
@@ -149,14 +166,14 @@ class _SubcatButtonState extends State<SubcatButton> {
                     //widget.callback.addCategory(widget.categoryName);
                     widget.isChosen = !widget.isChosen;
                     widget.show = !widget.show;
-                    subCatcolor = ThemeChanger.lightBlue;
-                    textColor = ThemeChanger.textColor;
+                    widget.subCatcolor = ThemeChanger.lightBlue;
+                    widget.textColor = ThemeChanger.textColor;
                   }
                   else{  // selected
                     widget.isChosen = !widget.isChosen;
-                    subCatcolor = ThemeChanger.articlecardbackground;
+                    widget.subCatcolor = widget.giveColor();
                     widget.show = !widget.show;
-                    textColor = ThemeChanger.catTextColor;
+                    widget.textColor = ThemeChanger.catTextColor;
                    // widget.callback.removeOneCategory(widget.categoryName);
                   }
                 }
@@ -172,7 +189,7 @@ class _SubcatButtonState extends State<SubcatButton> {
             height: 30,
             margin: EdgeInsets.all(4),
             decoration: BoxDecoration(
-              color: widget._isProdCat ? prodCatColor : subCatcolor,
+              color: widget._isProdCat ? widget.prodCatColor : widget.subCatcolor,
               border: Border.all(
                   color: Colors.blueGrey,
                   width: 1,
@@ -182,7 +199,7 @@ class _SubcatButtonState extends State<SubcatButton> {
               TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w400,
-                color: textColor,
+                color: widget.textColor,
               ),
             textAlign: TextAlign.left,
             ),
