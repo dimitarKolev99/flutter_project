@@ -56,17 +56,17 @@ class SubcatButton extends StatefulWidget {
     }
   }
 
-  Color giveColor() {
+  bool giveColor() {
 
     for (var element in subCatButtons) {
       if (element.isChosen && element._isProdCat) {
-        return ThemeChanger.subCatChosen;
+        return true;
       } else {
         return element.giveColor();
       }
     }
 
-    return ThemeChanger.articlecardbackground;
+    return false;
   }
 
 }
@@ -132,8 +132,8 @@ class _SubcatButtonState extends State<SubcatButton> {
 
           InkWell(
           onTap: (){
+            getCats();
             setState(() {
-               getCats();
                 // if empty chosen category = Productcategory
                 if(widget.subCatButtons.isEmpty){
                   widget._isProdCat = true;
@@ -171,9 +171,9 @@ class _SubcatButtonState extends State<SubcatButton> {
                   }
                   else{  // selected
                     widget.isChosen = !widget.isChosen;
-                    widget.subCatcolor = widget.giveColor();
+                    widget.subCatcolor = widget.giveColor() ? ThemeChanger.lightBlue : ThemeChanger.articlecardbackground;
                     widget.show = !widget.show;
-                    widget.textColor = ThemeChanger.catTextColor;
+                    widget.textColor = widget.giveColor() ? ThemeChanger.textColor : ThemeChanger.catTextColor;
                    // widget.callback.removeOneCategory(widget.categoryName);
                   }
                 }
@@ -195,13 +195,18 @@ class _SubcatButtonState extends State<SubcatButton> {
                   width: 1,
               ),
             ),
-            child: Text(widget.categoryName, style:
+            child: Row(
+              children: [Text(widget.categoryName, style:
               TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w400,
                 color: widget.textColor,
               ),
             textAlign: TextAlign.left,
+            ),
+              if(widget.show) Icon(Icons.arrow_drop_up, size: 25),
+              ],
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             ),
           )
         ),

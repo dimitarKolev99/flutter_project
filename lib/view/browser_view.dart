@@ -99,7 +99,6 @@ class _BrowserPageState extends State<BrowserPage> {
     bargainsOfChosenCats[categoryId] = products;
     numberOfProducts += products.length;
     view.state.setState(() { });
-    print(numberOfProducts);
   }
 
   Future<void> changePrice() async{

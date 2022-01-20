@@ -24,16 +24,27 @@ class SubcategoryView extends StatefulWidget {
   int saving = 0;
   int minPrice = 0;
   int maxPrice = 0;
+  // boolean Variable used to hide the Price Slider and Discounts
   bool _hide = true;
   Map<String, int> subCategoriesMap = new Map();
 
+  // Discount options combined with a boolean for when chosen
+  var discounts = [
+    [10, false],
+    [20, false],
+    [30, false],
+    [40, false],
+    [50, false],
+  ];
 
   // names and Ids have matching indexes for name and id of the category
   List<String> subCategoriesNames = [];
   List<int> subCategoriesIds = [];
+
   @observable
   ObservableList<SubcatButton> subCatButtons = new ObservableList();
 
+  //values for the left and right output of the slider
   RangeValues _currentSliderValuesPrice = const RangeValues(00, 70);
 
   SubcategoryView(this.categoryId, this.categoryName, this.stream, this.updateStream, this.callback);
@@ -55,25 +66,10 @@ class SubcategoryView extends StatefulWidget {
 }
 
 class _SubcategoryViewState extends State<SubcategoryView> {
-  //values for the left and right output of the slider
-
-
-  // Discount options combined with a boolean for when chosen
-  var discounts = [
-    [10, false],
-    [20, false],
-    [30, false],
-    [40, false],
-    [50, false]
-  ];
-
-  // boolean Variable used to hide the Price Slider and Discounts
-
 
   JsonFunctions json = JsonFunctions();
 
-  //List<SubcatButton> subCatButtons = [];
-
+  @override
   void initState() {
     setState(() {});
     widget.state = this;
@@ -126,6 +122,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
 
   @override
   Widget build(BuildContext context) {
+    widget.state = this;
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
 
     MediaQueryData _mediaQueryData;
@@ -204,7 +201,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: ThemeChanger.articlecardbackground,
+                                            color: widget.callback.widget.mainCategoryNames[index] == widget.categoryName ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground,
                                           borderRadius: BorderRadius.circular(2),
                                         ),
                                         alignment: Alignment.centerRight,
@@ -365,14 +362,14 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                         mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                         children:
-                                        List.generate(discounts.length, (index) {
+                                        List.generate(widget.discounts.length, (index) {
                                           return Container(
                                             alignment: Alignment.center,
                                             width: blockSizeHorizontal * 13,
                                             decoration: BoxDecoration(
                                               shape: BoxShape.circle,
                                               // When a discount circle is clicked
-                                              color: (discounts[index][1] == true)
+                                              color: (widget.discounts[index][1] == true)
                                                   ? ThemeChanger.highlightedColor
                                                   : ThemeChanger.lightBlue,
                                             ),
@@ -380,15 +377,15 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                               onTap: () {
                                                 // When a discount circle is clicked
                                                 setState(() {
-                                                  if (discounts[index][1] == false) {
+                                                  if (widget.discounts[index][1] == false) {
                                                     // Only one discount can be selected
-                                                    for (var discount in discounts) {
+                                                    for (var discount in widget.discounts) {
                                                       discount[1] = false;
                                                     }
-                                                    discounts[index][1] = true;
-                                                    widget.saving = discounts[index][0] as int;
+                                                    widget.discounts[index][1] = true;
+                                                    widget.saving = widget.discounts[index][0] as int;
                                                   } else {
-                                                    discounts[index][1] = false;
+                                                    widget.discounts[index][1] = false;
                                                     widget.saving = 0;
                                                   }
                                                 });
@@ -400,7 +397,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                                 });
                                               },
                                               child: Text(
-                                                ">" + discounts[index][0].toString() + "%",
+                                                ">" + widget.discounts[index][0].toString() + "%",
                                                 style: TextStyle(
                                                   color: ThemeChanger
                                                       .textColor,
@@ -413,6 +410,9 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                   )
                                 ],
                               )),
+                          Divider(
+                            color: Colors.black,
+                          ),
                         ],
                       ),
                     ),
@@ -430,13 +430,6 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                 //fontWeight: FontWeight.bold,
                                 fontSize: safeBlockHorizontal * 5,
                               )),
-                          Text(
-                            "31754 Produkte",
-                            style: TextStyle(
-                                color: ThemeChanger.catTextColor,
-                                //fontWeight: FontWeight.bold,
-                                fontSize: safeBlockHorizontal * 3),
-                          ),
                         ],
                       ),
                     ),
