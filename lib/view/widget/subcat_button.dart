@@ -138,7 +138,7 @@ class _SubcatButtonState extends State<SubcatButton> {
                     widget.callback.removeOneCategory(widget.categoryName);
                     prodCatColor = ThemeChanger.articlecardbackground;
                     textColor = ThemeChanger.catTextColor;
-                    widget.callback.deleteProductsOfChosenCategory(widget.categoryId);
+                    widget.callback.deleteProductsOfChosenCategoryFromView(widget.categoryId);
                   }
 
 
