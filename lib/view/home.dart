@@ -91,7 +91,6 @@ class _HomePageState extends State<HomePage> {
   late int categoryIdWebSocket = 0;
   List<ProductWS> result = [];
   late int indexItemBuilder;
-  List<int> productIdList = [];
 
 
   //when map is empty then json funtions is called
