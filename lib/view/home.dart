@@ -411,7 +411,13 @@ class _HomePageState extends State<HomePage> {
         _selectedItems.removeWhere((element) => element == categoryId);
       });
     }
-    await preferences.setStringList("categories", _selectedItems);
+    List<String> categoriesList = [];
+    for (int i = 0; i < mainCategoryIds.length; i++) {
+      if (_selectedItems.contains(mainCategoryIds[i])) {
+        categoriesList.add(i.toString());
+      }
+    }
+    await preferences.setStringList("categories", categoriesList);
 
 
     await getSubCategories();
@@ -451,8 +457,13 @@ class _HomePageState extends State<HomePage> {
     if (!nofirstTime) {
       await preferences.setBool("nofirstTime", true);
     } else {
-      var categories = preferences.getStringList("categories");
-      print(categories);
+      var categoriesList = preferences.getStringList("categories");
+      if (categoriesList == null) {
+        categoriesList = [];
+      }
+      for (int i = 0; i < categoriesList.length; i++) {
+        selectCategory(int.parse(categoriesList[i]));
+      }
     }
     setState(() {
       if (nofirstTime) {
