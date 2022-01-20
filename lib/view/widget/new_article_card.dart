@@ -155,22 +155,9 @@ class NewArticleCard extends StatelessWidget {
                             ),
                           ),
                           // description
-                          Container(
-                            margin: EdgeInsets.only(left:  blockSizeHorizontal * 2,top: blockSizeVertical * 0.5),
-                            width: blockSizeHorizontal * 45,//displayWidth/3 ,
-                            child: Text(
-                              "DESCRIPTION",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontSize: safeBlockHorizontal * 3.25,
-                                color: ThemeChanger.reversetextColor,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                          )
                         ],),
                       Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children:[
                             //old price
                             Container(
@@ -202,8 +189,11 @@ class NewArticleCard extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          ])
-                    ]),
+                          ]
+                      )
+
+                    ]
+                ),
                 //icon
                 Container(
                   //margin: EdgeInsets.only(bottom: blockSizeVertical*5),
