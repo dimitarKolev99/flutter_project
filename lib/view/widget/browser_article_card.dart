@@ -110,39 +110,49 @@ class BrowserArticleCard extends StatelessWidget {
                     ),
                   ),
                   //Favorite icon
-                  Container(
-                    padding: EdgeInsets.only(top: blockSizeVertical*1.3, right: blockSizeHorizontal*2.2),
-                    width: blockSizeHorizontal * 60,//displayWidth / 3 -35,
+
+                  Align(
+                    alignment: Alignment.topRight,
                     child:
-                    // Favourite Icon
-                    Align(
+                    Container(
+                      //color: Colors.redAccent,
+                      padding: EdgeInsets.all(9),
+                      //width: blockSizeHorizontal * 60,//displayWidth / 3 -35,
                       child:
+                      // Favourite Icon
                       Icon(
                         Icons.favorite,
                         color: ThemeChanger.articlecardbackground,
-                        size: 29.0,
+                        size: 30.0,
                       ),
-                      alignment: Alignment.centerRight,
                     ),
                   ),
-                  Container(
-                    //margin: EdgeInsets.only(bottom: blockSizeVertical*5),
-                    width: blockSizeHorizontal * 60,//displayWidth / 3 -35,
-                    child:
-                    // Favourite Icon
-                    Align(
-                      child:
-                      IconButton(
-                        iconSize: 30.0,
-                        icon: (ProductController.isFavorite(id) ?
-                        Icon(Icons.favorite, color: Colors.red) :
-                        Icon(Icons.favorite_border, color: ThemeChanger.reversetextColor)),
-                        onPressed: _changeFavorite,
-                      ),
-                      alignment: Alignment.centerRight,
-                    ),
-                  ),
-                ],
+                  Align(
+                  alignment: Alignment.topRight,
+                  child:
+                        Container(
+                          //color: Colors.green,
+                          padding: EdgeInsets.zero,
+                          //margin: EdgeInsets.only(bottom: blockSizeVertical*5),
+                          //width: blockSizeHorizontal * 60,//displayWidth / 3 -35,
+                          child:
+                          // Favourite Icon
+                          IconButton(
+                            iconSize: 30.0,
+                            icon: (ProductController.isFavorite(id) ?
+                            Icon(Icons.favorite, color: Colors.red) :
+                            Icon(Icons.favorite_border, color: ThemeChanger.reversetextColor)),
+                            onPressed: _changeFavorite,
+                          ),
+
+
+                        ),),
+                      ],
+
+
+
+
+
               ),
               // title
               Container(

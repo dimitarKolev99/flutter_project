@@ -54,6 +54,7 @@ class BrowserPage extends StatefulWidget {
     "Haushaltselektronik",
     "Sport & Outdoor"
   ];
+
   List<int> mainCategoryIds = [
     30311, //
     3932,
@@ -298,7 +299,7 @@ class _BrowserPageState extends State<BrowserPage> {
                                         }
                                       );}
                                   },
-                                icon: Icon(Icons.clear, size: 18, color: ThemeChanger.articlecardbackground,) )
+                                icon: Icon(Icons.clear, size: 18, color: ThemeChanger.textColor,) )
 
                               ],
                             ),
@@ -326,10 +327,6 @@ class _BrowserPageState extends State<BrowserPage> {
                           textAlign: TextAlign.center)
 
                     )
-
-
-
-
                   ],
                 )
 
