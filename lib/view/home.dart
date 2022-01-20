@@ -290,26 +290,26 @@ class _HomePageState extends State<HomePage> {
         Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Align(
-              alignment: Alignment.topCenter,
-              child: Container(
-                color: ThemeChanger.lightBlue,
-                height: blockSizeVertical * 5.5,
-                width: displayWidth,
-                child: ListView.builder(
-                    physics: ScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    itemCount: mainCategories.length,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                          onTap: () async {
+                Align(
+                alignment: Alignment.topCenter,
+                child: Container(
+                  color: ThemeChanger.lightBlue,
+                  height: blockSizeVertical * 5.5,
+                  width: displayWidth,
+                  child: ListView.builder(
+                      physics: ScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemCount: mainCategories.length,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                            onTap: () async {
 
-                            selectCategory(index);
-                            mainCategories[index];
-                            categoryId = mainCategoryIds[index];
+                              selectCategory(index);
+                              mainCategories[index];
+                              categoryId = mainCategoryIds[index];
 
-                            /*
+                              /*
                             setState(() {
                               _jsonFunctions.getListOfProdCatIDs(mainCategoryIds.indexOf(categoryId))
                                   .then((value) {
@@ -321,28 +321,31 @@ class _HomePageState extends State<HomePage> {
                             });
 
                              */
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: (_selectedItems.contains(mainCategoryIds[index])) ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground,       //_selectedItem != null && _selectedItem == index ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground,
-                              borderRadius: BorderRadius.circular(2),
-                            ),
-                            alignment: Alignment.centerRight,
-                            margin: EdgeInsets.all(4),
-                            padding: EdgeInsets.all(4),
-                            child: Text(
-                              mainCategoryNames[index],
-                              style: TextStyle(
-                                color: ThemeChanger.catTextColor,
-                                fontWeight: FontWeight.w400,
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: (_selectedItems.contains(mainCategoryIds[index])) ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground,       //_selectedItem != null && _selectedItem == index ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground,
+                                borderRadius: BorderRadius.circular(2),
                               ),
-                            ),
-                          ));
-                    }),
+                              alignment: Alignment.centerRight,
+                              margin: EdgeInsets.all(4),
+                              padding: EdgeInsets.all(4),
+                              child: Text(
+                                mainCategoryNames[index],
+                                style: TextStyle(
+                                  color: ThemeChanger.catTextColor,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ));
+                      }),
+                ),
               ),
-            ),
+
           Expanded(
             child:
+                Stack(
+                  children: [
             Align(
                 alignment: Alignment.topCenter,
                 child: NotificationListener<ScrollNotification>(
@@ -385,8 +388,12 @@ class _HomePageState extends State<HomePage> {
                      else { return const Text("no data");}
                       },
                   ),
+
                 )
             ),
+                    Align(alignment: Alignment.topRight, child: IconButton(onPressed: (){}, icon: Icon(Icons.add, color: Colors.black))),
+            ]
+          ),
           )
           ],
         )
