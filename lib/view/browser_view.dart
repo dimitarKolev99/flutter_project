@@ -90,9 +90,10 @@ class _BrowserPageState extends State<BrowserPage> {
   final _preferenceArticles = PreferencesArticles();
 
   // This map is necessary because we need to know the id and the name of the chosen Cats
-  Map<String, int> mapOfChosenCategories = new Map();
-  List<String> chosenCategories = [];// Map has int with the id of the chosen category, and a Li
-//   st of bargains as value
+  Map<String, dynamic> mapOfChosenCategories = new Map();
+  List<String> chosenCategories = [];
+
+  // Map has int with the id of the chosen category, and a List of bargains as value
   Map<int, Iterable<Product>> bargainsOfChosenCats = new Map();
   int numberOfProducts = 0;
 
@@ -214,7 +215,6 @@ class _BrowserPageState extends State<BrowserPage> {
   @override
   Widget build(BuildContext context) {
 
-    print("got the new categorie : ${widget._currentProductId}");
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     MediaQueryData _mediaQueryData = MediaQuery.of(context);
     double displayWidth = _mediaQueryData.size.width;

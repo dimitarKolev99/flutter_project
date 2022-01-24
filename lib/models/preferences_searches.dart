@@ -9,14 +9,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PreferencesSearch {
   dynamic preferences;
 
-  Future addSearch(SubcategoryView search, String name) async {
+  Future addSearch(SubcategoryView search, String name, Map<String, dynamic> chosenCats) async {
     if (preferences == null) {
       await _fetchData();
     }
 
     final rawData = preferences.getString('searches');
     final jsonData = jsonDecode(rawData.toString());
-    jsonData[name] = fromSearchToJson(search);
+    jsonData[name] = fromSearchToJson(search, chosenCats);
     await preferences.setString("searches", jsonEncode(jsonData));
   }
 
@@ -53,7 +53,7 @@ class PreferencesSearch {
   }
 
 
-  Map<String, dynamic> fromSearchToJson(SubcategoryView view) {
+  Map<String, dynamic> fromSearchToJson(SubcategoryView view, Map<String, dynamic> chosenCats) {
     int dscnt = 0;
 
     // if no discount at all, then take 0
@@ -74,6 +74,7 @@ class PreferencesSearch {
         'discount': dscnt,
         'range_min': view.currentSliderValuesPrice.start,
         'range_max': view.currentSliderValuesPrice.end,
+        'chosenCats': JsonEncoder().convert(chosenCats),
       };
   }
 
@@ -90,6 +91,7 @@ class PreferencesSearch {
       json["discount"].toInt(),
       json["range_min"].toDouble(),
       json["range_max"].toDouble(),
+      JsonDecoder().convert(json["chosenCats"]),
       stream,
       updateStream,
       callback

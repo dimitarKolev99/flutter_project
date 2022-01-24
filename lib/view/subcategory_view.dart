@@ -56,7 +56,7 @@ class SubcategoryView extends StatefulWidget {
   final dynamic callback;
   ScrollController _scrollController = ScrollController();
   late var state;
-
+  Map<String, dynamic> chosenCats = new Map();
 
   SubcategoryView.fromSave(
       this.categoryId,
@@ -69,6 +69,7 @@ class SubcategoryView extends StatefulWidget {
       int dscnt,
       double rangeMin,
       double rangeMax,
+      this.chosenCats,
       this.stream,
       this.updateStream,
       this.callback)
@@ -112,13 +113,13 @@ class _SubcategoryViewState extends State<SubcategoryView> {
     if (widget.subCatButtons.isEmpty) {
       for (int i = 0; i < widget.subCategoriesNames.length; i++) {
           widget.subCatButtons.add(SubcatButton(
-          categoryName: widget.subCategoriesNames[i],
-          categoryId: widget.subCategoriesIds[i],
-          stream: widget.stream,
-          updateStream: widget.updateStream,
-          callback: widget.callback,
-          cBackToView: widget,
-          controller: widget._scrollController,
+          widget.subCategoriesNames[i],
+          widget.subCategoriesIds[i],
+          widget.stream,
+          widget.updateStream,
+          widget.callback,
+          widget,
+          widget._scrollController,
         ));
       }
     }
@@ -526,7 +527,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                               onPressed: () {
 
                                 PreferencesSearch prefs = new PreferencesSearch();
-                                prefs.addSearch(widget, _textFieldController.text);
+                                prefs.addSearch(widget, _textFieldController.text, widget.callback.mapOfChosenCategories);
 
                                 Navigator.pop(context);
                               },

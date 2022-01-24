@@ -45,7 +45,7 @@ class SavedSearchCard extends StatelessWidget {
     safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
 
-    return Container(
+    return InkWell( child: Container(
         margin: EdgeInsets.symmetric(horizontal: blockSizeHorizontal * 3, vertical: blockSizeVertical * 0.5),
         height: blockSizeVertical * 10,
         decoration: BoxDecoration(
@@ -97,8 +97,7 @@ class SavedSearchCard extends StatelessWidget {
                         // Show Min & Max Price only if they were set
                         (callback.widget.searches[name].startValue > 0) ?
                         buildBadge(true, callback.widget.searches[name].startValue.toString()): SizedBox(width: 0),
-                        (callback.widget.searches[name].endValue != 4900) ?
-                        buildBadge(false, callback.widget.searches[name].endValue.toString()): SizedBox(width: 0),
+                        buildBadge(false, callback.widget.searches[name].endValue.toString()),
                         buildDiscountBadge(callback.widget.searches[name].discounts),
                       ]
                     ), ),
@@ -119,7 +118,23 @@ class SavedSearchCard extends StatelessWidget {
                 )
               ],
             )
-            );
+            ),
+          onTap: () {
+            callback.widget.callback.numberOfProducts = 0;
+            callback.widget.callback.view = callback.widget.searches[name];
+            callback.widget.callback.mapOfChosenCategories = callback.widget.searches[name].chosenCats;
+            callback.widget.callback.chosenCategories.clear();
+            callback.widget.callback.mapOfChosenCategories.forEach((key, value) {
+              callback.widget.callback.chosenCategories.add(key);
+              callback.widget.callback.currentCategory = value;
+              callback.widget.callback.addProductsOfChosenCategory(value);
+          });
+          callback.widget.callback.showSearches = false;
+
+
+          callback.widget.callback.updateBrowserblabla(callback.widget.callback.currentCategory);
+
+          });
             }
 
 

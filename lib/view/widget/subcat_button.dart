@@ -32,16 +32,18 @@ class SubcatButton extends StatefulWidget {
   @observable
   ObservableList<SubcatButton> subCatButtons = new ObservableList();
 
-  SubcatButton({
-    required this.categoryName,
-    required this.categoryId,
-    required this.stream,
-    required this.updateStream,
-    required this.callback,
-    required this.cBackToView,
-    required this.controller,
+  SubcatButton(
+    this.categoryName,
+    this.categoryId,
+    this.stream,
+    this.updateStream,
+    this.callback,
+    this.cBackToView,
+    this.controller,
     //required this.isProdCat,
-  });
+      ){
+    isChosen = cBackToView.chosenCats.containsValue(categoryId);
+  }
 
   @override
   State<StatefulWidget> createState() => _SubcatButtonState();
@@ -82,13 +84,13 @@ class _SubcatButtonState extends State<SubcatButton> {
     if(widget.subCatButtons.isEmpty) {
       for (int i = 0; i < widget.subCategoriesNames.length; i++) {
         widget.subCatButtons.add(
-            SubcatButton(categoryName: widget.subCategoriesNames[i],
-              categoryId: widget.subCategoriesIds[i],
-              stream: widget.stream,
-              updateStream: widget.updateStream,
-            callback: widget.callback,
-            cBackToView: widget.cBackToView,
-            controller: widget.controller));
+            SubcatButton(widget.subCategoriesNames[i],
+              widget.subCategoriesIds[i],
+              widget.stream,
+              widget.updateStream,
+            widget.callback,
+            widget.cBackToView,
+            widget.controller));
       }
     }
   }
