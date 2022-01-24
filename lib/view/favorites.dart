@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'package:penny_pincher/models/preference_articles_ws.dart';
 import 'package:penny_pincher/models/preferences_articles.dart';
+import 'package:penny_pincher/models/ws_product.dart';
 import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
+import 'package:penny_pincher/services/product_controller_ws.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
@@ -37,6 +40,12 @@ class _FavoritePageState extends State<FavoritePage> {
 
   final _preferenceArticles = PreferencesArticles();
 
+  // NEW WEB SOCKET
+  final _preferenceArticlesWs = PreferenceArticlesWS();
+  List<ProductWS> favoriteProductsWS = [];
+
+  List<dynamic> allFavoritesProducts = [];
+
   @override
   void initState() {
     super.initState();
@@ -45,17 +54,30 @@ class _FavoritePageState extends State<FavoritePage> {
     });
 
     favoriteProducts = ProductController.favoriteProducts;
+    favoriteProductsWS = ProductControllerWS.favoriteProductsWS;
     getData();
   }
 
   getData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences presWS = await SharedPreferences.getInstance();
     List<Product> saved = await _preferenceArticles.getAllFavorites();
+    List<ProductWS> savedWs = await _preferenceArticlesWs.getAllFavorites();
     favoriteProducts.addAll(saved);
+    favoriteProductsWS.addAll(savedWs);
     setState(() {
       // displayName = prefs.getStringList('displayName');
     });
+
+    putListsTogether(favoriteProducts, favoriteProductsWS);
+
   }
+
+  putListsTogether(List<Product> listProduct, List<ProductWS> listProductsWs) async {
+    allFavoritesProducts.addAll(listProduct);
+    allFavoritesProducts.addAll(listProductsWs);
+  }
+
 /* //TODO DO NOT DELETE! TEMPLATE FOR FURTHER REAFCTORING
   Future <void> getProducts() async {
     favoriteProducts.clear();
@@ -75,6 +97,7 @@ class _FavoritePageState extends State<FavoritePage> {
   updateScreen(bool update) {
     if (this.mounted) {
       ProductController.updateFavorites(this);
+      ProductControllerWS.updateFavoritesWS(this);
     }
     if (_isClosed) {
       _isClosed = false;
@@ -87,12 +110,12 @@ class _FavoritePageState extends State<FavoritePage> {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     return Scaffold(
       appBar: FavoriteAppBar(this),
-      body: favoriteProducts.isNotEmpty
+      body: allFavoritesProducts.isNotEmpty
           ? Align(
         alignment: Alignment.topCenter,
         child: ListView.builder(
             shrinkWrap: true,
-            itemCount: favoriteProducts.length,
+            itemCount: allFavoritesProducts.length,
             itemBuilder: (context, index) {
               return InkWell(
                   onTap: () {
@@ -100,12 +123,12 @@ class _FavoritePageState extends State<FavoritePage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              ExtendedView(favoriteProducts[index], this, streamController.stream)),
+                              ExtendedView(allFavoritesProducts[index], this, streamController.stream)),
                     );
                     streamController.add(true);
                     _isClosed = true;
                   },
-                  child: ArticleCard(favoriteProducts[index], this));
+                  child: ArticleCard(allFavoritesProducts[index], this));
             }),
       )
           : Center(

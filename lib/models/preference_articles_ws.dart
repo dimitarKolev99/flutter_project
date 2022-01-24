@@ -52,7 +52,7 @@ class PreferenceArticlesWS {
   Map<String, dynamic> fromCardToJson(ProductWS product) => {
     'product_id': product.productId,
     'site_id': product.siteId,
-    'date': product.date,
+    'date': product.date.toIso8601String(),
     'currentPrice': product.currentPrice,
     'previousPrice': product.previousPrice,
     'dropPercentage': product.dropPercentage,
@@ -67,7 +67,7 @@ class PreferenceArticlesWS {
     return ProductWS(
       productId: int.parse(id),
       siteId: json["site_id"],
-      date: json["date"],
+      date: DateTime.parse(json["date"]),
       currentPrice: json["currentPrice"],
       previousPrice: json["previousPrice"],
       dropPercentage: json["dropPercentage"],

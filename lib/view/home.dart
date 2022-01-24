@@ -7,6 +7,7 @@ import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/json_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
+import 'package:penny_pincher/services/product_controller_ws.dart';
 import 'package:penny_pincher/view/extended_view_web_socket.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/welcome_screen.dart';
@@ -339,9 +340,15 @@ class _HomePageState extends State<HomePage> {
                           stream: channel.stream,
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
+<<<<<<< Updated upstream
                               //newProducts.add(productFromJson(snapshot.data.toString()));
                               animate();
                               search(listOfProdCat, productFromJson(snapshot.data.toString()));
+=======
+                              search(listOfProdCat,
+                                  productFromJson(snapshot.data.toString()));
+                              ProductControllerWS.addProductsWS(newProducts);
+>>>>>>> Stashed changes
                               return ListView.builder(
                                   reverse: true,
                                   shrinkWrap: true,
@@ -485,7 +492,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   void search(List<int> list, ProductWS product) {
+<<<<<<< Updated upstream
     //print("LIST: ${list}");
+=======
+   // print("LIST: ${list}");
+>>>>>>> Stashed changes
     for (int i = 0; i < list.length; i++) {
         if (!productIdList.contains(product.productId) && list[i] == product.categoryId) {
           newProducts.add(product);
