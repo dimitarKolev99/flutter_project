@@ -151,7 +151,7 @@ class _HomePageState extends State<HomePage> {
   bool _isLoading = true;
   var count = 0;
   bool isScrolling = false;
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   var x = 0.0;
   WelcomeStatus status = WelcomeStatus.loading;
   dynamic preferences;
@@ -171,7 +171,7 @@ class _HomePageState extends State<HomePage> {
   );
 
   _onUpdateScroll() {
-    if (this.mounted) {
+    if (mounted) {
       setState(() {
         if (_scrollController.offset <
             _scrollController.position.maxScrollExtent) {
@@ -184,7 +184,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void getProducts() {
-    if (this.mounted) {
+    if (mounted) {
       setState(() {
         if (status == WelcomeStatus.noFirstTime) {
           _isLoading = false;
@@ -206,7 +206,7 @@ class _HomePageState extends State<HomePage> {
     }
     super.initState();
     widget.stream.listen((update) {
-      if (this.mounted) {
+      if (mounted) {
         ProductController.updateFavorites(this);
       }
     });
@@ -311,8 +311,8 @@ class _HomePageState extends State<HomePage> {
                                   borderRadius: BorderRadius.circular(2),
                                 ),
                                 alignment: Alignment.centerRight,
-                                margin: EdgeInsets.all(4),
-                                padding: EdgeInsets.all(4),
+                                margin: const EdgeInsets.all(4),
+                                padding: const EdgeInsets.all(4),
                                 child: Text(
                                   mainCategoryNames[index],
                                   style: TextStyle(
@@ -338,8 +338,9 @@ class _HomePageState extends State<HomePage> {
                           stream: channel.stream,
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
-                              search(listOfProdCat,
-                                  productFromJson(snapshot.data.toString()));
+                              newProducts.add(productFromJson(snapshot.data.toString()));
+                              animate();
+                              //search(listOfProdCat, productFromJson(snapshot.data.toString()));
                               return ListView.builder(
                                   reverse: true,
                                   shrinkWrap: true,
@@ -372,7 +373,7 @@ class _HomePageState extends State<HomePage> {
                       alignment: Alignment.topRight,
                       child: IconButton(
                           onPressed: () {},
-                          icon: Icon(Icons.add, color: Colors.black))),
+                          icon: const Icon(Icons.add, color: Colors.black))),
                 ]),
               )
             ],
@@ -428,6 +429,16 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void animate() {
+    if (_scrollController.hasClients  && _scrollController.position.pixels < _scrollController.position.maxScrollExtent) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        curve: Curves.easeOut,
+        duration: const Duration(milliseconds: 300),
+      );
+    }
+  }
+
   firstAppStart() async {
     preferences = await SharedPreferences.getInstance();
     // await preferences.setBool("nofirstTime", false); // run welcome screen everytime
@@ -471,7 +482,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void search(List<int> list, ProductWS product) {
-    print("LIST: ${list}");
+    //print("LIST: ${list}");
     for (int i = 0; i < list.length; i++) {
         if (!productIdList.contains(product.productId) && list[i] == product.categoryId) {
           newProducts.add(product);

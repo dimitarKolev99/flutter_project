@@ -191,7 +191,7 @@ class JsonFunctions{
   Future<List<int>> getListOfProdCatIDs(int id) async{
     List<dynamic> resultList = await getJsonOneMain(id);
     translateTree(resultList);
-    print("In getListOfProdCatIDs $id");
+    //print("In getListOfProdCatIDs $id");
     return productCategoryIDs;
   }
 
