@@ -495,7 +495,6 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                           context
                       );
                     });
-
                   },
                       style: TextButton.styleFrom(backgroundColor: ThemeChanger.lightBlue),
                       child: Text("Zeige ${widget.callback.numberOfProducts} Produkte",

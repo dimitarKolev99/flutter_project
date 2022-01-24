@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:penny_pincher/models/preferences_searches.dart';
 import 'package:penny_pincher/view/subcategory_view.dart';
+import 'package:penny_pincher/view/widget/saved_search_card.dart';
 
 class SearchView extends StatefulWidget {
 
@@ -29,6 +30,7 @@ class _SearchViewState extends State<SearchView> {
     widget.names = await getAllNames();
   }
 
+
   List<String> getAllNames() {
     List<String> names = [];
 
@@ -37,6 +39,8 @@ class _SearchViewState extends State<SearchView> {
     });
     return names;
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +53,13 @@ class _SearchViewState extends State<SearchView> {
           child: Text(widget.names[index]));
     }
     );*/
-    return FutureBuilder(future: init(),builder: (context, snapshot) {
+    return FutureBuilder(
+        future: init(),
+        builder: (context, snapshot) {
         return ListView.builder(
           itemCount: widget.names.length,
           itemBuilder: (context, index) {
-            return Text(widget.names[index]);
+            return SavedSearchCard(this, widget.names[index]);
         },);
     });
 
