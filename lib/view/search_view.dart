@@ -45,22 +45,17 @@ class _SearchViewState extends State<SearchView> {
   @override
   Widget build(BuildContext context) {
   init();
-/*
-    return ListView.builder(itemBuilder: (context, index) {
-      return InkWell(
-          onTap: () {
-          },
-          child: Text(widget.names[index]));
-    }
-    );*/
-    return FutureBuilder(
-        future: init(),
-        builder: (context, snapshot) {
+
+
+    return FutureBuilder(future: init(),builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.done) {
+
         return ListView.builder(
           itemCount: widget.names.length,
           itemBuilder: (context, index) {
             return SavedSearchCard(this, widget.names[index]);
         },);
+      } else return CircularProgressIndicator();
     });
 
 
