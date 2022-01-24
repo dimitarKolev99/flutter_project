@@ -339,9 +339,9 @@ class _HomePageState extends State<HomePage> {
                           stream: channel.stream,
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
-                              newProducts.add(productFromJson(snapshot.data.toString()));
+                              //newProducts.add(productFromJson(snapshot.data.toString()));
                               animate();
-                              //search(listOfProdCat, productFromJson(snapshot.data.toString()));
+                              search(listOfProdCat, productFromJson(snapshot.data.toString()));
                               return ListView.builder(
                                   reverse: true,
                                   shrinkWrap: true,
@@ -409,10 +409,6 @@ class _HomePageState extends State<HomePage> {
       }
     }
     await preferences.setStringList("categories", categoriesList);
-
-
-    await getSubCategories();
-    await mapToLists();
 
     setState(() {
       _jsonFunctions.getListOfProdCatIDs(mainCategoryIds.indexOf(categoryId))
@@ -498,48 +494,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  /*
-  Future<void> filterProducts(List<ProductWS> newProducts) async {
-    List<ProductWS> ret = [];
-    //result.clear();
-    int catId = categoryIdWebSocket;
-
-
-    await getSubCategories();
-    await mapToLists();
-
-
-
-    print("CatId ==== >>>>> $catId");
-    print("newProducts ======> {$newProducts}");
-    print("ret ===> ${ret}");
-     if(ret.isEmpty) {
-       print("IS EMPTY");
-       for (var i in listOfProdCat) {
-         for (var j in newProducts) {
-           if(listOfProdCat[i] == newProducts[j].categoryId) {
-
-           }
-         }
-
-       }
-       ret = newProducts;
-       print("RET ====> $ret");
-       for (var p in ret) {
-        // print("p ===> $p");
-         if (catId == p.categoryId) {
-           print("CATID -----> $catId");
-           print("p.CatID ====> -----> ${p.categoryId}");
-
-           filteredProducts.add(p);
-         }
-       }
-     }
-     //filteredProducts = result;
-    print("FILTERED PRODUCTS ===> ${filteredProducts}");
-  }
-
-   */
 }
 
 enum WelcomeStatus { loading, firstTime, noFirstTime, finished }
