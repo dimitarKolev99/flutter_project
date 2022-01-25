@@ -75,17 +75,11 @@ class _HomePageState extends State<HomePage> {
     3626,
   ];
 
-  bool state = false;
   JsonFunctions json = JsonFunctions();
-  Map<String, int> subCategoriesMap = Map();
-  // names and Ids have matching indexes for name and id of the category
-  List<String> subCategoriesNames = [];
-  List<int> subCategoriesIds = [];
   late int categoryId;
   late String categoryName;
   List<int> productCategoryIDs = [];
   List<int> productIdList = [];
- // bool check = false;
 
   ///NEW WEBSOCKET
   List<ProductWS> filteredProducts = [];
@@ -93,61 +87,12 @@ class _HomePageState extends State<HomePage> {
   List<ProductWS> result = [];
   late int indexItemBuilder;
 
-
-  //when map is empty then json funtions is called
-  Future<void> getSubCategories() async{
-    if(subCategoriesMap.isEmpty) {
-      json.getJson().then((List<dynamic> result) {
-        List<dynamic> resultList = [];
-        resultList = result;
-        subCategoriesMap = json.getMapOfSubOrProductCategories(categoryId, resultList);
-      });
-    }
-    if(subCategoriesMap.isNotEmpty) {
-      subCategoriesMap.clear();
-      json.getJson().then((List<dynamic> result) {
-        List<dynamic> resultList = [];
-        resultList = result;
-        subCategoriesMap = json.getMapOfSubOrProductCategories(categoryId, resultList);
-      });
-    }
-  }
-
-
-  //seperate the sub map into 2 lists 1 with names and 1 with ids
-  Future<void> mapToLists() async {
-    if(subCategoriesNames.isEmpty) {
-     // print("mapToLists Is emtpy");
-      subCategoriesMap.forEach((name, id) {
-        subCategoriesNames.add(name);
-        subCategoriesIds.add(id);
-      //  print("added $name");
-      });
-    }
-    if (subCategoriesNames.isNotEmpty) {
-    //  print("mapToLists Its Not Empty");
-      subCategoriesNames.clear();
-      subCategoriesIds.clear();
-        subCategoriesMap.forEach((name, id) {
-        subCategoriesNames.add(name);
-        subCategoriesIds.add(id);
-      //  print("added $name");
-     //   print("added $id");
-      });
-    }
-  }
-
-
-
   StreamController<bool> streamController = StreamController<bool>.broadcast();
 
 
-  late List<Product> _product;
 
   late List<ProductWS> newProduct;
 
-  late final List _favoriteIds = [];
-  late final List<Product> _products = [];
   late final List<ProductWS> newProducts = [];
   bool _isLoading = true;
   var count = 0;
@@ -157,12 +102,10 @@ class _HomePageState extends State<HomePage> {
   WelcomeStatus status = WelcomeStatus.loading;
   dynamic preferences;
 
-  //var screenHeight = ;
 
-  final _preferenceArticles = PreferencesArticles();
   final _jsonFunctions = JsonFunctions();
   var index = 0;
-  var randomCategory = 0;
+
   bool loadingProducts = false;
 
   final List<int> _selectedItems = [];
@@ -221,11 +164,6 @@ class _HomePageState extends State<HomePage> {
   Future<void> disableSplashScreen() async {
     await Future.delayed(const Duration(seconds: 2), (){});
     getProducts();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   List<int> listOfProdCat = [];
@@ -390,12 +328,6 @@ class _HomePageState extends State<HomePage> {
   selectCategory(index) async {
     mainCategories[index];
     categoryId = mainCategoryIds[index];
-    //  print("categoryid = ${categoryId}");
-
-    setState(() {
-      !state ? state = true : state = false;
-    });
-
 
     if(!_selectedItems.contains(mainCategoryIds[index])) {
       setState(() {
@@ -417,11 +349,7 @@ class _HomePageState extends State<HomePage> {
         setState(() {
           _jsonFunctions.getListOfProdCatIDs(_selectedItems)
               .then((value) {
-            //timerFunction(value);
-            //_jsonFunctions.count = 1;
-            // print("AAAAAA $_jsonFunctions.count");
             listOfProdCat = value;
-            //print(_selectedItems);
           });
         });
 
@@ -484,11 +412,9 @@ class _HomePageState extends State<HomePage> {
 
   void currentCatId(indexItemBuilder) {
     categoryIdWebSocket = mainCategoryIds[indexItemBuilder];
-   // print("categoryIdWebSocket ===> $categoryIdWebSocket");
   }
 
   void search(List<int> list, ProductWS product) {
-    //print("LIST: ${list}");
     for (int i = 0; i < list.length; i++) {
         if (!productIdList.contains(product.productId) && list[i] == product.categoryId) {
           newProducts.add(product);

@@ -154,32 +154,6 @@ class JsonFunctions{
     }
   }
 
-  void translateTreeOneMain(List<dynamic> resultList) {
-    for (var element in resultList) {
-      if (element.toString().substring(1, 14) == "subCategories") {
-
-        List<dynamic> resultList2 = element["subCategories"];
-        if (element["subCategories"] != null &&
-            element["productCategories"] != null) {
-          List<dynamic> productList = element["productCategories"];
-          for (var element in productList) {
-            id = element["id"];
-            productCategoryIDs.add(id);
-          }
-        }
-        translateTree(resultList2);
-      }
-      else if (element.toString().substring(1, 18) == "productCategories") {
-        List<dynamic> resultList2 = element["productCategories"];
-        for (var element in resultList2) {
-          id = element["id"];
-          productCategoryIDs.add(id);
-        }
-        translateTree(resultList2);
-      }
-    }
-  }
-
   Future<List<dynamic>> getJson() async {
     final response = await rootBundle.loadString('lib/resources/cat_tree1.json');
     Map<String, dynamic> myMap =
@@ -209,22 +183,17 @@ class JsonFunctions{
 
 
   Future<List<int>> getListOfProdCatIDs(List<int> id) async{
-    for (int i = 0; i < id.length; i++) {
-      List<dynamic> resultList = await getJsonOneMain(mainCategoryIds.indexOf(id[i]));
-      translateTree(resultList);
-      //print(resultList);
-    }
-
-    if (productCategoryIDs.isNotEmpty) {
-      for (int i = 0; i < productCategoryIDs.length; i++) {
+    productCategoryIDs = [];
+    if (id.isNotEmpty) {
+      for (int i = 0; i < id.length; i++) {
         List<dynamic> resultList = await getJsonOneMain(
             mainCategoryIds.indexOf(id[i]));
         translateTree(resultList);
-        //print(resultList);
       }
+    } else {
+      List<dynamic> resultList = await getJson();
+      translateTree(resultList);
     }
-    print(productCategoryIDs.length);
-    //print("In getListOfProdCatIDs $id");
     return productCategoryIDs;
   }
 

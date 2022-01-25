@@ -59,7 +59,6 @@ class ProductApi {
   }
 
   fetchProductWebSocket()  {
-    print("API called");
 
     final channel = WebSocketChannel.connect(
       Uri.parse('wss://ika3taif23.execute-api.eu-central-1.amazonaws.com/prod'),
