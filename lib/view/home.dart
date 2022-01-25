@@ -1,21 +1,13 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
-import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/models/ws_product.dart';
 import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/json_functions.dart';
-import 'package:penny_pincher/services/product_api.dart';
-import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/view/extended_view_web_socket.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/welcome_screen.dart';
 import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
-import 'package:penny_pincher/view/widget/article_card.dart';
-import 'package:penny_pincher/view/widget/article_search.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:penny_pincher/view/extended_view.dart';
 import 'package:penny_pincher/view/widget/new_article_card.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -89,8 +81,6 @@ class _HomePageState extends State<HomePage> {
 
   StreamController<bool> streamController = StreamController<bool>.broadcast();
 
-
-
   late List<ProductWS> newProduct;
 
   late final List<ProductWS> newProducts = [];
@@ -98,7 +88,6 @@ class _HomePageState extends State<HomePage> {
   var count = 0;
   bool isScrolling = false;
   final ScrollController _scrollController = ScrollController();
-  var x = 0.0;
   WelcomeStatus status = WelcomeStatus.loading;
   dynamic preferences;
 
@@ -107,6 +96,8 @@ class _HomePageState extends State<HomePage> {
   var index = 0;
 
   bool loadingProducts = false;
+
+  bool show = false;
 
   final List<int> _selectedItems = [];
 
@@ -126,6 +117,15 @@ class _HomePageState extends State<HomePage> {
       });
     }
   }
+
+  var displayHeight = 0.0;
+
+   void check()  {
+    Future.delayed(const Duration(seconds: 7), () {
+      show = true;
+    });
+  }
+
 
   void getProducts() {
     if (mounted) {
@@ -158,7 +158,7 @@ class _HomePageState extends State<HomePage> {
     tz.initializeTimeZones();
 
     disableSplashScreen();
-
+    check();
   }
 
   Future<void> disableSplashScreen() async {
@@ -193,8 +193,6 @@ class _HomePageState extends State<HomePage> {
     blockSizeHorizontal = displayWidth / 100;
     blockSizeVertical = displayHeight / 100;
 
-    displayHeight = x;
-
     _safeAreaHorizontal =
         _mediaQueryData.padding.left + _mediaQueryData.padding.right;
     _safeAreaVertical =
@@ -214,14 +212,12 @@ class _HomePageState extends State<HomePage> {
         body: Container(
             color: ThemeChanger.lightBlue,
             alignment: Alignment.center,
-            child: Icon(Icons.search, color: Colors.grey, size: 100)),
+            child: const Icon(Icons.search, color: Colors.grey, size: 100)),
       );
     } else {
       return Scaffold(
           appBar: HomeBrowserAppBar(this),
-          body:
-          //_isLoading ? Center(child: CircularProgressIndicator()) :
-          Column(
+          body: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Align(
@@ -231,7 +227,7 @@ class _HomePageState extends State<HomePage> {
                   height: 40,
                   width: displayWidth,
                   child: ListView.builder(
-                      physics: ScrollPhysics(),
+                      physics: const ScrollPhysics(),
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
                       itemCount: mainCategories.length,
@@ -278,7 +274,6 @@ class _HomePageState extends State<HomePage> {
                           stream: channel.stream,
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
-                              //newProducts.add(productFromJson(snapshot.data.toString()))
                               search(listOfProdCat, productFromJson(snapshot.data.toString()));
                               return ListView.builder(
                                   reverse: true,
@@ -303,16 +298,26 @@ class _HomePageState extends State<HomePage> {
                                         NewArticleCard(newProducts[index]));
                                   });
                             } else {
-                              return const Text("no data");
+                              return const CircularProgressIndicator();
                             }
                           },
                         ),
 
-                      )),
+                      )
+                  ),
                   Align(
                       alignment: Alignment.bottomRight,
-                      child: FloatingActionButton(
-                        onPressed: () {animate();},
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: show ? FloatingActionButton(
+                          onPressed: () {
+                            animate();
+                            show = false;
+                            check();
+                          },
+                          child: const Icon(Icons.arrow_upward),
+                          backgroundColor: ThemeChanger.lightBlue,
+                        ) : null
                       ),
                   ),
               ]
@@ -321,6 +326,18 @@ class _HomePageState extends State<HomePage> {
 
               ]
           ),
+        /*
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            animate();
+            show = false;
+            check();
+          },
+          child: const Icon(Icons.arrow_upward),
+          backgroundColor: ThemeChanger.lightBlue,
+        ),
+
+         */
       );
     }
   }
@@ -368,7 +385,7 @@ class _HomePageState extends State<HomePage> {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
         curve: Curves.easeOut,
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 500),
       );
     }
   }
