@@ -75,6 +75,7 @@ class _HomePageState extends State<HomePage> {
     3626,
   ];
 
+  bool state = false;
   JsonFunctions json = JsonFunctions();
   Map<String, int> subCategoriesMap = Map();
   // names and Ids have matching indexes for name and id of the category
@@ -339,8 +340,7 @@ class _HomePageState extends State<HomePage> {
                           stream: channel.stream,
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
-                              //newProducts.add(productFromJson(snapshot.data.toString()));
-                              animate();
+                              //newProducts.add(productFromJson(snapshot.data.toString()))
                               search(listOfProdCat, productFromJson(snapshot.data.toString()));
                               return ListView.builder(
                                   reverse: true,
@@ -372,10 +372,9 @@ class _HomePageState extends State<HomePage> {
 
                       )),
                   Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.add, color: Colors.black)
+                      alignment: Alignment.bottomRight,
+                      child: FloatingActionButton(
+                        onPressed: () {animate();},
                       ),
                   ),
               ]
@@ -388,10 +387,15 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> selectCategory(index) async {
+  selectCategory(index) async {
     mainCategories[index];
     categoryId = mainCategoryIds[index];
     //  print("categoryid = ${categoryId}");
+
+    setState(() {
+      !state ? state = true : state = false;
+    });
+
 
     if(!_selectedItems.contains(mainCategoryIds[index])) {
       setState(() {
@@ -410,18 +414,17 @@ class _HomePageState extends State<HomePage> {
     }
     await preferences.setStringList("categories", categoriesList);
 
-    setState(() {
-      _jsonFunctions.getListOfProdCatIDs(mainCategoryIds.indexOf(categoryId))
-          .then((value) {
-        //timerFunction(value);
-        //_jsonFunctions.count = 1;
-        // print("AAAAAA $_jsonFunctions.count");
-        listOfProdCat = value;
-      });
-    });
+        setState(() {
+          _jsonFunctions.getListOfProdCatIDs(_selectedItems)
+              .then((value) {
+            //timerFunction(value);
+            //_jsonFunctions.count = 1;
+            // print("AAAAAA $_jsonFunctions.count");
+            listOfProdCat = value;
+            //print(_selectedItems);
+          });
+        });
 
-    //print("subCategoryMAP = ${subCategoriesMap}");
-    //print("subCategoryID = ${subCategoriesIds}");
   }
 
   void closeWelcomeScreen() {
