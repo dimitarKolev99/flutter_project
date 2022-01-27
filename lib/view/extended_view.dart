@@ -57,9 +57,9 @@ class _ExtendedViewState extends State<ExtendedView> {
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
 
-    double newprice = int.parse(widget.price).toDouble()/100;
-    int x = 100 - int.parse(widget.saving).toInt();
-    double prevpreis = newprice / x * 100;
+   // double newprice = int.parse(widget.price).toDouble()/100;
+    //int x = 100 - int.parse(widget.saving).toInt();
+    //double prevpreis = newprice / x * 100;
 
     MediaQueryData _mediaQueryData;
     double displayWidth;
@@ -144,7 +144,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                                       topRight: Radius.circular(5))),
                               margin: EdgeInsets.only(left: blockSizeHorizontal * 3),
                               child: Text(
-                                widget.price,//newprice.toStringAsFixed(2) + " €",
+                                widget.price + " €",//newprice.toStringAsFixed(2) + " €",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: safeBlockHorizontal * 9,
@@ -190,7 +190,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                             ),
                             margin: EdgeInsets.only(left: blockSizeHorizontal * 3),
                             child: Text(
-                                widget.price,//prevpreis.toStringAsFixed(2) + "€",
+                                widget.price + " €",//prevpreis.toStringAsFixed(2) + "€",
                               style: TextStyle(
                                   decoration: TextDecoration.lineThrough,
                                   fontSize: safeBlockHorizontal * 5.0,

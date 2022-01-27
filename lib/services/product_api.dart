@@ -153,9 +153,11 @@ class ProductApi {
     //List<dynamic> bargains = findBargains(fromUri);
 
 
+    final startIndex = 0;
+
     return bargains.map((data) => Product.fromJson(data)).where((bargains){
-    final productPrice = int.parse(bargains.price).toDouble();
-    final productSaving = int.parse(bargains.saving).toInt();
+    final productPrice = int.parse(bargains.price);
+    final productSaving = int.parse(bargains.saving);
 
     //print("PRICERANGE-------------------------$productPrice, $minPrice, $maxPrice, $saving");
 

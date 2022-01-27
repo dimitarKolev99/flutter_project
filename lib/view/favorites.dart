@@ -66,6 +66,7 @@ class _FavoritePageState extends State<FavoritePage> {
    // SharedPreferences presWS = await SharedPreferences.getInstance();
     List<Product> saved = await _preferenceArticles.getAllFavorites();
     //List<ProductWS> savedWs = await _preferenceArticlesWs.getAllFavorites();
+    favoriteProducts.clear();
     favoriteProducts.addAll(saved);
    // favoriteProductsWS.addAll(savedWs);
     setState(() {
@@ -102,7 +103,7 @@ class _FavoritePageState extends State<FavoritePage> {
       //ProductController.updateFavorites(this);
       setState(() {
         getData();
-        ProductControllerWS.updateFavoritesWS(this);
+        ProductController.updateFavorites(this);
       });
 
     }

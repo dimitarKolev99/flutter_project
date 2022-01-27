@@ -22,7 +22,7 @@ class BrowserArticleCard extends StatelessWidget {
     this.id = product.productId;
     this.title = product.title;
     this.saving = product.saving;
-    this.price = product.price.toString();
+    this.price = product.price;
     this.image = product.smallImage;
     this.description = product.description;
     this.category = product.categoryName;

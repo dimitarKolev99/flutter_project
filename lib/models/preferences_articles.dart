@@ -60,6 +60,7 @@ class PreferencesArticles {
         'description': product.description,
         'smallImage': product.smallImage,
         'bigImage': product.bigImage,
+        'productPageUrl': product.productPageUrl
       };
 
   Product fromJsonToProduct(String id, Map<String, dynamic> json) {
@@ -73,7 +74,7 @@ class PreferencesArticles {
       description:json["description"],
       smallImage: json["smallImage"],
       bigImage: json["bigImage"],
-      productPageUrl: "BLABLA"//json["productPageUrl"],
+      productPageUrl: json["productPageUrl"],
     );
   }
 }

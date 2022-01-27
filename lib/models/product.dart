@@ -18,6 +18,8 @@ class Product {
     required this.productPageUrl
   });
 
+
+
   //int subCategoryId;
   int categoryId;
   String categoryName;
@@ -30,6 +32,8 @@ class Product {
   String bigImage;
   String productPageUrl;
 
+  final startIndex = 0;
+
   factory Product.fromJson(Map<String, dynamic> json) {
 
     return Product(
@@ -38,11 +42,11 @@ class Product {
       categoryName: json["category_name"] != null ? json["category_name"] : "",
       productId: json["product_id"] != null ? json["product_id"] : json["productId"],
       title: json["product_title"] != null ? json["product_title"] : json["productName"],
-      price: json["price"] != null ? json["price"] : json["currentPrice"],
-      saving: json["saving"] != null ? json["saving"] : json["dropPercentage"],
+      price: json["price"] != null ? json["price"].toString() : json["currentPrice"].toString(),
+      saving: json["saving"] != null ? json["saving"].toString() : json["dropPercentage"].toString(),
       description:json["description"] != null ? json["description"] : "",
-      smallImage: json["images"] != null ? json["images"] : json["productImageUrl"],
-      bigImage: json["images"] != null ? json["images"]: json["productPageUrl"],
+      smallImage: json["images"] != null ? json["images"]["w45h37"][0].toString() : json["productImageUrl"].toString(),
+      bigImage: json["images"] != null ? json["images"]["w60h50"][0].toString() : json["productImageUrl"].toString(),
       productPageUrl: json["productPageUrl"] != null ? json["productPageUrl"] : "",
     );
   }
