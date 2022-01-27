@@ -99,7 +99,7 @@ class _FavoritePageState extends State<FavoritePage> {
 */
   updateScreen(bool update) {
     if (this.mounted) {
-      ProductController.updateFavorites(this);
+      //ProductController.updateFavorites(this);
       ProductControllerWS.updateFavoritesWS(this);
     }
     if (_isClosed) {

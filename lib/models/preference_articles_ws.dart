@@ -11,10 +11,10 @@ class PreferenceArticlesWS {
       await _fetchData();
     }
 
-    final rawData = preferencesWS.getString('favorites');
+    final rawData = preferencesWS.getString('favoritesWS');
     final jsonData = jsonDecode(rawData.toString());
     jsonData[product.productId.toString()] = fromCardToJson(product);
-    await preferencesWS.setString("favorites", jsonEncode(jsonData));
+    await preferencesWS.setString("favoritesWS", jsonEncode(jsonData));
   }
 
   Future removeFavorite(int id) async {
@@ -22,10 +22,10 @@ class PreferenceArticlesWS {
       await _fetchData();
     }
 
-    final rawData = preferencesWS.getString('favorites');
+    final rawData = preferencesWS.getString('favoritesWS');
     final jsonData = jsonDecode(rawData.toString());
     jsonData.remove(id.toString());
-    await preferencesWS.setString("favorites", jsonEncode(jsonData));
+    await preferencesWS.setString("favoritesWS", jsonEncode(jsonData));
   }
 
   Future<List<ProductWS>> getAllFavorites() async {
@@ -33,10 +33,10 @@ class PreferenceArticlesWS {
       await _fetchData();
     }
 
-    var rawData = preferencesWS.getString('favorites');
+    var rawData = preferencesWS.getString('favoritesWS');
     if (rawData == null) {
-      await preferencesWS.setString("favorites", "{}");
-      rawData = preferencesWS.getString('favorites');
+      await preferencesWS.setString("favoritesWS", "{}");
+      rawData = preferencesWS.getString('favoritesWS');
     }
     final jsonData = jsonDecode(rawData.toString());
     List<ProductWS> products = [];
@@ -46,7 +46,7 @@ class PreferenceArticlesWS {
 
   Future _fetchData() async {
     preferencesWS = await SharedPreferences.getInstance();
-    //await preferences.setString("favorites", "{}"); // einkommentieren zum favoriten löschen
+    // await preferencesWS.setString("favoritesWS", "{}"); // einkommentieren zum favoriten löschen
   }
 
   Map<String, dynamic> fromCardToJson(ProductWS product) => {
