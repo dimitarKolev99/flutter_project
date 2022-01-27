@@ -126,10 +126,10 @@ class _HomePageState extends State<HomePage> {
     //print(_scrollController.offset);
 
     int a = (_scrollController.position.maxScrollExtent - _scrollController.position.pixels).toInt();
-    if (a == 172 ||
+    if (a == 157 ||
         a == 0 ||
-        a == 86 ||
-    a == 254) {
+        a == 69 ||
+    a == 314) {
       isScrolling = false;
     } else {
       print("HERE");
@@ -289,7 +289,7 @@ class _HomePageState extends State<HomePage> {
                       alignment: Alignment.topCenter,
                       child: NotificationListener<ScrollNotification>(
                         onNotification: (scrollNotification) {
-                          if (scrollNotification is ScrollEndNotification) {
+                          if (scrollNotification is ScrollStartNotification) {
                           print("NOTIFICATION");
                           //print("${_scrollController.position.pixels}" +  " " + "${_scrollController.position.maxScrollExtent}");
                           print(_scrollController.position.maxScrollExtent - _scrollController.position.pixels);
@@ -399,11 +399,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   void animate() {
+    isScrolling = false;
     if (_scrollController.hasClients  && _scrollController.position.pixels < _scrollController.position.maxScrollExtent) {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
         curve: Curves.easeOut,
-        duration: const Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 150),
       );
     }
   }
