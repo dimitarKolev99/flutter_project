@@ -181,7 +181,6 @@ class _BrowserPageState extends State<BrowserPage> {
       }
     });
     getProducts(widget._currentProductId);
-    print("CALLED FROM BROWSER VIEW");
   }
 
   Future<void> getProducts(int categoryID) async {

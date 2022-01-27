@@ -106,6 +106,7 @@ class _HomePageState extends State<HomePage> {
   );
 
   _onUpdateScroll() {
+    /*
     if (mounted) {
       setState(() {
         if (_scrollController.offset <
@@ -116,6 +117,23 @@ class _HomePageState extends State<HomePage> {
         }
       });
     }
+
+     */
+    //print(_scrollController.offset);
+
+    int a = (_scrollController.position.maxScrollExtent - _scrollController.position.pixels).toInt();
+    if (a == 172 ||
+        a == 0 ||
+        a == 86) {
+      isScrolling = false;
+    } else {
+      print("HERE");
+      isScrolling = true;
+      setState(() {
+        show = true;
+      });
+    }
+
   }
 
   var displayHeight = 0.0;
@@ -158,7 +176,6 @@ class _HomePageState extends State<HomePage> {
     tz.initializeTimeZones();
 
     disableSplashScreen();
-    check();
   }
 
   Future<void> disableSplashScreen() async {
@@ -265,7 +282,11 @@ class _HomePageState extends State<HomePage> {
                       alignment: Alignment.topCenter,
                       child: NotificationListener<ScrollNotification>(
                         onNotification: (scrollNotification) {
-                          if (scrollNotification is ScrollUpdateNotification) {
+                          if (scrollNotification is ScrollEndNotification) {
+                          print("NOTIFICATION");
+                          //print("${_scrollController.position.pixels}" +  " " + "${_scrollController.position.maxScrollExtent}");
+                          print(_scrollController.position.maxScrollExtent - _scrollController.position.pixels);
+                          //_scrollController.position.pixels < _scrollController.position.maxScrollExtent ? animate() : null;
                             _onUpdateScroll();
                           }
                           return true;
@@ -275,6 +296,8 @@ class _HomePageState extends State<HomePage> {
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               search(listOfProdCat, productFromJson(snapshot.data.toString()));
+                              !isScrolling ? animate() : null;
+                              //animate();
                               return ListView.builder(
                                   reverse: true,
                                   shrinkWrap: true,
@@ -290,12 +313,11 @@ class _HomePageState extends State<HomePage> {
                                                     ExtendenViewWebSocket(
                                                         newProducts[index],
                                                         //this,
-                                                        streamController
-                                                            .stream)),
+                                                        streamController.stream)
+                                            ),
                                           );
                                         },
-                                        child:
-                                        NewArticleCard(newProducts[index]));
+                                        child: NewArticleCard(newProducts[index]));
                                   });
                             } else {
                               return const CircularProgressIndicator();
@@ -312,8 +334,10 @@ class _HomePageState extends State<HomePage> {
                         child: show ? FloatingActionButton(
                           onPressed: () {
                             animate();
-                            show = false;
-                            check();
+                            setState(() {
+                              show = false;
+                            });
+                            //check();
                           },
                           child: const Icon(Icons.arrow_upward),
                           backgroundColor: ThemeChanger.lightBlue,
@@ -326,18 +350,6 @@ class _HomePageState extends State<HomePage> {
 
               ]
           ),
-        /*
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            animate();
-            show = false;
-            check();
-          },
-          child: const Icon(Icons.arrow_upward),
-          backgroundColor: ThemeChanger.lightBlue,
-        ),
-
-         */
       );
     }
   }
