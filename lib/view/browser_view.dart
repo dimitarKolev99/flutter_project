@@ -293,8 +293,6 @@ class _BrowserPageState extends State<BrowserPage> {
                                     constraints: const BoxConstraints(),
                                     padding : const EdgeInsets.only(top: 1.3),
                                     onPressed: (){
-                                      print("x clicked");
-                                      print(chosenCategories.isNotEmpty);
                                       if(chosenCategories.isNotEmpty) {
                                       setState((){
                                           //TODO: Reload Products
@@ -319,27 +317,30 @@ class _BrowserPageState extends State<BrowserPage> {
 
 
             // If no Products are in the chosen categories or no category is chosen
-            //TODO: Better Layout Design!
             _products.isEmpty?
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 50),
-                    Center(
-                      child:
-                      Text("Für deine ausgewählten Kategorien gibt es keine aktuell keine Schnäppchen. "
-                          "Bitte wähle eine oder mehrere der zur Verfügung stehenden Kategorien",
-                        style: TextStyle(fontStyle: FontStyle.italic, fontSize: 16 ),
-                          textAlign: TextAlign.center)
-
-                    )
-
-
-
-
-                  ],
-                )
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: blockSizeVertical*20),
+                  Icon(Icons.edit_outlined, color: Colors.grey, size: 80),
+                  SizedBox(height: 30),
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                            text:
+                            "Du hast noch keine Kategorie ausgewählt.\n \nMit klick auf die Oberkategorien,\n kannst du deine Suche starten.",
+                            style: TextStyle(
+                                fontSize: 18, color: ThemeChanger.reversetextColor)),
+                        ],
+                    ),
+                  )
+                ],
+              ),
+            )
 
 
             :

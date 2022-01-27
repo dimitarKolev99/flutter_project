@@ -477,17 +477,27 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                             builder: (context, snapshot) {
                               return ListView.builder(
                                   controller: _scrollController,
-                                  itemCount: widget.subCatButtons.length,
+                                  itemCount: widget.subCatButtons.length+1,
                                   itemBuilder: (context, index) {
                                     // print("length of categories : ${subCatButtons.length}");
-                                    return widget.subCatButtons[index];
+                                    if(index<widget.subCatButtons.length) {
+                                      return widget.subCatButtons[index];
+                                    } else {
+                                      return SizedBox(
+                                        height: 50,
+
+                                      );
+                                    }
                                   });
                             })),
                   ],
                 ),
-                Align(
+                Container(
+                  margin: EdgeInsets.only(right: 4),
+                  child:Align(
                   alignment: Alignment.bottomRight,
-                  child: TextButton(onPressed: (){
+                  child: TextButton(
+                      onPressed: (){
                     setState(() {
                       // TODO: widget.callback.currentCategory should be a collection of all chosen Categories
                       // TODO: show products of all categories
@@ -502,8 +512,10 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                       style: TextButton.styleFrom(backgroundColor: ThemeChanger.lightBlue),
                       child: Text("Zeige ${widget.callback.numberOfProducts} Produkte",
                   style: TextStyle(color: Colors.white),)),
-                ),
-                Align(
+                ),),
+        Container(
+          margin: EdgeInsets.only(left: 4),
+          child: Align(
                   alignment: Alignment.bottomLeft,
                   child: TextButton(onPressed: () async {
                     TextEditingController _textFieldController = TextEditingController();
@@ -512,40 +524,44 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          title: Text('Suche Speichern'),
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [Text('Suche Speichern'), Icon(Icons.bookmarks_outlined)],),
                           content: TextField(
                             controller: _textFieldController,
                             decoration: InputDecoration(hintText: "Gib einen Namen für deine Suche ein"),
                           ),
                           actions: <Widget>[
-                            FlatButton(
-                              child: Text('Abbrechen'),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                            FlatButton(
-                              child: Text('OK'),
-                              onPressed: () {
 
-                                PreferencesSearch prefs = new PreferencesSearch();
-                                prefs.addSearch(widget, _textFieldController.text, widget.callback.mapOfChosenCategories);
+                              TextButton(
+                                child: Text('Abbrechen', style: TextStyle(color: ThemeChanger.lightBlue),),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              TextButton(
 
-                                clearUnCheckedButtons(widget.subCatButtons);
+                                child: Text('OK', style: TextStyle(color: ThemeChanger.lightBlue),),
+                                onPressed: () {
+
+                                  PreferencesSearch prefs = new PreferencesSearch();
+                                  prefs.addSearch(widget, _textFieldController.text, widget.callback.mapOfChosenCategories);
+
+                                  clearUnCheckedButtons(widget.subCatButtons);
 
 
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        );
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ],
+                          );
                       },
                     );
                   },
                       style: TextButton.styleFrom(backgroundColor: ThemeChanger.lightBlue),
                       child: Text("Suche Speichern",
                         style: TextStyle(color: Colors.white),)),
-                )
+                ),),
 
               ],
             )
