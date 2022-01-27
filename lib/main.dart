@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:penny_pincher/view/app_navigator.dart';
-import 'package:penny_pincher/view/browser_view.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:penny_pincher/services/notification_service.dart';

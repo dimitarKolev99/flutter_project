@@ -59,7 +59,6 @@ class ProductApi {
   }
 
   fetchProductWebSocket()  {
-    print("API called");
 
     final channel = WebSocketChannel.connect(
       Uri.parse('wss://ika3taif23.execute-api.eu-central-1.amazonaws.com/prod'),
@@ -153,9 +152,11 @@ class ProductApi {
     //List<dynamic> bargains = findBargains(fromUri);
 
 
+    final startIndex = 0;
+
     return bargains.map((data) => Product.fromJson(data)).where((bargains){
-    final productPrice = bargains.price;
-    final productSaving = bargains.saving;
+    final productPrice = int.parse(bargains.price);
+    final productSaving = int.parse(bargains.saving);
 
     //print("PRICERANGE-------------------------$productPrice, $minPrice, $maxPrice, $saving");
 

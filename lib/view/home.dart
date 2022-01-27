@@ -1,26 +1,21 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
-import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/models/ws_product.dart';
 import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/json_functions.dart';
-import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
-import 'package:penny_pincher/view/extended_view_web_socket.dart';
+import 'package:penny_pincher/services/product_controller_ws.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/welcome_screen.dart';
 import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
-import 'package:penny_pincher/view/widget/article_card.dart';
-import 'package:penny_pincher/view/widget/article_search.dart';
 import 'package:flutter/material.dart';
+import 'package:penny_pincher/view/widget/article_card.dart';
 import 'dart:async';
-import 'package:penny_pincher/view/extended_view.dart';
-import 'package:penny_pincher/view/widget/new_article_card.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:web_socket_channel/web_socket_channel.dart';
+
+import 'extended_view.dart';
 
 class HomePage extends StatefulWidget {
   late final Stream<bool> stream;
@@ -76,15 +71,10 @@ class _HomePageState extends State<HomePage> {
   ];
 
   JsonFunctions json = JsonFunctions();
-  Map<String, int> subCategoriesMap = Map();
-  // names and Ids have matching indexes for name and id of the category
-  List<String> subCategoriesNames = [];
-  List<int> subCategoriesIds = [];
   late int categoryId;
   late String categoryName;
   List<int> productCategoryIDs = [];
   List<int> productIdList = [];
- // bool check = false;
 
   ///NEW WEBSOCKET
   List<ProductWS> filteredProducts = [];
@@ -92,77 +82,26 @@ class _HomePageState extends State<HomePage> {
   List<ProductWS> result = [];
   late int indexItemBuilder;
 
-
-  //when map is empty then json funtions is called
-  Future<void> getSubCategories() async{
-    if(subCategoriesMap.isEmpty) {
-      json.getJson().then((List<dynamic> result) {
-        List<dynamic> resultList = [];
-        resultList = result;
-        subCategoriesMap = json.getMapOfSubOrProductCategories(categoryId, resultList);
-      });
-    }
-    if(subCategoriesMap.isNotEmpty) {
-      subCategoriesMap.clear();
-      json.getJson().then((List<dynamic> result) {
-        List<dynamic> resultList = [];
-        resultList = result;
-        subCategoriesMap = json.getMapOfSubOrProductCategories(categoryId, resultList);
-      });
-    }
-  }
-
-
-  //seperate the sub map into 2 lists 1 with names and 1 with ids
-  Future<void> mapToLists() async {
-    if(subCategoriesNames.isEmpty) {
-     // print("mapToLists Is emtpy");
-      subCategoriesMap.forEach((name, id) {
-        subCategoriesNames.add(name);
-        subCategoriesIds.add(id);
-      //  print("added $name");
-      });
-    }
-    if (subCategoriesNames.isNotEmpty) {
-    //  print("mapToLists Its Not Empty");
-      subCategoriesNames.clear();
-      subCategoriesIds.clear();
-        subCategoriesMap.forEach((name, id) {
-        subCategoriesNames.add(name);
-        subCategoriesIds.add(id);
-      //  print("added $name");
-     //   print("added $id");
-      });
-    }
-  }
-
-
-
   StreamController<bool> streamController = StreamController<bool>.broadcast();
-
-
-  late List<Product> _product;
 
   late List<ProductWS> newProduct;
 
-  late final List _favoriteIds = [];
-  late final List<Product> _products = [];
-  late final List<ProductWS> newProducts = [];
+  late final List<Product> newProducts = [];
+
   bool _isLoading = true;
   var count = 0;
   bool isScrolling = false;
-  ScrollController _scrollController = ScrollController();
-  var x = 0.0;
+  final ScrollController _scrollController = ScrollController();
   WelcomeStatus status = WelcomeStatus.loading;
   dynamic preferences;
 
-  //var screenHeight = ;
 
-  final _preferenceArticles = PreferencesArticles();
   final _jsonFunctions = JsonFunctions();
   var index = 0;
-  var randomCategory = 0;
+
   bool loadingProducts = false;
+
+  bool show = false;
 
   final List<int> _selectedItems = [];
 
@@ -171,7 +110,8 @@ class _HomePageState extends State<HomePage> {
   );
 
   _onUpdateScroll() {
-    if (this.mounted) {
+    /*
+    if (mounted) {
       setState(() {
         if (_scrollController.offset <
             _scrollController.position.maxScrollExtent) {
@@ -181,10 +121,37 @@ class _HomePageState extends State<HomePage> {
         }
       });
     }
+
+     */
+    //print(_scrollController.offset);
+
+    int a = (_scrollController.position.maxScrollExtent - _scrollController.position.pixels).toInt();
+    if (a == 157 ||
+        a == 0 ||
+        a == 69 ||
+    a == 314) {
+      isScrolling = false;
+    } else {
+      print("HERE");
+      isScrolling = true;
+      setState(() {
+        show = true;
+      });
+    }
+
   }
 
+  var displayHeight = 0.0;
+
+   void check()  {
+    Future.delayed(const Duration(seconds: 7), () {
+      show = true;
+    });
+  }
+
+
   void getProducts() {
-    if (this.mounted) {
+    if (mounted) {
       setState(() {
         if (status == WelcomeStatus.noFirstTime) {
           _isLoading = false;
@@ -206,25 +173,21 @@ class _HomePageState extends State<HomePage> {
     }
     super.initState();
     widget.stream.listen((update) {
-      if (this.mounted) {
-        ProductController.updateFavorites(this);
-      }
+      if (mounted) {
+        setState(() {
+          ProductController.updateFavorites(this);
+        });
+       }
     });
     firstAppStart();
     tz.initializeTimeZones();
 
     disableSplashScreen();
-
   }
 
   Future<void> disableSplashScreen() async {
     await Future.delayed(const Duration(seconds: 2), (){});
     getProducts();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   List<int> listOfProdCat = [];
@@ -254,8 +217,6 @@ class _HomePageState extends State<HomePage> {
     blockSizeHorizontal = displayWidth / 100;
     blockSizeVertical = displayHeight / 100;
 
-    displayHeight = x;
-
     _safeAreaHorizontal =
         _mediaQueryData.padding.left + _mediaQueryData.padding.right;
     _safeAreaVertical =
@@ -275,14 +236,12 @@ class _HomePageState extends State<HomePage> {
         body: Container(
             color: ThemeChanger.lightBlue,
             alignment: Alignment.center,
-            child: Icon(Icons.search, color: Colors.grey, size: 100)),
+            child: const Icon(Icons.search, color: Colors.grey, size: 100)),
       );
     } else {
       return Scaffold(
           appBar: HomeBrowserAppBar(this),
-          body:
-          //_isLoading ? Center(child: CircularProgressIndicator()) :
-          Column(
+          body: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Align(
@@ -292,7 +251,7 @@ class _HomePageState extends State<HomePage> {
                   height: 40,
                   width: displayWidth,
                   child: ListView.builder(
-                      physics: ScrollPhysics(),
+                      physics: const ScrollPhysics(),
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
                       itemCount: mainCategories.length,
@@ -311,8 +270,8 @@ class _HomePageState extends State<HomePage> {
                                   borderRadius: BorderRadius.circular(2),
                                 ),
                                 alignment: Alignment.centerRight,
-                                margin: EdgeInsets.all(4),
-                                padding: EdgeInsets.all(4),
+                                margin: const EdgeInsets.all(4),
+                                padding: const EdgeInsets.all(4),
                                 child: Text(
                                   mainCategoryNames[index],
                                   style: TextStyle(
@@ -324,12 +283,17 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Expanded(
-                child: Stack(children: [
+                child:
+                Stack(children: [
                   Align(
                       alignment: Alignment.topCenter,
                       child: NotificationListener<ScrollNotification>(
                         onNotification: (scrollNotification) {
-                          if (scrollNotification is ScrollUpdateNotification) {
+                          if (scrollNotification is ScrollStartNotification) {
+                          print("NOTIFICATION");
+                          //print("${_scrollController.position.pixels}" +  " " + "${_scrollController.position.maxScrollExtent}");
+                          print(_scrollController.position.maxScrollExtent - _scrollController.position.pixels);
+                          //_scrollController.position.pixels < _scrollController.position.maxScrollExtent ? animate() : null;
                             _onUpdateScroll();
                           }
                           return true;
@@ -338,8 +302,9 @@ class _HomePageState extends State<HomePage> {
                           stream: channel.stream,
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
-                              search(listOfProdCat,
-                                  productFromJson(snapshot.data.toString()));
+                              search(listOfProdCat, productFromJson(snapshot.data.toString()));
+                              ProductController.addProducts(newProducts);
+                              !isScrolling ? animate() : null;
                               return ListView.builder(
                                   reverse: true,
                                   shrinkWrap: true,
@@ -352,38 +317,52 @@ class _HomePageState extends State<HomePage> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    ExtendenViewWebSocket(
-                                                        newProducts[index],
-                                                        //this,
-                                                        streamController
-                                                            .stream)),
+                                                    ExtendedView(newProducts[index], this, streamController.stream,)
+                                            ),
                                           );
                                         },
-                                        child:
-                                        NewArticleCard(newProducts[index]));
+                                        child: ArticleCard(newProducts[index], this));
                                   });
                             } else {
-                              return const Text("no data");
+                              return const Align(
+                                  alignment: Alignment.center,
+                                  child: CircularProgressIndicator());
                             }
                           },
                         ),
-                      )),
+
+                      )
+                  ),
                   Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.add, color: Colors.black))),
-                ]),
-              )
-            ],
-          ));
+                      alignment: Alignment.bottomRight,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: show ? FloatingActionButton(
+                          onPressed: () {
+                            animate();
+                            setState(() {
+                              show = false;
+                            });
+                            //check();
+                          },
+                          child: const Icon(Icons.arrow_upward),
+                          backgroundColor: ThemeChanger.lightBlue,
+                        ) : null
+                      ),
+                  ),
+              ]
+                      ),
+                  ),
+
+              ]
+          ),
+      );
     }
   }
 
-  Future<void> selectCategory(index) async {
+  selectCategory(index) async {
     mainCategories[index];
     categoryId = mainCategoryIds[index];
-    //  print("categoryid = ${categoryId}");
 
     if(!_selectedItems.contains(mainCategoryIds[index])) {
       setState(() {
@@ -402,22 +381,13 @@ class _HomePageState extends State<HomePage> {
     }
     await preferences.setStringList("categories", categoriesList);
 
+        setState(() {
+          _jsonFunctions.getListOfProdCatIDs(_selectedItems)
+              .then((value) {
+            listOfProdCat = value;
+          });
+        });
 
-    await getSubCategories();
-    await mapToLists();
-
-    setState(() {
-      _jsonFunctions.getListOfProdCatIDs(mainCategoryIds.indexOf(categoryId))
-          .then((value) {
-        //timerFunction(value);
-        //_jsonFunctions.count = 1;
-        // print("AAAAAA $_jsonFunctions.count");
-        listOfProdCat = value;
-      });
-    });
-
-    //print("subCategoryMAP = ${subCategoriesMap}");
-    //print("subCategoryID = ${subCategoriesIds}");
   }
 
   void closeWelcomeScreen() {
@@ -426,6 +396,17 @@ class _HomePageState extends State<HomePage> {
       widget.callback.loadingFinished();
       status = WelcomeStatus.noFirstTime;
     });
+  }
+
+  void animate() {
+    isScrolling = false;
+    if (_scrollController.hasClients  && _scrollController.position.pixels < _scrollController.position.maxScrollExtent) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        curve: Curves.easeOut,
+        duration: const Duration(milliseconds: 150),
+      );
+    }
   }
 
   firstAppStart() async {
@@ -467,11 +448,9 @@ class _HomePageState extends State<HomePage> {
 
   void currentCatId(indexItemBuilder) {
     categoryIdWebSocket = mainCategoryIds[indexItemBuilder];
-   // print("categoryIdWebSocket ===> $categoryIdWebSocket");
   }
 
-  void search(List<int> list, ProductWS product) {
-    print("LIST: ${list}");
+  void search(List<int> list, Product product) {
     for (int i = 0; i < list.length; i++) {
         if (!productIdList.contains(product.productId) && list[i] == product.categoryId) {
           newProducts.add(product);
@@ -480,48 +459,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  /*
-  Future<void> filterProducts(List<ProductWS> newProducts) async {
-    List<ProductWS> ret = [];
-    //result.clear();
-    int catId = categoryIdWebSocket;
-
-
-    await getSubCategories();
-    await mapToLists();
-
-
-
-    print("CatId ==== >>>>> $catId");
-    print("newProducts ======> {$newProducts}");
-    print("ret ===> ${ret}");
-     if(ret.isEmpty) {
-       print("IS EMPTY");
-       for (var i in listOfProdCat) {
-         for (var j in newProducts) {
-           if(listOfProdCat[i] == newProducts[j].categoryId) {
-
-           }
-         }
-
-       }
-       ret = newProducts;
-       print("RET ====> $ret");
-       for (var p in ret) {
-        // print("p ===> $p");
-         if (catId == p.categoryId) {
-           print("CATID -----> $catId");
-           print("p.CatID ====> -----> ${p.categoryId}");
-
-           filteredProducts.add(p);
-         }
-       }
-     }
-     //filteredProducts = result;
-    print("FILTERED PRODUCTS ===> ${filteredProducts}");
-  }
-
-   */
 }
 
 enum WelcomeStatus { loading, firstTime, noFirstTime, finished }

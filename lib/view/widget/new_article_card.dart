@@ -4,6 +4,7 @@ import 'package:penny_pincher/models/product.dart';
 import 'package:penny_pincher/models/ws_product.dart';
 import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/product_api.dart';
+import 'package:penny_pincher/services/product_controller_ws.dart';
 
 import '../theme.dart';
 
@@ -25,7 +26,7 @@ class NewArticleCard extends StatelessWidget {
 
 
 
-  NewArticleCard(this.productWS, {this.callback}){
+  NewArticleCard(this.productWS, this.callback){
     this.productName = productWS.productName;
     this.dropPercentage = productWS.dropPercentage;
     this.currentPrice = productWS.currentPrice;
@@ -215,10 +216,12 @@ class NewArticleCard extends StatelessWidget {
                     child:
                     IconButton(
                       iconSize: 30.0,
-                      icon: (ProductController.isFavorite(productId) ?
+                      icon: (ProductControllerWS.isFavoriteWS(productId) ?
                       Icon(Icons.favorite, color: Colors.red) :
                       Icon(Icons.favorite_border, color: ThemeChanger.reversetextColor)),
-                      onPressed: () {}//_changeFavoriteState,
+                      onPressed: () {
+                        _changeFavoriteStateWS();
+                      }//_changeFavoriteState,
 
                     ),
                     alignment: Alignment.centerRight,
@@ -231,10 +234,11 @@ class NewArticleCard extends StatelessWidget {
     );
   }
 
-  /*Future _changeFavoriteState() async {
+  Future _changeFavoriteStateWS() async {
     //await callback.changeFavoriteState(this);
-    ProductController.changeFavoriteState(this, callback);
-  }*/
+    print("WE ARE IN _changeFavoriteStateWS");
+    ProductControllerWS.changeFavoriteStateWS(this, callback);
+  }
 }
 
 

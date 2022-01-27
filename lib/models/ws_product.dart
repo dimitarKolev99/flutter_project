@@ -4,15 +4,15 @@
 
 import 'dart:convert';
 
-ProductWS productFromJson(String str) => ProductWS.fromJson(json.decode(str));
+ProductWS productFromJsonWS(String str) => ProductWS.fromJson(json.decode(str));
 
 String productToJson(ProductWS data) => json.encode(data.toJson());
 
 class ProductWS {
   ProductWS({
     required this.productId,
-    required this.siteId,
-    required this.date,
+    //required this.siteId,
+    //required this.date,
     required this.currentPrice,
     required this.previousPrice,
     required this.dropPercentage,
@@ -26,8 +26,8 @@ class ProductWS {
 
 
   int productId;
-  int siteId;
-  DateTime date;
+ // int siteId;
+  //DateTime date;
   String currentPrice;
   String previousPrice;
   String dropPercentage;
@@ -37,24 +37,24 @@ class ProductWS {
   String productPageUrl;
   int categoryId;
 
-  factory ProductWS.fromJson(Map<String, dynamic> json) => ProductWS(
-    productId: json["productId"],
-    siteId: json["siteId"],
-    date: DateTime.parse(json["date"]),
-    currentPrice: json["currentPrice"],
-    previousPrice: json["previousPrice"],
-    dropPercentage: json["dropPercentage"],
+  factory ProductWS.fromJson(Map<String, dynamic> json) =>
+      ProductWS(
+    productId: json["productId"] ? json["productId"] : json["product_id"],
+    currentPrice: json["currentPrice"] ? json["currentPrice"] : (json["price"].toDouble() -
+        json["price"].toDouble() * json["saving"].toDouble()).toString(),
+    previousPrice: json["previousPrice"] ? json["previousPrice"] : json["price"].toString(),
+    dropPercentage: json["dropPercentage"] ? json["dropPercentage"] : json["saving"].toString(),
     dropAbsolute: json["dropAbsolute"],
-    productName: json["productName"],
-    productImageUrl: json["productImageUrl"],
-    productPageUrl: json["productPageUrl"],
-    categoryId: json["categoryId"],
+    productName: json["productName"] ? json["productName"] : json["product_title"],
+    productImageUrl: json["productImageUrl"] ? json["productImageUrl"] : json["images"]["w120h100"][0],
+    productPageUrl: json["productPageUrl"] ? json["productPageUrl"] : "",
+    categoryId: json["categoryId"] ? json["categoryId"] : json["category_id"],
   );
 
   Map<String, dynamic> toJson() => {
     "productId": productId,
-    "siteId": siteId,
-    "date": date.toIso8601String(),
+   // "siteId": siteId,
+    //"date": date.toIso8601String(),
     "currentPrice": currentPrice,
     "previousPrice": previousPrice,
     "dropPercentage": dropPercentage,

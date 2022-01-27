@@ -1,17 +1,23 @@
 import 'dart:convert';
+import 'package:penny_pincher/models/preference_articles_ws.dart';
 import 'package:penny_pincher/models/preferences_articles.dart';
+import 'package:penny_pincher/models/ws_product.dart';
 import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
+import 'package:penny_pincher/services/product_controller_ws.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
 import 'package:penny_pincher/view/extended_view.dart';
 import 'package:flutter/material.dart';
 import 'package:penny_pincher/view/widget/favorite_search.dart';
+import 'package:penny_pincher/view/widget/new_article_card.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'extended_view_web_socket.dart';
 
 
 
@@ -37,6 +43,12 @@ class _FavoritePageState extends State<FavoritePage> {
 
   final _preferenceArticles = PreferencesArticles();
 
+  // NEW WEB SOCKET
+  final _preferenceArticlesWs = PreferenceArticlesWS();
+ // List<ProductWS> favoriteProductsWS = [];
+
+ // List<dynamic> allFavoritesProducts = [];
+
   @override
   void initState() {
     super.initState();
@@ -45,17 +57,31 @@ class _FavoritePageState extends State<FavoritePage> {
     });
 
     favoriteProducts = ProductController.favoriteProducts;
+    //favoriteProductsWS = ProductControllerWS.favoriteProductsWS;
     getData();
   }
 
   getData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+   // SharedPreferences presWS = await SharedPreferences.getInstance();
     List<Product> saved = await _preferenceArticles.getAllFavorites();
+    //List<ProductWS> savedWs = await _preferenceArticlesWs.getAllFavorites();
+    favoriteProducts.clear();
     favoriteProducts.addAll(saved);
+   // favoriteProductsWS.addAll(savedWs);
     setState(() {
       // displayName = prefs.getStringList('displayName');
     });
+
+    //putListsTogether(favoriteProducts, favoriteProductsWS);
+
   }
+
+  //putListsTogether(List<Product> listProduct, List<ProductWS> listProductsWs) async {
+ //   allFavoritesProducts.addAll(listProduct);
+  //  allFavoritesProducts.addAll(listProductsWs);
+ // }
+
 /* //TODO DO NOT DELETE! TEMPLATE FOR FURTHER REAFCTORING
   Future <void> getProducts() async {
     favoriteProducts.clear();
@@ -74,7 +100,12 @@ class _FavoritePageState extends State<FavoritePage> {
 */
   updateScreen(bool update) {
     if (this.mounted) {
-      ProductController.updateFavorites(this);
+      //ProductController.updateFavorites(this);
+      setState(() {
+        getData();
+        ProductController.updateFavorites(this);
+      });
+
     }
     if (_isClosed) {
       _isClosed = false;
@@ -147,6 +178,10 @@ class _FavoritePageState extends State<FavoritePage> {
 
   Future changeFavoriteState(ArticleCard card) async {
     ProductController.changeFavoriteState(card, this);
+  }
+
+  Future changeFavoriteStateWS(NewArticleCard card) async {
+    ProductControllerWS.changeFavoriteStateWS(card, this);
   }
 
   List<Product> filterFavorites(search) {

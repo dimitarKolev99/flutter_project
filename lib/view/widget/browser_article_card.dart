@@ -10,8 +10,8 @@ import 'article_card.dart';
 class BrowserArticleCard extends StatelessWidget {
   late final int id;
   late final String title;
-  late final int saving;
-  late final double price;
+  late final String saving;
+  late final String price;
   late final String image;
   late final String description;
   late final String category;
@@ -30,8 +30,9 @@ class BrowserArticleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double newprice = price/100;
-    int x = 100 - saving;
+
+    double newprice = int.parse(price).toDouble()/100;
+    int x = 100 - int.parse(saving).toInt();
     double prevpreis = newprice/x * 100;
 
     MediaQueryData _mediaQueryData = MediaQuery.of(context);;
