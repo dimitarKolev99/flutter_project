@@ -6,6 +6,7 @@ import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/view/theme.dart';
 
 import '../browser_view.dart';
+import '../search_view.dart';
 import 'article_search.dart';
 import 'favorite_search.dart';
 
@@ -44,16 +45,13 @@ class HomeBrowserAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       backgroundColor: ThemeChanger.navBarColor,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(width: blockSizeHorizontal * 17.8),
+      title: Center(
+        child:
           Image.asset(
             'pictures/pp_logo1.png',
               width: blockSizeHorizontal * 50,
           ),
-          SizedBox(width: blockSizeHorizontal * 4),
-        ],
+
       ),
       actions: [
         IconButton(
@@ -63,9 +61,20 @@ class HomeBrowserAppBar extends StatelessWidget implements PreferredSizeWidget {
             final results =
             showSearch(context: context, delegate: ArticleSearch(true, callback, callback.streamController));
           },
-        )
+        ),
       ],
+
+      leading: callback.widget is BrowserPage ?
+      IconButton(
+        iconSize: safeBlockHorizontal * 7.5,
+        icon: Icon(Icons.bookmarks_outlined),
+        onPressed: () {
+          callback.showSearches = !callback.showSearches;
+          callback.setState(() {});
+          },
+      ) : SizedBox(width:0)
     );
+
   }
 
   @override
