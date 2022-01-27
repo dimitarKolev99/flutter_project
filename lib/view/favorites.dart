@@ -12,9 +12,12 @@ import 'package:penny_pincher/view/widget/article_card.dart';
 import 'package:penny_pincher/view/extended_view.dart';
 import 'package:flutter/material.dart';
 import 'package:penny_pincher/view/widget/favorite_search.dart';
+import 'package:penny_pincher/view/widget/new_article_card.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'extended_view_web_socket.dart';
 
 
 
@@ -59,11 +62,11 @@ class _FavoritePageState extends State<FavoritePage> {
   }
 
   getData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+   // SharedPreferences prefs = await SharedPreferences.getInstance();
     SharedPreferences presWS = await SharedPreferences.getInstance();
-    List<Product> saved = await _preferenceArticles.getAllFavorites();
+  //  List<Product> saved = await _preferenceArticles.getAllFavorites();
     List<ProductWS> savedWs = await _preferenceArticlesWs.getAllFavorites();
-    favoriteProducts.addAll(saved);
+  //  favoriteProducts.addAll(saved);
     favoriteProductsWS.addAll(savedWs);
     setState(() {
       // displayName = prefs.getStringList('displayName');
@@ -123,12 +126,12 @@ class _FavoritePageState extends State<FavoritePage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              ExtendedView(allFavoritesProducts[index], this, streamController.stream)),
+                              ExtendenViewWebSocket(allFavoritesProducts[index],streamController.stream, this)),
                     );
                     streamController.add(true);
                     _isClosed = true;
                   },
-                  child: ArticleCard(allFavoritesProducts[index], this));
+                  child: NewArticleCard(allFavoritesProducts[index], this));
             }),
       )
           : Center(
@@ -170,6 +173,10 @@ class _FavoritePageState extends State<FavoritePage> {
 
   Future changeFavoriteState(ArticleCard card) async {
     ProductController.changeFavoriteState(card, this);
+  }
+
+  Future changeFavoriteStateWS(NewArticleCard card) async {
+    ProductControllerWS.changeFavoriteStateWS(card, this);
   }
 
   List<Product> filterFavorites(search) {

@@ -48,15 +48,18 @@ class ProductControllerWS {
     print("WE ARE IN addFavoriteWS");
     print("NewArticleCard cardWS =====> $cardWS");
     print("_productsWS ------> $_productsWS");
-    final product = _productsWS.where((pWS) => pWS.productId == cardWS.productId).toList()[0];
+    final product = _productsWS.where((pWS) =>
+    pWS.productId == cardWS.productId).toList()[0];
 
     print("LIST OF PRODUCTS ====> ${product}");
     await _preferenceArticlesWS.addFavorite(product);
-    if (callback.mounted) {
-      callback.setState(() {
-        favoriteProductsWS.add(cardWS.productWS);
-      });
-    }
+    // if (callback.mounted) {
+    callback.setState(() {
+      favoriteProductsWS.add(cardWS.productWS);
+      print("CARD ADDED !!!!!");
+      print("$favoriteProductsWS");
+    });
+ // }
     callback.widget.updateStream.add(true);
   }
 
@@ -66,6 +69,7 @@ class ProductControllerWS {
       callback.setState(() {
         for(ProductWS pWS in favoriteProductsWS) {
           if(pWS.productId == id) favoriteProductsWS.remove(id);
+          print("CARD REMOVED !!!!");
         }
       });
     }

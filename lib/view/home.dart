@@ -208,7 +208,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     widget.stream.listen((update) {
       if (mounted) {
-        ProductController.updateFavorites(this);
+        //ProductController.updateFavorites(this);
+        ProductControllerWS.updateFavoritesWS(this);
       }
     });
     firstAppStart();
@@ -340,7 +341,7 @@ class _HomePageState extends State<HomePage> {
                           stream: channel.stream,
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
-                              animate();
+                             // animate();
                               search(listOfProdCat, productFromJson(snapshot.data.toString()));
                               ProductControllerWS.addProductsWS(newProducts);
                               return ListView.builder(
@@ -357,13 +358,13 @@ class _HomePageState extends State<HomePage> {
                                                 builder: (context) =>
                                                     ExtendenViewWebSocket(
                                                         newProducts[index],
-                                                        //this,
                                                         streamController
-                                                            .stream)),
+                                                            .stream,
+                                                    this)),
                                           );
                                         },
                                         child:
-                                        NewArticleCard(newProducts[index]));
+                                        NewArticleCard(newProducts[index], this));
                                   });
                             } else {
                               return const Text("no data");

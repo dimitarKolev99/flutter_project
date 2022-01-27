@@ -19,10 +19,10 @@ class ExtendenViewWebSocket extends StatefulWidget {
   late final String productPageUrl;
   late final int categoryId;
   final Stream<bool> stream;
-  //dynamic callback;
+  dynamic callback;
   ProductWS productWs;
 
-  ExtendenViewWebSocket(this.productWs, this.stream) {
+  ExtendenViewWebSocket(this.productWs, this.stream, this.callback) {
     productId = productWs.productId;
     siteId = productWs.siteId;
     currentPrice = productWs.currentPrice;

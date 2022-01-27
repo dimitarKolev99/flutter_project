@@ -26,7 +26,7 @@ class NewArticleCard extends StatelessWidget {
 
 
 
-  NewArticleCard(this.productWS, {this.callback}){
+  NewArticleCard(this.productWS, this.callback){
     this.productName = productWS.productName;
     this.dropPercentage = productWS.dropPercentage;
     this.currentPrice = productWS.currentPrice;
