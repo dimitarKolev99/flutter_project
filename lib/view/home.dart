@@ -320,7 +320,9 @@ class _HomePageState extends State<HomePage> {
                                         child: NewArticleCard(newProducts[index]));
                                   });
                             } else {
-                              return const CircularProgressIndicator();
+                              return const Align(
+                                  alignment: Alignment.center,
+                                  child: CircularProgressIndicator());
                             }
                           },
                         ),
