@@ -16,7 +16,7 @@ class ProductControllerWS {
     favoriteProductsWS.addAll(favorites.toSet());
     for(ProductWS pWS in favorites) {
       favoriteProductsWS.removeWhere((element) => element.equals(pWS));
-      favoriteProductsWS.add(pWS);
+      //favoriteProductsWS.add(pWS);
     }
     callback.setState(() {});
     callback.streamController.add(true); // note: was not called for browser view before refactoring
