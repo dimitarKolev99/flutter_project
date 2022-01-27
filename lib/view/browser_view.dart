@@ -264,6 +264,7 @@ class _BrowserPageState extends State<BrowserPage> {
                                       }
                                       return view;
                                       },
+
                                   ));
                             },
                           child:

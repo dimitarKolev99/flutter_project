@@ -75,6 +75,7 @@ class PreferencesSearch {
         'range_min': view.currentSliderValuesPrice.start,
         'range_max': view.currentSliderValuesPrice.end,
         'chosenCats': JsonEncoder().convert(chosenCats),
+        'checkedButtons': JsonEncoder().convert(view.checkedButtons),
       };
   }
 
@@ -92,6 +93,7 @@ class PreferencesSearch {
       json["range_min"].toDouble(),
       json["range_max"].toDouble(),
       JsonDecoder().convert(json["chosenCats"]),
+      JsonDecoder().convert(json["checkedButtons"]),
       stream,
       updateStream,
       callback

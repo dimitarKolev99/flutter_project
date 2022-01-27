@@ -57,6 +57,7 @@ class SubcategoryView extends StatefulWidget {
   ScrollController _scrollController = ScrollController();
   late var state;
   Map<String, dynamic> chosenCats = new Map();
+  Map<String, dynamic> checkedButtons = new Map();
 
   SubcategoryView.fromSave(
       this.categoryId,
@@ -70,6 +71,7 @@ class SubcategoryView extends StatefulWidget {
       double rangeMin,
       double rangeMax,
       this.chosenCats,
+      this.checkedButtons,
       this.stream,
       this.updateStream,
       this.callback)
@@ -529,6 +531,9 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                 PreferencesSearch prefs = new PreferencesSearch();
                                 prefs.addSearch(widget, _textFieldController.text, widget.callback.mapOfChosenCategories);
 
+                                clearUnCheckedButtons(widget.subCatButtons);
+
+
                                 Navigator.pop(context);
                               },
                             ),
@@ -546,5 +551,13 @@ class _SubcategoryViewState extends State<SubcategoryView> {
             )
             // Everything shown in body
           );
+
+
+  }
+  void clearUnCheckedButtons(ObservableList<SubcatButton> buttons) {
+    for(SubcatButton sub in buttons) {
+      if(!sub.giveColor()) widget.checkedButtons.remove(sub.categoryName);
+      clearUnCheckedButtons(sub.subCatButtons);
+    }
   }
 }

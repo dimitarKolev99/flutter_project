@@ -124,15 +124,26 @@ class SavedSearchCard extends StatelessWidget {
             callback.widget.callback.view = callback.widget.searches[name];
             callback.widget.callback.mapOfChosenCategories = callback.widget.searches[name].chosenCats;
             callback.widget.callback.chosenCategories.clear();
+
             callback.widget.callback.mapOfChosenCategories.forEach((key, value) {
               callback.widget.callback.chosenCategories.add(key);
               callback.widget.callback.currentCategory = value;
               callback.widget.callback.addProductsOfChosenCategory(value);
+
           });
           callback.widget.callback.showSearches = false;
-
+          callback.widget.callback.setState(() {});
 
           callback.widget.callback.updateBrowserblabla(callback.widget.callback.currentCategory);
+
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return callback.widget.callback.view;
+                  },
+                ));
+
 
           });
             }

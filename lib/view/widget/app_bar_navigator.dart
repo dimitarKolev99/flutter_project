@@ -67,7 +67,7 @@ class HomeBrowserAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: callback.widget is BrowserPage ?
       IconButton(
         iconSize: safeBlockHorizontal * 7.5,
-        icon: Icon(Icons.save),
+        icon: Icon(Icons.bookmarks_outlined),
         onPressed: () {
           callback.showSearches = !callback.showSearches;
           callback.setState(() {});

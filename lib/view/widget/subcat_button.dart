@@ -15,7 +15,7 @@ class SubcatButton extends StatefulWidget {
   final String categoryName;
   final int categoryId;
   bool show = false;
-  bool _isProdCat = false;
+  bool isProdCat = false;
   bool isChosen = false;
   late final Stream<bool> stream;
   late final StreamController updateStream;
@@ -25,10 +25,9 @@ class SubcatButton extends StatefulWidget {
   List<String> subCategoriesNames = [];
   List<int> subCategoriesIds = [];
 
-  late Color subCatcolor = isChosen ? ThemeChanger.lightBlue : ThemeChanger.articlecardbackground;
-  late Color prodCatColor = isChosen ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground;
-  late Color textColor = isChosen ? ThemeChanger.articlecardbackground : ThemeChanger.catTextColor;
-
+  late Color subCatcolor;
+  late Color prodCatColor;
+  late Color textColor;
   @observable
   ObservableList<SubcatButton> subCatButtons = new ObservableList();
 
@@ -42,7 +41,13 @@ class SubcatButton extends StatefulWidget {
     this.controller,
     //required this.isProdCat,
       ){
-    isChosen = cBackToView.chosenCats.containsValue(categoryId);
+    if(cBackToView.chosenCats.containsValue(categoryId) || cBackToView.checkedButtons.containsValue(categoryId)) isChosen = true;
+    isProdCat = cBackToView.chosenCats.containsValue(categoryId);
+
+    subCatcolor = isChosen ? ThemeChanger.lightBlue : ThemeChanger.articlecardbackground;
+    prodCatColor = isChosen ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground;
+    textColor = isChosen ? ThemeChanger.articlecardbackground : ThemeChanger.catTextColor;
+
   }
 
   @override
@@ -61,10 +66,10 @@ class SubcatButton extends StatefulWidget {
   bool giveColor() {
 
     for (var element in subCatButtons) {
-      if (element.isChosen && element._isProdCat) {
+      if (element.isChosen && element.isProdCat) {
         return true;
       } else {
-        return element.giveColor();
+        if(element.giveColor()) return true;
       }
     }
 
@@ -138,7 +143,7 @@ class _SubcatButtonState extends State<SubcatButton> {
             setState(() {
                 // if empty chosen category = Productcategory
                 if(widget.subCatButtons.isEmpty){
-                  widget._isProdCat = true;
+                  widget.isProdCat = true;
                   if(widget.isChosen == false){ //unselected
                     widget.isChosen = !widget.isChosen;
                     widget.callback.addCategory(widget.categoryName, widget.categoryId);
@@ -149,7 +154,6 @@ class _SubcatButtonState extends State<SubcatButton> {
                     // TODO: Call Json Function to updayte the resultList and Update Button Text
                     widget.callback.currentCategory = widget.categoryId;
                     widget.callback.addProductsOfChosenCategory(widget.categoryId);
-
                   }
                   else{
                     widget.isChosen = !widget.isChosen;
@@ -164,18 +168,21 @@ class _SubcatButtonState extends State<SubcatButton> {
                 }
                 // Subcategories
                 else {
-                  if(widget.isChosen == false){ // unselected
+                  if(widget.show == false){ // unselected
                     //widget.callback.addCategory(widget.categoryName);
                     widget.isChosen = !widget.isChosen;
                     widget.show = !widget.show;
                     widget.subCatcolor = ThemeChanger.lightBlue;
                     widget.textColor = ThemeChanger.textColor;
+                    widget.cBackToView.checkedButtons[widget.categoryName] = widget.categoryId;
+                    print(widget.cBackToView.checkedButtons[widget.categoryName]);
                   }
                   else{  // selected
                     widget.isChosen = !widget.isChosen;
                     widget.subCatcolor = widget.giveColor() ? ThemeChanger.lightBlue : ThemeChanger.articlecardbackground;
                     widget.show = !widget.show;
                     widget.textColor = widget.giveColor() ? ThemeChanger.textColor : ThemeChanger.catTextColor;
+                    if(!widget.giveColor()) widget.cBackToView.chosenCats.remove(widget.categoryName);
                    // widget.callback.removeOneCategory(widget.categoryName);
                   }
                 }
@@ -191,7 +198,7 @@ class _SubcatButtonState extends State<SubcatButton> {
             height: 30,
             margin: EdgeInsets.all(4),
             decoration: BoxDecoration(
-              color: widget._isProdCat ? widget.prodCatColor : widget.subCatcolor,
+              color: widget.isProdCat ? widget.prodCatColor : widget.subCatcolor,
               border: Border.all(
                   color: Colors.blueGrey,
                   width: 1,
