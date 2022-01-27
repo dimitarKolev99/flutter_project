@@ -55,6 +55,7 @@ class BrowserPage extends StatefulWidget {
     "Haushaltselektronik",
     "Sport & Outdoor"
   ];
+
   List<int> mainCategoryIds = [
     30311, //
     3932,

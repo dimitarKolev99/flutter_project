@@ -5,6 +5,7 @@ import 'package:penny_pincher/view/browser_view.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:penny_pincher/services/notification_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   // Always keep Portrait Orientation:
@@ -15,7 +16,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class SplashPage extends StatelessWidget {
@@ -40,16 +41,54 @@ class SplashPage extends StatelessWidget {
   }
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends StatefulWidget {
+
+  @override
+  State<MyApp> createState() => _MyAppPage();
+}
+
+class _MyAppPage extends State<MyApp> {
+
+  bool isLight = true;
+  bool dataLoaded = false;
+
+  @override
+  void initState() {
+    loadTheme();
+  }
+
+  loadTheme() async {
+    var preferences = await SharedPreferences.getInstance();
+    var light = preferences.getBool('isLight');
+    if (light == null || light) {
+      isLight = true;
+      await preferences.setBool("isLight", true);
+    } else {
+      isLight = false;
+    }
+    setState(() {
+      dataLoaded = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<ThemeChanger>(
-      // ToDo: changing the start value from light mode into the state from app closing (shared preferences)
-      create: (_) => ThemeChanger(ThemeData.light()),
-      child: new MaterialAppWithTheme(),
-    );
+    if (isLight) {
+      ThemeChanger _themeChanger = new ThemeChanger(ThemeData.light());
+      _themeChanger.setlightTheme(ThemeData.light());
+    } else {
+      ThemeChanger _themeChanger = new ThemeChanger(ThemeData.dark());
+      _themeChanger.setdarkTheme(ThemeData.dark());
+    }
+    if (!dataLoaded) {
+      return MaterialApp();
+    } else {
+      return ChangeNotifierProvider<ThemeChanger>(
+        // ToDo: changing the start value from light mode into the state from app closing (shared preferences)
+        create: (_) => isLight ? ThemeChanger(ThemeData.light()) : ThemeChanger(ThemeData.dark()),
+        child: new MaterialAppWithTheme(),
+      );
+    }
   }
 }
 

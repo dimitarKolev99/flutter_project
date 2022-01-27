@@ -83,7 +83,14 @@ class _HomePageState extends State<HomePage> {
   late int categoryId;
   late String categoryName;
   List<int> productCategoryIDs = [];
+  List<int> productIdList = [];
  // bool check = false;
+
+  ///NEW WEBSOCKET
+  List<ProductWS> filteredProducts = [];
+  late int categoryIdWebSocket = 0;
+  List<ProductWS> result = [];
+  late int indexItemBuilder;
 
 
   //when map is empty then json funtions is called
@@ -104,6 +111,8 @@ class _HomePageState extends State<HomePage> {
       });
     }
   }
+
+
   //seperate the sub map into 2 lists 1 with names and 1 with ids
   Future<void> mapToLists() async {
     if(subCategoriesNames.isEmpty) {
@@ -153,6 +162,7 @@ class _HomePageState extends State<HomePage> {
   final _jsonFunctions = JsonFunctions();
   var index = 0;
   var randomCategory = 0;
+  bool loadingProducts = false;
 
   final List<int> _selectedItems = [];
 
@@ -173,16 +183,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> getProducts(int categoryID) async {
-    _product = await ProductApi().fetchProduct(categoryID);
-
-    List<Product> favorites = await _preferenceArticles.getAllFavorites();
-    for (var i in favorites) {
-      if (!_favoriteIds.contains(i.productId)) {
-        _favoriteIds.add(i.productId);
-      }
-    }
-
+  void getProducts() {
     if (this.mounted) {
       setState(() {
         if (status == WelcomeStatus.noFirstTime) {
@@ -194,11 +195,6 @@ class _HomePageState extends State<HomePage> {
       widget.callback.loadingFinished();
       status = WelcomeStatus.finished;
     }
-    if (count < _product.length) {
-      _products.insert(count, _product[count]);
-      count++;
-    }
-    ProductController.addProducts(_products);
   }
 
   @override
@@ -216,12 +212,22 @@ class _HomePageState extends State<HomePage> {
     });
     firstAppStart();
     tz.initializeTimeZones();
+
+    disableSplashScreen();
+
+  }
+
+  Future<void> disableSplashScreen() async {
+    await Future.delayed(const Duration(seconds: 2), (){});
+    getProducts();
   }
 
   @override
   void dispose() {
     super.dispose();
   }
+
+  List<int> listOfProdCat = [];
 
   @override
   Widget build(BuildContext context) {
@@ -273,97 +279,104 @@ class _HomePageState extends State<HomePage> {
       );
     } else {
       return Scaffold(
-        appBar: HomeBrowserAppBar(this),
-        body:
-        //_isLoading ? Center(child: CircularProgressIndicator()) :
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Align(
-              alignment: Alignment.topCenter,
-              child: Container(
-                color: ThemeChanger.lightBlue,
-                height: 40,
-                width: displayWidth,
-                child: ListView.builder(
-                    physics: ScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    itemCount: mainCategories.length,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                          onTap: () async {
-                            selectCategory(index);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: (_selectedItems.contains(mainCategoryIds[index])) ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground,       //_selectedItem != null && _selectedItem == index ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground,
-                              borderRadius: BorderRadius.circular(2),
-                            ),
-                            alignment: Alignment.centerRight,
-                            margin: EdgeInsets.all(4),
-                            padding: EdgeInsets.all(4),
-                            child: Text(
-                              mainCategoryNames[index],
-                              style: TextStyle(
-                                color: ThemeChanger.catTextColor,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ));
-                    }),
-              ),
-            ),
-          Expanded(
-            child:
-            Align(
+          appBar: HomeBrowserAppBar(this),
+          body:
+          //_isLoading ? Center(child: CircularProgressIndicator()) :
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Align(
                 alignment: Alignment.topCenter,
-                child: NotificationListener<ScrollNotification>(
-                  onNotification: (scrollNotification) {
-                    if (scrollNotification is ScrollUpdateNotification) {
-                      _onUpdateScroll();
-                    }
-                    return true;
-                  },
-                  child: StreamBuilder(
-                    stream: channel.stream,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        newProducts.add(productFromJson(snapshot.data.toString()));
-                        return ListView.builder(
-                              reverse: true,
-                              shrinkWrap: true,
-                              controller: _scrollController,
-                              itemCount: newProducts.length,
-                              itemBuilder: (context, index) {
-                                return InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                ExtendenViewWebSocket(
-                                                    newProducts[index],
-                                                    //this,
-                                                    streamController.stream
-                                                )),
-                                      );
-                                    },
-                                    child: NewArticleCard(newProducts[index])
-                                );
-                              }
-                          );
-                        }
-                     else { return const Text("no data");}
-                      },
-                  ),
-                )
-            ),
-          )
-          ],
-        )
-
-      );
+                child: Container(
+                  color: ThemeChanger.lightBlue,
+                  height: 40,
+                  width: displayWidth,
+                  child: ListView.builder(
+                      physics: ScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemCount: mainCategories.length,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                            onTap: () async {
+                              selectCategory(index);
+                            },
+                            child: Container(
+                                decoration: BoxDecoration(
+                                  color: (_selectedItems
+                                      .contains(mainCategoryIds[index]))
+                                      ? ThemeChanger.highlightedColor
+                                      : ThemeChanger.articlecardbackground,
+                                  //_selectedItem != null && _selectedItem == index ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground,
+                                  borderRadius: BorderRadius.circular(2),
+                                ),
+                                alignment: Alignment.centerRight,
+                                margin: EdgeInsets.all(4),
+                                padding: EdgeInsets.all(4),
+                                child: Text(
+                                  mainCategoryNames[index],
+                                  style: TextStyle(
+                                    color: ThemeChanger.catTextColor,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                )));
+                      }),
+                ),
+              ),
+              Expanded(
+                child: Stack(children: [
+                  Align(
+                      alignment: Alignment.topCenter,
+                      child: NotificationListener<ScrollNotification>(
+                        onNotification: (scrollNotification) {
+                          if (scrollNotification is ScrollUpdateNotification) {
+                            _onUpdateScroll();
+                          }
+                          return true;
+                        },
+                        child: StreamBuilder(
+                          stream: channel.stream,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              search(listOfProdCat,
+                                  productFromJson(snapshot.data.toString()));
+                              return ListView.builder(
+                                  reverse: true,
+                                  shrinkWrap: true,
+                                  controller: _scrollController,
+                                  itemCount: newProducts.length,
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ExtendenViewWebSocket(
+                                                        newProducts[index],
+                                                        //this,
+                                                        streamController
+                                                            .stream)),
+                                          );
+                                        },
+                                        child:
+                                        NewArticleCard(newProducts[index]));
+                                  });
+                            } else {
+                              return const Text("no data");
+                            }
+                          },
+                        ),
+                      )),
+                  Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.add, color: Colors.black))),
+                ]),
+              )
+            ],
+          ));
     }
   }
 
@@ -381,6 +394,13 @@ class _HomePageState extends State<HomePage> {
         _selectedItems.removeWhere((element) => element == categoryId);
       });
     }
+    List<String> categoriesList = [];
+    for (int i = 0; i < mainCategoryIds.length; i++) {
+      if (_selectedItems.contains(mainCategoryIds[i])) {
+        categoriesList.add(i.toString());
+      }
+    }
+    await preferences.setStringList("categories", categoriesList);
 
 
     await getSubCategories();
@@ -392,6 +412,7 @@ class _HomePageState extends State<HomePage> {
         //timerFunction(value);
         //_jsonFunctions.count = 1;
         // print("AAAAAA $_jsonFunctions.count");
+        listOfProdCat = value;
       });
     });
 
@@ -409,11 +430,23 @@ class _HomePageState extends State<HomePage> {
 
   firstAppStart() async {
     preferences = await SharedPreferences.getInstance();
-    await preferences.setBool("nofirstTime", false); // run welcome screen everytime
+    // await preferences.setBool("nofirstTime", false); // run welcome screen everytime
 
     var nofirstTime = preferences.getBool('nofirstTime');
+    if (nofirstTime == null) {
+      nofirstTime = false;
+    }
+
     if (!nofirstTime) {
       await preferences.setBool("nofirstTime", true);
+    } else {
+      var categoriesList = preferences.getStringList("categories");
+      if (categoriesList == null) {
+        categoriesList = [];
+      }
+      for (int i = 0; i < categoriesList.length; i++) {
+        selectCategory(int.parse(categoriesList[i]));
+      }
     }
     setState(() {
       if (nofirstTime) {
@@ -431,6 +464,64 @@ class _HomePageState extends State<HomePage> {
   void setLoading(bool b) {
     _isLoading = b;
   }
+
+  void currentCatId(indexItemBuilder) {
+    categoryIdWebSocket = mainCategoryIds[indexItemBuilder];
+   // print("categoryIdWebSocket ===> $categoryIdWebSocket");
+  }
+
+  void search(List<int> list, ProductWS product) {
+    print("LIST: ${list}");
+    for (int i = 0; i < list.length; i++) {
+        if (!productIdList.contains(product.productId) && list[i] == product.categoryId) {
+          newProducts.add(product);
+          productIdList.add(product.productId);
+        }
+    }
+  }
+
+  /*
+  Future<void> filterProducts(List<ProductWS> newProducts) async {
+    List<ProductWS> ret = [];
+    //result.clear();
+    int catId = categoryIdWebSocket;
+
+
+    await getSubCategories();
+    await mapToLists();
+
+
+
+    print("CatId ==== >>>>> $catId");
+    print("newProducts ======> {$newProducts}");
+    print("ret ===> ${ret}");
+     if(ret.isEmpty) {
+       print("IS EMPTY");
+       for (var i in listOfProdCat) {
+         for (var j in newProducts) {
+           if(listOfProdCat[i] == newProducts[j].categoryId) {
+
+           }
+         }
+
+       }
+       ret = newProducts;
+       print("RET ====> $ret");
+       for (var p in ret) {
+        // print("p ===> $p");
+         if (catId == p.categoryId) {
+           print("CATID -----> $catId");
+           print("p.CatID ====> -----> ${p.categoryId}");
+
+           filteredProducts.add(p);
+         }
+       }
+     }
+     //filteredProducts = result;
+    print("FILTERED PRODUCTS ===> ${filteredProducts}");
+  }
+
+   */
 }
 
 enum WelcomeStatus { loading, firstTime, noFirstTime, finished }
