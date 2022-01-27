@@ -15,6 +15,7 @@ class PreferenceArticlesWS {
     final jsonData = jsonDecode(rawData.toString());
     jsonData[product.productId.toString()] = fromCardToJson(product);
     await preferencesWS.setString("favoritesWS", jsonEncode(jsonData));
+   
   }
 
   Future removeFavorite(int id) async {

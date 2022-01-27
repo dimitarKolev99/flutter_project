@@ -56,7 +56,7 @@ class _FavoritePageState extends State<FavoritePage> {
       updateScreen(update);
     });
 
-    favoriteProducts = ProductController.favoriteProducts;
+    //favoriteProducts = ProductController.favoriteProducts;
     favoriteProductsWS = ProductControllerWS.favoriteProductsWS;
     getData();
   }
@@ -100,7 +100,10 @@ class _FavoritePageState extends State<FavoritePage> {
   updateScreen(bool update) {
     if (this.mounted) {
       //ProductController.updateFavorites(this);
-      ProductControllerWS.updateFavoritesWS(this);
+      setState(() {
+        ProductControllerWS.updateFavoritesWS(this);
+      });
+
     }
     if (_isClosed) {
       _isClosed = false;

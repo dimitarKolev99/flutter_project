@@ -58,6 +58,7 @@ class ProductControllerWS {
       favoriteProductsWS.add(cardWS.productWS);
       print("CARD ADDED !!!!!");
       print("$favoriteProductsWS");
+
     });
  // }
     callback.widget.updateStream.add(true);

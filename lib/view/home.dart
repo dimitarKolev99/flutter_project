@@ -208,8 +208,10 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     widget.stream.listen((update) {
       if (mounted) {
+        setState(() {
+          ProductControllerWS.updateFavoritesWS(this);
+        });
         //ProductController.updateFavorites(this);
-        ProductControllerWS.updateFavoritesWS(this);
       }
     });
     firstAppStart();
