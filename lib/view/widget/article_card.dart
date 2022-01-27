@@ -111,7 +111,7 @@ class ArticleCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(0),
                   ),
                   child:
-                  Text("-" + saving.toString() + "%",
+                  Text("-" + saving.toString(),
                     style: TextStyle(
                       color: ThemeChanger.textColor,
                       fontWeight: FontWeight.bold,

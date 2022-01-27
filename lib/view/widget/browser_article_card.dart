@@ -30,6 +30,7 @@ class BrowserArticleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     double newprice = int.parse(price).toDouble()/100;
     int x = 100 - int.parse(saving).toInt();
     double prevpreis = newprice/x * 100;
