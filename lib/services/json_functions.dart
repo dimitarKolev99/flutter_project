@@ -21,6 +21,20 @@ class JsonFunctions{
     "Haushaltselektronik" : 1940,
   };
 
+  List<int> mainCategoryIds = [
+    30311,
+    3932,
+    3686,
+    9908,
+    7032,
+    3326,
+    12913,
+    4033,
+    2400,
+    1940,
+    3626,
+  ];
+
   Map<String, int> getMainCategories(){
     return mainCategories1;
   }
@@ -116,7 +130,10 @@ class JsonFunctions{
           List<dynamic> productList = element["productCategories"];
           for (var element in productList) {
             id = element["id"];
-            productCategoryIDs.add(id);
+            if(!productCategoryIDs.contains(id)) {
+              productCategoryIDs.add(id);
+            }
+
             count++;
           }
         }
@@ -126,34 +143,11 @@ class JsonFunctions{
         List<dynamic> resultList2 = element["productCategories"];
         for (var element in resultList2) {
           id = element["id"];
-          productCategoryIDs.add(id);
-          count++;
-        }
-        translateTree(resultList2);
-      }
-    }
-  }
-
-  void translateTreeOneMain(List<dynamic> resultList) {
-    for (var element in resultList) {
-      if (element.toString().substring(1, 14) == "subCategories") {
-
-        List<dynamic> resultList2 = element["subCategories"];
-        if (element["subCategories"] != null &&
-            element["productCategories"] != null) {
-          List<dynamic> productList = element["productCategories"];
-          for (var element in productList) {
-            id = element["id"];
+          if(!productCategoryIDs.contains(id)) {
             productCategoryIDs.add(id);
           }
-        }
-        translateTree(resultList2);
-      }
-      else if (element.toString().substring(1, 18) == "productCategories") {
-        List<dynamic> resultList2 = element["productCategories"];
-        for (var element in resultList2) {
-          id = element["id"];
-          productCategoryIDs.add(id);
+
+          count++;
         }
         translateTree(resultList2);
       }
@@ -188,13 +182,19 @@ class JsonFunctions{
   }
 
 
-  Future<List<int>> getListOfProdCatIDs(int id) async{
-    List<dynamic> resultList = await getJsonOneMain(id);
-    translateTree(resultList);
-    //print("In getListOfProdCatIDs $id");
+  Future<List<int>> getListOfProdCatIDs(List<int> id) async{
+    productCategoryIDs = [];
+    if (id.isNotEmpty) {
+      for (int i = 0; i < id.length; i++) {
+        List<dynamic> resultList = await getJsonOneMain(
+            mainCategoryIds.indexOf(id[i]));
+        translateTree(resultList);
+      }
+    } else {
+      List<dynamic> resultList = await getJson();
+      translateTree(resultList);
+    }
     return productCategoryIDs;
   }
-
-
 
 }
