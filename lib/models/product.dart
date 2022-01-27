@@ -37,7 +37,7 @@ class Product {
       categoryId: json["category_id"] != null ? json["category_id"] : json["categoryId"],
       categoryName: json["category_name"] != null ? json["category_name"] : "",
       productId: json["product_id"] != null ? json["product_id"] : json["productId"],
-      title: json["product_title"] != null ? ["product_title"] : json["productName"],
+      title: json["product_title"] != null ? json["product_title"] : json["productName"],
       price: json["price"] != null ? json["price"] : json["currentPrice"],
       saving: json["saving"] != null ? json["saving"] : json["dropPercentage"],
       description:json["description"] != null ? json["description"] : "",

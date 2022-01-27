@@ -73,7 +73,7 @@ class PreferencesArticles {
       description:json["description"],
       smallImage: json["smallImage"],
       bigImage: json["bigImage"],
-      productPageUrl: json["productPageUrl"],
+      productPageUrl: "BLABLA"//json["productPageUrl"],
     );
   }
 }

@@ -144,7 +144,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                                       topRight: Radius.circular(5))),
                               margin: EdgeInsets.only(left: blockSizeHorizontal * 3),
                               child: Text(
-                                newprice.toStringAsFixed(2) + " €",
+                                widget.price,//newprice.toStringAsFixed(2) + " €",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: safeBlockHorizontal * 9,
@@ -190,7 +190,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                             ),
                             margin: EdgeInsets.only(left: blockSizeHorizontal * 3),
                             child: Text(
-                              prevpreis.toStringAsFixed(2) + "€",
+                                widget.price,//prevpreis.toStringAsFixed(2) + "€",
                               style: TextStyle(
                                   decoration: TextDecoration.lineThrough,
                                   fontSize: safeBlockHorizontal * 5.0,
