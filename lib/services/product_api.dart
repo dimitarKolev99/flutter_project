@@ -154,8 +154,8 @@ class ProductApi {
 
 
     return bargains.map((data) => Product.fromJson(data)).where((bargains){
-    final productPrice = bargains.price;
-    final productSaving = bargains.saving;
+    final productPrice = int.parse(bargains.price).toDouble();
+    final productSaving = int.parse(bargains.saving).toInt();
 
     //print("PRICERANGE-------------------------$productPrice, $minPrice, $maxPrice, $saving");
 

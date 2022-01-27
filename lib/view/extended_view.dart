@@ -14,8 +14,8 @@ import 'widget/article_card.dart';
 class ExtendedView extends StatefulWidget {
   late final int id;
   late final String title;
-  late final int saving;
-  late final double price;
+  late final String saving;
+  late final String price;
   late final String image;
   late final String description;
   late final String category;
@@ -57,8 +57,8 @@ class _ExtendedViewState extends State<ExtendedView> {
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
 
-    double newprice = widget.price / 100;
-    int x = 100 - widget.saving;
+    double newprice = int.parse(widget.price).toDouble()/100;
+    int x = 100 - int.parse(widget.saving).toInt();
     double prevpreis = newprice / x * 100;
 
     MediaQueryData _mediaQueryData;

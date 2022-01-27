@@ -11,8 +11,8 @@ import '../theme.dart';
 class ArticleCard extends StatelessWidget {
   late final int id;
   late final String title;
-  late final int saving;
-  late final double price;
+  late final String saving;
+  late final String price;
   late final String image;
   late final String description;
   late final String category;
@@ -31,9 +31,9 @@ class ArticleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double newprice = price/100;
-    int x = 100 - saving;
-    double prevpreis = newprice/x * 100;
+   // double newprice = int.parse(price).toDouble()/100;
+   // int x = 100 - int.parse(saving).toInt();
+   // double prevpreis = newprice/x * 100;
 
     MediaQueryData _mediaQueryData;
     double displayWidth;
@@ -170,7 +170,7 @@ class ArticleCard extends StatelessWidget {
                               margin: EdgeInsets.only(left:  blockSizeHorizontal * 2),
                               width: blockSizeHorizontal * 45,
                               child: Text(
-                                prevpreis.toStringAsFixed(2) + "€",
+                                price,//prevpreis.toStringAsFixed(2) + "€",
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                     decoration: TextDecoration.lineThrough,
@@ -186,7 +186,7 @@ class ArticleCard extends StatelessWidget {
                               width: blockSizeHorizontal * 45,
                               child:
                               Text(
-                                newprice.toStringAsFixed(2) + "€",
+                                price,//.toStringAsFixed(2) + "€",
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                   fontSize: safeBlockHorizontal * 6.0,//16,

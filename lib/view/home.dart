@@ -148,7 +148,7 @@ class _HomePageState extends State<HomePage> {
 
   late final List _favoriteIds = [];
   late final List<Product> _products = [];
-  late final List<ProductWS> newProducts = [];
+  late final List<Product> newProducts = [];
   bool _isLoading = true;
   var count = 0;
   bool isScrolling = false;
@@ -344,8 +344,9 @@ class _HomePageState extends State<HomePage> {
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                              // animate();
+                              //print("DATA ==> $snapshot");
                               search(listOfProdCat, productFromJson(snapshot.data.toString()));
-                              ProductControllerWS.addProductsWS(newProducts);
+                              ProductController.addProducts(newProducts);
                               return ListView.builder(
                                   reverse: true,
                                   shrinkWrap: true,
@@ -358,15 +359,16 @@ class _HomePageState extends State<HomePage> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    ExtendenViewWebSocket(
+                                                    ExtendedView(
                                                         newProducts[index],
+                                                        this,
                                                         streamController
                                                             .stream,
-                                                    this)),
+                                                    )),
                                           );
                                         },
                                         child:
-                                        NewArticleCard(newProducts[index], this));
+                                        ArticleCard(newProducts[index], this));
                                   });
                             } else {
                               return const Text("no data");
@@ -488,7 +490,7 @@ class _HomePageState extends State<HomePage> {
    // print("categoryIdWebSocket ===> $categoryIdWebSocket");
   }
 
-  void search(List<int> list, ProductWS product) {
+  void search(List<int> list, Product product) {
     for (int i = 0; i < list.length; i++) {
         if (!productIdList.contains(product.productId) && list[i] == product.categoryId) {
           newProducts.add(product);

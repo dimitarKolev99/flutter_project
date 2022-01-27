@@ -45,9 +45,9 @@ class _FavoritePageState extends State<FavoritePage> {
 
   // NEW WEB SOCKET
   final _preferenceArticlesWs = PreferenceArticlesWS();
-  List<ProductWS> favoriteProductsWS = [];
+ // List<ProductWS> favoriteProductsWS = [];
 
-  List<dynamic> allFavoritesProducts = [];
+ // List<dynamic> allFavoritesProducts = [];
 
   @override
   void initState() {
@@ -56,18 +56,18 @@ class _FavoritePageState extends State<FavoritePage> {
       updateScreen(update);
     });
 
-    //favoriteProducts = ProductController.favoriteProducts;
-    favoriteProductsWS = ProductControllerWS.favoriteProductsWS;
+    favoriteProducts = ProductController.favoriteProducts;
+    //favoriteProductsWS = ProductControllerWS.favoriteProductsWS;
     getData();
   }
 
   getData() async {
-   // SharedPreferences prefs = await SharedPreferences.getInstance();
-    SharedPreferences presWS = await SharedPreferences.getInstance();
-  //  List<Product> saved = await _preferenceArticles.getAllFavorites();
-    List<ProductWS> savedWs = await _preferenceArticlesWs.getAllFavorites();
-  //  favoriteProducts.addAll(saved);
-    favoriteProductsWS.addAll(savedWs);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+   // SharedPreferences presWS = await SharedPreferences.getInstance();
+    List<Product> saved = await _preferenceArticles.getAllFavorites();
+    //List<ProductWS> savedWs = await _preferenceArticlesWs.getAllFavorites();
+    favoriteProducts.addAll(saved);
+   // favoriteProductsWS.addAll(savedWs);
     setState(() {
       // displayName = prefs.getStringList('displayName');
     });
@@ -117,12 +117,12 @@ class _FavoritePageState extends State<FavoritePage> {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     return Scaffold(
       appBar: FavoriteAppBar(this),
-      body: favoriteProductsWS.isNotEmpty
+      body: favoriteProducts.isNotEmpty
           ? Align(
         alignment: Alignment.topCenter,
         child: ListView.builder(
             shrinkWrap: true,
-            itemCount: favoriteProductsWS.length,
+            itemCount: favoriteProducts.length,
             itemBuilder: (context, index) {
               return InkWell(
                   onTap: () {
@@ -130,12 +130,12 @@ class _FavoritePageState extends State<FavoritePage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              ExtendenViewWebSocket(favoriteProductsWS[index],streamController.stream, this)),
+                              ExtendedView(favoriteProducts[index], this, streamController.stream)),
                     );
                     streamController.add(true);
                     _isClosed = true;
                   },
-                  child: NewArticleCard(favoriteProductsWS[index], this));
+                  child: ArticleCard(favoriteProducts[index], this));
             }),
       )
           : Center(
