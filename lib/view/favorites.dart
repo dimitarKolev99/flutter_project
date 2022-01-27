@@ -72,14 +72,14 @@ class _FavoritePageState extends State<FavoritePage> {
       // displayName = prefs.getStringList('displayName');
     });
 
-    putListsTogether(favoriteProducts, favoriteProductsWS);
+    //putListsTogether(favoriteProducts, favoriteProductsWS);
 
   }
 
-  putListsTogether(List<Product> listProduct, List<ProductWS> listProductsWs) async {
-    allFavoritesProducts.addAll(listProduct);
-    allFavoritesProducts.addAll(listProductsWs);
-  }
+  //putListsTogether(List<Product> listProduct, List<ProductWS> listProductsWs) async {
+ //   allFavoritesProducts.addAll(listProduct);
+  //  allFavoritesProducts.addAll(listProductsWs);
+ // }
 
 /* //TODO DO NOT DELETE! TEMPLATE FOR FURTHER REAFCTORING
   Future <void> getProducts() async {
@@ -101,6 +101,7 @@ class _FavoritePageState extends State<FavoritePage> {
     if (this.mounted) {
       //ProductController.updateFavorites(this);
       setState(() {
+        getData();
         ProductControllerWS.updateFavoritesWS(this);
       });
 
@@ -116,12 +117,12 @@ class _FavoritePageState extends State<FavoritePage> {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     return Scaffold(
       appBar: FavoriteAppBar(this),
-      body: allFavoritesProducts.isNotEmpty
+      body: favoriteProductsWS.isNotEmpty
           ? Align(
         alignment: Alignment.topCenter,
         child: ListView.builder(
             shrinkWrap: true,
-            itemCount: allFavoritesProducts.length,
+            itemCount: favoriteProductsWS.length,
             itemBuilder: (context, index) {
               return InkWell(
                   onTap: () {
@@ -129,12 +130,12 @@ class _FavoritePageState extends State<FavoritePage> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              ExtendenViewWebSocket(allFavoritesProducts[index],streamController.stream, this)),
+                              ExtendenViewWebSocket(favoriteProductsWS[index],streamController.stream, this)),
                     );
                     streamController.add(true);
                     _isClosed = true;
                   },
-                  child: NewArticleCard(allFavoritesProducts[index], this));
+                  child: NewArticleCard(favoriteProductsWS[index], this));
             }),
       )
           : Center(
