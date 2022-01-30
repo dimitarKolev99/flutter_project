@@ -2,17 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:penny_pincher/models/ws_product.dart';
 import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/json_functions.dart';
-import 'package:penny_pincher/view/extended_view_web_socket.dart';
+import 'package:penny_pincher/models/product.dart';
+import 'package:penny_pincher/services/product_controller_ws.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/welcome_screen.dart';
 import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
 import 'package:flutter/material.dart';
+import 'package:penny_pincher/view/widget/article_card.dart';
 import 'dart:async';
-import 'package:penny_pincher/view/widget/new_article_card.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:web_socket_channel/web_socket_channel.dart';
+
+import 'extended_view.dart';
 
 class HomePage extends StatefulWidget {
   late final Stream<bool> stream;
@@ -83,7 +86,8 @@ class _HomePageState extends State<HomePage> {
 
   late List<ProductWS> newProduct;
 
-  late final List<ProductWS> newProducts = [];
+  late final List<Product> newProducts = [];
+
   bool _isLoading = true;
   var count = 0;
   bool isScrolling = false;
@@ -145,8 +149,10 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     widget.stream.listen((update) {
       if (mounted) {
-        ProductController.updateFavorites(this);
-      }
+        setState(() {
+          ProductController.updateFavorites(this);
+        });
+       }
     });
     firstAppStart();
     tz.initializeTimeZones();
@@ -268,8 +274,8 @@ class _HomePageState extends State<HomePage> {
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               search(listOfProdCat, productFromJson(snapshot.data.toString()));
+                              ProductController.addProducts(newProducts);
                               !isScrolling ? animate() : null;
-                              //animate();
                               return ListView.builder(
                                   reverse: true,
                                   shrinkWrap: true,
@@ -282,14 +288,11 @@ class _HomePageState extends State<HomePage> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    ExtendenViewWebSocket(
-                                                        newProducts[index],
-                                                        //this,
-                                                        streamController.stream)
+                                                    ExtendedView(newProducts[index], this, streamController.stream,)
                                             ),
                                           );
                                         },
-                                        child: NewArticleCard(newProducts[index]));
+                                        child: ArticleCard(newProducts[index], this));
                                   });
                             } else {
                               return const Align(
@@ -312,7 +315,6 @@ class _HomePageState extends State<HomePage> {
                               isScrolling = false;
                               show = false;
                             });
-                            //check();
                           },
                           child: const Icon(Icons.arrow_upward),
                           backgroundColor: ThemeChanger.lightBlue,
@@ -368,6 +370,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void animate() {
+    isScrolling = false;
     if (_scrollController.hasClients  && _scrollController.position.pixels < _scrollController.position.maxScrollExtent) {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
@@ -418,7 +421,7 @@ class _HomePageState extends State<HomePage> {
     categoryIdWebSocket = mainCategoryIds[indexItemBuilder];
   }
 
-  void search(List<int> list, ProductWS product) {
+  void search(List<int> list, Product product) {
     for (int i = 0; i < list.length; i++) {
         if (!productIdList.contains(product.productId) && list[i] == product.categoryId) {
           newProducts.add(product);

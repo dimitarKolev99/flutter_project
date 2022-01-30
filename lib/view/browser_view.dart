@@ -3,6 +3,7 @@ import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
+import 'package:penny_pincher/view/search_view.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
@@ -83,14 +84,17 @@ class _BrowserPageState extends State<BrowserPage> {
   int maxPrice = 10000;
   int minPrice = 0;
 
+  bool showSearches = false;
+
   late SubcategoryView view;
 
   final _preferenceArticles = PreferencesArticles();
 
   // This map is necessary because we need to know the id and the name of the chosen Cats
-  Map<String, int> mapOfChosenCategories = new Map();
-  List<String> chosenCategories = [];// Map has int with the id of the chosen category, and a Li
-//   st of bargains as value
+  Map<String, dynamic> mapOfChosenCategories = new Map();
+  List<String> chosenCategories = [];
+
+  // Map has int with the id of the chosen category, and a List of bargains as value
   Map<int, Iterable<Product>> bargainsOfChosenCats = new Map();
   int numberOfProducts = 0;
 
@@ -100,7 +104,6 @@ class _BrowserPageState extends State<BrowserPage> {
     bargainsOfChosenCats[categoryId] = products;
     numberOfProducts += products.length;
     view.state.setState(() { });
-    print(numberOfProducts);
   }
 
   Future<void> changePrice() async{
@@ -212,16 +215,20 @@ class _BrowserPageState extends State<BrowserPage> {
   @override
   Widget build(BuildContext context) {
 
-    print("got the new categorie : ${widget._currentProductId}");
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     MediaQueryData _mediaQueryData = MediaQuery.of(context);
     double displayWidth = _mediaQueryData.size.width;
     double displayHeight = _mediaQueryData.size.height;
     double blockSizeHorizontal = displayWidth / 100; // screen width in 1%
     double blockSizeVertical = displayHeight / 100; // screen height in 1%
+
     return Scaffold(
         appBar: HomeBrowserAppBar(this),
-        body: Column(
+
+        body:
+        showSearches ? SearchView(this)
+            :
+        Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             //MainCategories to click to get to edit the filter categories / search
@@ -257,6 +264,7 @@ class _BrowserPageState extends State<BrowserPage> {
                                       }
                                       return view;
                                       },
+
                                   ));
                             },
                           child:
@@ -285,8 +293,6 @@ class _BrowserPageState extends State<BrowserPage> {
                                     constraints: const BoxConstraints(),
                                     padding : const EdgeInsets.only(top: 1.3),
                                     onPressed: (){
-                                      print("x clicked");
-                                      print(chosenCategories.isNotEmpty);
                                       if(chosenCategories.isNotEmpty) {
                                       setState((){
                                           //TODO: Reload Products
@@ -311,23 +317,30 @@ class _BrowserPageState extends State<BrowserPage> {
 
 
             // If no Products are in the chosen categories or no category is chosen
-            //TODO: Better Layout Design!
             _products.isEmpty?
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 50),
-                    Center(
-                      child:
-                      Text("Für deine ausgewählten Kategorien gibt es keine aktuell keine Schnäppchen. "
-                          "Bitte wähle eine oder mehrere der zur Verfügung stehenden Kategorien",
-                        style: TextStyle(fontStyle: FontStyle.italic, fontSize: 16 ),
-                          textAlign: TextAlign.center)
-
-                    )
-                  ],
-                )
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: blockSizeVertical*20),
+                  Icon(Icons.edit_outlined, color: Colors.grey, size: 80),
+                  SizedBox(height: 30),
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                            text:
+                            "Du hast noch keine Kategorie ausgewählt.\n \nMit klick auf die Oberkategorien,\n kannst du deine Suche starten.",
+                            style: TextStyle(
+                                fontSize: 18, color: ThemeChanger.reversetextColor)),
+                        ],
+                    ),
+                  )
+                ],
+              ),
+            )
 
 
             :

@@ -15,7 +15,7 @@ class SubcatButton extends StatefulWidget {
   final String categoryName;
   final int categoryId;
   bool show = false;
-  bool _isProdCat = false;
+  bool isProdCat = false;
   bool isChosen = false;
   late final Stream<bool> stream;
   late final StreamController updateStream;
@@ -25,19 +25,30 @@ class SubcatButton extends StatefulWidget {
   List<String> subCategoriesNames = [];
   List<int> subCategoriesIds = [];
 
+  late Color subCatcolor;
+  late Color prodCatColor;
+  late Color textColor;
   @observable
   ObservableList<SubcatButton> subCatButtons = new ObservableList();
 
-  SubcatButton({
-    required this.categoryName,
-    required this.categoryId,
-    required this.stream,
-    required this.updateStream,
-    required this.callback,
-    required this.cBackToView,
-    required this.controller,
+  SubcatButton(
+    this.categoryName,
+    this.categoryId,
+    this.stream,
+    this.updateStream,
+    this.callback,
+    this.cBackToView,
+    this.controller,
     //required this.isProdCat,
-  });
+      ){
+    if(cBackToView.chosenCats.containsValue(categoryId) || cBackToView.checkedButtons.containsValue(categoryId)) isChosen = true;
+    isProdCat = cBackToView.chosenCats.containsValue(categoryId);
+
+    subCatcolor = isChosen ? ThemeChanger.lightBlue : ThemeChanger.articlecardbackground;
+    prodCatColor = isChosen ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground;
+    textColor = isChosen ? ThemeChanger.articlecardbackground : ThemeChanger.catTextColor;
+
+  }
 
   @override
   State<StatefulWidget> createState() => _SubcatButtonState();
@@ -50,6 +61,19 @@ class SubcatButton extends StatefulWidget {
       }
       element.removeFromBrowser(name);
     }
+  }
+
+  bool giveColor() {
+
+    for (var element in subCatButtons) {
+      if (element.isChosen && element.isProdCat) {
+        return true;
+      } else {
+        if(element.giveColor()) return true;
+      }
+    }
+
+    return false;
   }
 
 }
@@ -65,13 +89,13 @@ class _SubcatButtonState extends State<SubcatButton> {
     if(widget.subCatButtons.isEmpty) {
       for (int i = 0; i < widget.subCategoriesNames.length; i++) {
         widget.subCatButtons.add(
-            SubcatButton(categoryName: widget.subCategoriesNames[i],
-              categoryId: widget.subCategoriesIds[i],
-              stream: widget.stream,
-              updateStream: widget.updateStream,
-            callback: widget.callback,
-            cBackToView: widget.cBackToView,
-            controller: widget.controller));
+            SubcatButton(widget.subCategoriesNames[i],
+              widget.subCategoriesIds[i],
+              widget.stream,
+              widget.updateStream,
+            widget.callback,
+            widget.cBackToView,
+            widget.controller));
       }
     }
   }
@@ -101,9 +125,9 @@ class _SubcatButtonState extends State<SubcatButton> {
     mapToLists();
     listToButtons();
   }
-  late Color subCatcolor = widget.isChosen ? ThemeChanger.lightBlue : ThemeChanger.articlecardbackground;
-  late Color prodCatColor = widget.isChosen ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground;
-  late Color textColor = widget.isChosen ? ThemeChanger.articlecardbackground : ThemeChanger.catTextColor;
+
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -115,29 +139,28 @@ class _SubcatButtonState extends State<SubcatButton> {
 
           InkWell(
           onTap: (){
+            getCats();
             setState(() {
-               getCats();
                 // if empty chosen category = Productcategory
                 if(widget.subCatButtons.isEmpty){
-                  widget._isProdCat = true;
+                  widget.isProdCat = true;
                   if(widget.isChosen == false){ //unselected
                     widget.isChosen = !widget.isChosen;
                     widget.callback.addCategory(widget.categoryName, widget.categoryId);
-                    prodCatColor = ThemeChanger.highlightedColor;
-                    textColor = ThemeChanger.textColor;
+                    widget.prodCatColor = ThemeChanger.highlightedColor;
+                    widget.textColor = ThemeChanger.textColor;
                     // function needed that leads to browser and shows results
                     // TODO: Add CategoryIDs to a Collection ,
                     // TODO: Call Json Function to updayte the resultList and Update Button Text
                     widget.callback.currentCategory = widget.categoryId;
                     widget.callback.addProductsOfChosenCategory(widget.categoryId);
-
                   }
                   else{
                     widget.isChosen = !widget.isChosen;
                     //print("try to remove : ! ${widget.categoryName}");
                     widget.callback.removeOneCategory(widget.categoryName);
-                    prodCatColor = ThemeChanger.articlecardbackground;
-                    textColor = ThemeChanger.catTextColor;
+                    widget.prodCatColor = ThemeChanger.articlecardbackground;
+                    widget.textColor = ThemeChanger.catTextColor;
                     widget.callback.deleteProductsOfChosenCategoryFromView(widget.categoryId);
                   }
 
@@ -145,18 +168,21 @@ class _SubcatButtonState extends State<SubcatButton> {
                 }
                 // Subcategories
                 else {
-                  if(widget.isChosen == false){ // unselected
+                  if(widget.show == false){ // unselected
                     //widget.callback.addCategory(widget.categoryName);
                     widget.isChosen = !widget.isChosen;
                     widget.show = !widget.show;
-                    subCatcolor = ThemeChanger.lightBlue;
-                    textColor = ThemeChanger.textColor;
+                    widget.subCatcolor = ThemeChanger.lightBlue;
+                    widget.textColor = ThemeChanger.textColor;
+                    widget.cBackToView.checkedButtons[widget.categoryName] = widget.categoryId;
+                    print(widget.cBackToView.checkedButtons[widget.categoryName]);
                   }
                   else{  // selected
                     widget.isChosen = !widget.isChosen;
-                    subCatcolor = ThemeChanger.articlecardbackground;
+                    widget.subCatcolor = widget.giveColor() ? ThemeChanger.lightBlue : ThemeChanger.articlecardbackground;
                     widget.show = !widget.show;
-                    textColor = ThemeChanger.catTextColor;
+                    widget.textColor = widget.giveColor() ? ThemeChanger.textColor : ThemeChanger.catTextColor;
+                    if(!widget.giveColor()) widget.cBackToView.chosenCats.remove(widget.categoryName);
                    // widget.callback.removeOneCategory(widget.categoryName);
                   }
                 }
@@ -172,19 +198,24 @@ class _SubcatButtonState extends State<SubcatButton> {
             height: 30,
             margin: EdgeInsets.all(4),
             decoration: BoxDecoration(
-              color: widget._isProdCat ? prodCatColor : subCatcolor,
+              color: widget.isProdCat ? widget.prodCatColor : widget.subCatcolor,
               border: Border.all(
                   color: Colors.blueGrey,
                   width: 1,
               ),
             ),
-            child: Text(widget.categoryName, style:
+            child: Row(
+              children: [Text(widget.categoryName, style:
               TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w400,
-                color: textColor,
+                color: widget.textColor,
               ),
             textAlign: TextAlign.left,
+            ),
+              if(widget.show) Icon(Icons.arrow_drop_up, size: 25),
+              ],
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             ),
           )
         ),

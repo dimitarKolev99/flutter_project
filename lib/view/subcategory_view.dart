@@ -4,39 +4,86 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
+import 'package:penny_pincher/models/preferences_searches.dart';
 import 'package:penny_pincher/services/json_functions.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
 import 'package:penny_pincher/view/widget/subcat_button.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SubcategoryView extends StatefulWidget {
+
+  // Specific fields
   int categoryId;
   String categoryName;
-  late final Stream<bool> stream;
-  late final StreamController updateStream;
-  final dynamic callback;
-  ScrollController _scrollController = ScrollController();
-  late var state;
   var startValue = 0;
   var endValue = 4900;
   int saving = 0;
   int minPrice = 0;
   int maxPrice = 0;
-  bool _hide = true;
-  Map<String, int> subCategoriesMap = new Map();
+
+  // Discount options combined with a boolean for when chosen
+  var discounts = [
+    [10, false],
+    [20, false],
+    [30, false],
+    [40, false],
+    [50, false],
+  ];
+
+
+  //values for the left and right output of the slider
+  late RangeValues currentSliderValuesPrice;
+
 
 
   // names and Ids have matching indexes for name and id of the category
   List<String> subCategoriesNames = [];
   List<int> subCategoriesIds = [];
+
   @observable
   ObservableList<SubcatButton> subCatButtons = new ObservableList();
 
-  RangeValues _currentSliderValuesPrice = const RangeValues(00, 70);
 
-  SubcategoryView(this.categoryId, this.categoryName, this.stream, this.updateStream, this.callback);
+  // boolean Variable used to hide the Price Slider and Discounts
+  bool _hide = true;
+
+  Map<String, int> subCategoriesMap = new Map();
+  late final Stream<bool> stream;
+  late final StreamController updateStream;
+  final dynamic callback;
+  ScrollController _scrollController = ScrollController();
+  late var state;
+  Map<String, dynamic> chosenCats = new Map();
+  Map<String, dynamic> checkedButtons = new Map();
+
+  SubcategoryView.fromSave(
+      this.categoryId,
+      this.categoryName,
+      this.startValue,
+      this.endValue,
+      this.saving,
+      this.minPrice,
+      this.maxPrice,
+      int dscnt,
+      double rangeMin,
+      double rangeMax,
+      this.chosenCats,
+      this.checkedButtons,
+      this.stream,
+      this.updateStream,
+      this.callback)
+  {
+    if(dscnt!=0) this.discounts[dscnt][1] = true;
+    currentSliderValuesPrice = RangeValues(rangeMin, rangeMax);
+  }
+
+
+  SubcategoryView(this.categoryId, this.categoryName, this.stream, this.updateStream, this.callback) {
+    currentSliderValuesPrice = RangeValues(00, 70);
+  }
 
 
   @override
@@ -55,25 +102,10 @@ class SubcategoryView extends StatefulWidget {
 }
 
 class _SubcategoryViewState extends State<SubcategoryView> {
-  //values for the left and right output of the slider
-
-
-  // Discount options combined with a boolean for when chosen
-  var discounts = [
-    [10, false],
-    [20, false],
-    [30, false],
-    [40, false],
-    [50, false]
-  ];
-
-  // boolean Variable used to hide the Price Slider and Discounts
-
 
   JsonFunctions json = JsonFunctions();
 
-  //List<SubcatButton> subCatButtons = [];
-
+  @override
   void initState() {
     setState(() {});
     widget.state = this;
@@ -83,13 +115,13 @@ class _SubcategoryViewState extends State<SubcategoryView> {
     if (widget.subCatButtons.isEmpty) {
       for (int i = 0; i < widget.subCategoriesNames.length; i++) {
           widget.subCatButtons.add(SubcatButton(
-          categoryName: widget.subCategoriesNames[i],
-          categoryId: widget.subCategoriesIds[i],
-          stream: widget.stream,
-          updateStream: widget.updateStream,
-          callback: widget.callback,
-          cBackToView: widget,
-          controller: widget._scrollController,
+          widget.subCategoriesNames[i],
+          widget.subCategoriesIds[i],
+          widget.stream,
+          widget.updateStream,
+          widget.callback,
+          widget,
+          widget._scrollController,
         ));
       }
     }
@@ -126,6 +158,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
 
   @override
   Widget build(BuildContext context) {
+    widget.state = this;
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
 
     MediaQueryData _mediaQueryData;
@@ -204,7 +237,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: ThemeChanger.articlecardbackground,
+                                            color: widget.callback.widget.mainCategoryNames[index] == widget.categoryName ? ThemeChanger.highlightedColor : ThemeChanger.articlecardbackground,
                                           borderRadius: BorderRadius.circular(2),
                                         ),
                                         alignment: Alignment.centerRight,
@@ -263,16 +296,16 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                   RangeSlider(
                                     inactiveColor: ThemeChanger.lightBlue,
                                     activeColor: ThemeChanger.catTextColor,
-                                    values: widget._currentSliderValuesPrice,
+                                    values: widget.currentSliderValuesPrice,
                                     min: 0,
                                     max: 100,
                                     divisions: 100,
                                     onChanged: (RangeValues values) {
                                       setState(() {
-                                        widget._currentSliderValuesPrice = values;
+                                        widget.currentSliderValuesPrice = values;
                                       // values change exponentially and not linear.
-                                      widget.startValue = pow(widget._currentSliderValuesPrice.start, 2).round();
-                                      widget.endValue = pow(widget._currentSliderValuesPrice.end, 2).round();
+                                      widget.startValue = pow(widget.currentSliderValuesPrice.start, 2).round();
+                                      widget.endValue = pow(widget.currentSliderValuesPrice.end, 2).round();
                                       //print("$startValue, $endValue" );
                                     });},
                                     onChangeEnd: (RangeValues values) {
@@ -365,14 +398,14 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                         mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                         children:
-                                        List.generate(discounts.length, (index) {
+                                        List.generate(widget.discounts.length, (index) {
                                           return Container(
                                             alignment: Alignment.center,
                                             width: blockSizeHorizontal * 13,
                                             decoration: BoxDecoration(
                                               shape: BoxShape.circle,
                                               // When a discount circle is clicked
-                                              color: (discounts[index][1] == true)
+                                              color: (widget.discounts[index][1] == true)
                                                   ? ThemeChanger.highlightedColor
                                                   : ThemeChanger.lightBlue,
                                             ),
@@ -380,15 +413,15 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                               onTap: () {
                                                 // When a discount circle is clicked
                                                 setState(() {
-                                                  if (discounts[index][1] == false) {
+                                                  if (widget.discounts[index][1] == false) {
                                                     // Only one discount can be selected
-                                                    for (var discount in discounts) {
+                                                    for (var discount in widget.discounts) {
                                                       discount[1] = false;
                                                     }
-                                                    discounts[index][1] = true;
-                                                    widget.saving = discounts[index][0] as int;
+                                                    widget.discounts[index][1] = true;
+                                                    widget.saving = widget.discounts[index][0] as int;
                                                   } else {
-                                                    discounts[index][1] = false;
+                                                    widget.discounts[index][1] = false;
                                                     widget.saving = 0;
                                                   }
                                                 });
@@ -400,7 +433,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                                 });
                                               },
                                               child: Text(
-                                                ">" + discounts[index][0].toString() + "%",
+                                                ">" + widget.discounts[index][0].toString() + "%",
                                                 style: TextStyle(
                                                   color: ThemeChanger
                                                       .textColor,
@@ -413,6 +446,9 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                   )
                                 ],
                               )),
+                          Divider(
+                            color: Colors.black,
+                          ),
                         ],
                       ),
                     ),
@@ -430,13 +466,6 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                 //fontWeight: FontWeight.bold,
                                 fontSize: safeBlockHorizontal * 5,
                               )),
-                          Text(
-                            "31754 Produkte",
-                            style: TextStyle(
-                                color: ThemeChanger.catTextColor,
-                                //fontWeight: FontWeight.bold,
-                                fontSize: safeBlockHorizontal * 3),
-                          ),
                         ],
                       ),
                     ),
@@ -448,21 +477,30 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                             builder: (context, snapshot) {
                               return ListView.builder(
                                   controller: _scrollController,
-                                  itemCount: widget.subCatButtons.length,
+                                  itemCount: widget.subCatButtons.length+1,
                                   itemBuilder: (context, index) {
                                     // print("length of categories : ${subCatButtons.length}");
-                                    return widget.subCatButtons[index];
+                                    if(index<widget.subCatButtons.length) {
+                                      return widget.subCatButtons[index];
+                                    } else {
+                                      return SizedBox(
+                                        height: 50,
+
+                                      );
+                                    }
                                   });
                             })),
                   ],
                 ),
-                Align(
+                Container(
+                  margin: EdgeInsets.only(right: 4),
+                  child:Align(
                   alignment: Alignment.bottomRight,
-                  child: TextButton(onPressed: (){
+                  child: TextButton(
+                      onPressed: (){
                     setState(() {
                       // TODO: widget.callback.currentCategory should be a collection of all chosen Categories
                       // TODO: show products of all categories
-                      print(widget.callback.currentCategory);
                       //widget.callback.setPriceRange(startValue * 100, endValue * 100);
                       //widget.callback.setSaving(saving);
                       widget.callback.updateBrowserblabla(widget.callback.currentCategory);
@@ -470,16 +508,72 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                           context
                       );
                     });
-
                   },
                       style: TextButton.styleFrom(backgroundColor: ThemeChanger.lightBlue),
                       child: Text("Zeige ${widget.callback.numberOfProducts} Produkte",
                   style: TextStyle(color: Colors.white),)),
-                )
+                ),),
+        Container(
+          margin: EdgeInsets.only(left: 4),
+          child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: TextButton(onPressed: () async {
+                    TextEditingController _textFieldController = TextEditingController();
+
+                    return showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [Text('Suche Speichern'), Icon(Icons.bookmarks_outlined)],),
+                          content: TextField(
+                            controller: _textFieldController,
+                            decoration: InputDecoration(hintText: "Gib einen Namen für deine Suche ein"),
+                          ),
+                          actions: <Widget>[
+
+                              TextButton(
+                                child: Text('Abbrechen', style: TextStyle(color: ThemeChanger.lightBlue),),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              TextButton(
+
+                                child: Text('OK', style: TextStyle(color: ThemeChanger.lightBlue),),
+                                onPressed: () {
+
+                                  PreferencesSearch prefs = new PreferencesSearch();
+                                  prefs.addSearch(widget, _textFieldController.text, widget.callback.mapOfChosenCategories);
+
+                                  clearUnCheckedButtons(widget.subCatButtons);
+
+
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ],
+                          );
+                      },
+                    );
+                  },
+                      style: TextButton.styleFrom(backgroundColor: ThemeChanger.lightBlue),
+                      child: Text("Suche Speichern",
+                        style: TextStyle(color: Colors.white),)),
+                ),),
 
               ],
             )
             // Everything shown in body
           );
+
+
+  }
+  void clearUnCheckedButtons(ObservableList<SubcatButton> buttons) {
+    for(SubcatButton sub in buttons) {
+      if(!sub.giveColor()) widget.checkedButtons.remove(sub.categoryName);
+      clearUnCheckedButtons(sub.subCatButtons);
+    }
   }
 }

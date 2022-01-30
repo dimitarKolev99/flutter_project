@@ -14,8 +14,8 @@ import 'widget/article_card.dart';
 class ExtendedView extends StatefulWidget {
   late final int id;
   late final String title;
-  late final int saving;
-  late final double price;
+  late final String saving;
+  late final String price;
   late final String image;
   late final String description;
   late final String category;
@@ -57,9 +57,14 @@ class _ExtendedViewState extends State<ExtendedView> {
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
 
-    double newprice = widget.price / 100;
-    int x = 100 - widget.saving;
-    double prevpreis = newprice / x * 100;
+    String currentPrice = widget.price;
+    int savingToInt = int.parse(widget.saving.replaceFirst(RegExp('%'), '', 0));
+    int x = 100 - savingToInt;
+    String replaceS = currentPrice.replaceFirst(RegExp(','), '.', 0);
+    replaceS = replaceS.replaceFirst(RegExp('€'), '', 0);
+    double convertToDouble = double.parse(replaceS);
+    double prevPreis = convertToDouble / x * 100;
+
 
     MediaQueryData _mediaQueryData;
     double displayWidth;
@@ -144,7 +149,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                                       topRight: Radius.circular(5))),
                               margin: EdgeInsets.only(left: blockSizeHorizontal * 3),
                               child: Text(
-                                newprice.toStringAsFixed(2) + " €",
+                                widget.price.contains("€") ? widget.price : widget.price + " €",//newprice.toStringAsFixed(2) + " €",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: safeBlockHorizontal * 9,
@@ -166,7 +171,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                                   padding: EdgeInsets.only(
                                       top: 3, bottom: 3, left: 13, right: 10),
                                   child: Text(
-                                    "-" + widget.saving.toString() + "%",
+                                    widget.saving.contains("%") ? widget.saving : widget.saving + "%",//"-" + widget.saving.toString() + "%",
                                     style: TextStyle(
                                       color: ThemeChanger.textColor,
                                       fontWeight: FontWeight.bold,
@@ -190,7 +195,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                             ),
                             margin: EdgeInsets.only(left: blockSizeHorizontal * 3),
                             child: Text(
-                              prevpreis.toStringAsFixed(2) + "€",
+                              prevPreis.toString() + " €",//prevpreis.toStringAsFixed(2) + "€",//,
                               style: TextStyle(
                                   decoration: TextDecoration.lineThrough,
                                   fontSize: safeBlockHorizontal * 5.0,
@@ -247,6 +252,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                       ),
 
 
+                      widget.description != null ?
                       /// Description
                       Container(
                         //color: Colors.purple,
@@ -257,17 +263,17 @@ class _ExtendedViewState extends State<ExtendedView> {
                         //width: displayWidth,
                         //height: displayHeight / 4,
                         child: Text(
-                          widget.description,
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.roboto(
-                          textStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: safeBlockHorizontal * 3,
-                          color: ThemeChanger.reversetextColor,
+                            widget.description,
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.roboto(
+                              textStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: safeBlockHorizontal * 3,
+                                color: ThemeChanger.reversetextColor,
+                              ),
+                            )
                         ),
-                      )
-                        ),
-                      ),
+                      ) : SizedBox(height: 3),
 
                       /*
                       blockSizeHorizontal = displayWidth / 100;

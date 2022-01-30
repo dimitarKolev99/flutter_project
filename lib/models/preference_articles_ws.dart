@@ -11,10 +11,11 @@ class PreferenceArticlesWS {
       await _fetchData();
     }
 
-    final rawData = preferencesWS.getString('favorites');
+    final rawData = preferencesWS.getString('favoritesWS');
     final jsonData = jsonDecode(rawData.toString());
     jsonData[product.productId.toString()] = fromCardToJson(product);
-    await preferencesWS.setString("favorites", jsonEncode(jsonData));
+    await preferencesWS.setString("favoritesWS", jsonEncode(jsonData));
+
   }
 
   Future removeFavorite(int id) async {
@@ -22,10 +23,10 @@ class PreferenceArticlesWS {
       await _fetchData();
     }
 
-    final rawData = preferencesWS.getString('favorites');
+    final rawData = preferencesWS.getString('favoritesWS');
     final jsonData = jsonDecode(rawData.toString());
     jsonData.remove(id.toString());
-    await preferencesWS.setString("favorites", jsonEncode(jsonData));
+    await preferencesWS.setString("favoritesWS", jsonEncode(jsonData));
   }
 
   Future<List<ProductWS>> getAllFavorites() async {
@@ -33,10 +34,10 @@ class PreferenceArticlesWS {
       await _fetchData();
     }
 
-    var rawData = preferencesWS.getString('favorites');
+    var rawData = preferencesWS.getString('favoritesWS');
     if (rawData == null) {
-      await preferencesWS.setString("favorites", "{}");
-      rawData = preferencesWS.getString('favorites');
+      await preferencesWS.setString("favoritesWS", "{}");
+      rawData = preferencesWS.getString('favoritesWS');
     }
     final jsonData = jsonDecode(rawData.toString());
     List<ProductWS> products = [];
@@ -46,13 +47,13 @@ class PreferenceArticlesWS {
 
   Future _fetchData() async {
     preferencesWS = await SharedPreferences.getInstance();
-    //await preferences.setString("favorites", "{}"); // einkommentieren zum favoriten löschen
+    // await preferencesWS.setString("favoritesWS", "{}"); // einkommentieren zum favoriten löschen
   }
 
   Map<String, dynamic> fromCardToJson(ProductWS product) => {
     'product_id': product.productId,
-    'site_id': product.siteId,
-    'date': product.date,
+   // 'site_id': product.siteId,
+   // 'date': product.date.toIso8601String(),
     'currentPrice': product.currentPrice,
     'previousPrice': product.previousPrice,
     'dropPercentage': product.dropPercentage,
@@ -66,8 +67,8 @@ class PreferenceArticlesWS {
   ProductWS fromJsonToProduct(String id, Map<String, dynamic> json) {
     return ProductWS(
       productId: int.parse(id),
-      siteId: json["site_id"],
-      date: json["date"],
+     // siteId: json["site_id"],
+     // date: DateTime.parse(json["date"]),
       currentPrice: json["currentPrice"],
       previousPrice: json["previousPrice"],
       dropPercentage: json["dropPercentage"],

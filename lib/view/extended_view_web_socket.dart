@@ -9,7 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ExtendenViewWebSocket extends StatefulWidget {
   late final int productId;
-  late final int siteId;
+  //late final int siteId;
   late final DateTime date;
   late final String currentPrice;
   late final String previousPrice;
@@ -19,12 +19,12 @@ class ExtendenViewWebSocket extends StatefulWidget {
   late final String productPageUrl;
   late final int categoryId;
   final Stream<bool> stream;
-  //dynamic callback;
+  dynamic callback;
   ProductWS productWs;
 
-  ExtendenViewWebSocket(this.productWs, this.stream) {
+  ExtendenViewWebSocket(this.productWs, this.stream, this.callback) {
     productId = productWs.productId;
-    siteId = productWs.siteId;
+  //  siteId = productWs.siteId;
     currentPrice = productWs.currentPrice;
     previousPrice = productWs.previousPrice;
     dropPercentage = productWs.dropPercentage;
