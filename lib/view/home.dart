@@ -110,35 +110,10 @@ class _HomePageState extends State<HomePage> {
   );
 
   _onUpdateScroll() {
-    /*
-    if (mounted) {
-      setState(() {
-        if (_scrollController.offset <
-            _scrollController.position.maxScrollExtent) {
-          isScrolling = true;
-        } else {
-          isScrolling = false;
-        }
-      });
-    }
-
-     */
-    //print(_scrollController.offset);
-
-    int a = (_scrollController.position.maxScrollExtent - _scrollController.position.pixels).toInt();
-    if (a == 157 ||
-        a == 0 ||
-        a == 69 ||
-    a == 314) {
-      isScrolling = false;
-    } else {
-      print("HERE");
+    setState(() {
+      show = true;
       isScrolling = true;
-      setState(() {
-        show = true;
-      });
-    }
-
+    });
   }
 
   var displayHeight = 0.0;
@@ -289,12 +264,8 @@ class _HomePageState extends State<HomePage> {
                       alignment: Alignment.topCenter,
                       child: NotificationListener<ScrollNotification>(
                         onNotification: (scrollNotification) {
-                          if (scrollNotification is ScrollStartNotification) {
-                          print("NOTIFICATION");
-                          //print("${_scrollController.position.pixels}" +  " " + "${_scrollController.position.maxScrollExtent}");
-                          print(_scrollController.position.maxScrollExtent - _scrollController.position.pixels);
-                          //_scrollController.position.pixels < _scrollController.position.maxScrollExtent ? animate() : null;
-                            _onUpdateScroll();
+                          if (scrollNotification is ScrollUpdateNotification) {
+                            scrollNotification.dragDetails != null ? _onUpdateScroll() : null;
                           }
                           return true;
                         },
@@ -341,9 +312,9 @@ class _HomePageState extends State<HomePage> {
                           onPressed: () {
                             animate();
                             setState(() {
+                              isScrolling = false;
                               show = false;
                             });
-                            //check();
                           },
                           child: const Icon(Icons.arrow_upward),
                           backgroundColor: ThemeChanger.lightBlue,
@@ -404,7 +375,7 @@ class _HomePageState extends State<HomePage> {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
         curve: Curves.easeOut,
-        duration: const Duration(milliseconds: 150),
+        duration: const Duration(milliseconds: 500),
       );
     }
   }
