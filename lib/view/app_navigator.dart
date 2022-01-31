@@ -148,7 +148,7 @@ class AppState extends State<AppNavigator> {
                           padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
                           child: Icon(Icons.account_circle, size: isLargeDevice ? safeBlockHorizontal * 7 : safeBlockHorizontal * 6.5),
                         ),
-                        label: 'Profil',
+                        label: 'Einstellungen',
                       ),
                     ],
                     type: BottomNavigationBarType.fixed,
