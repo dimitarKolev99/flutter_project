@@ -16,7 +16,6 @@ import 'package:penny_pincher/view/extended_view.dart';
 import 'package:penny_pincher/view/subcategory_view.dart';
 import 'package:provider/provider.dart';
 
-import 'filter_view.dart';
 
 class BrowserPage extends StatefulWidget {
   late final Stream<bool> stream;
