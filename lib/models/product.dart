@@ -45,8 +45,8 @@ class Product {
       price: json["price"] != null ? json["price"].toString() : json["currentPrice"].toString(),
       saving: json["saving"] != null ? json["saving"].toString() : json["dropPercentage"].toString(),
       description:json["description"] != null ? json["description"] : "",
-      smallImage: json["images"] != null ? json["images"]["w45h37"][0].toString() : json["productImageUrl"].toString(),
-      bigImage: json["images"] != null ? json["images"]["w60h50"][0].toString() : json["productImageUrl"].toString(),
+      smallImage: json["images"] != null ? json["images"]["w168h140"][0].toString() : json["productImageUrl"].toString(),
+      bigImage: json["images"] != null ? json["images"]["w600h600"][0].toString() : json["productImageUrl"].toString(),
       productPageUrl: json["productPageUrl"] != null ? json["productPageUrl"] : "",
     );
   }

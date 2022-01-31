@@ -133,7 +133,7 @@ class AppState extends State<AppNavigator> {
                           padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
                           child: Icon(AppIcon.view_tile, size: isLargeDevice ? safeBlockHorizontal * 7 : safeBlockHorizontal * 6.5),
                         ),
-                        label: 'Browser',
+                        label: 'Kategorien',
                       ),
                       // TODO: change heart Icon to bookmark_add_outlined ?
                       BottomNavigationBarItem(
@@ -141,7 +141,7 @@ class AppState extends State<AppNavigator> {
                           padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
                           child: Icon(Icons.favorite_outline, size: isLargeDevice ? safeBlockHorizontal * 7 : safeBlockHorizontal * 6.5),
                         ),
-                        label: 'Merkzettel',
+                        label: 'Favoriten',
                       ),
                       BottomNavigationBarItem(
                         icon: Padding(
