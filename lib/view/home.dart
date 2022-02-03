@@ -293,6 +293,7 @@ class _HomePageState extends State<HomePage> {
                               search(listOfProdCat, productFromJson(snapshot.data.toString()));
                               ProductController.addProducts(newProducts);
                               !isScrolling ? animate() : null;
+                             // disableSplashScreen();
                               return ListView.builder(
                                   reverse: true,
                                   shrinkWrap: true,
@@ -399,7 +400,8 @@ class _HomePageState extends State<HomePage> {
 
   firstAppStart() async {
     preferences = await SharedPreferences.getInstance();
-    // await preferences.setBool("nofirstTime", false); // run welcome screen everytime
+    //  TODO: später wieder auskommentieren
+    await preferences.setBool("nofirstTime", false); // run welcome screen everytime
 
     var nofirstTime = preferences.getBool('nofirstTime');
     if (nofirstTime == null) {
