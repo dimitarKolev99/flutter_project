@@ -75,6 +75,7 @@ class PreferencesArticles {
       smallImage: json["smallImage"],
       bigImage: json["bigImage"],
       productPageUrl: json["productPageUrl"],
+      previousPrice: json["previousPrice"],
     );
   }
 }

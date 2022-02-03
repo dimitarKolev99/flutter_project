@@ -16,6 +16,7 @@ class ExtendedView extends StatefulWidget {
   late final String title;
   late final String saving;
   late final String price;
+  late final String previousPrice;
   late final String image;
   late final String description;
   late final String category;
@@ -28,6 +29,7 @@ class ExtendedView extends StatefulWidget {
     this.title = product.title;
     this.saving = product.saving;
     this.price = product.price;
+    this.previousPrice = product.previousPrice;
     this.image = product.bigImage;
     this.description = product.description;
     this.category = product.categoryName;
@@ -171,7 +173,8 @@ class _ExtendedViewState extends State<ExtendedView> {
                                   padding: EdgeInsets.only(
                                       top: 3, bottom: 3, left: 13, right: 10),
                                   child: Text(
-                                    widget.saving.contains("%") ? widget.saving : widget.saving + "%",//"-" + widget.saving.toString() + "%",
+                                    widget.saving != null ? "-" + widget.saving : "",
+                                    //widget.saving.contains("%") ? widget.saving : widget.saving + "%",//"-" + widget.saving.toString() + "%",
                                     style: TextStyle(
                                       color: ThemeChanger.textColor,
                                       fontWeight: FontWeight.bold,
@@ -195,7 +198,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                             ),
                             margin: EdgeInsets.only(left: blockSizeHorizontal * 3),
                             child: Text(
-                              prevPreis.toString() + " €",//prevpreis.toStringAsFixed(2) + "€",//,
+                              widget.previousPrice != "" ? widget.previousPrice : "",//prevpreis.toStringAsFixed(2) + "€",//,
                               style: TextStyle(
                                   decoration: TextDecoration.lineThrough,
                                   fontSize: safeBlockHorizontal * 5.0,

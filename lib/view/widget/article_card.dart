@@ -13,6 +13,7 @@ class ArticleCard extends StatelessWidget {
   late final String title;
   late final String saving;
   late final String price;
+  late final String previousPrice;
   late final String image;
   late final String description;
   late final String category;
@@ -23,6 +24,7 @@ class ArticleCard extends StatelessWidget {
     this.title = product.title;
     this.saving = product.saving;
     this.price = product.price;
+    this.previousPrice = product.previousPrice;
     this.image = product.smallImage;
     this.description = product.description;
     this.category = product.categoryName;
@@ -111,7 +113,7 @@ class ArticleCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(0),
                   ),
                   child:
-                  Text("-" + saving.toString(),
+                  Text("-" + saving,
                     style: TextStyle(
                       color: ThemeChanger.textColor,
                       fontWeight: FontWeight.bold,
@@ -170,7 +172,7 @@ class ArticleCard extends StatelessWidget {
                               margin: EdgeInsets.only(left:  blockSizeHorizontal * 2),
                               width: blockSizeHorizontal * 45,
                               child: Text(
-                                price,//prevpreis.toStringAsFixed(2) + "€",
+                                previousPrice,//prevpreis.toStringAsFixed(2) + "€",
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                     decoration: TextDecoration.lineThrough,
