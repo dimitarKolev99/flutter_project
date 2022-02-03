@@ -296,7 +296,7 @@ class _BrowserPageState extends State<BrowserPage> {
                                       if(chosenCategories.isNotEmpty) {
                                       setState((){
                                           //TODO: Reload Products
-                                          print(chosenCategories[index]);
+                                          //print(chosenCategories[index]);
                                           view.removeFromBrowser(chosenCategories[index]);
                                           removeOneCategory(chosenCategories[index]);
                                           updateBrowserblabla(currentCategory);

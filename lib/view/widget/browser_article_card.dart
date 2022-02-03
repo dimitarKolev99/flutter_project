@@ -31,8 +31,10 @@ class BrowserArticleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+
+
     double newprice = int.parse(price).toDouble()/100;
-    int x = 100 - int.parse(saving).toInt();
+    int x = 100 - int.parse(saving);
     double prevpreis = newprice/x * 100;
 
     MediaQueryData _mediaQueryData = MediaQuery.of(context);;

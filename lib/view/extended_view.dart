@@ -59,6 +59,7 @@ class _ExtendedViewState extends State<ExtendedView> {
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
 
+    /*
     String currentPrice = widget.price;
     int savingToInt = int.parse(widget.saving.replaceFirst(RegExp('%'), '', 0));
     int x = 100 - savingToInt;
@@ -66,6 +67,17 @@ class _ExtendedViewState extends State<ExtendedView> {
     replaceS = replaceS.replaceFirst(RegExp('€'), '', 0);
     double convertToDouble = double.parse(replaceS);
     double prevPreis = convertToDouble / x * 100;
+
+     */
+
+    double newprice = 0.0;
+    double prevpreis = 0.0;
+
+    if (!widget.price.contains(",")) {
+      newprice = int.parse(widget.price).toDouble() / 100;
+      int x = 100 - int.parse(widget.saving);
+      prevpreis = newprice / x * 100;
+    }
 
 
     MediaQueryData _mediaQueryData;
@@ -151,7 +163,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                                       topRight: Radius.circular(5))),
                               margin: EdgeInsets.only(left: blockSizeHorizontal * 3),
                               child: Text(
-                                widget.price.contains("€") ? widget.price : widget.price + " €",//newprice.toStringAsFixed(2) + " €",
+                                widget.price.contains("€") ? widget.price : (int.parse(widget.price) / 100).toStringAsFixed(2) + " €",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: safeBlockHorizontal * 9,
@@ -173,7 +185,8 @@ class _ExtendedViewState extends State<ExtendedView> {
                                   padding: EdgeInsets.only(
                                       top: 3, bottom: 3, left: 13, right: 10),
                                   child: Text(
-                                    widget.saving != null ? "-" + widget.saving : "",
+                                    widget.saving != null  && widget.saving.contains("%") ? "-" + widget.saving
+                                        : "-" + widget.saving + "%",
                                     //widget.saving.contains("%") ? widget.saving : widget.saving + "%",//"-" + widget.saving.toString() + "%",
                                     style: TextStyle(
                                       color: ThemeChanger.textColor,
@@ -198,7 +211,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                             ),
                             margin: EdgeInsets.only(left: blockSizeHorizontal * 3),
                             child: Text(
-                              widget.previousPrice != "" ? widget.previousPrice : "",//prevpreis.toStringAsFixed(2) + "€",//,
+                              widget.previousPrice != "" ? widget.previousPrice : prevpreis.toStringAsFixed(2) + " €",//prevpreis.toStringAsFixed(2) + "€",//,
                               style: TextStyle(
                                   decoration: TextDecoration.lineThrough,
                                   fontSize: safeBlockHorizontal * 5.0,
@@ -255,7 +268,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                       ),
 
 
-                      widget.description != null ?
+                      widget.description != "" ?
                       /// Description
                       Container(
                         //color: Colors.purple,
@@ -276,7 +289,9 @@ class _ExtendedViewState extends State<ExtendedView> {
                               ),
                             )
                         ),
-                      ) : SizedBox(height: 3),
+                      )
+                          :
+                      Text(""),
 
                       /*
                       blockSizeHorizontal = displayWidth / 100;

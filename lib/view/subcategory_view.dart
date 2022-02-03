@@ -215,8 +215,8 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                           widget.categoryId = widget
                                               .callback.widget.mainCategoryIds[index];
                                           widget.callback.bargainsOfChosenCats.clear();
-                                          print(
-                                              "lasdköjflöaksjf ${widget.callback.widget.mainCategoryIds[index]}");
+                                          //print(
+                                            //  "lasdköjflöaksjf ${widget.callback.widget.mainCategoryIds[index]}");
                                           widget.callback.chosenCategories.clear();
                                           Navigator.pushReplacement(
                                               context,

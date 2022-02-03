@@ -109,6 +109,8 @@ class _HomePageState extends State<HomePage> {
     Uri.parse('wss://ika3taif23.execute-api.eu-central-1.amazonaws.com/prod'),
   );
 
+  int a = 124936;
+
   _onUpdateScroll() {
     setState(() {
       show = true;
@@ -156,6 +158,13 @@ class _HomePageState extends State<HomePage> {
     });
     firstAppStart();
     tz.initializeTimeZones();
+
+    /*
+    double b = a.toDouble() / 100;
+    print(b);
+    print(a / 100000);
+
+     */
 
     disableSplashScreen();
   }
