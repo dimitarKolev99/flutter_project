@@ -244,6 +244,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                       ),
                       SizedBox(height: blockSizeVertical * 1),
 
+                      widget.description != "" ?
                       ///Categories
                       Container(
                         //alignment: Alignment.topLeft,// category
@@ -265,7 +266,9 @@ class _ExtendedViewState extends State<ExtendedView> {
                               fontSize: safeBlockHorizontal * 3.3
                           ),
                         ),
-                      ),
+                      )
+                      :
+                      SizedBox(width: 1),
 
 
                       widget.description != "" ?
@@ -291,7 +294,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                         ),
                       )
                           :
-                      Text(""),
+                      SizedBox(width: 1),
 
                       /*
                       blockSizeHorizontal = displayWidth / 100;

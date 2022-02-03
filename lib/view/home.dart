@@ -84,9 +84,10 @@ class _HomePageState extends State<HomePage> {
 
   StreamController<bool> streamController = StreamController<bool>.broadcast();
 
-  late List<ProductWS> newProduct;
-
   late final List<Product> newProducts = [];
+
+  late final List<Product> intermiddVarProd = [];
+
 
   bool _isLoading = true;
   var count = 0;
@@ -159,14 +160,21 @@ class _HomePageState extends State<HomePage> {
     firstAppStart();
     tz.initializeTimeZones();
 
-    /*
-    double b = a.toDouble() / 100;
-    print(b);
-    print(a / 100000);
-
-     */
+    //timerFunction();
 
     disableSplashScreen();
+  }
+
+  Timer? timer;
+
+  void timerFunction() {
+
+    timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+      if (intermiddVarProd.isNotEmpty) {
+        newProducts.insert(count, intermiddVarProd[count]);
+        count++;
+      }
+    });
   }
 
   Future<void> disableSplashScreen() async {
