@@ -58,17 +58,24 @@ class PreferencesArticles {
         'price': product.price,
         'saving': product.saving,
         'description': product.description,
-        'image': product.image,
+        'smallImage': product.smallImage,
+        'bigImage': product.bigImage,
+        'productPageUrl': product.productPageUrl
       };
 
   Product fromJsonToProduct(String id, Map<String, dynamic> json) {
-    return Product(categoryId: json["category_id"],
+    return Product(
+      categoryId: json["category_id"],
       categoryName: json["category_name"],
       productId: int.parse(id),
       title: json["title"],
-      price: json["price"].toDouble(),
+      price: json["price"],
       saving: json["saving"],
       description:json["description"],
-      image: json["image"],);
+      smallImage: json["smallImage"],
+      bigImage: json["bigImage"],
+      productPageUrl: json["productPageUrl"],
+    );
   }
 }
+

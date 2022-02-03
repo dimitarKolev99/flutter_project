@@ -1,39 +1,49 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:penny_pincher/models/product.dart';
+import 'package:penny_pincher/models/ws_product.dart';
 import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/product_api.dart';
+import 'package:penny_pincher/services/product_controller_ws.dart';
 
 import '../theme.dart';
 
 
 
-class ArticleCard extends StatelessWidget {
-  late final int id;
-  late final String title;
-  late final String saving;
-  late final String price;
-  late final String image;
-  late final String description;
-  late final String category;
+class NewArticleCard extends StatelessWidget {
+  late final int productId;
+  late final int siteId;
+  late final DateTime date;
+  late final String currentPrice;
+  late final String previousPrice;
+  late final String dropPercentage;
+  late final String productName;
+  late final String productImageUrl;
+  late final String productPageUrl;
+  late final int categoryId;
   late dynamic callback;
-  Product product;
+  ProductWS productWS;
 
-  ArticleCard(this.product, this.callback){
-    this.title = product.title;
-    this.saving = product.saving;
-    this.price = product.price;
-    this.image = product.smallImage;
-    this.description = product.description;
-    this.category = product.categoryName;
-    this.id = product.productId;
+
+
+  NewArticleCard(this.productWS, this.callback){
+    this.productName = productWS.productName;
+    this.dropPercentage = productWS.dropPercentage;
+    this.currentPrice = productWS.currentPrice;
+    this.productImageUrl = productWS.productImageUrl;
+    //this.description = productWS.description;
+    this.previousPrice = productWS.previousPrice;
+    this.categoryId = productWS.categoryId;
+    this.productId = productWS.productId;
   }
+
+
 
   @override
   Widget build(BuildContext context) {
-    // double newprice = int.parse(price).toDouble()/100;
-    // int x = 100 - int.parse(saving).toInt();
-    // double prevpreis = newprice/x * 100;
+    //double newprice = currentPrice/100;
+    //int x = 100 - currentPrice as int;
+    //double prevpreis = newprice/x * 100;
 
     MediaQueryData _mediaQueryData;
     double displayWidth;
@@ -84,20 +94,18 @@ class ArticleCard extends StatelessWidget {
                 children:[
                   // Product Image
                   Container(
-                    //color: Colors.purple,
-                    //width: blockSizeHorizontal * 30,//displayWidth/3 - 20,
-                    //height: blockSizeVertical * 15,
+                    width: blockSizeHorizontal * 30,//displayWidth/3 - 20,
+                    height: blockSizeVertical * 15,
                     margin: EdgeInsets.only(left: blockSizeHorizontal * 3),//(left: 10),
                     child:
                     ClipRRect(
                       borderRadius: BorderRadius.circular(4.0),
                       child:
                       Image.network(
-                        image,
+                        productImageUrl,
                         //width: blockSizeHorizontal * 50,//displayWidth / 3 - 30,
                         //height: blockSizeHorizontal * 50,//displayWidth / 3 - 30,
                         fit: BoxFit.contain,
-                        width: blockSizeHorizontal*30,
                       ),
                     ),
                   ),
@@ -111,7 +119,7 @@ class ArticleCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(0),
                     ),
                     child:
-                    Text("-" + saving.toString(),
+                    Text("-" + dropPercentage.toString(),
                       style: TextStyle(
                         color: ThemeChanger.textColor,
                         fontWeight: FontWeight.bold,
@@ -136,7 +144,7 @@ class ArticleCard extends StatelessWidget {
                             width: blockSizeHorizontal * 45,//displayWidth/3 ,
                             //height: blockSizeVertical * 10,
                             child: Text(
-                              title,
+                              productName,
                               style: TextStyle(
                                 fontSize: safeBlockHorizontal * 4.5,//16,
                                 color: ThemeChanger.reversetextColor,
@@ -148,29 +156,16 @@ class ArticleCard extends StatelessWidget {
                             ),
                           ),
                           // description
-                          Container(
-                            margin: EdgeInsets.only(left:  blockSizeHorizontal * 2,top: blockSizeVertical * 0.5),
-                            width: blockSizeHorizontal * 45,//displayWidth/3 ,
-                            child: Text(
-                              description,
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontSize: safeBlockHorizontal * 3.25,
-                                color: ThemeChanger.reversetextColor,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                          )
                         ],),
                       Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children:[
                             //old price
                             Container(
                               margin: EdgeInsets.only(left:  blockSizeHorizontal * 2),
                               width: blockSizeHorizontal * 45,
                               child: Text(
-                                price,//prevpreis.toStringAsFixed(2) + "€",
+                                previousPrice,
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                     decoration: TextDecoration.lineThrough,
@@ -186,7 +181,7 @@ class ArticleCard extends StatelessWidget {
                               width: blockSizeHorizontal * 45,
                               child:
                               Text(
-                                price,//.toStringAsFixed(2) + "€",
+                                currentPrice,
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                   fontSize: safeBlockHorizontal * 6.0,//16,
@@ -195,8 +190,11 @@ class ArticleCard extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          ])
-                    ]),
+                          ]
+                      )
+
+                    ]
+                ),
                 //icon
                 Container(
                   //margin: EdgeInsets.only(bottom: blockSizeVertical*5),
@@ -218,10 +216,13 @@ class ArticleCard extends StatelessWidget {
                     child:
                     IconButton(
                       iconSize: 30.0,
-                      icon: (ProductController.isFavorite(id) ?  //
+                      icon: (ProductControllerWS.isFavoriteWS(productId) ?
                       Icon(Icons.favorite, color: Colors.red) :
                       Icon(Icons.favorite_border, color: ThemeChanger.reversetextColor)),
-                      onPressed: _changeFavoriteState,
+                      onPressed: () {
+                        _changeFavoriteStateWS();
+                      }//_changeFavoriteState,
+
                     ),
                     alignment: Alignment.centerRight,
                   ),
@@ -233,11 +234,13 @@ class ArticleCard extends StatelessWidget {
     );
   }
 
-  Future _changeFavoriteState() async {
+  Future _changeFavoriteStateWS() async {
     //await callback.changeFavoriteState(this);
-    ProductController.changeFavoriteState(this, callback);
+    print("WE ARE IN _changeFavoriteStateWS");
+    ProductControllerWS.changeFavoriteStateWS(this, callback);
   }
 }
+
 
 
 

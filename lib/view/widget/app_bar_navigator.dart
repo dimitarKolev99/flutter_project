@@ -6,6 +6,7 @@ import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/view/theme.dart';
 
 import '../browser_view.dart';
+import '../search_view.dart';
 import 'article_search.dart';
 import 'favorite_search.dart';
 
@@ -52,37 +53,13 @@ class HomeBrowserAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       backgroundColor: ThemeChanger.navBarColor,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(width: blockSizeHorizontal * 17.8),
-          Padding(
-            padding: EdgeInsets.only(top: blockSizeVertical * 1),
-            child:
-            Text(
-              'Penny Pincher',
-              style: TextStyle(
-                // Shaddow is used to get Distance to the underline -> TextColor itself is transparent
-                shadows: [
-                  Shadow(
-                      color: Color.fromRGBO(240, 240, 240, 1),
-                      offset: Offset(0, -6))
-                ],
-                //fontFamily: '....',
-                fontSize: safeBlockVertical * 3.5,
-                letterSpacing: safeBlockHorizontal * 0.5,
-                color: Colors.transparent,
-                fontWeight: FontWeight.w900,
-                decoration:
-                TextDecoration.underline,
-                decorationColor: ThemeChanger.highlightedColor,
-                decorationThickness: safeBlockVertical * 0.5,
-              ),
-            ),
+      title: Center(
+        child:
+          Image.asset(
+            'pictures/pp_logo1.png',
+              width: blockSizeHorizontal * 50,
           ),
-          SizedBox(width: safeBlockHorizontal * 4),
 
-        ],
       ),
       actions: [
         IconButton(
@@ -92,9 +69,20 @@ class HomeBrowserAppBar extends StatelessWidget implements PreferredSizeWidget {
             final results =
             showSearch(context: context, delegate: ArticleSearch(true, callback, callback.streamController));
           },
-        )
+        ),
       ],
+
+      leading: callback.widget is BrowserPage ?
+      IconButton(
+        iconSize: safeBlockHorizontal * 7.5,
+        icon: Icon(Icons.bookmarks_outlined),
+        onPressed: () {
+          callback.showSearches = !callback.showSearches;
+          callback.setState(() {});
+          },
+      ) : SizedBox(width:0)
     );
+
   }
 
   @override
@@ -148,31 +136,11 @@ class FavoriteAppBar extends StatelessWidget implements PreferredSizeWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           SizedBox(width: blockSizeHorizontal * 17.8),
-          Padding(
-            padding: EdgeInsets.only(top: blockSizeVertical * 1),
-            child:
-            Text(
-              'Penny Pincher',
-              style: TextStyle(
-                // Shaddow is used to get Distance to the underline -> TextColor itself is transparent
-                shadows: [
-                  Shadow(
-                      color: Color.fromRGBO(240, 240, 240, 1),
-                      offset: Offset(0, -6))
-                ],
-                //fontFamily: '....',
-                fontSize: safeBlockVertical * 3.5,
-                letterSpacing: safeBlockHorizontal * 0.5,
-                color: Colors.transparent,
-                fontWeight: FontWeight.w900,
-                decoration:
-                TextDecoration.underline,
-                decorationColor: ThemeChanger.highlightedColor,
-                decorationThickness: safeBlockVertical * 0.5,
-              ),
-            ),
+          Image.asset(
+            'pictures/pp_logo1.png',
+            width: blockSizeHorizontal * 50,
           ),
-          SizedBox(width: safeBlockHorizontal * 4),
+          SizedBox(width: blockSizeHorizontal * 4),
 
         ],
       ),
@@ -228,33 +196,12 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(width: blockSizeHorizontal * 2.4),
-          Padding(
-            padding: EdgeInsets.only(top: blockSizeVertical * 1),
-            child:
-            Text(
-              'Penny Pincher',
-              style: TextStyle(
-                // Shaddow is used to get Distance to the underline -> TextColor itself is transparent
-                shadows: [
-                  Shadow(
-                      color: Color.fromRGBO(240, 240, 240, 1),
-                      offset: Offset(0, -6))
-                ],
-                //fontFamily: '....',
-                fontSize: safeBlockVertical * 3.5,
-                letterSpacing: safeBlockHorizontal * 0.5,
-                color: Colors.transparent,
-                fontWeight: FontWeight.w900,
-                decoration:
-                TextDecoration.underline,
-                decorationColor: ThemeChanger.highlightedColor,
-                decorationThickness: safeBlockVertical * 0.5,
-              ),
-            ),
+          SizedBox(width: blockSizeHorizontal * 5.6),
+          Image.asset(
+            'pictures/pp_logo1.png',
+            width: blockSizeHorizontal * 50,
           ),
-         // SizedBox(width: safeBlockHorizontal * 3),
-
+          SizedBox(width: blockSizeHorizontal * 4),
         ],
       ),
     );
@@ -298,33 +245,62 @@ class ExtendedViewAppBar extends StatelessWidget implements PreferredSizeWidget 
       title: Row(
         //mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(width: blockSizeHorizontal * 11.9),
-          Padding(
-            padding: EdgeInsets.only(top: blockSizeVertical * 1),
-            child:
-            Text(
-              'Penny Pincher',
-              style: TextStyle(
-                // Shaddow is used to get Distance to the underline -> TextColor itself is transparent
-                shadows: [
-                  Shadow(
-                      color: Color.fromRGBO(240, 240, 240, 1),
-                      offset: Offset(0, -6))
-                ],
-                //fontFamily: '....',
-                fontSize: safeBlockVertical * 3.5,
-                letterSpacing: safeBlockHorizontal * 0.5,
-                color: Colors.transparent,
-                fontWeight: FontWeight.w900,
-                decoration:
-                TextDecoration.underline,
-                decorationColor: ThemeChanger.highlightedColor,
-                decorationThickness: safeBlockVertical * 0.5,
-              ),
-            ),
+          SizedBox(width: blockSizeHorizontal * 7.5),
+          Image.asset(
+            'pictures/pp_logo1.png',
+            width: blockSizeHorizontal * 50,
           ),
-          SizedBox(width: safeBlockHorizontal * 4.5),
+          SizedBox(width: blockSizeHorizontal * 4),
+        ],
+      ),
+    );
+  }
 
+  @override
+  // TODO: change to responsive height
+  Size get preferredSize => Size.fromHeight(55.0);
+
+}
+
+class CategorieViewAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const CategorieViewAppBar({Key? key}) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    MediaQueryData _mediaQueryData;
+    double displayWidth;
+    double displayHeight;
+    double blockSizeHorizontal;
+    double blockSizeVertical;
+
+    double _safeAreaHorizontal;
+    double _safeAreaVertical;
+    double safeBlockHorizontal;
+    double safeBlockVertical;
+
+    _mediaQueryData = MediaQuery.of(context);
+    displayWidth = _mediaQueryData.size.width;
+    displayHeight = _mediaQueryData.size.height;
+    blockSizeHorizontal = displayWidth / 100;
+    blockSizeVertical = displayHeight / 100;
+
+    _safeAreaHorizontal = _mediaQueryData.padding.left + _mediaQueryData.padding.right;
+    _safeAreaVertical = _mediaQueryData.padding.top + _mediaQueryData.padding.bottom;
+    safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
+    safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
+
+    return AppBar(
+      backgroundColor: ThemeChanger.navBarColor,
+      title: Row(
+        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(width: blockSizeHorizontal * 7.5),
+          Image.asset(
+            'pictures/pp_logo2.png',
+            width: blockSizeHorizontal * 50,
+          ),
+          SizedBox(width: blockSizeHorizontal * 4),
         ],
       ),
     );

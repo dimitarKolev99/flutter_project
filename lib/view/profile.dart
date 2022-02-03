@@ -2,6 +2,7 @@ import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/services/notification_service.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
+import 'package:penny_pincher/view/help.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
@@ -14,6 +15,7 @@ import 'package:provider/provider.dart';
 
 import 'package:penny_pincher/view/widget/browser_article_card.dart';
 import 'package:penny_pincher/view/extended_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'about.dart';
 
@@ -30,86 +32,78 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
   @override
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
 
     MediaQueryData _mediaQueryData = MediaQuery.of(context);
-    ;
+
     double displayWidth = _mediaQueryData.size.width;
     double displayHeight = _mediaQueryData.size.height;
     double blockSizeHorizontal = displayWidth / 100; // bildschirmbreite in 1%
     double blockSizeVertical = displayHeight / 100; // bildschirmhöhe in 1%
     return Scaffold(
       //ScreenUtil.init(context, height:896, width:414, allowFontScaling: true);
-      appBar: const ProfileAppBar(),
+      appBar: ProfileAppBar(),
       body: Column(
         children: <Widget>[
-          SizedBox(height: blockSizeVertical * 5),
+          SizedBox(height: blockSizeVertical * 20),
           Expanded(
             child: ListView(
               //padding: EdgeInsets.only(top: 50),
               children: <Widget>[
+
+                //Theme Changer Button
                 Container(
                   height: 50,
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(33),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.6),
-                        offset: Offset(
-                          0.0,
-                          10.0,
-                        ),
-                        blurRadius: 20.0,
-                        spreadRadius: -3.0,
-                      ),
-                    ],
+                    borderRadius: BorderRadius.circular(3),
                     color: ThemeChanger.textColor,
                   ),
                   child:
                   TextButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      var preferences = await SharedPreferences.getInstance();
                       if(_themeChanger.getTheme() == ThemeData.light()){
+                        await preferences.setBool("isLight", false);
                         return _themeChanger.setdarkTheme(ThemeData.dark());
                       }
                       if(_themeChanger.getTheme() == ThemeData.dark()){
+                        await preferences.setBool("isLight", true);
                         return _themeChanger.setlightTheme(ThemeData.light());
                       }
                     },
                     style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(ThemeChanger.textColor),
+                        backgroundColor: MaterialStateProperty.all(ThemeChanger.lightBlue),
                         foregroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 45, 45, 1)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(33),
-                              //side: BorderSide(color: Colors.black)
-                            )
+                                side: BorderSide(
+                                    color: ThemeChanger.navBarColor,
+                                    width: 2,
+                                    style: BorderStyle.solid),
+                                borderRadius:
+                                BorderRadius.circular(3)),
                         ),
                         textStyle: MaterialStateProperty.all(TextStyle(
                           fontSize: 21,
                           fontWeight: FontWeight.w500,
                         ))),
-                    child: Text("Dark/Light Mode"),
+                    child: Text("Dark/Light Mode",style: TextStyle(
+                      color: ThemeChanger.textColor,
+                    ),
+                    ),
                   ),
                 ),
+
+                //Notification Button
                 Container(
                   height: 50,
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(33),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.6),
-                        offset: Offset(
-                          0.0,
-                          10.0,
-                        ),
-                        blurRadius: 20.0,
-                        spreadRadius: -3.0,
-                      ),
-                    ],
+                    borderRadius: BorderRadius.circular(3),
                     color: ThemeChanger.textColor,
                   ),
                   child:
@@ -122,76 +116,68 @@ class _ProfilePageState extends State<ProfilePage> {
                           5);
                     },
                     style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(ThemeChanger.textColor),
+                        backgroundColor: MaterialStateProperty.all(ThemeChanger.lightBlue),
                         foregroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 45, 45, 1)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(33),
-                              //side: BorderSide(color: Colors.black)
-                            )
+                          RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color: ThemeChanger.navBarColor,
+                                  width: 2,
+                                  style: BorderStyle.solid),
+                              borderRadius:
+                              BorderRadius.circular(3)),
                         ),
                         textStyle: MaterialStateProperty.all(TextStyle(
                           fontSize: 21,
                           fontWeight: FontWeight.w500,
                         ))),
-                    child: Text("Notification"),
+                    child: Text("Notification",style: TextStyle(
+                      color: ThemeChanger.textColor,
+                    ),),
                   ),
                 ),
+
+                // Delete search history button
                 Container(
                   height: 50,
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(33),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.6),
-                        offset: Offset(
-                          0.0,
-                          10.0,
-                        ),
-                        blurRadius: 20.0,
-                        spreadRadius: -3.0,
-                      ),
-                    ],
+                    borderRadius: BorderRadius.circular(3),
                     color: ThemeChanger.textColor,
                   ),
                   child:
                   TextButton(
                     onPressed: () {
-
+                      showAlertDialog(context);
                     },
                     style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(ThemeChanger.textColor),
+                        backgroundColor: MaterialStateProperty.all(ThemeChanger.lightBlue),
                         foregroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 45, 45, 1)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(33),
-                              //side: BorderSide(color: Colors.black)
-                            )
+                          RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color: ThemeChanger.navBarColor,
+                                  width: 2,
+                                  style: BorderStyle.solid),
+                              borderRadius:
+                              BorderRadius.circular(3)),
                         ),
                         textStyle: MaterialStateProperty.all(TextStyle(
                           fontSize: 21,
                           fontWeight: FontWeight.w500,
                         ))),
-                    child: Text("Suchverlauf Löschen"),
+                    child: Text("Suchverlauf Löschen",style: TextStyle(
+                      color: ThemeChanger.textColor,
+                    ),),
                   ),
                 ),
+
+                //About button
                 Container(
                   height: 50,
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(33),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.6),
-                        offset: Offset(
-                          0.0,
-                          10.0,
-                        ),
-                        blurRadius: 20.0,
-                        spreadRadius: -3.0,
-                      ),
-                    ],
+                    borderRadius: BorderRadius.circular(3),
                     color: ThemeChanger.textColor,
                   ),
                   child:
@@ -203,58 +189,62 @@ class _ProfilePageState extends State<ProfilePage> {
                       );
                     },
                     style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(ThemeChanger.textColor),
+                        backgroundColor: MaterialStateProperty.all(ThemeChanger.lightBlue),
                         foregroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 45, 45, 1)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(33),
-                              //side: BorderSide(color: Colors.black)
-                            )
+                          RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color: ThemeChanger.navBarColor,
+                                  width: 2,
+                                  style: BorderStyle.solid),
+                              borderRadius:
+                              BorderRadius.circular(3)),
                         ),
                         textStyle: MaterialStateProperty.all(TextStyle(
                           fontSize: 21,
                           fontWeight: FontWeight.w500,
                         ))),
-                    child: Text("About"),
+                    child: Text("About",style: TextStyle(
+                      color: ThemeChanger.textColor,
+                    ),),
                   ),
                 ),
+
+                //Help Button
                 Container(
                   height: 50,
                   margin: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(33),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.6),
-                        offset: Offset(
-                          0.0,
-                          10.0,
-                        ),
-                        blurRadius: 20.0,
-                        spreadRadius: -3.0,
-                      ),
-                    ],
+                    borderRadius: BorderRadius.circular(3),
                     color: ThemeChanger.textColor,
                   ),
                   child:
                   TextButton(
                     onPressed: () {
-
+                      Navigator.push (
+                        context,
+                        MaterialPageRoute(builder: (context) => Help()),
+                      );
                     },
                     style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(ThemeChanger.textColor),
+                        backgroundColor: MaterialStateProperty.all(ThemeChanger.lightBlue),
                         foregroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 45, 45, 1)),
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(33),
-                              //side: BorderSide(color: Colors.black)
-                            )
+                          RoundedRectangleBorder(
+                              side: BorderSide(
+                                  color: ThemeChanger.navBarColor,
+                                  width: 2,
+                                  style: BorderStyle.solid),
+                              borderRadius:
+                              BorderRadius.circular(3)),
                         ),
                         textStyle: MaterialStateProperty.all(TextStyle(
                           fontSize: 21,
                           fontWeight: FontWeight.w500,
                         ))),
-                    child: Text("Help"),
+                    child: Text("Help",style: TextStyle(
+                      color: ThemeChanger.textColor,
+                    ),),
                   ),
                 )
               ],
@@ -264,4 +254,46 @@ class _ProfilePageState extends State<ProfilePage> {
       )
     );
   }
+
+  static showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: const Text("Nein"),
+      onPressed: () {
+        Navigator.of(context, rootNavigator: true).pop('dialog');
+      },
+    );
+    Widget continueButton = TextButton(
+      style: TextButton.styleFrom(
+        primary: Colors.red,
+      ),
+      child: const Text("Ja"),
+      onPressed: () async {
+        Navigator.of(context, rootNavigator: true).pop('dialog');
+        ArticleSearch.deleteAllRecent();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: const Text("Suchverlauf löschen?"),
+      content: const Text(
+          "Willst du wirklich deinen kompletten Textsuchverlauf löschen?"),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
 }

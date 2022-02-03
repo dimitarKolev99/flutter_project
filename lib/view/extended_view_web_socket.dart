@@ -1,70 +1,70 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:penny_pincher/models/product.dart';
-import 'package:penny_pincher/services/product_controller.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:penny_pincher/services/product_api.dart';
+import 'package:penny_pincher/models/ws_product.dart';
+import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'theme.dart';
-import 'widget/article_card.dart';
-
-class ExtendedView extends StatefulWidget {
-  late final int id;
-  late final String title;
-  late final String saving;
-  late final String price;
-  late final String image;
-  late final String description;
-  late final String category;
+class ExtendenViewWebSocket extends StatefulWidget {
+  late final int productId;
+  //late final int siteId;
+  late final DateTime date;
+  late final String currentPrice;
+  late final String previousPrice;
+  late final String dropPercentage;
+  late final String productName;
+  late final String productImageUrl;
+  late final String productPageUrl;
+  late final int categoryId;
   final Stream<bool> stream;
   dynamic callback;
-  Product product;
+  ProductWS productWs;
 
-  ExtendedView(this.product, this.callback, this.stream){
-    this.id = product.productId;
-    this.title = product.title;
-    this.saving = product.saving;
-    this.price = product.price;
-    this.image = product.bigImage;
-    this.description = product.description;
-    this.category = product.categoryName;
+  ExtendenViewWebSocket(this.productWs, this.stream, this.callback) {
+    productId = productWs.productId;
+  //  siteId = productWs.siteId;
+    currentPrice = productWs.currentPrice;
+    previousPrice = productWs.previousPrice;
+    dropPercentage = productWs.dropPercentage;
+    productName = productWs.productName;
+    productImageUrl = productWs.productImageUrl;
+    productPageUrl = productWs.productPageUrl;
+    categoryId = productWs.categoryId;
   }
 
   @override
-  State<ExtendedView> createState() => _ExtendedViewState();
+  State<ExtendenViewWebSocket> createState() => _ExtendenViewWebSocketState();
 }
 
-class _ExtendedViewState extends State<ExtendedView> {
+class _ExtendenViewWebSocketState extends State<ExtendenViewWebSocket> {
+
+
 
   @override
   void initState() {
     super.initState();
     widget.stream.listen((update) {
-      updateExtendedView(update);
+      updateExtendedViewWebSocket(update);
     });
   }
 
-  updateExtendedView(bool update) {
+
+
+
+
+  updateExtendedViewWebSocket(bool update) {
     if (this.mounted) {
       setState(() {});
     }
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
-
-    String currentPrice = widget.price;
-    int savingToInt = int.parse(widget.saving.replaceFirst(RegExp('%'), '', 0));
-    int x = 100 - savingToInt;
-    String replaceS = currentPrice.replaceFirst(RegExp(','), '.', 0);
-    replaceS = replaceS.replaceFirst(RegExp('€'), '', 0);
-    double convertToDouble = double.parse(replaceS);
-    double prevPreis = convertToDouble / x * 100;
-
 
     MediaQueryData _mediaQueryData;
     double displayWidth;
@@ -123,7 +123,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                         alignment: Alignment.centerLeft,
                         margin: EdgeInsets.only(left: blockSizeHorizontal * 3, top: blockSizeVertical * 1),
                         child: Text(
-                            widget.title,
+                            widget.productName,
                             textAlign: TextAlign.left,
                             style: GoogleFonts.roboto(
                               textStyle: TextStyle(
@@ -149,7 +149,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                                       topRight: Radius.circular(5))),
                               margin: EdgeInsets.only(left: blockSizeHorizontal * 3),
                               child: Text(
-                                widget.price.contains("€") ? widget.price : widget.price + " €",//newprice.toStringAsFixed(2) + " €",
+                                widget.currentPrice,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: safeBlockHorizontal * 9,
@@ -171,7 +171,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                                   padding: EdgeInsets.only(
                                       top: 3, bottom: 3, left: 13, right: 10),
                                   child: Text(
-                                    widget.saving.contains("%") ? widget.saving : widget.saving + "%",//"-" + widget.saving.toString() + "%",
+                                    "-" + widget.dropPercentage,
                                     style: TextStyle(
                                       color: ThemeChanger.textColor,
                                       fontWeight: FontWeight.bold,
@@ -195,7 +195,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                             ),
                             margin: EdgeInsets.only(left: blockSizeHorizontal * 3),
                             child: Text(
-                              prevPreis.toString() + " €",//prevpreis.toStringAsFixed(2) + "€",//,
+                              widget.previousPrice,
                               style: TextStyle(
                                   decoration: TextDecoration.lineThrough,
                                   fontSize: safeBlockHorizontal * 5.0,
@@ -216,10 +216,10 @@ class _ExtendedViewState extends State<ExtendedView> {
                       ///IMAGE
                       Center(
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(6.0),
-                          //color: Colors.grey,
+                            borderRadius: BorderRadius.circular(6.0),
+                            //color: Colors.grey,
                             child: Image.network(
-                              widget.image,
+                              widget.productImageUrl,
                               width: displayWidth * 0.6,
                               height: displayWidth * 0.6,
                               fit: BoxFit.contain,
@@ -228,6 +228,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                       ),
                       SizedBox(height: blockSizeVertical * 1),
 
+                      /*
                       ///Categories
                       Container(
                         //alignment: Alignment.topLeft,// category
@@ -252,7 +253,8 @@ class _ExtendedViewState extends State<ExtendedView> {
                       ),
 
 
-                      widget.description != null ?
+
+
                       /// Description
                       Container(
                         //color: Colors.purple,
@@ -273,7 +275,9 @@ class _ExtendedViewState extends State<ExtendedView> {
                               ),
                             )
                         ),
-                      ) : SizedBox(height: 3),
+                      ),
+
+                       */
 
                       /*
                       blockSizeHorizontal = displayWidth / 100;
@@ -281,63 +285,63 @@ class _ExtendedViewState extends State<ExtendedView> {
                        */
                       SizedBox(height: blockSizeVertical * 0.5),
                       Container(
-                          height: blockSizeVertical * 10,
-                          width: blockSizeHorizontal * 100,
-                          //color: Colors.red,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(left: blockSizeHorizontal * 2),
-                                width: blockSizeHorizontal * 81.5,
-                                height: blockSizeVertical * 8,
-                                child: TextButton(
-                                    onPressed: _launchURL,
-                                    child: Text(
-                                      "Zum Angebot",
-                                      style: TextStyle(
-                                        fontSize: safeBlockHorizontal * 5,
-                                        color: ThemeChanger.textColor,
-                                      ),
+                        height: blockSizeVertical * 10,
+                        width: blockSizeHorizontal * 100,
+                        //color: Colors.red,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(left: blockSizeHorizontal * 2),
+                              width: blockSizeHorizontal * 81.5,
+                              height: blockSizeVertical * 8,
+                              child: TextButton(
+                                  onPressed: _launchURL,
+                                  child: Text(
+                                    "Zum Angebot",
+                                    style: TextStyle(
+                                      fontSize: safeBlockHorizontal * 5,
+                                      color: ThemeChanger.textColor,
                                     ),
-                                    style: TextButton.styleFrom(
-                                      //fontWeight: FontWeight.bold,
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: blockSizeHorizontal * 20, vertical: blockSizeVertical * 1),
-                                      backgroundColor: ThemeChanger.lightBlue,
-                                      shape: RoundedRectangleBorder(
-                                          side: BorderSide(
-                                              color: ThemeChanger.navBarColor,
-                                              width: 2,
-                                              style: BorderStyle.solid),
-                                          borderRadius:
-                                          BorderRadius.circular(3)),
-                                    )
+                                  ),
+                                  style: TextButton.styleFrom(
+                                    //fontWeight: FontWeight.bold,
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: blockSizeHorizontal * 20, vertical: blockSizeVertical * 1),
+                                    backgroundColor: ThemeChanger.lightBlue,
+                                    shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                            color: ThemeChanger.navBarColor,
+                                            width: 2,
+                                            style: BorderStyle.solid),
+                                        borderRadius:
+                                        BorderRadius.circular(3)),
+                                  )
 
-                                ),
                               ),
-                              Container(
-                                height: blockSizeVertical * 7.9,
-                                //margin: EdgeInsets.only(right: 10),
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: ThemeChanger.navBarColor, width: 2, style: BorderStyle.solid),
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: ThemeChanger.lightBlue,
-                                ),
-                                child: IconButton(
-                                  iconSize: safeBlockHorizontal * 7,
-                                  icon: (ProductController.isFavorite(widget.id)
-                                      ? const Icon(Icons.favorite,
-                                      color: Colors.red)
-                                      : const Icon(Icons.favorite_border,
-                                      color: Colors.white)),
-                                  onPressed: _changeFavoriteState,
-                                ),
+                            ),
+                            Container(
+                              height: blockSizeVertical * 7.9,
+                              //margin: EdgeInsets.only(right: 10),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: ThemeChanger.navBarColor, width: 2, style: BorderStyle.solid),
+                                borderRadius: BorderRadius.circular(5),
+                                color: ThemeChanger.lightBlue,
                               ),
-                              SizedBox(height: blockSizeVertical * 0.5),
-                            ],
-                          ),
+                              child: IconButton(
+                                iconSize: safeBlockHorizontal * 7,
+                                icon: (//ProductController.isFavorite(widget.id)
+                                   // ? const Icon(Icons.favorite,
+                                   // color: Colors.red)
+                                    const Icon(Icons.favorite_border, //:
+                                    color: Colors.white)),
+                                onPressed: () {} //_changeFavoriteState,
+                              ),
+                            ),
+                            SizedBox(height: blockSizeVertical * 0.5),
+                          ],
                         ),
+                      ),
                     ]
                 )
             )
@@ -345,15 +349,10 @@ class _ExtendedViewState extends State<ExtendedView> {
     );
   }
 
-  Future _changeFavoriteState() async {
-    ArticleCard articleCard = ArticleCard(widget.product, widget.callback);
-    ProductController.changeFavoriteState(articleCard, widget.callback);
-  }
-
   // creating specific URL and launching it from available browser apps
   _launchURL() async {
     String url = 'https://www.idealo.de/preisvergleich/OffersOfProduct/' +
-        widget.id.toString();
+        widget.productId.toString();
     if (await canLaunch(url)) {
       await launch(url);
     } else {

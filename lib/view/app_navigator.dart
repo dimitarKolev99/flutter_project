@@ -44,7 +44,6 @@ class AppState extends State<AppNavigator> {
 
 
 
-
   @override
   Widget build(context) {
     MediaQueryData _mediaQueryData;
@@ -151,6 +150,7 @@ class AppState extends State<AppNavigator> {
                         icon: Padding(
                           padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
                           child: Icon(Icons.bookmarks_outlined,  size: isWeb ? iconSize = safeBlockHorizontal * 1.9 : iconSize),
+
                         ),
                         label: 'Merkzettel',
                       ),

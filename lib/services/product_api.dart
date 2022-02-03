@@ -5,7 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:penny_pincher/models/product.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:penny_pincher/models/ws_product.dart';
 import 'package:penny_pincher/services/json_functions.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ProductApi {
 
@@ -31,6 +33,8 @@ class ProductApi {
   int resultID = 0;
   bool stop = true;
 
+  List<ProductWS> products = [];
+
   findBargains(List<dynamic> fromUri) {
         String name = "";
         int id = 0;
@@ -52,65 +56,113 @@ class ProductApi {
 
           }
         });
-      }
+  }
 
-      Future<List<Product>> fetchProduct(int categoryID) async {
-        //print("call APi");
+  fetchProductWebSocket()  {
 
-        final response = await rootBundle.loadString('lib/resources/cat_tree1.json');
-        Map<String, dynamic> myMap = Map<String, dynamic>.from(json.decode(response));
+    final channel = WebSocketChannel.connect(
+      Uri.parse('wss://ika3taif23.execute-api.eu-central-1.amazonaws.com/prod'),
+    );
 
-        List<dynamic> resultList = myMap["result"];
-        JsonFunctions testFunctions = JsonFunctions();
-        // TODO: Test Call !
-
-        //testFunctions.getMapOfSubOrProductCategories(1760, resultList);
-
-
-       // print("CATEGORYID: $categoryID");
-
-        final response2 = await http.get(Uri.parse(
-            "https://usjm35yny3.execute-api.eu-central-1.amazonaws.com/dev/pp-bargains?maxItems=20&minSaving=1&categoryIds=$categoryID"));
-
+    /*
         Map<String, dynamic> map = Map<String, dynamic>.from(json.decode(response2.body));
         List<dynamic> fromUri = map["result"]; //TODO: InternalLinkedHashMap Error from here
         findBargains(fromUri);
-        //List<dynamic> bargains = findBargains(fromUri);
 
-    
-        return bargains.map((data) => Product.fromJson(data)).toList();
-      }
+        */
+    /*channel.stream.listen(
+        (data) {
+          products.add(productFromJson(data));
+          print(data);
+        },
+      onError: (error) => print(error),
+    );*/
 
-      Future<List<Product>> getProduct(int categoryID, String query) async {
-       // print("call APi");
+    return channel;
+  }
 
-        final response = await rootBundle.loadString('lib/resources/cat_tree1.json');
-        Map<String, dynamic> myMap = Map<String, dynamic>.from(json.decode(response));
+  Future<List<Product>> fetchProduct(int categoryID) async {
+    final response = await rootBundle.loadString('lib/resources/cat_tree1.json');
+    Map<String, dynamic> myMap = Map<String, dynamic>.from(json.decode(response));
 
-        List<dynamic> resultList = myMap["result"];
-        JsonFunctions testFunctions = JsonFunctions();
-        // TODO: Test Call !
+    List<dynamic> resultList = myMap["result"];
+    JsonFunctions testFunctions = JsonFunctions();
+    final response2 = await http.get(Uri.parse(
+        "https://usjm35yny3.execute-api.eu-central-1.amazonaws.com/dev/pp-bargains?maxItems=20&minSaving=1&categoryIds=$categoryID"));
 
-        //testFunctions.getMapOfSubOrProductCategories(1760, resultList);
+    Map<String, dynamic> map = Map<String, dynamic>.from(json.decode(response2.body));
+    List<dynamic> fromUri = map["result"]; //TODO: InternalLinkedHashMap Error from here
+    findBargains(fromUri);
+    return bargains.map((data) => Product.fromJson(data)).toList();
+  }
+
+  Future<List<Product>> getProduct(int categoryID, String query) async {
+   // print("call APi");
+
+    final response = await rootBundle.loadString('lib/resources/cat_tree1.json');
+    Map<String, dynamic> myMap = Map<String, dynamic>.from(json.decode(response));
+
+    List<dynamic> resultList = myMap["result"];
+    JsonFunctions testFunctions = JsonFunctions();
+    // TODO: Test Call !
+
+    //testFunctions.getMapOfSubOrProductCategories(1760, resultList);
 
 
-       // print("CATEGORYID: $categoryID");
+   // print("CATEGORYID: $categoryID");
 
-        final response2 = await http.get(Uri.parse(
-            "https://usjm35yny3.execute-api.eu-central-1.amazonaws.com/dev/pp-bargains?maxItems=20&minSaving=5&categoryIds=$categoryID"));
+    final response2 = await http.get(Uri.parse(
+        "https://usjm35yny3.execute-api.eu-central-1.amazonaws.com/dev/pp-bargains?maxItems=20&minSaving=5&categoryIds=$categoryID"));
 
-        Map<String, dynamic> map = Map<String, dynamic>.from(json.decode(response2.body));
-        List<dynamic> fromUri = map["result"]; //TODO: InternalLinkedHashMap Error from here
-        findBargains(fromUri);
-        //List<dynamic> bargains = findBargains(fromUri);
+    Map<String, dynamic> map = Map<String, dynamic>.from(json.decode(response2.body));
+    List<dynamic> fromUri = map["result"]; //TODO: InternalLinkedHashMap Error from here
+    findBargains(fromUri);
+    //List<dynamic> bargains = findBargains(fromUri);
 
-    
-        return bargains.map((data) => Product.fromJson(data)).where((bargains){
-        final productTitle = bargains.title.toLowerCase();
-        final searchLower = query.toLowerCase();
 
-        return productTitle.contains(searchLower);
-        }).toList();
-      }
+    return bargains.map((data) => Product.fromJson(data)).where((bargains){
+    final productTitle = bargains.title.toLowerCase();
+    final searchLower = query.toLowerCase();
+
+    return productTitle.contains(searchLower);
+    }).toList();
+  }
+
+  Future<List<Product>> getFilterProducts(int categoryID, int saving, int minPrice, int maxPrice) async {
+   // print("call APi");
+
+    final response = await rootBundle.loadString('lib/resources/cat_tree1.json');
+    Map<String, dynamic> myMap = Map<String, dynamic>.from(json.decode(response));
+
+    List<dynamic> resultList = myMap["result"];
+    JsonFunctions testFunctions = JsonFunctions();
+    // TODO: Test Call !
+
+    //testFunctions.getMapOfSubOrProductCategories(1760, resultList);
+
+
+   // print("CATEGORYID: $categoryID");
+
+    final response2 = await http.get(Uri.parse(
+        "https://usjm35yny3.execute-api.eu-central-1.amazonaws.com/dev/pp-bargains?maxItems=20&minSaving=5&categoryIds=$categoryID"));
+
+    Map<String, dynamic> map = Map<String, dynamic>.from(json.decode(response2.body));
+    List<dynamic> fromUri = map["result"]; //TODO: InternalLinkedHashMap Error from here
+    findBargains(fromUri);
+    //List<dynamic> bargains = findBargains(fromUri);
+
+
+    final startIndex = 0;
+
+    return bargains.map((data) => Product.fromJson(data)).where((bargains){
+    final productPrice = int.parse(bargains.price);
+    final productSaving = int.parse(bargains.saving);
+
+    //print("PRICERANGE-------------------------$productPrice, $minPrice, $maxPrice, $saving");
+
+    return productSaving >= saving && productPrice >= minPrice && productPrice <= maxPrice;
+    //return productSaving >= saving;
+    }).toList();
+  }
 }
 

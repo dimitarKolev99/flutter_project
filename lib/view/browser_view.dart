@@ -3,6 +3,7 @@ import 'package:penny_pincher/models/preferences_articles.dart';
 import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/models/product.dart';
+import 'package:penny_pincher/view/search_view.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
 import 'package:penny_pincher/view/widget/article_card.dart';
@@ -15,14 +16,11 @@ import 'package:penny_pincher/view/extended_view.dart';
 import 'package:penny_pincher/view/subcategory_view.dart';
 import 'package:provider/provider.dart';
 
-import 'filter_view.dart';
 
 class BrowserPage extends StatefulWidget {
   late final Stream<bool> stream;
   late final StreamController updateStream;
   int _currentProductId;
-
-
 
   BrowserPage(this.stream, this.updateStream, this._currentProductId);
 
@@ -56,6 +54,7 @@ class BrowserPage extends StatefulWidget {
     "Haushaltselektronik",
     "Sport & Outdoor"
   ];
+
   List<int> mainCategoryIds = [
     30311, //
     3932,
@@ -80,10 +79,65 @@ class _BrowserPageState extends State<BrowserPage> {
   bool _isLoading = true;
   var count = 0;
   Timer? _timer;
+  int saving = 0;
+  int maxPrice = 10000;
+  int minPrice = 0;
+
+  bool showSearches = false;
+
+  late SubcategoryView view;
 
   final _preferenceArticles = PreferencesArticles();
 
+  // This map is necessary because we need to know the id and the name of the chosen Cats
+  Map<String, dynamic> mapOfChosenCategories = new Map();
   List<String> chosenCategories = [];
+
+  // Map has int with the id of the chosen category, and a List of bargains as value
+  Map<int, Iterable<Product>> bargainsOfChosenCats = new Map();
+  int numberOfProducts = 0;
+
+  // Whenever a productcategory gets selected this function should add all Products of the category to the Map
+  Future<void> addProductsOfChosenCategory(int categoryId)async {
+    Iterable<Product> products = await ProductApi().getFilterProducts(categoryId, saving, minPrice, maxPrice);
+    bargainsOfChosenCats[categoryId] = products;
+    numberOfProducts += products.length;
+    view.state.setState(() { });
+  }
+
+  Future<void> changePrice() async{
+    bargainsOfChosenCats.forEach((key, value) async {
+      numberOfProducts = 0;
+
+      Iterable<Product> products = await ProductApi().getFilterProducts(key, saving, minPrice, maxPrice);
+      bargainsOfChosenCats[key] = products;
+      numberOfProducts += products.length;
+      view.updateStream.add(true);
+      view.state.setState(() { });
+    });
+  }
+
+  // Whenever a productcategory gets unselcted this function should delete all Products of the category to the Map
+  //TODO: Does this wotk with the ?.clear() to delete the products
+  void deleteProductsOfChosenCategory(int categoryID){
+    // call this if in browserView -> sets state of browserView instead of SubcatView
+      Iterable<Product>? products = bargainsOfChosenCats[categoryID];
+      if(products!=null){
+      numberOfProducts -= products.length;
+      bargainsOfChosenCats.remove(categoryID);
+      setState(() { });
+    }
+  }
+
+  void deleteProductsOfChosenCategoryFromView(int categoryID){
+    // call this if in subcatView -> sets state of subcatView instead of browserView
+    Iterable<Product>? products = bargainsOfChosenCats[categoryID];
+    if(products!=null){
+      numberOfProducts -= products.length;
+      bargainsOfChosenCats.remove(categoryID);
+      view.state.setState(() { });
+    }
+  }
 
   String getMainCategoryName(int i){
     return widget.mainCategoryNames[i];
@@ -93,25 +147,26 @@ class _BrowserPageState extends State<BrowserPage> {
     return widget.mainCategoryIds[i];
   }
 
-  void addCategory(String s){
+  void addCategory(String s, int id){
     //chosenCategories.add(s);
     //TODO: change to propper working category List, this is juts to show only the last cat
+    mapOfChosenCategories[s] = id;
     chosenCategories.add(s);
+    //print(chosenCategories);
+
   }
 
-  void removeOneCategory(String s ){
+  void removeOneCategory(String s){
     int index = chosenCategories.indexOf(s);
-    //print("removing : ! ${s}");
     chosenCategories.remove(chosenCategories[index]);
-  }
-
-  void deleteCategory(String s){
-    int index = chosenCategories.indexOf(s);
-    for(int i = chosenCategories.length-1; i >= index ; i--){
-      chosenCategories.remove(chosenCategories[i]);
+    int? id = mapOfChosenCategories[s];
+    if(id != null) {
+      //print("works");
+      deleteProductsOfChosenCategory(id);
     }
+    mapOfChosenCategories.remove(s);
+    //print(chosenCategories);
   }
-
 
   @override
   void initState() {
@@ -128,11 +183,9 @@ class _BrowserPageState extends State<BrowserPage> {
       }
     });
     getProducts(widget._currentProductId);
-    print("CALLED FROM BROWSER VIEW");
   }
 
   Future<void> getProducts(int categoryID) async {
-    _product = await ProductApi().fetchProduct(categoryID);
     List<Product> favorites = await _preferenceArticles.getAllFavorites();
     for (var i in favorites) {
       if (!_favoriteIds.contains(i.productId)) {
@@ -145,7 +198,10 @@ class _BrowserPageState extends State<BrowserPage> {
         _isLoading = false;
       });
     }
-    _products.addAll(_product);
+    // iterate map for each value of map add All
+    bargainsOfChosenCats.forEach((key, value) {
+      _products.addAll(value);
+    });
     ProductController.addProducts(_products);
   }
 
@@ -158,16 +214,20 @@ class _BrowserPageState extends State<BrowserPage> {
   @override
   Widget build(BuildContext context) {
 
-    print("got the new categorie : ${widget._currentProductId}");
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     MediaQueryData _mediaQueryData = MediaQuery.of(context);
     double displayWidth = _mediaQueryData.size.width;
     double displayHeight = _mediaQueryData.size.height;
     double blockSizeHorizontal = displayWidth / 100; // screen width in 1%
     double blockSizeVertical = displayHeight / 100; // screen height in 1%
+
     return Scaffold(
         appBar: HomeBrowserAppBar(this),
-        body: Column(
+
+        body:
+        showSearches ? SearchView(this)
+            :
+        Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             //MainCategories to click to get to edit the filter categories / search
@@ -175,7 +235,7 @@ class _BrowserPageState extends State<BrowserPage> {
               alignment: Alignment.topCenter,
               child: Container(
                 color: ThemeChanger.lightBlue,
-                height: 35,
+                height: 40,
                 width: displayWidth,
                 //TODO:ListView Bulider to show the route of the categories, works only for choosing 1 Prod. Cat.
 
@@ -187,20 +247,25 @@ class _BrowserPageState extends State<BrowserPage> {
                     itemBuilder: (context, index) {
                       return InkWell(
                           onTap: () {
-                            chosenCategories = [];
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SubcategoryView(
-                                    categoryName:
-                                        widget.mainCategoryNames[index],
-                                    categoryId: widget.mainCategoryIds[index],
-                                    stream: widget.stream,
-                                    updateStream: widget.updateStream,
-                                    callback: this,
-                                  ),
-                                ));
-                          },
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      if(chosenCategories.isEmpty) {
+                                        view = SubcategoryView(
+                                          widget.mainCategoryIds[index],
+                                          widget.mainCategoryNames[index],
+                                          widget.stream,
+                                          widget.updateStream,
+                                          this,
+                                          );
+                                        numberOfProducts = 0;
+                                      }
+                                      return view;
+                                      },
+
+                                  ));
+                            },
                           child:
                               Container(
                               decoration: BoxDecoration(
@@ -214,34 +279,35 @@ class _BrowserPageState extends State<BrowserPage> {
                               mainAxisAlignment : MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                              chosenCategories.isEmpty? widget.mainCategoryNames[index] : chosenCategories[index],
-                              style: TextStyle(
-                                color: chosenCategories.isEmpty? ThemeChanger.navBarColor : ThemeChanger.articlecardbackground,
-                                //fontWeight:  !chosenCategories.isEmpty && index == chosenCategories.length-1?  FontWeight.w600 :FontWeight.normal,
-                                fontWeight:  FontWeight.w400,
-                              ),
-                              ),
-                                chosenCategories.isEmpty?
-                                SizedBox(width: 0,):
+                                    chosenCategories.isEmpty? widget.mainCategoryNames[index] : chosenCategories[index],
+                                    style: TextStyle(
+                                      color: chosenCategories.isEmpty? ThemeChanger.catTextColor : ThemeChanger.textColor,
+                                      fontWeight:  FontWeight.w400,
+                                    ),
+                                  ),
+
+                                chosenCategories.isEmpty? SizedBox(width: 0,):
                                 IconButton(
                                   alignment: Alignment.centerRight,
                                     constraints: const BoxConstraints(),
                                     padding : const EdgeInsets.only(top: 1.3),
                                     onPressed: (){
-                                  setState((){
-                                    if(!chosenCategories.isEmpty) {
-                                      //TODO: Reload Products
-                                      removeOneCategory(chosenCategories[index]);
-                                      updateBrowserblabla(currentCategory);
-                                    }
-                                  });},
-                                icon: Icon(Icons.clear, size: 18, color: ThemeChanger.articlecardbackground,) )
+                                      if(chosenCategories.isNotEmpty) {
+                                      setState((){
+                                          //TODO: Reload Products
+                                          print(chosenCategories[index]);
+                                          view.removeFromBrowser(chosenCategories[index]);
+                                          removeOneCategory(chosenCategories[index]);
+                                          updateBrowserblabla(currentCategory);
+
+                                        }
+                                      );}
+                                  },
+                                icon: Icon(Icons.clear, size: 18, color: ThemeChanger.textColor,) )
+
                               ],
                             ),
-
-
-
-                          ));
+                           ));
 
 
                     }),
@@ -249,9 +315,34 @@ class _BrowserPageState extends State<BrowserPage> {
             ),
 
 
+            // If no Products are in the chosen categories or no category is chosen
+            _products.isEmpty?
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: blockSizeVertical*20),
+                  Icon(Icons.edit_outlined, color: Colors.grey, size: 80),
+                  SizedBox(height: 30),
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                            text:
+                            "Du hast noch keine Kategorie ausgewählt.\n \nMit klick auf die Oberkategorien,\n kannst du deine Suche starten.",
+                            style: TextStyle(
+                                fontSize: 18, color: ThemeChanger.reversetextColor)),
+                        ],
+                    ),
+                  )
+                ],
+              ),
+            )
 
 
-
+            :
             // This Grid View is supposed to show the main categories on top of the screen in the browser view
             Expanded(
               child: GridView.count(
@@ -262,12 +353,15 @@ class _BrowserPageState extends State<BrowserPage> {
                 children: List.generate(_products.length, (index) {
                   return InkWell(
                       onTap: () {
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => ExtendedView(_products[index], this, streamController.stream)),
                         );
                         streamController.add(true);
+
+
                       },
                       child: BrowserArticleCard(_products[index], this));
                 }),
@@ -276,10 +370,21 @@ class _BrowserPageState extends State<BrowserPage> {
           ],
         ));
   }
+
   void updateBrowserblabla(int catID){
     _products.clear();
     widget._currentProductId = catID;
     getProducts(widget._currentProductId);
     setState(() {});
+  }
+
+  void setSaving(int saving){
+    this.saving = saving;
+  }
+
+  void setPriceRange(int minPrice, int maxPrice){
+    //print("PRICESPRICERANGE-------------------------------$minPrice, $maxPrice");
+    this.minPrice = minPrice;
+    this.maxPrice = maxPrice;
   }
 }
