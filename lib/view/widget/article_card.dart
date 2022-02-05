@@ -92,6 +92,11 @@ class ArticleCard extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(4.0),
                       child:
+                        Image(image: AssetImage('pictures/htw_logo.jpg'),
+                          fit: BoxFit.contain,
+                          width: blockSizeHorizontal*30,
+                        ),
+                          /*
                       Image.network(
                         image,
                         //width: blockSizeHorizontal * 50,//displayWidth / 3 - 30,
@@ -99,6 +104,8 @@ class ArticleCard extends StatelessWidget {
                         fit: BoxFit.contain,
                         width: blockSizeHorizontal*30,
                       ),
+
+                           */
                     ),
                   ),
                   // % Badge

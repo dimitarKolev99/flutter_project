@@ -259,70 +259,73 @@ class _HomePageState extends State<HomePage> {
               ),
               Expanded(
                 child:
-                Stack(children: [
-                  Align(
-                      alignment: Alignment.topCenter,
-                      child: NotificationListener<ScrollNotification>(
-                        onNotification: (scrollNotification) {
-                          if (scrollNotification is ScrollUpdateNotification) {
-                            scrollNotification.dragDetails != null ? _onUpdateScroll() : null;
-                          }
-                          return true;
-                        },
-                        child: StreamBuilder(
-                          stream: channel.stream,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              search(listOfProdCat, productFromJson(snapshot.data.toString()));
-                              ProductController.addProducts(newProducts);
-                              !isScrolling ? animate() : null;
-                              return ListView.builder(
-                                  reverse: true,
-                                  shrinkWrap: true,
-                                  controller: _scrollController,
-                                  itemCount: newProducts.length,
-                                  itemBuilder: (context, index) {
-                                    return InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ExtendedView(newProducts[index], this, streamController.stream,)
-                                            ),
-                                          );
-                                        },
-                                        child: ArticleCard(newProducts[index], this));
-                                  });
-                            } else {
-                              return const Align(
-                                  alignment: Alignment.center,
-                                  child: CircularProgressIndicator());
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: displayWidth / 6),
+                  child: Stack(children: [
+                    Align(
+                        alignment: Alignment.topCenter,
+                        child: NotificationListener<ScrollNotification>(
+                          onNotification: (scrollNotification) {
+                            if (scrollNotification is ScrollUpdateNotification) {
+                              scrollNotification.dragDetails != null ? _onUpdateScroll() : null;
                             }
+                            return true;
                           },
-                        ),
+                          child: StreamBuilder(
+                            stream: channel.stream,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                search(listOfProdCat, productFromJson(snapshot.data.toString()));
+                                ProductController.addProducts(newProducts);
+                                !isScrolling ? animate() : null;
+                                return ListView.builder(
+                                    reverse: true,
+                                    shrinkWrap: true,
+                                    controller: _scrollController,
+                                    itemCount: newProducts.length,
+                                    itemBuilder: (context, index) {
+                                      return InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ExtendedView(newProducts[index], this, streamController.stream,)
+                                              ),
+                                            );
+                                          },
+                                          child: ArticleCard(newProducts[index], this));
+                                    });
+                              } else {
+                                return const Align(
+                                    alignment: Alignment.center,
+                                    child: CircularProgressIndicator());
+                              }
+                            },
+                          ),
 
-                      )
-                  ),
-                  Align(
-                      alignment: Alignment.bottomRight,
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: show ? FloatingActionButton(
-                          onPressed: () {
-                            animate();
-                            setState(() {
-                              isScrolling = false;
-                              show = false;
-                            });
-                          },
-                          child: const Icon(Icons.arrow_upward),
-                          backgroundColor: ThemeChanger.lightBlue,
-                        ) : null
-                      ),
-                  ),
+                        )
+                    ),
+                    Align(
+                        alignment: Alignment.bottomRight,
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: show ? FloatingActionButton(
+                            onPressed: () {
+                              animate();
+                              setState(() {
+                                isScrolling = false;
+                                show = false;
+                              });
+                            },
+                            child: const Icon(Icons.arrow_upward),
+                            backgroundColor: ThemeChanger.lightBlue,
+                          ) : null
+                        ),
+                    ),
               ]
-                      ),
+                        ),
+                ),
                   ),
 
               ]
