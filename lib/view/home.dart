@@ -3,7 +3,6 @@ import 'package:penny_pincher/models/ws_product.dart';
 import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/json_functions.dart';
 import 'package:penny_pincher/models/product.dart';
-import 'package:penny_pincher/services/product_controller_ws.dart';
 import 'package:penny_pincher/view/theme.dart';
 import 'package:penny_pincher/view/welcome_screen.dart';
 import 'package:penny_pincher/view/widget/app_bar_navigator.dart';
@@ -84,9 +83,10 @@ class _HomePageState extends State<HomePage> {
 
   StreamController<bool> streamController = StreamController<bool>.broadcast();
 
-  late List<ProductWS> newProduct;
-
   late final List<Product> newProducts = [];
+
+  late final List<Product> intermiddVarProd = [];
+
 
   bool _isLoading = true;
   var count = 0;
@@ -109,6 +109,8 @@ class _HomePageState extends State<HomePage> {
     Uri.parse('wss://ika3taif23.execute-api.eu-central-1.amazonaws.com/prod'),
   );
 
+  int a = 124936;
+
   _onUpdateScroll() {
     setState(() {
       show = true;
@@ -118,7 +120,7 @@ class _HomePageState extends State<HomePage> {
 
   var displayHeight = 0.0;
 
-   void check()  {
+  void check()  {
     Future.delayed(const Duration(seconds: 7), () {
       show = true;
     });
@@ -152,12 +154,26 @@ class _HomePageState extends State<HomePage> {
         setState(() {
           ProductController.updateFavorites(this);
         });
-       }
+      }
     });
     firstAppStart();
     tz.initializeTimeZones();
 
+    //timerFunction();
+
     disableSplashScreen();
+  }
+
+  Timer? timer;
+
+  void timerFunction() {
+
+    timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+      if (intermiddVarProd.isNotEmpty) {
+        newProducts.insert(count, intermiddVarProd[count]);
+        count++;
+      }
+    });
   }
 
   Future<void> disableSplashScreen() async {
@@ -215,8 +231,8 @@ class _HomePageState extends State<HomePage> {
       );
     } else {
       return Scaffold(
-          appBar: HomeBrowserAppBar(this),
-          body: Column(
+        appBar: HomeBrowserAppBar(this),
+        body: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Align(
@@ -266,8 +282,8 @@ class _HomePageState extends State<HomePage> {
                         alignment: Alignment.topCenter,
                         child: NotificationListener<ScrollNotification>(
                           onNotification: (scrollNotification) {
-                            if (scrollNotification is ScrollUpdateNotification) {
-                              scrollNotification.dragDetails != null ? _onUpdateScroll() : null;
+                            if (scrollNotification is UserScrollNotification ) {
+                              scrollNotification != null ? _onUpdateScroll() : null;
                             }
                             return true;
                           },
@@ -278,10 +294,12 @@ class _HomePageState extends State<HomePage> {
                                 search(listOfProdCat, productFromJson(snapshot.data.toString()));
                                 ProductController.addProducts(newProducts);
                                 !isScrolling ? animate() : null;
+                                // disableSplashScreen();
                                 return ListView.builder(
                                     reverse: true,
                                     shrinkWrap: true,
-                                    controller: _scrollController,
+                                    controller: widget.callback.controller,
+                                    //controller: _scrollController,
                                     itemCount: newProducts.length,
                                     itemBuilder: (context, index) {
                                       return InkWell(
@@ -307,8 +325,8 @@ class _HomePageState extends State<HomePage> {
                         )
                     ),
                     Align(
-                        alignment: Alignment.bottomRight,
-                        child: Padding(
+                      alignment: Alignment.bottomRight,
+                      child: Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: show ? FloatingActionButton(
                             onPressed: () {
@@ -321,15 +339,15 @@ class _HomePageState extends State<HomePage> {
                             child: const Icon(Icons.arrow_upward),
                             backgroundColor: ThemeChanger.lightBlue,
                           ) : null
-                        ),
+                      ),
                     ),
-              ]
-                        ),
-                ),
+                  ]
                   ),
+                ),
+              ),
 
-              ]
-          ),
+            ]
+        ),
       );
     }
   }
@@ -355,12 +373,12 @@ class _HomePageState extends State<HomePage> {
     }
     await preferences.setStringList("categories", categoriesList);
 
-        setState(() {
-          _jsonFunctions.getListOfProdCatIDs(_selectedItems)
-              .then((value) {
-            listOfProdCat = value;
-          });
-        });
+    setState(() {
+      _jsonFunctions.getListOfProdCatIDs(_selectedItems)
+          .then((value) {
+        listOfProdCat = value;
+      });
+    });
 
   }
 
@@ -374,9 +392,10 @@ class _HomePageState extends State<HomePage> {
 
   void animate() {
     isScrolling = false;
-    if (_scrollController.hasClients  && _scrollController.position.pixels < _scrollController.position.maxScrollExtent) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
+    if (widget.callback.controller.hasClients  &&
+        widget.callback.controller.position.pixels < widget.callback.controller.position.maxScrollExtent) {
+      widget.callback.controller.animateTo(
+        widget.callback.controller.position.maxScrollExtent,
         curve: Curves.easeOut,
         duration: const Duration(milliseconds: 500),
       );
@@ -385,7 +404,7 @@ class _HomePageState extends State<HomePage> {
 
   firstAppStart() async {
     preferences = await SharedPreferences.getInstance();
-    // await preferences.setBool("nofirstTime", false); // run welcome screen everytime
+    //  await preferences.setBool("nofirstTime", false); // run welcome screen everytime
 
     var nofirstTime = preferences.getBool('nofirstTime');
     if (nofirstTime == null) {
@@ -426,10 +445,10 @@ class _HomePageState extends State<HomePage> {
 
   void search(List<int> list, Product product) {
     for (int i = 0; i < list.length; i++) {
-        if (!productIdList.contains(product.productId) && list[i] == product.categoryId) {
-          newProducts.add(product);
-          productIdList.add(product.productId);
-        }
+      if (!productIdList.contains(product.productId) && list[i] == product.categoryId) {
+        newProducts.add(product);
+        productIdList.add(product.productId);
+      }
     }
   }
 

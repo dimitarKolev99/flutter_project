@@ -13,6 +13,7 @@ class ArticleCard extends StatelessWidget {
   late final String title;
   late final String saving;
   late final String price;
+  late final String previousPrice;
   late final String image;
   late final String description;
   late final String category;
@@ -20,6 +21,7 @@ class ArticleCard extends StatelessWidget {
   Product product;
   var isWeb = false;
 
+  /*
   Widget titleSection = Container(
     padding: const EdgeInsets.all(32),
     child: Row(
@@ -46,19 +48,19 @@ class ArticleCard extends StatelessWidget {
               ],
             )
         ),
-        Icon(
-          Icons.star,
-          color: Colors.red[500],
-        ),
+        iconButton,
         const Text('41'),
       ],
     ),
   );
 
+
+   */
   ArticleCard(this.product, this.callback){
     this.title = product.title;
     this.saving = product.saving;
     this.price = product.price;
+    this.previousPrice = product.previousPrice;
     this.image = product.smallImage;
     this.description = product.description;
     this.category = product.categoryName;
@@ -95,6 +97,12 @@ class ArticleCard extends StatelessWidget {
     safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
 
+     Widget iconButton = IconButton(
+      color: Colors.red[500],
+      onPressed: () { _changeFavoriteState(); },
+      icon: Icon(Icons.favorite),
+    );
+
 
     //BAD Code: make a class Responsive instead
     if (displayWidth > 412) {
@@ -104,7 +112,8 @@ class ArticleCard extends StatelessWidget {
     }
 
     //
-/*
+
+    /*
     return Container(
         margin: EdgeInsets.symmetric(horizontal: blockSizeHorizontal * 3, vertical: blockSizeVertical * 0.5),
         height: blockSizeVertical * 20,
@@ -165,15 +174,15 @@ class ArticleCard extends StatelessWidget {
                       color: ThemeChanger.highlightedColor,  // const Color.fromRGBO(23, 41, 111, 0.8),
                       borderRadius: BorderRadius.circular(0),
                     ),
-                    child:
-                    Text("-" + saving.toString(),
-                      style: TextStyle(
-                        color: ThemeChanger.textColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: safeBlockHorizontal * 4,
-                      ),
+                  child:
+                  Text("-" + saving,
+                    style: TextStyle(
+                      color: ThemeChanger.textColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: safeBlockHorizontal * 4,
                     ),
                   ),
+                  )
                 ]
             ),
             Stack(
@@ -225,7 +234,7 @@ class ArticleCard extends StatelessWidget {
                               margin: EdgeInsets.only(left:  blockSizeHorizontal * 2),
                               width: blockSizeHorizontal * 45,
                               child: Text(
-                                price,//prevpreis.toStringAsFixed(2) + "€",
+                                previousPrice,//prevpreis.toStringAsFixed(2) + "€",
                                 textAlign: TextAlign.left,
                                 style: TextStyle(
                                     decoration: TextDecoration.lineThrough,
@@ -287,16 +296,40 @@ class ArticleCard extends StatelessWidget {
         )
     );
 
- */
-    return Column(
-      children: [
-        Image.asset(
-          'pictures/htw_logo.jpg',
-          height: displayHeight,
-        ),
-        titleSection,
-      ],
+     */
+
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: blockSizeHorizontal * 3, vertical: blockSizeVertical * 0.5),
+      height: blockSizeVertical * 45,
+      decoration: BoxDecoration(
+        color: ThemeChanger.articlecardbackground,
+        borderRadius: BorderRadius.circular(3),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.6),
+            offset: Offset(
+              0.0,
+              10.0,
+            ),
+            blurRadius: 10.0,
+            spreadRadius: -6.0,
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Image.asset(
+            'pictures/htw_logo.jpg',
+            fit: BoxFit.cover,
+            width: displayWidth / 2,
+            height: 200,
+          ),
+          IconSection(_changeFavoriteState()),
+        ],
+      ),
     );
+
+
   }
 
 
@@ -304,6 +337,54 @@ class ArticleCard extends StatelessWidget {
   Future _changeFavoriteState() async {
     //await callback.changeFavoriteState(this);
     ProductController.changeFavoriteState(this, callback);
+  }
+}
+
+class IconSection extends StatelessWidget {
+  dynamic method;
+  IconSection(method) {
+    this.method = method;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Container(
+      padding: const EdgeInsets.all(32),
+      child: Row(
+        children: [
+          Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: const Text(
+                      "title",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    "description",
+                    style: TextStyle(
+                      color: Colors.grey[500],
+                    ),
+                  ),
+                ],
+              )
+          ),
+          IconButton(
+            color: Colors.red[500],
+            onPressed: () { method; },
+            icon: Icon(Icons.favorite),
+          ),
+          const Text('41'),
+        ],
+      ),
+    );
+
   }
 }
 

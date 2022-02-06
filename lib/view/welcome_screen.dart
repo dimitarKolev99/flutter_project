@@ -37,13 +37,19 @@ class _WelcomePageState extends State<WelcomePage> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    double screenHeightPercentage = screenHeight / 100;
+    double screenWidthPercentage = screenWidth / 100;
+
     return Stack(
       children: <Widget>[
         Column(
           children: <Widget>[
             Expanded(
               child: ListView(children: <Widget>[
-                SizedBox(height: 30),
+                SizedBox(height: screenHeightPercentage * 5),
                 const Align(
                   alignment: Alignment.topCenter,
                   child: Text(
@@ -56,8 +62,9 @@ class _WelcomePageState extends State<WelcomePage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 45),
+                SizedBox(height: screenHeightPercentage * 7),
                 Container(
+                  color: Colors.blue,
                     child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -74,7 +81,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(Icons.ad_units, size: 40),
-                            SizedBox(height: 10),
+                            SizedBox(height: screenHeightPercentage * 1.5),
                             Text(
                               "Elektroartikel",
                               style: TextStyle(fontSize: 15),
@@ -85,7 +92,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(MdiIcons.pill, size: 40),
-                            SizedBox(height: 10),
+                            SizedBox(height: screenHeightPercentage * 1.5),
                             Text(
                               "Drogerie",
                               style: TextStyle(fontSize: 15),
@@ -96,7 +103,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(MdiIcons.flowerTulip, size: 40),
-                            SizedBox(height: 10),
+                            SizedBox(height: screenHeightPercentage * 1.5),
                             Text(
                               "Garten",
                               style: TextStyle(fontSize: 15),
@@ -107,7 +114,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(MdiIcons.tshirtCrew, size: 40),
-                            SizedBox(height: 10),
+                            SizedBox(height: screenHeightPercentage * 1.5),
                             Text(
                               "Mode",
                               style: TextStyle(fontSize: 15),
@@ -141,8 +148,9 @@ class _WelcomePageState extends State<WelcomePage> {
                     ),
                   ],
                 )),
-                const SizedBox(height: 40),
+                SizedBox(height: screenHeightPercentage * 8),
                 Container(
+                  color: Colors.red,
                     child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -159,7 +167,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(MdiIcons.paw, size: 40),
-                            SizedBox(height: 10),
+                            SizedBox(height: screenHeightPercentage * 1.5),
                             Text(
                               "Tierbedarf",
                               style: TextStyle(fontSize: 15),
@@ -170,7 +178,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(MdiIcons.controllerClassic, size: 40),
-                            SizedBox(height: 10),
+                            SizedBox(height: screenHeightPercentage * 1.5),
                             Text(
                               "Gaming",
                               style: TextStyle(fontSize: 15),
@@ -181,7 +189,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(MdiIcons.food, size: 40),
-                            SizedBox(height: 10),
+                            SizedBox(height: screenHeightPercentage * 1.5),
                             Text(
                               "Essen",
                               style: TextStyle(fontSize: 15),
@@ -192,7 +200,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(MdiIcons.babyCarriage, size: 40),
-                            SizedBox(height: 10),
+                            SizedBox(height: screenHeightPercentage * 1.5),
                             Text(
                               "Baby",
                               style: TextStyle(fontSize: 15),
@@ -226,8 +234,9 @@ class _WelcomePageState extends State<WelcomePage> {
                     ),
                   ],
                 )),
-                const SizedBox(height: 45),
+                SizedBox(height: screenHeightPercentage * 8),
                 Container(
+                  color: Colors.green,
                     child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -244,7 +253,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(MdiIcons.car, size: 40),
-                            SizedBox(height: 10),
+                            SizedBox(height: screenHeightPercentage * 1.5),
                             Text(
                               "Auto",
                               style: TextStyle(fontSize: 15),
@@ -255,7 +264,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(MdiIcons.vacuum, size: 40),
-                            SizedBox(height: 10),
+                            SizedBox(height: screenHeightPercentage * 1.5),
                             Text(
                               "Haushaltselektronik",
                               style: TextStyle(fontSize: 15),
@@ -266,7 +275,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(MdiIcons.tennis, size: 40),
-                            SizedBox(height: 10),
+                            SizedBox(height: screenHeightPercentage * 1.5),
                             Text(
                               "Sport",
                               style: TextStyle(fontSize: 15),
@@ -311,7 +320,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Container(
-                        height: 50,
+                        height: screenHeightPercentage * 6.5,
                         margin:
                             EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                         decoration: BoxDecoration(
@@ -376,7 +385,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 30),
+                      SizedBox(height: screenHeightPercentage * 5),
                     ],
                   ),
                 )),

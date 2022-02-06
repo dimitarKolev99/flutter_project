@@ -46,22 +46,23 @@ class PreferencesArticles {
   }
 
   Future _fetchData() async {
-      preferences = await SharedPreferences.getInstance();
-      //await preferences.setString("favorites", "{}"); // einkommentieren zum favoriten löschen
+    preferences = await SharedPreferences.getInstance();
+    await preferences.setString("favorites", "{}"); // einkommentieren zum favoriten löschen
   }
 
   Map<String, dynamic> fromCardToJson(Product product) => {
-        'category_id': product.categoryId,
-        'category_name': product.categoryName,
-        'productId': product.productId,
-        'title': product.title,
-        'price': product.price,
-        'saving': product.saving,
-        'description': product.description,
-        'smallImage': product.smallImage,
-        'bigImage': product.bigImage,
-        'productPageUrl': product.productPageUrl
-      };
+    'category_id': product.categoryId,
+    'category_name': product.categoryName,
+    'productId': product.productId,
+    'title': product.title,
+    'price': product.price,
+    'saving': product.saving,
+    'description': product.description,
+    'smallImage': product.smallImage,
+    'bigImage': product.bigImage,
+    'productPageUrl': product.productPageUrl,
+    'previousPrice': product.previousPrice
+  };
 
   Product fromJsonToProduct(String id, Map<String, dynamic> json) {
     return Product(
@@ -75,7 +76,7 @@ class PreferencesArticles {
       smallImage: json["smallImage"],
       bigImage: json["bigImage"],
       productPageUrl: json["productPageUrl"],
+      previousPrice: json["previousPrice"],
     );
   }
 }
-

@@ -45,9 +45,9 @@ class _FavoritePageState extends State<FavoritePage> {
 
   // NEW WEB SOCKET
   final _preferenceArticlesWs = PreferenceArticlesWS();
- // List<ProductWS> favoriteProductsWS = [];
+  // List<ProductWS> favoriteProductsWS = [];
 
- // List<dynamic> allFavoritesProducts = [];
+  // List<dynamic> allFavoritesProducts = [];
 
   @override
   void initState() {
@@ -63,12 +63,12 @@ class _FavoritePageState extends State<FavoritePage> {
 
   getData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-   // SharedPreferences presWS = await SharedPreferences.getInstance();
+    // SharedPreferences presWS = await SharedPreferences.getInstance();
     List<Product> saved = await _preferenceArticles.getAllFavorites();
     //List<ProductWS> savedWs = await _preferenceArticlesWs.getAllFavorites();
     favoriteProducts.clear();
     favoriteProducts.addAll(saved);
-   // favoriteProductsWS.addAll(savedWs);
+    // favoriteProductsWS.addAll(savedWs);
     setState(() {
       // displayName = prefs.getStringList('displayName');
     });
@@ -78,9 +78,9 @@ class _FavoritePageState extends State<FavoritePage> {
   }
 
   //putListsTogether(List<Product> listProduct, List<ProductWS> listProductsWs) async {
- //   allFavoritesProducts.addAll(listProduct);
+  //   allFavoritesProducts.addAll(listProduct);
   //  allFavoritesProducts.addAll(listProductsWs);
- // }
+  // }
 
 /* //TODO DO NOT DELETE! TEMPLATE FOR FURTHER REAFCTORING
   Future <void> getProducts() async {

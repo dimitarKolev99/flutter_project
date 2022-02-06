@@ -31,8 +31,10 @@ class BrowserArticleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+
+
     double newprice = int.parse(price).toDouble()/100;
-    int x = 100 - int.parse(saving).toInt();
+    int x = 100 - int.parse(saving);
     double prevpreis = newprice/x * 100;
 
     MediaQueryData _mediaQueryData = MediaQuery.of(context);;
@@ -83,10 +85,10 @@ class BrowserArticleCard extends StatelessWidget {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(4.0),
                         child:
-                        Image.network(
-                          image,
-                          width: blockSizeHorizontal * 33.33,
-                          fit: BoxFit.fill,
+                        Image.asset(
+                          'pictures/htw_logo.jpg',
+                          width: 50,
+                          height: 50,
                         ),
                       ),
                       alignment: Alignment.topCenter,

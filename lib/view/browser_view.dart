@@ -295,7 +295,7 @@ class _BrowserPageState extends State<BrowserPage> {
                                       if(chosenCategories.isNotEmpty) {
                                       setState((){
                                           //TODO: Reload Products
-                                          print(chosenCategories[index]);
+                                          //print(chosenCategories[index]);
                                           view.removeFromBrowser(chosenCategories[index]);
                                           removeOneCategory(chosenCategories[index]);
                                           updateBrowserblabla(currentCategory);
@@ -345,26 +345,29 @@ class _BrowserPageState extends State<BrowserPage> {
             :
             // This Grid View is supposed to show the main categories on top of the screen in the browser view
             Expanded(
-              child: GridView.count(
-                // Create a grid with 2 columns. If you change the scrollDirection to
-                // horizontal, this produces 2 rows.
-                crossAxisCount: 2,
-                childAspectRatio: 0.75,
-                children: List.generate(_products.length, (index) {
-                  return InkWell(
-                      onTap: () {
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: displayWidth / 4),
+                child: GridView.count(
+                  // Create a grid with 2 columns. If you change the scrollDirection to
+                  // horizontal, this produces 2 rows.
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.75,
+                  children: List.generate(_products.length, (index) {
+                    return InkWell(
+                        onTap: () {
 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ExtendedView(_products[index], this, streamController.stream)),
-                        );
-                        streamController.add(true);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ExtendedView(_products[index], this, streamController.stream)),
+                          );
+                          streamController.add(true);
 
 
-                      },
-                      child: BrowserArticleCard(_products[index], this));
-                }),
+                        },
+                        child: BrowserArticleCard(_products[index], this));
+                  }),
+                ),
               ),
             )
           ],

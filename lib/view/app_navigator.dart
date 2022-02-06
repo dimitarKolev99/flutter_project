@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:penny_pincher/services/app_icons.dart';
 import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/view/theme.dart';
+import 'package:penny_pincher/view/widget/scroll_to_hide_widget.dart';
 import 'package:penny_pincher/view/widget/tab_navigator.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +17,7 @@ class AppNavigator extends StatefulWidget {
 }
 
 class AppState extends State<AppNavigator> {
+  late ScrollController controller;
   bool _isLoading = true;
   bool isLargeDevice = true;
   bool isWeb = false;
@@ -42,7 +44,19 @@ class AppState extends State<AppNavigator> {
     }
   }
 
+  @override
+  void initState() {
+    super.initState();
 
+    controller = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(context) {
@@ -111,59 +125,62 @@ class AppState extends State<AppNavigator> {
           return isFirstRouteInCurrentTab;
         },
         child: Scaffold(
-          body: Stack(children: <Widget>[
-            _buildOffstageNavigator("Page1"),
-            _buildOffstageNavigator("Page2"),
-            _buildOffstageNavigator("Page3"),
-            _buildOffstageNavigator("Page4"),
-          ]),
+          body: Stack(
+              children: <Widget>[
+              _buildOffstageNavigator("Page1"),
+              _buildOffstageNavigator("Page2"),
+              _buildOffstageNavigator("Page3"),
+              _buildOffstageNavigator("Page4"),
+              ]
+          ),
           bottomNavigationBar: _isLoading
               ? SizedBox()
-              : SizedBox(
-                  height: isWeb ? (displayHeight / 100) * 9 : sizedBoxHeight,
-                  child: BottomNavigationBar(
-                    selectedItemColor: ThemeChanger.highlightedColor,
-                    unselectedItemColor: ThemeChanger.textColor,
-                    iconSize: safeBlockHorizontal * 6,
-                    backgroundColor: ThemeChanger.navBarColor,
-                    onTap: (int index) {
-                      _selectTab(pageKeys[index], index);
-                    },
-                    currentIndex: _selectedIndex,
-                    items: [
-                      BottomNavigationBarItem(
-                        icon: Padding(
-                          padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
-                          child: Icon(Icons.update, size: isWeb ? iconSize = safeBlockHorizontal * 1.9 : iconSize),
-                        ),
-                        label: 'LiveFeed',
+              : ScrollToHideWidget(
+                controller: controller,
+                height: isWeb ? (displayHeight / 100) * 9 : sizedBoxHeight,
+                child: BottomNavigationBar(
+                  selectedItemColor: ThemeChanger.highlightedColor,
+                  unselectedItemColor: ThemeChanger.textColor,
+                  iconSize: safeBlockHorizontal * 6,
+                  backgroundColor: ThemeChanger.navBarColor,
+                  onTap: (int index) {
+                    _selectTab(pageKeys[index], index);
+                  },
+                  currentIndex: _selectedIndex,
+                  items: [
+                    BottomNavigationBarItem(
+                      icon: Padding(
+                        padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
+                        child: Icon(Icons.update, size: isWeb ? iconSize = safeBlockHorizontal * 1.9 : iconSize),
                       ),
-                      BottomNavigationBarItem(
-                        icon: Padding(
-                          padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
-                          child: Icon(AppIcon.view_tile, size: isWeb ? iconSize = safeBlockHorizontal * 1.9 : iconSize),
-                        ),
-                        label: 'Browser',
+                      label: 'LiveFeed',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Padding(
+                        padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
+                        child: Icon(AppIcon.view_tile, size: isWeb ? iconSize = safeBlockHorizontal * 1.9 : iconSize),
                       ),
-                      // TODO: change heart Icon to bookmark_add_outlined ?
-                      BottomNavigationBarItem(
-                        icon: Padding(
-                          padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
-                          child: Icon(Icons.bookmarks_outlined,  size: isWeb ? iconSize = safeBlockHorizontal * 1.9 : iconSize),
+                      label: 'Kategorien',
+                    ),
+                    // TODO: change heart Icon to bookmark_add_outlined ?
+                    BottomNavigationBarItem(
+                      icon: Padding(
+                        padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
+                        child: Icon(Icons.bookmarks_outlined,  size: isWeb ? iconSize = safeBlockHorizontal * 1.9 : iconSize),
 
-                        ),
-                        label: 'Merkzettel',
                       ),
-                      BottomNavigationBarItem(
-                        icon: Padding(
-                          padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
-                          child: Icon(Icons.account_circle, size: isWeb ? iconSize = safeBlockHorizontal * 1.9 : iconSize),
-                        ),
-                        label: 'Profil',
+                      label: 'Favoriten',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Padding(
+                        padding: EdgeInsets.only(bottom: safeBlockBottom * 0.5),
+                        child: Icon(Icons.account_circle, size: isWeb ? iconSize = safeBlockHorizontal * 1.9 : iconSize),
                       ),
-                    ],
-                    type: BottomNavigationBarType.fixed,
-                  ),
+                      label: 'Einstellungen',
+                    ),
+                  ],
+                  type: BottomNavigationBarType.fixed,
+                ),
               ),
         )
     );

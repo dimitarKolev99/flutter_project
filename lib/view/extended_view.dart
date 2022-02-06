@@ -16,6 +16,7 @@ class ExtendedView extends StatefulWidget {
   late final String title;
   late final String saving;
   late final String price;
+  late final String previousPrice;
   late final String image;
   late final String description;
   late final String category;
@@ -28,6 +29,7 @@ class ExtendedView extends StatefulWidget {
     this.title = product.title;
     this.saving = product.saving;
     this.price = product.price;
+    this.previousPrice = product.previousPrice;
     this.image = product.bigImage;
     this.description = product.description;
     this.category = product.categoryName;
@@ -57,6 +59,7 @@ class _ExtendedViewState extends State<ExtendedView> {
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
 
+    /*
     String currentPrice = widget.price;
     int savingToInt = int.parse(widget.saving.replaceFirst(RegExp('%'), '', 0));
     int x = 100 - savingToInt;
@@ -64,6 +67,17 @@ class _ExtendedViewState extends State<ExtendedView> {
     replaceS = replaceS.replaceFirst(RegExp('€'), '', 0);
     double convertToDouble = double.parse(replaceS);
     double prevPreis = convertToDouble / x * 100;
+
+     */
+
+    double newprice = 0.0;
+    double prevpreis = 0.0;
+
+    if (!widget.price.contains(",")) {
+      newprice = int.parse(widget.price).toDouble() / 100;
+      int x = 100 - int.parse(widget.saving);
+      prevpreis = newprice / x * 100;
+    }
 
 
     MediaQueryData _mediaQueryData;
@@ -149,7 +163,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                                       topRight: Radius.circular(5))),
                               margin: EdgeInsets.only(left: blockSizeHorizontal * 3),
                               child: Text(
-                                widget.price.contains("€") ? widget.price : widget.price + " €",//newprice.toStringAsFixed(2) + " €",
+                                widget.price.contains("€") ? widget.price : (int.parse(widget.price) / 100).toStringAsFixed(2) + " €",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: safeBlockHorizontal * 9,
@@ -171,7 +185,9 @@ class _ExtendedViewState extends State<ExtendedView> {
                                   padding: EdgeInsets.only(
                                       top: 3, bottom: 3, left: 13, right: 10),
                                   child: Text(
-                                    widget.saving.contains("%") ? widget.saving : widget.saving + "%",//"-" + widget.saving.toString() + "%",
+                                    widget.saving != null  && widget.saving.contains("%") ? "-" + widget.saving
+                                        : "-" + widget.saving + "%",
+                                    //widget.saving.contains("%") ? widget.saving : widget.saving + "%",//"-" + widget.saving.toString() + "%",
                                     style: TextStyle(
                                       color: ThemeChanger.textColor,
                                       fontWeight: FontWeight.bold,
@@ -195,7 +211,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                             ),
                             margin: EdgeInsets.only(left: blockSizeHorizontal * 3),
                             child: Text(
-                              prevPreis.toString() + " €",//prevpreis.toStringAsFixed(2) + "€",//,
+                              widget.previousPrice != "" ? widget.previousPrice : prevpreis.toStringAsFixed(2) + " €",//prevpreis.toStringAsFixed(2) + "€",//,
                               style: TextStyle(
                                   decoration: TextDecoration.lineThrough,
                                   fontSize: safeBlockHorizontal * 5.0,
@@ -228,6 +244,7 @@ class _ExtendedViewState extends State<ExtendedView> {
                       ),
                       SizedBox(height: blockSizeVertical * 1),
 
+                      widget.description != "" ?
                       ///Categories
                       Container(
                         //alignment: Alignment.topLeft,// category
@@ -249,10 +266,12 @@ class _ExtendedViewState extends State<ExtendedView> {
                               fontSize: safeBlockHorizontal * 3.3
                           ),
                         ),
-                      ),
+                      )
+                      :
+                      SizedBox(width: 1),
 
 
-                      widget.description != null ?
+                      widget.description != "" ?
                       /// Description
                       Container(
                         //color: Colors.purple,
@@ -273,7 +292,9 @@ class _ExtendedViewState extends State<ExtendedView> {
                               ),
                             )
                         ),
-                      ) : SizedBox(height: 3),
+                      )
+                          :
+                      SizedBox(width: 1),
 
                       /*
                       blockSizeHorizontal = displayWidth / 100;

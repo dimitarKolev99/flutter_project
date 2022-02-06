@@ -215,8 +215,8 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                           widget.categoryId = widget
                                               .callback.widget.mainCategoryIds[index];
                                           widget.callback.bargainsOfChosenCats.clear();
-                                          print(
-                                              "lasdköjflöaksjf ${widget.callback.widget.mainCategoryIds[index]}");
+                                          //print(
+                                            //  "lasdköjflöaksjf ${widget.callback.widget.mainCategoryIds[index]}");
                                           widget.callback.chosenCategories.clear();
                                           Navigator.pushReplacement(
                                               context,
@@ -257,8 +257,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
 
                     // Price and Discount
                     Container(
-                      padding:
-                      EdgeInsets.symmetric(horizontal: blockSizeHorizontal * 2),
+                      padding: EdgeInsets.symmetric(horizontal: blockSizeHorizontal * 2),
                       child: Column(
                         children: [
                           // Title for Price-Slider

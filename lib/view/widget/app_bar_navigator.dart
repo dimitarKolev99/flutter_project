@@ -57,7 +57,7 @@ class HomeBrowserAppBar extends StatelessWidget implements PreferredSizeWidget {
         child:
           Image.asset(
             'pictures/pp_logo1.png',
-              width: blockSizeHorizontal * 50,
+              width: blockSizeHorizontal * 10,
           ),
 
       ),
@@ -138,7 +138,7 @@ class FavoriteAppBar extends StatelessWidget implements PreferredSizeWidget {
           SizedBox(width: blockSizeHorizontal * 17.8),
           Image.asset(
             'pictures/pp_logo1.png',
-            width: blockSizeHorizontal * 50,
+            width: blockSizeHorizontal * 10,
           ),
           SizedBox(width: blockSizeHorizontal * 4),
 
@@ -199,7 +199,7 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
           SizedBox(width: blockSizeHorizontal * 5.6),
           Image.asset(
             'pictures/pp_logo1.png',
-            width: blockSizeHorizontal * 50,
+            width: blockSizeHorizontal * 10,
           ),
           SizedBox(width: blockSizeHorizontal * 4),
         ],

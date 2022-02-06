@@ -47,7 +47,7 @@ class PreferenceArticlesWS {
 
   Future _fetchData() async {
     preferencesWS = await SharedPreferences.getInstance();
-    // await preferencesWS.setString("favoritesWS", "{}"); // einkommentieren zum favoriten löschen
+    await preferencesWS.setString("favoritesWS", "{}"); // einkommentieren zum favoriten löschen
   }
 
   Map<String, dynamic> fromCardToJson(ProductWS product) => {
