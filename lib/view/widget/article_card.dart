@@ -18,6 +18,42 @@ class ArticleCard extends StatelessWidget {
   late final String category;
   late dynamic callback;
   Product product;
+  var isWeb = false;
+
+  Widget titleSection = Container(
+    padding: const EdgeInsets.all(32),
+    child: Row(
+      children: [
+        Expanded(
+            child: Column(
+             crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: const Text(
+                    "title",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Text(
+                  "description",
+                  style: TextStyle(
+                    color: Colors.grey[500],
+                  ),
+                ),
+              ],
+            )
+        ),
+        Icon(
+          Icons.star,
+          color: Colors.red[500],
+        ),
+        const Text('41'),
+      ],
+    ),
+  );
 
   ArticleCard(this.product, this.callback){
     this.title = product.title;
@@ -29,11 +65,13 @@ class ArticleCard extends StatelessWidget {
     this.id = product.productId;
   }
 
+
   @override
   Widget build(BuildContext context) {
     // double newprice = int.parse(price).toDouble()/100;
     // int x = 100 - int.parse(saving).toInt();
     // double prevpreis = newprice/x * 100;
+
 
     MediaQueryData _mediaQueryData;
     double displayWidth;
@@ -57,6 +95,16 @@ class ArticleCard extends StatelessWidget {
     safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
 
+
+    //BAD Code: make a class Responsive instead
+    if (displayWidth > 412) {
+      isWeb = true;
+    } else  {
+      isWeb = false;
+    }
+
+    //
+/*
     return Container(
         margin: EdgeInsets.symmetric(horizontal: blockSizeHorizontal * 3, vertical: blockSizeVertical * 0.5),
         height: blockSizeVertical * 20,
@@ -85,7 +133,7 @@ class ArticleCard extends StatelessWidget {
                   // Product Image
                   Container(
                     //color: Colors.purple,
-                    //width: blockSizeHorizontal * 30,//displayWidth/3 - 20,
+                    //width: blockSizeHorizontal / 10,//displayWidth/3 - 20,
                     //height: blockSizeVertical * 15,
                     margin: EdgeInsets.only(left: blockSizeHorizontal * 3),//(left: 10),
                     child:
@@ -238,7 +286,20 @@ class ArticleCard extends StatelessWidget {
           ],
         )
     );
+
+ */
+    return Column(
+      children: [
+        Image.asset(
+          'pictures/htw_logo.jpg',
+          height: displayHeight,
+        ),
+        titleSection,
+      ],
+    );
   }
+
+
 
   Future _changeFavoriteState() async {
     //await callback.changeFavoriteState(this);

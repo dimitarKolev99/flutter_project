@@ -260,7 +260,7 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 child:
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: displayWidth / 6),
+                  padding: EdgeInsets.symmetric(horizontal: displayWidth / 4),
                   child: Stack(children: [
                     Align(
                         alignment: Alignment.topCenter,
