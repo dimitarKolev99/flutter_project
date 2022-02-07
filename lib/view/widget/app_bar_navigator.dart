@@ -74,7 +74,7 @@ class HomeBrowserAppBar extends StatelessWidget implements PreferredSizeWidget {
 
       leading: callback.widget is BrowserPage ?
       IconButton(
-        iconSize: safeBlockHorizontal * 7.5,
+        iconSize: 24,
         icon: Icon(Icons.bookmarks_outlined),
         onPressed: () {
           callback.showSearches = !callback.showSearches;
@@ -132,17 +132,13 @@ class FavoriteAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       backgroundColor: ThemeChanger.navBarColor,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(width: blockSizeHorizontal * 17.8),
-          Image.asset(
-            'pictures/pp_logo1.png',
-            width: blockSizeHorizontal * 10,
-          ),
-          SizedBox(width: blockSizeHorizontal * 4),
+      title: Center(
+        child:
+        Image.asset(
+          'pictures/pp_logo1.png',
+          width: blockSizeHorizontal * 10,
+        ),
 
-        ],
       ),
       actions: [
         IconButton(
@@ -152,8 +148,17 @@ class FavoriteAppBar extends StatelessWidget implements PreferredSizeWidget {
             final results =
             showSearch(context: context, delegate: FavoriteSearch(callback, callback.streamController));
           },
-        )
+        ),
       ],
+        leading: callback.widget is BrowserPage ?
+        IconButton(
+          iconSize: 24,
+          icon: Icon(Icons.bookmarks_outlined),
+          onPressed: () {
+            callback.showSearches = !callback.showSearches;
+            callback.setState(() {});
+          },
+        ) : SizedBox(width:0)
     );
   }
 
@@ -193,17 +198,24 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       backgroundColor: ThemeChanger.navBarColor,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(width: blockSizeHorizontal * 5.6),
+        title: Center(
+          child:
           Image.asset(
             'pictures/pp_logo1.png',
             width: blockSizeHorizontal * 10,
           ),
-          SizedBox(width: blockSizeHorizontal * 4),
+        ),
+        actions: [
+          Visibility(
+            visible: true,
+            child: IconButton(
+              iconSize: safeBlockHorizontal * 2,
+              icon: Icon(Icons.search),
+              onPressed: () {},
+            ),
+          ),
         ],
-      ),
+        leading:  SizedBox(width:0),
     );
   }
 
@@ -292,16 +304,12 @@ class CategorieViewAppBar extends StatelessWidget implements PreferredSizeWidget
 
     return AppBar(
       backgroundColor: ThemeChanger.navBarColor,
-      title: Row(
-        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(width: blockSizeHorizontal * 7.5),
-          Image.asset(
-            'pictures/pp_logo2.png',
-            width: blockSizeHorizontal * 50,
-          ),
-          SizedBox(width: blockSizeHorizontal * 4),
-        ],
+      title:  Center(
+        child:
+        Image.asset(
+          'pictures/pp_logo1.png',
+          width: blockSizeHorizontal * 10,
+        ),
       ),
     );
   }

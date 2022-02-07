@@ -186,6 +186,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
+    Size _size = MediaQuery.of(context).size;
+
+    //_size.width > 1340
 
     MediaQueryData _mediaQueryData;
     double displayWidth;

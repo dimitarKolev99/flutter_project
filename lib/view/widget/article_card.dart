@@ -21,6 +21,8 @@ class ArticleCard extends StatelessWidget {
   Product product;
   var isWeb = false;
 
+
+
   /*
   Widget titleSection = Container(
     padding: const EdgeInsets.all(32),
@@ -39,23 +41,23 @@ class ArticleCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text(
-                  "description",
-                  style: TextStyle(
-                    color: Colors.grey[500],
-                  ),
-                ),
               ],
             )
         ),
-        iconButton,
-        const Text('41'),
+        IconButton(
+          color: Colors.red[500],
+          onPressed: () {},
+          icon: Icon(Icons.favorite),
+        ),
       ],
     ),
   );
 
 
    */
+
+
+
   ArticleCard(this.product, this.callback){
     this.title = product.title;
     this.saving = product.saving;
@@ -324,7 +326,42 @@ class ArticleCard extends StatelessWidget {
             width: displayWidth / 2,
             height: 200,
           ),
-          IconSection(_changeFavoriteState()),
+          Container(
+            padding: const EdgeInsets.all(32),
+            child: Row(
+              children: [
+                Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(bottom: 0),
+                          child: Text(
+                            title,
+                            style: TextStyle(
+                              fontSize: safeBlockHorizontal * 1,//16,
+                              color: ThemeChanger.reversetextColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ],
+                    )
+                ),
+                IconButton(
+                  iconSize: 30.0,
+                  icon: (ProductController.isFavorite(id) ?  //
+                  Icon(Icons.favorite, color: Colors.red) :
+                  Icon(Icons.favorite_border, color: ThemeChanger.reversetextColor)),
+                  onPressed: () => _changeFavoriteState(),
+                ),
+              ],
+            ),
+          ),
+          //IconSection(_changeFavoriteState(), title),
         ],
       ),
     );
@@ -338,12 +375,16 @@ class ArticleCard extends StatelessWidget {
     //await callback.changeFavoriteState(this);
     ProductController.changeFavoriteState(this, callback);
   }
+
+
 }
 
 class IconSection extends StatelessWidget {
   dynamic method;
-  IconSection(method) {
+  late String title;
+  IconSection(method, title) {
     this.method = method;
+    this.title = title;
   }
 
   @override
@@ -359,17 +400,11 @@ class IconSection extends StatelessWidget {
                 children: [
                   Container(
                     padding: const EdgeInsets.only(bottom: 8),
-                    child: const Text(
-                      "title",
+                    child: Text(
+                      title,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
-                    ),
-                  ),
-                  Text(
-                    "description",
-                    style: TextStyle(
-                      color: Colors.grey[500],
                     ),
                   ),
                 ],
@@ -377,10 +412,9 @@ class IconSection extends StatelessWidget {
           ),
           IconButton(
             color: Colors.red[500],
-            onPressed: () { method; },
+            onPressed: () {},
             icon: Icon(Icons.favorite),
           ),
-          const Text('41'),
         ],
       ),
     );

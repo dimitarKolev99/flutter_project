@@ -115,30 +115,57 @@ class _FavoritePageState extends State<FavoritePage> {
 
   @override
   Widget build(BuildContext context) {
+
+
+    MediaQueryData _mediaQueryData;
+    double displayWidth;
+    double displayHeight;
+    double blockSizeHorizontal;
+    double blockSizeVertical;
+
+    double _safeAreaHorizontal;
+    double _safeAreaVertical;
+    double safeBlockHorizontal;
+    double safeBlockVertical;
+
+    _mediaQueryData = MediaQuery.of(context);
+    displayWidth = _mediaQueryData.size.width;
+    displayHeight = _mediaQueryData.size.height;
+    blockSizeHorizontal = displayWidth / 100;
+    blockSizeVertical = displayHeight / 100;
+
+    _safeAreaHorizontal = _mediaQueryData.padding.left + _mediaQueryData.padding.right;
+    _safeAreaVertical = _mediaQueryData.padding.top + _mediaQueryData.padding.bottom;
+    safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
+    safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
+
     ThemeChanger _themeChanger = Provider.of<ThemeChanger>(context);
     return Scaffold(
       appBar: FavoriteAppBar(this),
       body: favoriteProducts.isNotEmpty
-          ? Align(
+          ? Padding(
+            padding: EdgeInsets.symmetric(horizontal: displayWidth / 4),
+            child: Align(
         alignment: Alignment.topCenter,
         child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: favoriteProducts.length,
-            itemBuilder: (context, index) {
-              return InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ExtendedView(favoriteProducts[index], this, streamController.stream)),
-                    );
-                    streamController.add(true);
-                    _isClosed = true;
-                  },
-                  child: ArticleCard(favoriteProducts[index], this));
-            }),
-      )
+              shrinkWrap: true,
+              itemCount: favoriteProducts.length,
+              itemBuilder: (context, index) {
+                return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ExtendedView(favoriteProducts[index], this, streamController.stream)),
+                      );
+                      streamController.add(true);
+                      _isClosed = true;
+                    },
+                    child: ArticleCard(favoriteProducts[index], this));
+              }),
+      ),
+          )
           : Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

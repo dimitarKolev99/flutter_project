@@ -286,22 +286,21 @@ class _BrowserPageState extends State<BrowserPage> {
                                     ),
                                   ),
 
-                                chosenCategories.isEmpty? SizedBox(width: 0,):
+                                chosenCategories.isEmpty? SizedBox(width: 0):
                                 IconButton(
                                   alignment: Alignment.centerRight,
                                     constraints: const BoxConstraints(),
                                     padding : const EdgeInsets.only(top: 1.3),
                                     onPressed: (){
                                       if(chosenCategories.isNotEmpty) {
-                                      setState((){
-                                          //TODO: Reload Products
-                                          //print(chosenCategories[index]);
-                                          view.removeFromBrowser(chosenCategories[index]);
-                                          removeOneCategory(chosenCategories[index]);
-                                          updateBrowserblabla(currentCategory);
-
-                                        }
-                                      );}
+                                        setState((){
+                                            //TODO: Reload Products
+                                            //print(chosenCategories[index]);
+                                            view.removeFromBrowser(chosenCategories[index]);
+                                            removeOneCategory(chosenCategories[index]);
+                                            updateBrowserblabla(currentCategory);
+                                        });
+                                      }
                                   },
                                 icon: Icon(Icons.clear, size: 18, color: ThemeChanger.textColor,) )
 

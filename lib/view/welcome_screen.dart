@@ -64,7 +64,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 ),
                 SizedBox(height: screenHeightPercentage * 7),
                 Container(
-                  color: Colors.blue,
+                  //color: Colors.blue,
                     child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -150,7 +150,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 )),
                 SizedBox(height: screenHeightPercentage * 8),
                 Container(
-                  color: Colors.red,
+                  //color: Colors.red,
                     child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -236,7 +236,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 )),
                 SizedBox(height: screenHeightPercentage * 8),
                 Container(
-                  color: Colors.green,
+                  //color: Colors.green,
                     child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[

@@ -21,7 +21,7 @@ class ScrollToHideWidget extends StatefulWidget {
 }
 
 class _ScrollToHideWidgetState extends State<ScrollToHideWidget> {
-  bool isVisible = true;
+  bool isVisible = false;
 
   @override
   void initState() {
@@ -40,9 +40,9 @@ class _ScrollToHideWidgetState extends State<ScrollToHideWidget> {
   void listen() {
     final direction = widget.controller.position.userScrollDirection;
     if (direction == ScrollDirection.forward) {
-      hide();
-    } else if (direction == ScrollDirection.reverse) {
       show();
+    } else if (direction == ScrollDirection.reverse) {
+      hide();
     }
   }
 

@@ -48,6 +48,7 @@ class BrowserArticleCard extends StatelessWidget {
     double safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
     double safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
 
+    /*
     return Container(
       // card itself
       margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
@@ -87,8 +88,8 @@ class BrowserArticleCard extends StatelessWidget {
                         child:
                         Image.asset(
                           'pictures/htw_logo.jpg',
-                          width: 50,
-                          height: 50,
+                          width: 400 ,
+                          height: 400,
                         ),
                       ),
                       alignment: Alignment.topCenter,
@@ -108,7 +109,7 @@ class BrowserArticleCard extends StatelessWidget {
                       style: TextStyle(
                         color: ThemeChanger.textColor,
                         fontWeight: FontWeight.bold,
-                        fontSize: safeBlockHorizontal * 4,
+                        fontSize: safeBlockHorizontal * 1.5,
                       ),
                     ),
                   ),
@@ -160,11 +161,11 @@ class BrowserArticleCard extends StatelessWidget {
               // title
               Container(
                 margin: EdgeInsets.only(top: blockSizeVertical*1),
-                width: blockSizeVertical*22.5,
+                width: blockSizeVertical*2,
                 child: Text(
                   title,
                   style: TextStyle(
-                    fontSize: safeBlockHorizontal * 4.5,//16,
+                    fontSize: safeBlockHorizontal * 1.5,//16,
                     color: ThemeChanger.reversetextColor,
                     fontWeight: FontWeight.bold,
                   ),
@@ -176,11 +177,11 @@ class BrowserArticleCard extends StatelessWidget {
               ),
               Container(
                 margin: EdgeInsets.only(top: blockSizeVertical * 0.5),
-                width: blockSizeVertical*22.5,
+                width: blockSizeVertical*2,
                 child: Text(
                   description,
                   style: TextStyle(
-                    fontSize: safeBlockHorizontal * 3.25,//16,
+                    fontSize: safeBlockHorizontal * 1.5,//16,
                     color: ThemeChanger.reversetextColor,
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -198,14 +199,14 @@ class BrowserArticleCard extends StatelessWidget {
                   prevpreis.toStringAsFixed(2) + "€",
                   style: TextStyle(
                       decoration: TextDecoration.lineThrough,
-                      fontSize: safeBlockHorizontal * 3.25,
+                      fontSize: safeBlockHorizontal * 1.5,
                       color: ThemeChanger.reversetextColor),
                 ),
                 //newprice
                 Text(
                   newprice.toStringAsFixed(2) + "€",
                   style: TextStyle(
-                    fontSize: safeBlockHorizontal * 6.0,//16,
+                    fontSize: safeBlockHorizontal * 2,//16,
                     color: ThemeChanger.highlightedColor,
                     fontWeight: FontWeight.bold,
                   ),
@@ -215,6 +216,76 @@ class BrowserArticleCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+
+     */
+
+
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+      //height: blockSizeVertical * 45,
+      decoration: BoxDecoration(
+        color: ThemeChanger.articlecardbackground,
+        borderRadius: BorderRadius.circular(3),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.6),
+            offset: Offset(
+              0.0,
+              10.0,
+            ),
+            blurRadius: 10.0,
+            spreadRadius: -6.0,
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Expanded(
+            child: Image.asset(
+              'pictures/htw_logo.jpg',
+              width: displayWidth / 4,
+              height: 200,
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(32),
+            child: Row(
+              children: [
+                Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(bottom: 0),
+                          child: Text(
+                            title,
+                            style: TextStyle(
+                              fontSize: safeBlockHorizontal * 1.5,//16,
+                              color: ThemeChanger.reversetextColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ],
+                    )
+                ),
+                IconButton(
+                  iconSize: 30.0,
+                  icon: (ProductController.isFavorite(id) ?  //
+                  Icon(Icons.favorite, color: Colors.red) :
+                  Icon(Icons.favorite_border, color: ThemeChanger.reversetextColor)),
+                  onPressed: () => _changeFavorite(),
+                ),
+              ],
+            ),
+          ),
+          //IconSection(_changeFavoriteState(), title),
+        ],
       ),
     );
   }

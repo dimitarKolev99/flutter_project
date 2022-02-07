@@ -268,7 +268,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                     style: TextStyle(
                                       color: ThemeChanger.catTextColor,
                                       //fontWeight: FontWeight.bold,
-                                      fontSize: safeBlockHorizontal * 5,
+                                      fontSize: safeBlockHorizontal * 1.5,
                                     )),
 
                                     // Collapse-Unfold Icon
@@ -277,7 +277,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                                           ? Icons.arrow_drop_down
                                           : Icons.arrow_drop_up,
                                       ),
-                                      iconSize: blockSizeHorizontal * 10,
+                                      iconSize: 24,
                                       tooltip: "Einklappen/Ausklappen",
                                       onPressed: () {
                                         setState(() {
@@ -463,7 +463,7 @@ class _SubcategoryViewState extends State<SubcategoryView> {
                               style: TextStyle(
                                 color: ThemeChanger.catTextColor,
                                 //fontWeight: FontWeight.bold,
-                                fontSize: safeBlockHorizontal * 5,
+                                fontSize: safeBlockHorizontal * 1.5,
                               )),
                         ],
                       ),
