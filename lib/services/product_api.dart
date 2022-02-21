@@ -107,7 +107,7 @@ class ProductApi {
 
   Future<List<Product>> getFilterProducts(int categoryID, int saving, int minPrice, int maxPrice) async {
     List<Product> list = [];
-    final response = await http.get(Uri.parse("https://fakestoreapi.com/products"));
+    final response = await http.get(Uri.parse("https://calm-shelf-76793.herokuapp.com/"));
 
     var decodeRes = json.decode(response.body);
     for (int i = 0; i < decodeRes.length; i++) {
