@@ -60,13 +60,14 @@ class ArticleCard extends StatelessWidget {
 
   ArticleCard(this.product, this.callback){
     this.title = product.title;
-    this.saving = product.saving;
-    this.price = product.price;
-    this.previousPrice = product.previousPrice;
-    this.image = product.smallImage;
+    //this.saving = product.saving;
+    this.price = product.price.toString();
+    //this.previousPrice = product.previousPrice;
+    this.image = product.image;
+    // this.image = product.smallImage;
     this.description = product.description;
-    this.category = product.categoryName;
-    this.id = product.productId;
+    this.category = product.category;
+    this.id = product.id;
   }
 
 
@@ -320,9 +321,9 @@ class ArticleCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Image.asset(
-            'pictures/htw_logo.jpg',
-            fit: BoxFit.cover,
+          Image.network(
+            image,
+            fit: BoxFit.contain,
             width: displayWidth / 2,
             height: 200,
           ),

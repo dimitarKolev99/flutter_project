@@ -19,24 +19,26 @@ class BrowserArticleCard extends StatelessWidget {
   Product product;
 
   BrowserArticleCard(this.product, this.callback){
-    this.id = product.productId;
+    this.id = product.id;
     this.title = product.title;
-    this.saving = product.saving;
-    this.price = product.price;
-    this.image = product.smallImage;
+    // this.saving = product.saving;
+    this.price = product.price.toString();
+    this.image = product.image;
     this.description = product.description;
-    this.category = product.categoryName;
+    this.category = product.category;
   }
 
   @override
   Widget build(BuildContext context) {
 
-
+/*
 
     double newprice = int.parse(price).toDouble()/100;
     int x = 100 - int.parse(saving);
     double prevpreis = newprice/x * 100;
 
+
+ */
     MediaQueryData _mediaQueryData = MediaQuery.of(context);;
     double displayWidth = _mediaQueryData.size.width;
     double displayHeight = _mediaQueryData.size.height;
@@ -243,10 +245,11 @@ class BrowserArticleCard extends StatelessWidget {
       child: Column(
         children: [
           Expanded(
-            child: Image.asset(
-              'pictures/htw_logo.jpg',
+            child: Image.network(
+              image,
               width: displayWidth / 4,
               height: 200,
+              fit: BoxFit.contain,
             ),
           ),
           Container(

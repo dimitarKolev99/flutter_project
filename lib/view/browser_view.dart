@@ -75,7 +75,7 @@ class _BrowserPageState extends State<BrowserPage> {
   StreamController<bool> streamController = StreamController<bool>.broadcast();
   late List<Product> _product;
   late final List _favoriteIds = [];
-  late final List<Product> _products = [];
+  List<Product> _products = [];
   bool _isLoading = true;
   var count = 0;
   Timer? _timer;
@@ -186,10 +186,12 @@ class _BrowserPageState extends State<BrowserPage> {
   }
 
   Future<void> getProducts(int categoryID) async {
-    List<Product> favorites = await _preferenceArticles.getAllFavorites();
+    //List<Product> favorites = await _preferenceArticles.getAllFavorites();
+    List<Product> favorites = ProductController.favoriteProducts;
+
     for (var i in favorites) {
-      if (!_favoriteIds.contains(i.productId)) {
-        _favoriteIds.add(i.productId);
+      if (!_favoriteIds.contains(i.id)) {
+        _favoriteIds.add(i.id);
       }
     }
 
@@ -247,6 +249,15 @@ class _BrowserPageState extends State<BrowserPage> {
                     itemBuilder: (context, index) {
                       return InkWell(
                           onTap: () {
+
+                             ProductApi().getFilterProducts(1, 2, 3, 4)
+                                 .then((value) {
+                                   _products = value;
+                                   setState(() {
+                                   });
+                                 });
+
+                            /*
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -265,6 +276,8 @@ class _BrowserPageState extends State<BrowserPage> {
                                       },
 
                                   ));
+
+                             */
                             },
                           child:
                               Container(
@@ -354,7 +367,7 @@ class _BrowserPageState extends State<BrowserPage> {
                   children: List.generate(_products.length, (index) {
                     return InkWell(
                         onTap: () {
-
+                          /*
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -362,7 +375,7 @@ class _BrowserPageState extends State<BrowserPage> {
                           );
                           streamController.add(true);
 
-
+                           */
                         },
                         child: BrowserArticleCard(_products[index], this));
                   }),

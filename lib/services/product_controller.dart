@@ -18,12 +18,15 @@ class ProductController {
 
   static Future<void> updateFavorites(callback) async {
     favoriteProducts.clear();
+    /*
     List<Product> favorites = await _preferenceArticles.getAllFavorites();
     favoriteProducts.addAll(favorites.toSet());
     for(Product p in favorites) {
       favoriteProducts.removeWhere((element) => element.equals(p));
       favoriteProducts.add(p);
     }
+
+     */
     callback.setState(() {});
     callback.streamController.add(true); // note: was not called for browser view before refactoring
   }
@@ -36,38 +39,42 @@ class ProductController {
 
   static bool isFavorite(int id) {
     for(Product fav in favoriteProducts) {
-      if(fav.productId == id) return true;
+      if(fav.id == id) {
+        print(true);
+        return true;
+      }
     }
     return false;
   }
 
-  static Future changeFavoriteState(ArticleCard card, dynamic callback) async {
+  static changeFavoriteState(ArticleCard card, dynamic callback) {
 
     if (isFavorite(card.id)) {
       showAlertDialog(callback.context, card.id, callback);
     } else {
-      await addFavorite(card, callback);
+      addFavorite(card, callback);
     }
   }
 
-  static Future addFavorite(ArticleCard card, callback) async {
-    final product = _products.where((p) => p.productId == card.id).toList()[0];
+  static addFavorite(ArticleCard card, callback) {
+    final product = _products.where((p) => p.id == card.id).toList()[0];
 
-    await _preferenceArticles.addFavorite(product);
+    //await _preferenceArticles.addFavorite(product);
     if (callback.mounted) {
       callback.setState(() {
         favoriteProducts.add(card.product);
       });
     }
+    print(callback.widget.updateStream);
     callback.widget.updateStream.add(true);
   }
 
   static Future removeFavorite(int id, bool close, callback) async {
-    await _preferenceArticles.removeFavorite(id);
+    //await _preferenceArticles.removeFavorite(id);
     if (callback.mounted) {
       callback.setState(() {
         for(Product p in favoriteProducts) {
-          if(p.productId == id) favoriteProducts.remove(id);
+          if(p.id == id) favoriteProducts.remove(id);
         }
       });
     }

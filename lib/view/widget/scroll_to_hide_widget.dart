@@ -21,7 +21,7 @@ class ScrollToHideWidget extends StatefulWidget {
 }
 
 class _ScrollToHideWidgetState extends State<ScrollToHideWidget> {
-  bool isVisible = false;
+  bool isVisible = true;
 
   @override
   void initState() {

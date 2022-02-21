@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // this class will store all the informations
 class PreferencesArticles {
+  /*
   dynamic preferences;
 
   Future addFavorite(Product product) async {
@@ -14,7 +15,7 @@ class PreferencesArticles {
 
     final rawData = preferences.getString('favorites');
     final jsonData = jsonDecode(rawData.toString());
-    jsonData[product.productId.toString()] = fromCardToJson(product);
+    jsonData[product.id.toString()] = fromCardToJson(product);
     await preferences.setString("favorites", jsonEncode(jsonData));
   }
 
@@ -51,19 +52,33 @@ class PreferencesArticles {
   }
 
   Map<String, dynamic> fromCardToJson(Product product) => {
-    'category_id': product.categoryId,
-    'category_name': product.categoryName,
-    'productId': product.productId,
+    'category_id': product.category,
+    'productId': product.id,
     'title': product.title,
     'price': product.price,
-    'saving': product.saving,
+    //'saving': product.saving,
     'description': product.description,
-    'smallImage': product.smallImage,
+    'smallImage': product.image,
+    /*
     'bigImage': product.bigImage,
     'productPageUrl': product.productPageUrl,
     'previousPrice': product.previousPrice
+
+     */
   };
 
+  Product fromJsonToProduct(String id, Map<String, dynamic> json) {
+    return Product(
+      id: json["id"],
+      title: json["title"],
+      price: json["price"].toDouble(),
+      description: json["description"],
+      category: json["category"],
+      image: json["image"],
+    );
+  }
+
+  /*
   Product fromJsonToProduct(String id, Map<String, dynamic> json) {
     return Product(
       categoryId: json["category_id"],
@@ -79,4 +94,8 @@ class PreferencesArticles {
       previousPrice: json["previousPrice"],
     );
   }
+  */
+
+   */
+
 }

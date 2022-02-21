@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:penny_pincher/models/ws_product.dart';
+import 'package:penny_pincher/services/product_api.dart';
+import 'package:penny_pincher/services/product_api.dart';
+import 'package:penny_pincher/services/product_api.dart';
 import 'package:penny_pincher/services/product_controller.dart';
 import 'package:penny_pincher/services/json_functions.dart';
 import 'package:penny_pincher/models/product.dart';
@@ -105,9 +108,12 @@ class _HomePageState extends State<HomePage> {
 
   final List<int> _selectedItems = [];
 
+
   final channel = WebSocketChannel.connect(
-    Uri.parse('wss://ika3taif23.execute-api.eu-central-1.amazonaws.com/prod'),
+    Uri.parse('wss://localhost:3000'),
   );
+
+
 
   int a = 124936;
 
@@ -120,11 +126,6 @@ class _HomePageState extends State<HomePage> {
 
   var displayHeight = 0.0;
 
-  void check()  {
-    Future.delayed(const Duration(seconds: 7), () {
-      show = true;
-    });
-  }
 
 
   void getProducts() {
@@ -148,6 +149,10 @@ class _HomePageState extends State<HomePage> {
         _isLoading = true;
       });
     }
+    ProductApi().getFilterProducts(1, 2, 3, 45).then((value) {
+      newProducts.addAll(value);
+      setState(() {});
+    });
     super.initState();
     widget.stream.listen((update) {
       if (mounted) {
@@ -222,6 +227,8 @@ class _HomePageState extends State<HomePage> {
     safeBlockHorizontal = (displayWidth - _safeAreaHorizontal) / 100;
     safeBlockVertical = (displayHeight - _safeAreaVertical) / 100;
 
+    ProductController.addProducts(newProducts);
+
     if (status == WelcomeStatus.firstTime) {
       return WelcomePage(this);
     }
@@ -290,10 +297,35 @@ class _HomePageState extends State<HomePage> {
                             }
                             return true;
                           },
+                          child: ListView.builder(
+                              reverse: false,
+                              shrinkWrap: true,
+                              controller: widget.callback.controller,
+                              //controller: _scrollController,
+                              itemCount: newProducts.length,
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                    onTap: () {
+                                      /*
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ExtendedView(newProducts[index], this, streamController.stream,)
+                                        ),
+                                      );
+
+                                       */
+                                    },
+                                    child: ArticleCard(newProducts[index], this));
+                              }
+                              ),
+                        /*
                           child: StreamBuilder(
                             stream: channel.stream,
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
+                                print(snapshot.data);
                                 search(listOfProdCat, productFromJson(snapshot.data.toString()));
                                 ProductController.addProducts(newProducts);
                                 !isScrolling ? animate() : null;
@@ -324,9 +356,10 @@ class _HomePageState extends State<HomePage> {
                               }
                             },
                           ),
-
-                        )
+                          */
+                ),
                     ),
+                    /*
                     Align(
                       alignment: Alignment.bottomRight,
                       child: Padding(
@@ -344,6 +377,8 @@ class _HomePageState extends State<HomePage> {
                           ) : null
                       ),
                     ),
+
+                     */
                   ]
                   ),
                 ),
@@ -396,7 +431,7 @@ class _HomePageState extends State<HomePage> {
   void animate() {
     isScrolling = false;
     if (widget.callback.controller.hasClients  &&
-        widget.callback.controller.position.pixels < widget.callback.controller.position.maxScrollExtent) {
+        widget.callback.controller.position.pixels < widget.callback.controller.position.minScrollExtent) {
       widget.callback.controller.animateTo(
         widget.callback.controller.position.maxScrollExtent,
         curve: Curves.easeOut,
@@ -448,9 +483,9 @@ class _HomePageState extends State<HomePage> {
 
   void search(List<int> list, Product product) {
     for (int i = 0; i < list.length; i++) {
-      if (!productIdList.contains(product.productId) && list[i] == product.categoryId) {
+      if (!productIdList.contains(product.id) && list[i] == product.id) {
         newProducts.add(product);
-        productIdList.add(product.productId);
+        productIdList.add(product.id);
       }
     }
   }

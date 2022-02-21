@@ -66,10 +66,12 @@ class ArticleSearch extends SearchDelegate<String> {
 
       storeToRecent(query);
 
-      List<Product> favorites = await _preferenceArticles.getAllFavorites();
+      //List<Product> favorites = await _preferenceArticles.getAllFavorites();
+      List<Product> favorites = ProductController.favoriteProducts;
+
       for (var i in favorites) {
-        if (!_favoriteIds.contains(i.productId)) {
-          _favoriteIds.add(i.productId);
+        if (!_favoriteIds.contains(i.id)) {
+          _favoriteIds.add(i.id);
         }
       }
       ProductController.addProducts(_products);
